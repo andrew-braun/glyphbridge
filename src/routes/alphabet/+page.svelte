@@ -3,17 +3,19 @@
 	import { thaiPack } from '$lib/data/thai';
 	import type { Letter } from '$lib/data/types';
 
-	// Build a map of all letters from all lessons
+	// Build a flat list of every letter introduced across all lessons
 	const allLetters: Letter[] = thaiPack.lessons.flatMap((l) => l.newLetters);
 
-	// Group by type
+	// Reactively partition letters into consonants and vowels for separate grid sections
 	const consonants = $derived(allLetters.filter((l) => l.type === 'consonant'));
 	const vowels = $derived(allLetters.filter((l) => l.type === 'vowel'));
 
+	// Check whether the user has unlocked a letter by completing its lesson
 	function isKnown(char: string): boolean {
 		return $knownLetters.includes(char);
 	}
 
+	// Tracks which letter tile is expanded in the detail panel; null means panel is closed
 	let selectedLetter = $state<Letter | null>(null);
 </script>
 
@@ -21,20 +23,32 @@
 	<title>Alphabet — SparkScripts</title>
 </svelte:head>
 
+<!--
+  Alphabet Page
+  Displays all Thai letters the curriculum teaches, split into consonant and vowel grids.
+  - Unknown letters appear disabled with a "?" placeholder until the user completes
+    the lesson that introduces them.
+  - Known letters are clickable and reveal a detail panel with pronunciation,
+    romanization, consonant class, writing position, and a mnemonic.
+  - A progress bar at the top shows how many letters the user has learned out of the total.
+-->
 <div class="alphabet container">
 	<h1>Your Thai Alphabet</h1>
 	<p class="alphabet__subtitle">
 		Letters unlock as you complete lessons. You know <strong>{$knownLetters.length}</strong> of {allLetters.length} letters taught so far.
 	</p>
 
+	<!-- Visual progress bar: fill width is the percentage of letters learned -->
 	<div class="progress-bar" style="margin-bottom: 2rem">
 		<div class="progress-bar__fill" style="width: {($knownLetters.length / allLetters.length) * 100}%"></div>
 	</div>
 
+	<!-- Consonant grid -->
 	<section class="letter-section">
 		<h2>Consonants</h2>
 		<div class="letter-grid">
 			{#each consonants as letter}
+				<!-- Clicking a known tile toggles its selection; unknown tiles are disabled -->
 				<button
 					class="letter-tile"
 					class:letter-tile--known={isKnown(letter.character)}
@@ -53,6 +67,7 @@
 		</div>
 	</section>
 
+	<!-- Vowel grid (same tile structure as consonants) -->
 	<section class="letter-section">
 		<h2>Vowels</h2>
 		<div class="letter-grid">
@@ -75,6 +90,7 @@
 		</div>
 	</section>
 
+	<!-- Detail panel: shown when a known letter tile is selected -->
 	{#if selectedLetter}
 		<div class="detail-panel card">
 			<button class="detail-panel__close btn btn--ghost" onclick={() => selectedLetter = null}>&times;</button>
@@ -94,6 +110,7 @@
 					<span class="detail-panel__label">Type</span>
 					<span>{selectedLetter.type}{selectedLetter.class ? ` (${selectedLetter.class} class)` : ''}</span>
 				</div>
+				<!-- Position row is only relevant for vowels that attach to a consonant -->
 				{#if selectedLetter.position && selectedLetter.position !== 'standalone'}
 					<div class="detail-panel__row">
 						<span class="detail-panel__label">Position</span>
@@ -109,6 +126,11 @@
 </div>
 
 <style lang="scss">
+	/* ========================================
+	   Alphabet page styles
+	   ======================================== */
+
+	// Page-level wrapper and subtitle
 	.alphabet {
 		&__subtitle {
 			color: $color-text-light;
@@ -117,6 +139,7 @@
 		}
 	}
 
+	// Section wrapper for each letter category (Consonants / Vowels)
 	.letter-section {
 		margin-top: $space-xl;
 
@@ -131,6 +154,7 @@
 		gap: $space-md;
 	}
 
+	// Individual letter tile with known/unknown/selected states
 	.letter-tile {
 		display: flex;
 		flex-direction: column;
@@ -229,6 +253,7 @@
 		}
 	}
 
+	// Mobile: smaller tiles and stacked detail panel layout
 	@media (max-width: $bp-sm) {
 		.letter-grid {
 			grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));

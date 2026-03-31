@@ -1,6 +1,27 @@
+/**
+ * Thai Language Curriculum Data
+ *
+ * This file defines the complete lesson sequence for learning to read Thai script.
+ * The curriculum follows a "real-word-first" approach: each lesson is anchored around
+ * a practical Thai word that a traveler would encounter (place names, signs, food terms),
+ * and uses that word to introduce new letters and reading rules organically.
+ *
+ * Lesson stages progress as follows:
+ *   Stage 1 - First contact: high-frequency consonants and above-line vowels (หัวหิน)
+ *   Stage 2 - Expanding basics: hidden vowels, final consonant stops, long vowels (ตลาด)
+ *   Stage 3 - Aspiration contrast: aspirated vs unaspirated consonants (ถนน)
+ *   Stage 4 - Silent carriers & final consonant shifts: อ as placeholder, ร as final "n" (อาหาร)
+ *
+ * Each lesson builds on previously learned letters and rules, with explicit review
+ * of earlier characters via the `reviewLetters` array.
+ */
 import type { Lesson, LanguagePack } from './types';
 
 const lessons: Lesson[] = [
+	// ---------------------------------------------------------------
+	// Stage 1: First Thai word -- introduces core consonants (ห, ว, น)
+	// and above-line short vowels (ั, ิ)
+	// ---------------------------------------------------------------
 	{
 		id: 1,
 		stage: 1,
@@ -116,6 +137,11 @@ const lessons: Lesson[] = [
 			}
 		]
 	},
+	// ---------------------------------------------------------------
+	// Stage 2: Market vocabulary -- introduces mid-class consonants
+	// (ต, ด), the low-class consonant ล, and the long vowel า.
+	// Key rules: hidden short "a" vowel, final consonant stopping.
+	// ---------------------------------------------------------------
 	{
 		id: 2,
 		stage: 2,
@@ -230,6 +256,11 @@ const lessons: Lesson[] = [
 		],
 		reviewLetters: ['ห', 'น', 'ว']
 	},
+	// ---------------------------------------------------------------
+	// Stage 3: Street signs -- introduces the aspirated consonant ถ.
+	// Key rules: aspirated vs unaspirated "t" distinction, hidden
+	// vowel pattern reinforcement with a new consonant pair.
+	// ---------------------------------------------------------------
 	{
 		id: 3,
 		stage: 3,
@@ -317,6 +348,11 @@ const lessons: Lesson[] = [
 		],
 		reviewLetters: ['ต', 'ล', 'า', 'ด', 'ห', 'น']
 	},
+	// ---------------------------------------------------------------
+	// Stage 4: Food vocabulary -- introduces the silent carrier อ
+	// and ร (which shifts to "n" in final position).
+	// Key rules: อ as a vowel placeholder, final ร-to-n reduction.
+	// ---------------------------------------------------------------
 	{
 		id: 4,
 		stage: 4,
@@ -416,6 +452,7 @@ const lessons: Lesson[] = [
 	}
 ];
 
+/** The complete Thai language pack exported for use by the app */
 export const thaiPack: LanguagePack = {
 	id: 'thai',
 	name: 'Thai',

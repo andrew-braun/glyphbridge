@@ -1,8 +1,20 @@
 <script lang="ts">
+	// SvelteKit page state used for determining the active nav link
 	import { page } from '$app/state';
+	// Progress stores supply the counts displayed as badges next to nav links
 	import { knownLetters, knownWords } from '$lib/stores/progress';
 </script>
 
+<!--
+  Nav Component
+  Top-level sticky navigation bar rendered on every page via the root layout.
+  - Logo links back to the home page.
+  - Four nav links: Learn, Letters, Words, Practice.
+  - Letters and Words links display a live count badge from the progress stores.
+  - Active state is determined by matching the current URL pathname:
+    "/learn" uses startsWith() so it highlights for all lesson sub-routes,
+    while the others use exact equality.
+-->
 <nav class="nav">
 	<div class="nav__inner container">
 		<a href="/" class="nav__logo">
@@ -10,7 +22,8 @@
 		</a>
 
 		<div class="nav__links">
-			<a href="/learn" class="nav__link" class:active={page.url.pathname.startsWith('/learn')}>
+			<!-- Learn uses startsWith so /learn/1, /learn/2, etc. all highlight this link -->
+		<a href="/learn" class="nav__link" class:active={page.url.pathname.startsWith('/learn')}>
 				Learn
 			</a>
 			<a href="/alphabet" class="nav__link" class:active={page.url.pathname === '/alphabet'}>
