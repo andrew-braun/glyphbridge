@@ -25,5 +25,8 @@
 		"@sveltejs/adapter-static": "^3.0.10",
 		"bits-ui": "^2.16.5",
 		"sass": "^1.98.0"
+	},
+	"volta": {
+		"node": "24.14.1"
 	}
 }
