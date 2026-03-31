@@ -26,10 +26,12 @@
 		<a href="/learn" class="nav__link" class:active={page.url.pathname.startsWith('/learn')}>
 				Learn
 			</a>
-			<a href="/alphabet" class="nav__link" class:active={page.url.pathname === '/alphabet'}>
+			<!-- Badge shows how many letters the user knows -->
+		<a href="/alphabet" class="nav__link" class:active={page.url.pathname === '/alphabet'}>
 				Letters <span class="nav__count">{$knownLetters.length}</span>
 			</a>
-			<a href="/words" class="nav__link" class:active={page.url.pathname === '/words'}>
+			<!-- Badge shows how many words the user knows -->
+		<a href="/words" class="nav__link" class:active={page.url.pathname === '/words'}>
 				Words <span class="nav__count">{$knownWords.length}</span>
 			</a>
 			<a href="/practice" class="nav__link" class:active={page.url.pathname === '/practice'}>
@@ -40,6 +42,11 @@
 </nav>
 
 <style lang="scss">
+	/* ========================================
+	   Nav component styles
+	   ======================================== */
+
+	// Sticky top bar with card background and bottom border
 	.nav {
 		background: $color-bg-card;
 		border-bottom: 1px solid $color-border;
@@ -96,6 +103,7 @@
 			}
 		}
 
+		// Circular pill badge showing a numeric count next to link text
 		&__count {
 			background: $color-primary;
 			color: white;
@@ -110,6 +118,7 @@
 		}
 	}
 
+	// Mobile: tighten spacing and shrink font size to fit all links
 	@media (max-width: $bp-sm) {
 		.nav__links {
 			gap: 0;

@@ -150,6 +150,10 @@ export function isLessonUnlocked(lessonId: number): boolean {
 	return $p.lessonProgress.some((lp) => lp.lessonId === lessonId - 1 && lp.completed);
 }
 
+/**
+ * Resets all learner progress back to the initial blank state.
+ * The store subscription will automatically clear localStorage.
+ */
 export function resetProgress() {
 	progress.set(createInitialProgress());
 }

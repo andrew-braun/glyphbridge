@@ -148,6 +148,7 @@
 		}
 	}
 
+	// Responsive grid: tiles auto-fill at a minimum of 80px wide
 	.letter-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
@@ -207,6 +208,7 @@
 		}
 	}
 
+	// Expandable detail panel: appears below the grids when a known tile is selected
 	.detail-panel {
 		position: relative;
 		margin-top: $space-xl;
