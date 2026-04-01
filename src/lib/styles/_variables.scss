@@ -1,24 +1,30 @@
 // Re-export variables for use in component <style lang="scss"> blocks
-$color-primary: #6C5CE7;
-$color-primary-light: #A29BFE;
-$color-primary-dark: #5A4BD1;
-$color-accent: #FD79A8;
-$color-accent-light: #FDCB6E;
-$color-success: #00B894;
-$color-success-light: #55EFC4;
-$color-warning: #FDCB6E;
-$color-error: #FF7675;
-$color-bg: #FAFAFA;
-$color-bg-card: #FFFFFF;
-$color-bg-dark: #2D3436;
-$color-text: #2D3436;
-$color-text-light: #636E72;
-$color-text-muted: #B2BEC3;
-$color-border: #DFE6E9;
+$color-primary: #6c5ce7;
+$color-primary-light: #a29bfe;
+$color-primary-dark: #5a4bd1;
+$color-accent: #fd79a8;
+$color-accent-light: #fdcb6e;
+$color-success: #00b894;
+$color-success-light: #55efc4;
+$color-warning: #fdcb6e;
+$color-error: #ff7675;
+$color-bg: #fafafa;
+$color-bg-card: #ffffff;
+$color-bg-dark: #2d3436;
+$color-text: #2d3436;
+$color-text-light: #636e72;
+$color-text-muted: #b2bec3;
+$color-border: #dfe6e9;
 
-$font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-$font-thai: 'Noto Sans Thai', 'Sarabun', sans-serif;
-$font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+$font-body:
+	"Inter",
+	-apple-system,
+	BlinkMacSystemFont,
+	"Segoe UI",
+	sans-serif;
+// $font-thai: 'Noto Sans Thai', 'Sarabun', sans-serif;
+$font-thai: "unset";
+$font-mono: "JetBrains Mono", "Fira Code", monospace;
 
 $font-size-xs: 0.75rem;
 $font-size-sm: 0.875rem;
