@@ -12,27 +12,27 @@
   to the rules step.
 -->
 <script lang="ts">
-	import type { Letter } from '$lib/data/types';
-
+	import Button from "$lib/components/ui/Button.svelte"
+	import type { Letter } from "$lib/data/types"
 
 	let {
 		letters,
-		onComplete
+		onComplete,
 	}: {
-		letters: Letter[];
-		onComplete: () => void;
-	} = $props();
+		letters: Letter[]
+		onComplete: () => void
+	} = $props()
 
 	// Track which letter the learner is currently viewing
-	let currentIndex = $state(0);
-	const currentLetter = $derived(letters[currentIndex]);
+	let currentIndex = $state(0)
+	const currentLetter = $derived(letters[currentIndex])
 
 	/** Advance to next letter, or move to rules step if all letters shown. */
 	function next() {
 		if (currentIndex < letters.length - 1) {
-			currentIndex++;
+			currentIndex++
 		} else {
-			onComplete();
+			onComplete()
 		}
 	}
 </script>
@@ -44,7 +44,10 @@
 
 	<div class="letter-intro">
 		<!-- Large character display -->
-		<div class="letter-intro__char thai" style="font-size: 5rem; line-height: 1;">
+		<div
+			class="letter-intro__char thai"
+			style="font-size: 5rem; line-height: 1;"
+		>
 			{currentLetter.character}
 		</div>
 
@@ -61,27 +64,34 @@
 			<div class="letter-intro__row">
 				<span class="letter-intro__label">Type</span>
 				<span class="letter-intro__value badge badge--primary">
-					{currentLetter.type}{currentLetter.class ? ` (${currentLetter.class} class)` : ''}
+					{currentLetter.type}{currentLetter.class
+						? ` (${currentLetter.class} class)`
+						: ""}
 				</span>
 			</div>
 			<!-- Position only shown for non-standalone characters (vowels that sit above/below/around) -->
-			{#if currentLetter.position && currentLetter.position !== 'standalone'}
+			{#if currentLetter.position && currentLetter.position !== "standalone"}
 				<div class="letter-intro__row">
 					<span class="letter-intro__label">Position</span>
-					<span class="letter-intro__value">Written {currentLetter.position} the consonant</span>
+					<span class="letter-intro__value"
+						>Written {currentLetter.position} the consonant</span
+					>
 				</div>
 			{/if}
 		</div>
 
 		<!-- Mnemonic memory trick -->
 		<div class="letter-intro__mnemonic card card--flat">
-			<strong>Remember:</strong> {currentLetter.mnemonic}
+			<strong>Remember:</strong>
+			{currentLetter.mnemonic}
 		</div>
 	</div>
 
-	<button class="btn btn--primary btn--large btn--full" onclick={next}>
-		{currentIndex < letters.length - 1 ? 'Next Letter →' : 'Learn the Rules →'}
-	</button>
+	<Button variant="primary" size="large" fullWidth={true} onclick={next}>
+		{currentIndex < letters.length - 1
+			? "Next Letter ->"
+			: "Learn the Rules ->"}
+	</Button>
 </div>
 
 <style lang="scss">

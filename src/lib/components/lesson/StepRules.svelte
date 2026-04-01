@@ -11,26 +11,27 @@
     - Concrete examples the learner can already (mostly) read
 -->
 <script lang="ts">
-	import type { Rule } from '$lib/data/types';
+	import Button from "$lib/components/ui/Button.svelte"
+	import type { Rule } from "$lib/data/types"
 
 	let {
 		rules,
-		onComplete
+		onComplete,
 	}: {
-		rules: Rule[];
-		onComplete: () => void;
-	} = $props();
+		rules: Rule[]
+		onComplete: () => void
+	} = $props()
 
 	// Track which rule the learner is currently viewing
-	let currentIndex = $state(0);
-	const currentRule = $derived(rules[currentIndex]);
+	let currentIndex = $state(0)
+	const currentRule = $derived(rules[currentIndex])
 
 	/** Advance to next rule, or move to drills if all rules shown. */
 	function next() {
 		if (currentIndex < rules.length - 1) {
-			currentIndex++;
+			currentIndex++
 		} else {
-			onComplete();
+			onComplete()
 		}
 	}
 </script>
@@ -54,16 +55,16 @@
 			<h4>Examples:</h4>
 			{#each currentRule.examples as example}
 				<div class="rule-card__example">
-					<span class="thai thai--sm">{example.split(' ')[0]}</span>
+					<span class="thai thai--sm">{example.split(" ")[0]}</span>
 					<span>{example}</span>
 				</div>
 			{/each}
 		</div>
 	</div>
 
-	<button class="btn btn--primary btn--large btn--full" onclick={next}>
-		{currentIndex < rules.length - 1 ? 'Next Rule →' : 'Start Drills →'}
-	</button>
+	<Button variant="primary" size="large" fullWidth={true} onclick={next}>
+		{currentIndex < rules.length - 1 ? "Next Rule ->" : "Start Drills ->"}
+	</Button>
 </div>
 
 <style lang="scss">

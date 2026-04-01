@@ -8,22 +8,22 @@
     - Navigation to the next lesson or back to the lesson list
 -->
 <script lang="ts">
-	import type { Lesson } from '$lib/data/types';
-
+	import Button from "$lib/components/ui/Button.svelte"
+	import type { Lesson } from "$lib/data/types"
 
 	let {
 		lesson,
 		correctCount,
 		totalDrills,
 		onNextLesson,
-		hasNextLesson
+		hasNextLesson,
 	}: {
-		lesson: Lesson;
-		correctCount: number;
-		totalDrills: number;
-		onNextLesson: () => void;
-		hasNextLesson: boolean;
-	} = $props();
+		lesson: Lesson
+		correctCount: number
+		totalDrills: number
+		onNextLesson: () => void
+		hasNextLesson: boolean
+	} = $props()
 </script>
 
 <div class="step">
@@ -49,7 +49,8 @@
 			<div class="complete__letter-grid">
 				{#each lesson.newLetters as letter}
 					<div class="complete__letter">
-						<span class="thai" style="font-size:2.5rem">{letter.character}</span>
+						<span class="thai" style="font-size:2.5rem">{letter.character}</span
+						>
 						<span>{letter.romanization}</span>
 					</div>
 				{/each}
@@ -59,15 +60,16 @@
 		<!-- Navigation actions -->
 		<div class="complete__actions">
 			{#if hasNextLesson}
-				<button class="btn btn--primary btn--large" onclick={onNextLesson}>
-					Next Lesson &rarr;
-				</button>
+				<Button variant="primary" size="large" onclick={onNextLesson}>
+					Next Lesson ->
+				</Button>
 			{:else}
-				<a href="/practice" class="btn btn--primary btn--large">
+				<Button href="/practice" variant="primary" size="large">
 					Practice What You've Learned
-				</a>
+				</Button>
 			{/if}
-			<a href="/learn" class="btn btn--secondary btn--large">All Lessons</a>
+			<Button href="/learn" variant="secondary" size="large">All Lessons</Button
+			>
 		</div>
 	</div>
 </div>

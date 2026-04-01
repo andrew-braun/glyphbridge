@@ -1,36 +1,24 @@
-<!--
-  LessonList.svelte — Lesson overview cards
-  ===========================================
-  Lists all available lessons with visual indicators for:
-    - Completed lessons (green left border + checkmark)
-    - Current lesson (purple left border + pulsing dot)
-    - Locked lessons (dimmed + lock icon)
-
-  Each card shows the anchor word, lesson title, meaning,
-  and a preview of the new letters that lesson introduces.
--->
 <script lang="ts">
-	import { knownWords, currentLessonId } from '$lib/stores/progress';
-	import { thaiPack } from '$lib/data/thai';
-
+	import { thaiPack } from "$lib/data/thai"
+	import { currentLessonId, knownWords } from "$lib/stores/progress"
 </script>
 
 <section class="upcoming">
 	<h2>Your Lessons</h2>
 	<div class="lesson-list">
 		{#each thaiPack.lessons as lesson}
-			<!-- Determine lesson state based on user progress -->
-			{@const isCompleted = $knownWords.some(w => w.thai === lesson.anchorWord.thai)}
+			{@const isCompleted = $knownWords.some(
+				(w) => w.thai === lesson.anchorWord.thai,
+			)}
 			{@const isCurrent = lesson.id === $currentLessonId}
 			{@const isLocked = lesson.id > $currentLessonId}
 			<a
-				href={isLocked ? '#' : `/learn/${lesson.id}`}
+				href={isLocked ? "#" : `/learn/${lesson.id}`}
 				class="lesson-item card"
 				class:lesson-item--completed={isCompleted}
 				class:lesson-item--current={isCurrent}
 				class:lesson-item--locked={isLocked}
 			>
-				<!-- Status indicator: checkmark / pulsing dot / lock -->
 				<div class="lesson-item__status">
 					{#if isCompleted}
 						<span class="lesson-item__check">&#10003;</span>
@@ -41,18 +29,22 @@
 					{/if}
 				</div>
 
-				<!-- Lesson metadata -->
 				<div class="lesson-item__content">
-					<span class="lesson-item__stage badge badge--primary">Stage {lesson.stage}</span>
+					<span class="lesson-item__stage badge badge--primary"
+						>Stage {lesson.stage}</span
+					>
 					<h3 class="lesson-item__title">{lesson.title}</h3>
-					<span class="lesson-item__word thai thai--sm">{lesson.anchorWord.thai}</span>
+					<span class="lesson-item__word thai thai--sm"
+						>{lesson.anchorWord.thai}</span
+					>
 					<span class="lesson-item__meaning">{lesson.anchorWord.meaning}</span>
 				</div>
 
-				<!-- Preview of new letters (hidden on mobile) -->
 				<div class="lesson-item__letters">
 					{#each lesson.newLetters as letter}
-						<span class="lesson-item__letter thai thai--sm">{letter.character}</span>
+						<span class="lesson-item__letter thai thai--sm"
+							>{letter.character}</span
+						>
 					{/each}
 				</div>
 			</a>
@@ -76,7 +68,6 @@
 		color: inherit;
 		transition: all $transition-base;
 
-		// State borders — left accent color indicates progress
 		&--completed {
 			border-left: 4px solid $color-success;
 		}
@@ -91,11 +82,10 @@
 			cursor: not-allowed;
 
 			&:hover {
-				box-shadow: $shadow-md; // override the card hover shadow lift
+				box-shadow: $shadow-md;
 			}
 		}
 
-		// Left-side status icon
 		&__status {
 			flex-shrink: 0;
 			width: 40px;
@@ -111,7 +101,6 @@
 			font-weight: 700;
 		}
 
-		// Pulsing dot for current lesson
 		&__dot {
 			width: 14px;
 			height: 14px;
@@ -124,7 +113,6 @@
 			font-size: $font-size-lg;
 		}
 
-		// Text content: stage badge, title, word, meaning
 		&__content {
 			flex: 1;
 			display: flex;
@@ -145,7 +133,6 @@
 			font-size: $font-size-sm;
 		}
 
-		// Right-side letter preview chips
 		&__letters {
 			display: flex;
 			gap: $space-sm;
@@ -165,11 +152,15 @@
 	}
 
 	@keyframes pulse {
-		0%, 100% { opacity: 1; }
-		50% { opacity: 0.5; }
+		0%,
+		100% {
+			opacity: 1;
+		}
+		50% {
+			opacity: 0.5;
+		}
 	}
 
-	// Hide letter preview chips on small screens
 	@media (max-width: $bp-md) {
 		.lesson-item__letters {
 			display: none;

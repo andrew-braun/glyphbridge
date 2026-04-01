@@ -14,67 +14,71 @@
   and capped at the session size (default: 10 questions).
 -->
 <script lang="ts">
-	import { knownLetters, knownWords, progress } from '$lib/stores/progress';
-	import { thaiPack } from '$lib/data/thai';
-	import type { DrillQuestion } from '$lib/data/types';
-	import DrillExercise from '$lib/components/DrillExercise.svelte';
+	import DrillExercise from "$lib/components/exercises/DrillExercise.svelte"
+	import Button from "$lib/components/ui/Button.svelte"
+	import { thaiPack } from "$lib/data/thai"
+	import type { DrillQuestion } from "$lib/data/types"
+	import { knownLetters, knownWords, progress } from "$lib/stores/progress"
 
 	// --- Gather available drills from completed lessons ---
 	// Reactively re-computed when progress changes (e.g. after completing a new lesson).
 	const availableDrills = $derived.by(() => {
 		const completedIds = $progress.lessonProgress
 			.filter((lp) => lp.completed)
-			.map((lp) => lp.lessonId);
+			.map((lp) => lp.lessonId)
 		return thaiPack.lessons
 			.filter((l) => completedIds.includes(l.id))
-			.flatMap((l) => l.drills);
-	});
+			.flatMap((l) => l.drills)
+	})
 
 	// --- Session configuration ---
-	const SESSION_SIZE = 10;
+	const SESSION_SIZE = 10
 
 	// --- Session state ---
-	let drillPool = $state<DrillQuestion[]>([]);
-	let currentDrillIndex = $state(0);
-	let correctCount = $state(0);
-	let totalAnswered = $state(0);
-	let sessionActive = $state(false);
+	let drillPool = $state<DrillQuestion[]>([])
+	let currentDrillIndex = $state(0)
+	let correctCount = $state(0)
+	let totalAnswered = $state(0)
+	let sessionActive = $state(false)
 
 	// Derived state
-	const currentDrill = $derived<DrillQuestion | undefined>(drillPool[currentDrillIndex]);
+	const currentDrill = $derived<DrillQuestion | undefined>(
+		drillPool[currentDrillIndex],
+	)
 	const sessionComplete = $derived(
-		sessionActive && (totalAnswered >= SESSION_SIZE || currentDrillIndex >= drillPool.length)
-	);
+		sessionActive &&
+			(totalAnswered >= SESSION_SIZE || currentDrillIndex >= drillPool.length),
+	)
 
 	/** Fisher-Yates shuffle to randomize drill order each session. */
 	function shuffle<T>(arr: T[]): T[] {
-		const shuffled = [...arr];
+		const shuffled = [...arr]
 		for (let i = shuffled.length - 1; i > 0; i--) {
-			const j = Math.floor(Math.random() * (i + 1));
-			[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+			const j = Math.floor(Math.random() * (i + 1))
+			;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
 		}
-		return shuffled;
+		return shuffled
 	}
 
 	/** Initialize a new practice session with shuffled drills. */
 	function startSession() {
-		drillPool = shuffle(availableDrills).slice(0, SESSION_SIZE);
-		currentDrillIndex = 0;
-		correctCount = 0;
-		totalAnswered = 0;
-		sessionActive = true;
+		drillPool = shuffle(availableDrills).slice(0, SESSION_SIZE)
+		currentDrillIndex = 0
+		correctCount = 0
+		totalAnswered = 0
+		sessionActive = true
 	}
 
 	/** Called by DrillExercise after user selects an answer. */
 	function handleAnswer(isCorrect: boolean) {
-		totalAnswered++;
-		if (isCorrect) correctCount++;
+		totalAnswered++
+		if (isCorrect) correctCount++
 	}
 
 	/** Called by DrillExercise when user clicks "Next". */
 	function handleNext() {
 		if (currentDrillIndex < drillPool.length - 1) {
-			currentDrillIndex++;
+			currentDrillIndex++
 		}
 		// sessionComplete derived state will flip to true on the last question
 	}
@@ -86,7 +90,9 @@
 
 <div class="practice container">
 	<h1>Practice</h1>
-	<p class="practice__subtitle">Review what you've learned with randomized drills.</p>
+	<p class="practice__subtitle">
+		Review what you've learned with randomized drills.
+	</p>
 
 	<!-- STATE: No drills available (user hasn't completed any lessons) -->
 	{#if availableDrills.length === 0}
@@ -94,14 +100,19 @@
 			<div class="empty__icon">&#127947;</div>
 			<h2>Nothing to practice yet!</h2>
 			<p>Complete at least one lesson to unlock practice drills.</p>
-			<a href="/learn" class="btn btn--primary btn--large">Start Learning</a>
+			<Button href="/learn" variant="primary" size="large"
+				>Start Learning</Button
+			>
 		</div>
 
-	<!-- STATE: Session not started — show stats and start button -->
+		<!-- STATE: Session not started — show stats and start button -->
 	{:else if !sessionActive}
 		<div class="start card">
 			<h2>Ready to practice?</h2>
-			<p>You have <strong>{availableDrills.length}</strong> drill questions from completed lessons.</p>
+			<p>
+				You have <strong>{availableDrills.length}</strong> drill questions from completed
+				lessons.
+			</p>
 			<div class="start__stats">
 				<div class="stat">
 					<span class="stat__num">{$knownLetters.length}</span>
@@ -112,12 +123,13 @@
 					<span class="stat__label">Words</span>
 				</div>
 			</div>
-			<button class="btn btn--primary btn--large" onclick={startSession}>
-				Start Practice Session ({Math.min(SESSION_SIZE, availableDrills.length)} questions)
-			</button>
+			<Button variant="primary" size="large" onclick={startSession}>
+				Start Practice Session ({Math.min(SESSION_SIZE, availableDrills.length)}
+				questions)
+			</Button>
 		</div>
 
-	<!-- STATE: Session complete — show results -->
+		<!-- STATE: Session complete — show results -->
 	{:else if sessionComplete}
 		<div class="results card">
 			<!-- Emoji adapts to score: trophy for perfect, muscle for good, chat for needs work -->
@@ -139,20 +151,32 @@
 				{Math.round((correctCount / totalAnswered) * 100)}%
 			</div>
 			<div class="results__actions">
-				<button class="btn btn--primary btn--large" onclick={startSession}>Practice Again</button>
-				<a href="/learn" class="btn btn--secondary btn--large">Back to Lessons</a>
+				<Button variant="primary" size="large" onclick={startSession}
+					>Practice Again</Button
+				>
+				<Button href="/learn" variant="secondary" size="large"
+					>Back to Lessons</Button
+				>
 			</div>
 		</div>
 
-	<!-- STATE: Active session — show current drill -->
+		<!-- STATE: Active session — show current drill -->
 	{:else if currentDrill}
 		<div class="session">
 			<!-- Progress bar for the session -->
 			<div class="session__header">
 				<div class="progress-bar" style="flex:1">
-					<div class="progress-bar__fill" style="width: {(totalAnswered / SESSION_SIZE) * 100}%"></div>
+					<div
+						class="progress-bar__fill"
+						style="width: {(totalAnswered / SESSION_SIZE) * 100}%"
+					></div>
 				</div>
-				<span class="session__count">{totalAnswered + 1} / {Math.min(SESSION_SIZE, drillPool.length)}</span>
+				<span class="session__count"
+					>{totalAnswered + 1} / {Math.min(
+						SESSION_SIZE,
+						drillPool.length,
+					)}</span
+				>
 			</div>
 
 			<!-- Reusable drill component handles the answer UI -->
@@ -162,9 +186,10 @@
 				correctIndex={currentDrill.correctIndex}
 				onAnswer={handleAnswer}
 				onNext={handleNext}
-				nextLabel={currentDrillIndex < drillPool.length - 1 && totalAnswered < SESSION_SIZE
-					? 'Next Question →'
-					: 'See Results →'}
+				nextLabel={currentDrillIndex < drillPool.length - 1 &&
+				totalAnswered < SESSION_SIZE
+					? "Next Question →"
+					: "See Results →"}
 			/>
 
 			<!-- Running score counter -->
@@ -183,11 +208,24 @@
 	}
 
 	// Shared layout for empty, start, and results states
-	.empty, .start, .results {
+	.empty,
+	.start {
 		@include empty-state;
 	}
 
-	.empty__icon, .results__emoji {
+	.results {
+		text-align: center;
+		padding: $space-3xl;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: $space-lg;
+		max-width: 500px;
+		margin: 0 auto;
+	}
+
+	.empty__icon,
+	.results__emoji {
 		@include empty-state-icon;
 	}
 

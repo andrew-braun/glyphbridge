@@ -1,6 +1,7 @@
 <script lang="ts">
 	// Reactive store of words the user has learned by completing lessons
-	import { knownWords } from '$lib/stores/progress';
+	import Button from "$lib/components/ui/Button.svelte"
+	import { knownWords } from "$lib/stores/progress"
 </script>
 
 <svelte:head>
@@ -18,7 +19,9 @@
 -->
 <div class="words container">
 	<h1>Known Words</h1>
-	<p class="words__subtitle">Your growing collection of Thai words you can read.</p>
+	<p class="words__subtitle">
+		Your growing collection of Thai words you can read.
+	</p>
 
 	<!-- Empty state: shown when the user has not completed any lessons yet -->
 	{#if $knownWords.length === 0}
@@ -26,9 +29,11 @@
 			<div class="empty__icon">&#128218;</div>
 			<h2>No words yet!</h2>
 			<p>Complete your first lesson to start building your word collection.</p>
-			<a href="/learn" class="btn btn--primary btn--large">Start Learning</a>
+			<Button href="/learn" variant="primary" size="large"
+				>Start Learning</Button
+			>
 		</div>
-	<!-- Word cards grid: each card shows full word details and syllable breakdown -->
+		<!-- Word cards grid: each card shows full word details and syllable breakdown -->
 	{:else}
 		<div class="word-grid">
 			{#each $knownWords as word}

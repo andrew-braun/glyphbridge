@@ -1,23 +1,23 @@
 <script lang="ts">
-	import { knownLetters, progress } from '$lib/stores/progress';
-	import { thaiPack } from '$lib/data/thai';
-	import type { Letter } from '$lib/data/types';
-
+	import Button from "$lib/components/ui/Button.svelte"
+	import { thaiPack } from "$lib/data/thai"
+	import type { Letter } from "$lib/data/types"
+	import { knownLetters, progress } from "$lib/stores/progress"
 
 	// Build a flat list of every letter introduced across all lessons
-	const allLetters: Letter[] = thaiPack.lessons.flatMap((l) => l.newLetters);
+	const allLetters: Letter[] = thaiPack.lessons.flatMap((l) => l.newLetters)
 
 	// Reactively partition letters into consonants and vowels for separate grid sections
-	const consonants = $derived(allLetters.filter((l) => l.type === 'consonant'));
-	const vowels = $derived(allLetters.filter((l) => l.type === 'vowel'));
+	const consonants = $derived(allLetters.filter((l) => l.type === "consonant"))
+	const vowels = $derived(allLetters.filter((l) => l.type === "vowel"))
 
 	// Check whether the user has unlocked a letter by completing its lesson
 	function isKnown(char: string): boolean {
-		return $knownLetters.includes(char);
+		return $knownLetters.includes(char)
 	}
 
 	// Tracks which letter tile is expanded in the detail panel; null means panel is closed
-	let selectedLetter = $state<Letter | null>(null);
+	let selectedLetter = $state<Letter | null>(null)
 </script>
 
 <svelte:head>
@@ -36,12 +36,18 @@
 <div class="alphabet container">
 	<h1>Your Thai Alphabet</h1>
 	<p class="alphabet__subtitle">
-		Letters unlock as you complete lessons. You know <strong>{$knownLetters.length}</strong> of {allLetters.length} letters taught so far.
+		Letters unlock as you complete lessons. You know <strong
+			>{$knownLetters.length}</strong
+		>
+		of {allLetters.length} letters taught so far.
 	</p>
 
 	<!-- Visual progress bar: fill width is the percentage of letters learned -->
 	<div class="progress-bar" style="margin-bottom: 2rem">
-		<div class="progress-bar__fill" style="width: {($knownLetters.length / allLetters.length) * 100}%"></div>
+		<div
+			class="progress-bar__fill"
+			style="width: {($knownLetters.length / allLetters.length) * 100}%"
+		></div>
 	</div>
 
 	<!-- Consonant grid -->
@@ -53,8 +59,11 @@
 				<button
 					class="letter-tile"
 					class:letter-tile--known={isKnown(letter.character)}
-					class:letter-tile--selected={selectedLetter?.character === letter.character}
-					onclick={() => selectedLetter = selectedLetter?.character === letter.character ? null : letter}
+					class:letter-tile--selected={selectedLetter?.character ===
+						letter.character}
+					onclick={() =>
+						(selectedLetter =
+							selectedLetter?.character === letter.character ? null : letter)}
 					disabled={!isKnown(letter.character)}
 				>
 					<span class="letter-tile__char thai">{letter.character}</span>
@@ -76,8 +85,11 @@
 				<button
 					class="letter-tile"
 					class:letter-tile--known={isKnown(letter.character)}
-					class:letter-tile--selected={selectedLetter?.character === letter.character}
-					onclick={() => selectedLetter = selectedLetter?.character === letter.character ? null : letter}
+					class:letter-tile--selected={selectedLetter?.character ===
+						letter.character}
+					onclick={() =>
+						(selectedLetter =
+							selectedLetter?.character === letter.character ? null : letter)}
 					disabled={!isKnown(letter.character)}
 				>
 					<span class="letter-tile__char thai">{letter.character}</span>
@@ -94,8 +106,17 @@
 	<!-- Detail panel: shown when a known letter tile is selected -->
 	{#if selectedLetter}
 		<div class="detail-panel card">
-			<button class="detail-panel__close btn btn--ghost" onclick={() => selectedLetter = null}>&times;</button>
-			<div class="detail-panel__char thai" style="font-size: 4rem; color: var(--primary);">
+			<Button
+				variant="ghost"
+				class="detail-panel__close"
+				onclick={() => (selectedLetter = null)}
+			>
+				&times;
+			</Button>
+			<div
+				class="detail-panel__char thai"
+				style="font-size: 4rem; color: var(--primary);"
+			>
 				{selectedLetter.character}
 			</div>
 			<div class="detail-panel__info">
@@ -109,17 +130,22 @@
 				</div>
 				<div class="detail-panel__row">
 					<span class="detail-panel__label">Type</span>
-					<span>{selectedLetter.type}{selectedLetter.class ? ` (${selectedLetter.class} class)` : ''}</span>
+					<span
+						>{selectedLetter.type}{selectedLetter.class
+							? ` (${selectedLetter.class} class)`
+							: ""}</span
+					>
 				</div>
 				<!-- Position row is only relevant for vowels that attach to a consonant -->
-				{#if selectedLetter.position && selectedLetter.position !== 'standalone'}
+				{#if selectedLetter.position && selectedLetter.position !== "standalone"}
 					<div class="detail-panel__row">
 						<span class="detail-panel__label">Position</span>
 						<span>Written {selectedLetter.position}</span>
 					</div>
 				{/if}
 				<div class="detail-panel__mnemonic">
-					<strong>Memory trick:</strong> {selectedLetter.mnemonic}
+					<strong>Memory trick:</strong>
+					{selectedLetter.mnemonic}
 				</div>
 			</div>
 		</div>
@@ -219,7 +245,7 @@
 
 		--primary: #{$color-primary};
 
-		&__close {
+		:global(.detail-panel__close) {
 			position: absolute;
 			top: $space-md;
 			right: $space-md;
