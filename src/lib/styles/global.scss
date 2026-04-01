@@ -20,7 +20,7 @@ $color-border: #DFE6E9;
 
 // Typography
 $font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-$font-thai: 'Noto Sans Thai', 'Sarabun', sans-serif;
+$font-thai: 'Sarabun', sans-serif;
 $font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
 $font-size-xs: 0.75rem;
@@ -84,12 +84,12 @@ html {
 }
 
 body {
-	// Use Noto Sans Thai alongside Inter so any Thai Unicode characters
+	// Use Sarabun alongside Inter so any Thai Unicode characters
 	// (U+0E00–U+0E7F) automatically render in the correct font even
 	// without a .thai class. The browser picks the first font that can
-	// render each glyph, so Inter handles Latin and Noto Sans Thai
-	// handles Thai script seamlessly.
-	font-family: 'Noto Sans Thai', $font-body;
+	// render each glyph, so Inter handles Latin and Sarabun handles
+	// Thai script seamlessly.
+	font-family: 'Sarabun', $font-body;
 	color: $color-text;
 	background-color: $color-bg;
 	line-height: 1.6;

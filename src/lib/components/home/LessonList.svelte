@@ -12,6 +12,7 @@
 <script lang="ts">
 	import { knownWords, currentLessonId } from '$lib/stores/progress';
 	import { thaiPack } from '$lib/data/thai';
+
 </script>
 
 <section class="upcoming">

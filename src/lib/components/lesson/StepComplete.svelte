@@ -10,6 +10,7 @@
 <script lang="ts">
 	import type { Lesson } from '$lib/data/types';
 
+
 	let {
 		lesson,
 		correctCount,

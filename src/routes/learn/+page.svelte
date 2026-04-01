@@ -3,6 +3,7 @@
 	import { currentLesson, currentLessonId } from '$lib/stores/progress';
 	import { goto } from '$app/navigation';
 	import { thaiPack } from '$lib/data/thai';
+
 </script>
 
 <svelte:head>
