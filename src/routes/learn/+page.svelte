@@ -1,4 +1,5 @@
 <script lang="ts">
+	// currentLessonId tracks the user's furthest unlocked lesson
 	import { currentLesson, currentLessonId } from '$lib/stores/progress';
 	import { goto } from '$app/navigation';
 	import { thaiPack } from '$lib/data/thai';
@@ -8,12 +9,23 @@
 	<title>Learn — SparkScripts</title>
 </svelte:head>
 
+<!--
+  Learn Page (Lesson Index)
+  Displays a grid of all available lessons from the Thai language pack.
+  Each lesson card shows:
+  - A stage badge and completion/current status indicator
+  - The anchor word (the real Thai word taught in the lesson)
+  - The new letters introduced by that lesson
+  Lessons are locked until the previous lesson is completed; locked cards
+  show a semi-transparent overlay preventing navigation.
+-->
 <div class="learn container">
 	<h1>Lessons</h1>
 	<p class="learn__subtitle">Each lesson teaches you a real Thai word and the letters inside it.</p>
 
 	<div class="lessons-grid">
 		{#each thaiPack.lessons as lesson}
+			<!-- Derive state flags: isCurrent marks the next lesson to do, isUnlocked allows navigation -->
 			{@const isCurrent = lesson.id === $currentLessonId}
 			{@const isUnlocked = lesson.id <= $currentLessonId}
 			<a
@@ -23,6 +35,7 @@
 				class:lesson-card--locked={!isUnlocked}
 				class:lesson-card--done={lesson.id < $currentLessonId}
 			>
+				<!-- Header badges: stage number + completion state (Complete / Current / none) -->
 				<div class="lesson-card__header">
 					<span class="badge badge--primary">Stage {lesson.stage}</span>
 					{#if lesson.id < $currentLessonId}
@@ -34,11 +47,13 @@
 				<div class="lesson-card__word thai">{lesson.anchorWord.thai}</div>
 				<h3>{lesson.title}</h3>
 				<p class="lesson-card__meaning">{lesson.anchorWord.meaning}</p>
+				<!-- Chips previewing the new Thai letters this lesson introduces -->
 				<div class="lesson-card__new-letters">
 					{#each lesson.newLetters as letter}
 						<span class="letter-chip thai thai--sm">{letter.character}</span>
 					{/each}
 				</div>
+				<!-- Overlay blocks interaction on locked lessons -->
 				{#if !isUnlocked}
 					<div class="lesson-card__overlay">&#128274; Complete previous lesson</div>
 				{/if}
@@ -48,6 +63,11 @@
 </div>
 
 <style lang="scss">
+	/* ========================================
+	   Learn page (lesson index) styles
+	   ======================================== */
+
+	// Page wrapper and subtitle
 	.learn {
 		&__subtitle {
 			color: $color-text-light;
@@ -56,12 +76,14 @@
 		}
 	}
 
+	// Two-column grid; collapses to single column on mobile
 	.lessons-grid {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
 		gap: $space-lg;
 	}
 
+	// Lesson card: three visual states via BEM modifiers (--current, --done, --locked)
 	.lesson-card {
 		position: relative;
 		display: flex;
@@ -116,6 +138,7 @@
 		}
 	}
 
+	// Small square chip showing a single Thai character
 	.letter-chip {
 		width: 40px;
 		height: 40px;
@@ -127,6 +150,7 @@
 		color: $color-primary;
 	}
 
+	// Mobile: single-column layout for lesson cards
 	@media (max-width: $bp-sm) {
 		.lessons-grid {
 			grid-template-columns: 1fr;

@@ -84,14 +84,22 @@ html {
 }
 
 body {
-	font-family: $font-body;
+	// Use Noto Sans Thai alongside Inter so any Thai Unicode characters
+	// (U+0E00–U+0E7F) automatically render in the correct font even
+	// without a .thai class. The browser picks the first font that can
+	// render each glyph, so Inter handles Latin and Noto Sans Thai
+	// handles Thai script seamlessly.
+	font-family: 'Noto Sans Thai', $font-body;
 	color: $color-text;
 	background-color: $color-bg;
 	line-height: 1.6;
 	min-height: 100vh;
 }
 
-// Thai text styling
+// Thai text styling — used to bump up the font size and line-height
+// for Thai script that should be displayed prominently (anchor words,
+// letter displays, drill options, etc.). The font-family is inherited
+// from body, so this class only adjusts sizing.
 .thai {
 	font-family: $font-thai;
 	font-size: $font-size-thai;

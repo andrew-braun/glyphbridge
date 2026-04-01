@@ -1,29 +1,52 @@
+<!--
+  Practice Page — /practice
+  ==========================
+  Standalone drill session using questions from all completed lessons.
+  The user starts a session of N randomized questions, answers them
+  one by one, then sees their score.
+
+  Three states:
+    1. Start screen — shows stats and a "Start Practice" button
+    2. Active session — renders DrillExercise for each question
+    3. Results screen — shows score and option to retry
+
+  Drills are pulled from all lessons the user has completed, shuffled,
+  and capped at the session size (default: 10 questions).
+-->
 <script lang="ts">
 	import { knownLetters, knownWords, progress } from '$lib/stores/progress';
 	import { thaiPack } from '$lib/data/thai';
 	import type { DrillQuestion } from '$lib/data/types';
+	import DrillExercise from '$lib/components/DrillExercise.svelte';
 
-	// Gather all drills from completed lessons
+	// --- Gather available drills from completed lessons ---
+	// Reactively re-computed when progress changes (e.g. after completing a new lesson).
 	const availableDrills = $derived.by(() => {
-		const completedIds = $progress.lessonProgress.filter((lp) => lp.completed).map((lp) => lp.lessonId);
+		const completedIds = $progress.lessonProgress
+			.filter((lp) => lp.completed)
+			.map((lp) => lp.lessonId);
 		return thaiPack.lessons
 			.filter((l) => completedIds.includes(l.id))
 			.flatMap((l) => l.drills);
 	});
 
+	// --- Session configuration ---
+	const SESSION_SIZE = 10;
+
+	// --- Session state ---
 	let drillPool = $state<DrillQuestion[]>([]);
 	let currentDrillIndex = $state(0);
-	let selectedAnswer = $state<number | null>(null);
-	let drillAnswered = $state(false);
 	let correctCount = $state(0);
 	let totalAnswered = $state(0);
 	let sessionActive = $state(false);
-	let sessionSize = $state(10);
 
+	// Derived state
 	const currentDrill = $derived<DrillQuestion | undefined>(drillPool[currentDrillIndex]);
-	const isCorrect = $derived(selectedAnswer === currentDrill?.correctIndex);
-	const sessionComplete = $derived(totalAnswered >= sessionSize || (sessionActive && currentDrillIndex >= drillPool.length));
+	const sessionComplete = $derived(
+		sessionActive && (totalAnswered >= SESSION_SIZE || currentDrillIndex >= drillPool.length)
+	);
 
+	/** Fisher-Yates shuffle to randomize drill order each session. */
 	function shuffle<T>(arr: T[]): T[] {
 		const shuffled = [...arr];
 		for (let i = shuffled.length - 1; i > 0; i--) {
@@ -33,32 +56,27 @@
 		return shuffled;
 	}
 
+	/** Initialize a new practice session with shuffled drills. */
 	function startSession() {
-		drillPool = shuffle(availableDrills).slice(0, sessionSize);
+		drillPool = shuffle(availableDrills).slice(0, SESSION_SIZE);
 		currentDrillIndex = 0;
-		selectedAnswer = null;
-		drillAnswered = false;
 		correctCount = 0;
 		totalAnswered = 0;
 		sessionActive = true;
 	}
 
-	function selectAnswer(index: number) {
-		if (drillAnswered) return;
-		selectedAnswer = index;
-		drillAnswered = true;
+	/** Called by DrillExercise after user selects an answer. */
+	function handleAnswer(isCorrect: boolean) {
 		totalAnswered++;
-		if (index === currentDrill?.correctIndex) {
-			correctCount++;
-		}
+		if (isCorrect) correctCount++;
 	}
 
-	function nextDrill() {
+	/** Called by DrillExercise when user clicks "Next". */
+	function handleNext() {
 		if (currentDrillIndex < drillPool.length - 1) {
 			currentDrillIndex++;
-			selectedAnswer = null;
-			drillAnswered = false;
 		}
+		// sessionComplete derived state will flip to true on the last question
 	}
 </script>
 
@@ -70,6 +88,7 @@
 	<h1>Practice</h1>
 	<p class="practice__subtitle">Review what you've learned with randomized drills.</p>
 
+	<!-- STATE: No drills available (user hasn't completed any lessons) -->
 	{#if availableDrills.length === 0}
 		<div class="empty card">
 			<div class="empty__icon">&#127947;</div>
@@ -77,6 +96,8 @@
 			<p>Complete at least one lesson to unlock practice drills.</p>
 			<a href="/learn" class="btn btn--primary btn--large">Start Learning</a>
 		</div>
+
+	<!-- STATE: Session not started — show stats and start button -->
 	{:else if !sessionActive}
 		<div class="start card">
 			<h2>Ready to practice?</h2>
@@ -92,11 +113,14 @@
 				</div>
 			</div>
 			<button class="btn btn--primary btn--large" onclick={startSession}>
-				Start Practice Session ({Math.min(sessionSize, availableDrills.length)} questions)
+				Start Practice Session ({Math.min(SESSION_SIZE, availableDrills.length)} questions)
 			</button>
 		</div>
+
+	<!-- STATE: Session complete — show results -->
 	{:else if sessionComplete}
 		<div class="results card">
+			<!-- Emoji adapts to score: trophy for perfect, muscle for good, chat for needs work -->
 			<div class="results__emoji">
 				{#if correctCount === totalAnswered}
 					&#127942;
@@ -119,47 +143,31 @@
 				<a href="/learn" class="btn btn--secondary btn--large">Back to Lessons</a>
 			</div>
 		</div>
+
+	<!-- STATE: Active session — show current drill -->
 	{:else if currentDrill}
 		<div class="session">
+			<!-- Progress bar for the session -->
 			<div class="session__header">
 				<div class="progress-bar" style="flex:1">
-					<div class="progress-bar__fill" style="width: {(totalAnswered / sessionSize) * 100}%"></div>
+					<div class="progress-bar__fill" style="width: {(totalAnswered / SESSION_SIZE) * 100}%"></div>
 				</div>
-				<span class="session__count">{totalAnswered + 1} / {Math.min(sessionSize, drillPool.length)}</span>
+				<span class="session__count">{totalAnswered + 1} / {Math.min(SESSION_SIZE, drillPool.length)}</span>
 			</div>
 
-			<div class="drill">
-				<h2 class="drill__prompt">{currentDrill.prompt}</h2>
-				<div class="drill__options">
-					{#each currentDrill.options as option, i}
-						<button
-							class="drill__option"
-							class:drill__option--selected={selectedAnswer === i}
-							class:drill__option--correct={drillAnswered && i === currentDrill.correctIndex}
-							class:drill__option--wrong={drillAnswered && selectedAnswer === i && i !== currentDrill.correctIndex}
-							onclick={() => selectAnswer(i)}
-							disabled={drillAnswered}
-						>
-							<span class="drill__option-text" class:thai={option.match(/[\u0E00-\u0E7F]/)}>
-								{option}
-							</span>
-						</button>
-					{/each}
-				</div>
-				{#if drillAnswered}
-					<div class="drill__feedback" class:drill__feedback--correct={isCorrect} class:drill__feedback--wrong={!isCorrect}>
-						{#if isCorrect}
-							<strong>Correct!</strong>
-						{:else}
-							<strong>Not quite.</strong> The answer is: <span class="thai thai--sm">{currentDrill.options[currentDrill.correctIndex]}</span>
-						{/if}
-					</div>
-					<button class="btn btn--primary btn--large btn--full" onclick={nextDrill}>
-						{currentDrillIndex < drillPool.length - 1 && totalAnswered < sessionSize ? 'Next Question →' : 'See Results →'}
-					</button>
-				{/if}
-			</div>
+			<!-- Reusable drill component handles the answer UI -->
+			<DrillExercise
+				prompt={currentDrill.prompt}
+				options={currentDrill.options}
+				correctIndex={currentDrill.correctIndex}
+				onAnswer={handleAnswer}
+				onNext={handleNext}
+				nextLabel={currentDrillIndex < drillPool.length - 1 && totalAnswered < SESSION_SIZE
+					? 'Next Question →'
+					: 'See Results →'}
+			/>
 
+			<!-- Running score counter -->
 			<div class="session__score">
 				Score: {correctCount} / {totalAnswered}
 			</div>
@@ -170,31 +178,20 @@
 <style lang="scss">
 	.practice {
 		&__subtitle {
-			color: $color-text-light;
-			margin-top: $space-sm;
-			margin-bottom: $space-xl;
+			@include page-subtitle;
 		}
 	}
 
+	// Shared layout for empty, start, and results states
 	.empty, .start, .results {
-		text-align: center;
-		padding: $space-3xl;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: $space-lg;
-		max-width: 500px;
-		margin: 0 auto;
-
-		p {
-			color: $color-text-light;
-		}
+		@include empty-state;
 	}
 
 	.empty__icon, .results__emoji {
-		font-size: 4rem;
+		@include empty-state-icon;
 	}
 
+	// Stat chips on the start screen
 	.start__stats {
 		display: flex;
 		gap: $space-xl;
@@ -212,31 +209,14 @@
 		}
 
 		&__label {
-			font-size: $font-size-sm;
-			color: $color-text-light;
-			text-transform: uppercase;
-			font-weight: 600;
+			@include step-counter;
 		}
 	}
 
+	// Results screen
 	.results {
 		&__score {
-			display: flex;
-			flex-direction: column;
-			gap: $space-xs;
-
-			&-num {
-				font-size: $font-size-3xl;
-				font-weight: 800;
-				color: $color-success;
-			}
-
-			&-label {
-				font-size: $font-size-sm;
-				color: $color-text-light;
-				text-transform: uppercase;
-				font-weight: 600;
-			}
+			@include score-display($color-success);
 		}
 
 		&__pct {
@@ -251,6 +231,7 @@
 		}
 	}
 
+	// Active session layout
 	.session {
 		max-width: 640px;
 		margin: 0 auto;
@@ -265,90 +246,13 @@
 		}
 
 		&__count {
-			font-size: $font-size-sm;
-			color: $color-text-muted;
-			font-weight: 600;
+			@include step-counter;
 			white-space: nowrap;
 		}
 
 		&__score {
 			text-align: center;
-			font-size: $font-size-sm;
-			color: $color-text-muted;
-			font-weight: 600;
-		}
-	}
-
-	.drill {
-		display: flex;
-		flex-direction: column;
-		gap: $space-xl;
-
-		&__prompt {
-			text-align: center;
-			font-size: $font-size-xl;
-		}
-
-		&__options {
-			display: grid;
-			grid-template-columns: 1fr 1fr;
-			gap: $space-md;
-		}
-
-		&__option {
-			padding: $space-lg;
-			border: 2px solid $color-border;
-			border-radius: $radius-lg;
-			background: $color-bg-card;
-			cursor: pointer;
-			transition: all $transition-fast;
-			font-family: inherit;
-			font-size: $font-size-base;
-
-			&:hover:not(:disabled) {
-				border-color: $color-primary;
-				background: rgba($color-primary, 0.03);
-			}
-
-			&--selected {
-				border-color: $color-primary;
-			}
-
-			&--correct {
-				border-color: $color-success !important;
-				background: rgba($color-success, 0.08) !important;
-			}
-
-			&--wrong {
-				border-color: $color-error !important;
-				background: rgba($color-error, 0.08) !important;
-			}
-
-			&-text.thai {
-				font-size: $font-size-thai;
-			}
-		}
-
-		&__feedback {
-			text-align: center;
-			padding: $space-md $space-lg;
-			border-radius: $radius-md;
-
-			&--correct {
-				background: rgba($color-success, 0.1);
-				color: #008c6e;
-			}
-
-			&--wrong {
-				background: rgba($color-error, 0.1);
-				color: #e55655;
-			}
-		}
-	}
-
-	@media (max-width: $bp-sm) {
-		.drill__options {
-			grid-template-columns: 1fr;
+			@include step-counter;
 		}
 	}
 </style>

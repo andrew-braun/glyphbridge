@@ -1,0 +1,166 @@
+// === SparkScripts SCSS Mixins ===
+// Reusable patterns extracted from repeated component styles.
+// Import via `@use '$lib/styles/mixins' as *;` or rely on
+// vite's additionalData injection (configured in vite.config.ts).
+//
+// Note: This file uses @use to import variables because @use creates
+// module boundaries in modern Sass. The variables must be explicitly
+// imported here even though they're also injected via additionalData.
+@use '$lib/styles/variables' as *;
+
+// ---------------------------------------------------------------------------
+// Drill option buttons — used in lesson drills and practice drills.
+// Renders a selectable tile that highlights green/red based on correctness.
+// ---------------------------------------------------------------------------
+@mixin drill-option {
+	padding: $space-lg;
+	border: 2px solid $color-border;
+	border-radius: $radius-lg;
+	background: $color-bg-card;
+	cursor: pointer;
+	transition: all $transition-fast;
+	font-family: $font-body;
+	font-size: $font-size-base;
+
+	&:hover:not(:disabled) {
+		border-color: $color-primary;
+		background: rgba($color-primary, 0.03);
+	}
+}
+
+// Drill option state modifiers — apply after @include drill-option.
+@mixin drill-option-states {
+	&--selected {
+		border-color: $color-primary;
+		background: rgba($color-primary, 0.05);
+	}
+
+	&--correct {
+		border-color: $color-success !important;
+		background: rgba($color-success, 0.08) !important;
+	}
+
+	&--wrong {
+		border-color: $color-error !important;
+		background: rgba($color-error, 0.08) !important;
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Drill feedback banner — shows "Correct!" or "Not quite." after answering.
+// ---------------------------------------------------------------------------
+@mixin drill-feedback {
+	text-align: center;
+	padding: $space-md $space-lg;
+	border-radius: $radius-md;
+	font-size: $font-size-lg;
+
+	&--correct {
+		background: rgba($color-success, 0.1);
+		color: #008c6e;
+	}
+
+	&--wrong {
+		background: rgba($color-error, 0.1);
+		color: #e55655;
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Score display — large number + small label stacked vertically.
+// Used for drill results and practice session summaries.
+// $number-color: the color for the big number (default: $color-success).
+// ---------------------------------------------------------------------------
+@mixin score-display($number-color: $color-success) {
+	display: flex;
+	flex-direction: column;
+	gap: $space-xs;
+
+	&-num {
+		font-size: $font-size-3xl;
+		font-weight: 800;
+		color: $number-color;
+	}
+
+	&-label {
+		font-size: $font-size-sm;
+		color: $color-text-light;
+		text-transform: uppercase;
+		font-weight: 600;
+		letter-spacing: 0.05em;
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Empty / placeholder state — centered card with icon, title, description.
+// Used when a page has no content yet (e.g. no words learned, no drills).
+// ---------------------------------------------------------------------------
+@mixin empty-state {
+	text-align: center;
+	padding: $space-3xl;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: $space-lg;
+	max-width: 500px;
+	margin: 0 auto;
+
+	p {
+		color: $color-text-light;
+	}
+}
+
+@mixin empty-state-icon {
+	font-size: 4rem;
+}
+
+// ---------------------------------------------------------------------------
+// Step counter label — small uppercase text showing "Letter 1 of 3" etc.
+// Used in lesson steps and practice sessions.
+// ---------------------------------------------------------------------------
+@mixin step-counter {
+	font-size: $font-size-sm;
+	color: $color-text-muted;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+// ---------------------------------------------------------------------------
+// Page subtitle — muted text below a page h1 heading.
+// ---------------------------------------------------------------------------
+@mixin page-subtitle {
+	color: $color-text-light;
+	margin-top: $space-sm;
+	margin-bottom: $space-xl;
+}
+
+// ---------------------------------------------------------------------------
+// Detail row — label + value on opposite sides, separated by a bottom border.
+// Used in letter detail panels and letter intro cards.
+// ---------------------------------------------------------------------------
+@mixin detail-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: $space-sm 0;
+	border-bottom: 1px solid $color-border;
+}
+
+@mixin detail-label {
+	font-weight: 600;
+	color: $color-text-light;
+	font-size: $font-size-sm;
+}
+
+// ---------------------------------------------------------------------------
+// Fade-in animation — subtle entrance for lesson steps and cards.
+// ---------------------------------------------------------------------------
+@mixin fade-in-animation {
+	animation: fadeIn 300ms ease;
+}
+
+@keyframes fadeIn {
+	from { opacity: 0; transform: translateY(8px); }
+	to { opacity: 1; transform: translateY(0); }
+}
