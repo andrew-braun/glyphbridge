@@ -3,6 +3,7 @@
 	import { thaiPack } from '$lib/data/thai';
 	import type { Letter } from '$lib/data/types';
 
+
 	// Build a flat list of every letter introduced across all lessons
 	const allLetters: Letter[] = thaiPack.lessons.flatMap((l) => l.newLetters);
 

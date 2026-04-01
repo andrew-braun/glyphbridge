@@ -14,6 +14,7 @@
 <script lang="ts">
 	import type { Letter } from '$lib/data/types';
 
+
 	let {
 		letters,
 		onComplete
