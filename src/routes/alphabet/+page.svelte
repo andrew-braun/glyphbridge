@@ -21,7 +21,7 @@
 </script>
 
 <svelte:head>
-	<title>Alphabet — SparkScripts</title>
+	<title>Alphabet — GlyphBridge</title>
 </svelte:head>
 
 <!--

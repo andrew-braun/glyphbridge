@@ -5,12 +5,12 @@
  * Provides writable and derived stores for tracking known letters, known words,
  * lesson completion, and the current lesson. All mutations auto-persist to localStorage.
  */
-import { writable, derived, get } from 'svelte/store';
-import type { AppProgress, Word, LessonProgress } from '$lib/data/types';
-import { thaiPack } from '$lib/data/thai';
+import { thaiPack } from "$lib/data/thai"
+import type { AppProgress, LessonProgress, Word } from "$lib/data/types"
+import { derived, get, writable } from "svelte/store"
 
 /** localStorage key under which the serialized progress JSON is stored */
-const STORAGE_KEY = 'sparkscripts_progress';
+const STORAGE_KEY = "glyphbridge_progress"
 
 /** Returns a blank AppProgress object representing a brand-new learner */
 function createInitialProgress(): AppProgress {
@@ -18,34 +18,34 @@ function createInitialProgress(): AppProgress {
 		knownLetters: [],
 		knownWords: [],
 		lessonProgress: [],
-		currentLessonId: 1
-	};
+		currentLessonId: 1,
+	}
 }
 
 /** Loads saved progress from localStorage, falling back to initial state on failure or SSR */
 function loadProgress(): AppProgress {
-	if (typeof window === 'undefined') return createInitialProgress();
+	if (typeof window === "undefined") return createInitialProgress()
 	try {
-		const stored = localStorage.getItem(STORAGE_KEY);
-		if (stored) return JSON.parse(stored);
+		const stored = localStorage.getItem(STORAGE_KEY)
+		if (stored) return JSON.parse(stored)
 	} catch {
 		// ignore parse errors
 	}
-	return createInitialProgress();
+	return createInitialProgress()
 }
 
 /** Persists the current progress state to localStorage; silently no-ops during SSR */
 function saveProgress(progress: AppProgress) {
-	if (typeof window === 'undefined') return;
+	if (typeof window === "undefined") return
 	try {
-		localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+		localStorage.setItem(STORAGE_KEY, JSON.stringify(progress))
 	} catch {
 		// ignore storage errors
 	}
 }
 
 /** The primary writable store holding the full AppProgress state */
-export const progress = writable<AppProgress>(createInitialProgress());
+export const progress = writable<AppProgress>(createInitialProgress())
 
 /**
  * Initializes the progress store by loading saved state from localStorage
@@ -53,25 +53,28 @@ export const progress = writable<AppProgress>(createInitialProgress());
  * Should be called once when the app mounts on the client side.
  */
 export function initProgress() {
-	const loaded = loadProgress();
-	progress.set(loaded);
-	progress.subscribe(saveProgress);
+	const loaded = loadProgress()
+	progress.set(loaded)
+	progress.subscribe(saveProgress)
 }
 
 /** Derived store: array of all Thai characters the learner has encountered */
-export const knownLetters = derived(progress, ($p) => $p.knownLetters);
+export const knownLetters = derived(progress, ($p) => $p.knownLetters)
 /** Derived store: array of all anchor words from completed lessons */
-export const knownWords = derived(progress, ($p) => $p.knownWords);
+export const knownWords = derived(progress, ($p) => $p.knownWords)
 /** Derived store: the numeric ID of the learner's current (or next) lesson */
-export const currentLessonId = derived(progress, ($p) => $p.currentLessonId);
+export const currentLessonId = derived(progress, ($p) => $p.currentLessonId)
 
 /** Derived store: the full Lesson object for the learner's current lesson, falling back to lesson 1 */
 export const currentLesson = derived(progress, ($p) => {
-	return thaiPack.lessons.find((l) => l.id === $p.currentLessonId) ?? thaiPack.lessons[0];
-});
+	return (
+		thaiPack.lessons.find((l) => l.id === $p.currentLessonId) ??
+		thaiPack.lessons[0]
+	)
+})
 
 /** Total number of lessons available in the Thai curriculum */
-export const totalLessons = thaiPack.lessons.length;
+export const totalLessons = thaiPack.lessons.length
 
 /**
  * Marks a lesson as completed and updates the learner's progress.
@@ -86,42 +89,44 @@ export const totalLessons = thaiPack.lessons.length;
  */
 export function completeLesson(lessonId: number, drillScore: number) {
 	progress.update(($p) => {
-		const lesson = thaiPack.lessons.find((l) => l.id === lessonId);
-		if (!lesson) return $p;
+		const lesson = thaiPack.lessons.find((l) => l.id === lessonId)
+		if (!lesson) return $p
 
 		// Add new letters
 		const newLetters = lesson.newLetters
 			.map((l) => l.character)
-			.filter((c) => !$p.knownLetters.includes(c));
-		$p.knownLetters = [...$p.knownLetters, ...newLetters];
+			.filter((c) => !$p.knownLetters.includes(c))
+		$p.knownLetters = [...$p.knownLetters, ...newLetters]
 
 		// Add word
 		if (!$p.knownWords.find((w) => w.thai === lesson.anchorWord.thai)) {
-			$p.knownWords = [...$p.knownWords, lesson.anchorWord];
+			$p.knownWords = [...$p.knownWords, lesson.anchorWord]
 		}
 
 		// Update lesson progress
-		const existing = $p.lessonProgress.findIndex((lp) => lp.lessonId === lessonId);
+		const existing = $p.lessonProgress.findIndex(
+			(lp) => lp.lessonId === lessonId,
+		)
 		const lp: LessonProgress = {
 			lessonId,
 			completed: true,
 			drillScore,
-			completedAt: new Date().toISOString()
-		};
+			completedAt: new Date().toISOString(),
+		}
 		if (existing >= 0) {
-			$p.lessonProgress[existing] = lp;
+			$p.lessonProgress[existing] = lp
 		} else {
-			$p.lessonProgress = [...$p.lessonProgress, lp];
+			$p.lessonProgress = [...$p.lessonProgress, lp]
 		}
 
 		// Advance to next lesson
-		const nextLesson = thaiPack.lessons.find((l) => l.id > lessonId);
+		const nextLesson = thaiPack.lessons.find((l) => l.id > lessonId)
 		if (nextLesson) {
-			$p.currentLessonId = nextLesson.id;
+			$p.currentLessonId = nextLesson.id
 		}
 
-		return $p;
-	});
+		return $p
+	})
 }
 
 /**
@@ -132,8 +137,10 @@ export function completeLesson(lessonId: number, drillScore: number) {
  * @returns true if the lesson is marked as completed
  */
 export function isLessonCompleted(lessonId: number): boolean {
-	const $p = get(progress);
-	return $p.lessonProgress.some((lp) => lp.lessonId === lessonId && lp.completed);
+	const $p = get(progress)
+	return $p.lessonProgress.some(
+		(lp) => lp.lessonId === lessonId && lp.completed,
+	)
 }
 
 /**
@@ -145,9 +152,11 @@ export function isLessonCompleted(lessonId: number): boolean {
  * @returns true if the learner is allowed to start this lesson
  */
 export function isLessonUnlocked(lessonId: number): boolean {
-	const $p = get(progress);
-	if (lessonId === 1) return true;
-	return $p.lessonProgress.some((lp) => lp.lessonId === lessonId - 1 && lp.completed);
+	const $p = get(progress)
+	if (lessonId === 1) return true
+	return $p.lessonProgress.some(
+		(lp) => lp.lessonId === lessonId - 1 && lp.completed,
+	)
 }
 
 /**
@@ -155,5 +164,5 @@ export function isLessonUnlocked(lessonId: number): boolean {
  * The store subscription will automatically clear localStorage.
  */
 export function resetProgress() {
-	progress.set(createInitialProgress());
+	progress.set(createInitialProgress())
 }

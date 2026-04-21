@@ -1,0 +1,22 @@
+# GlyphBridge Copilot Instructions
+
+- This file is the repo-wide Copilot baseline. Path-specific rules live in `.github/instructions/*.instructions.md`.
+- Also respect the nearest `AGENTS.md` when working in a subdirectory.
+- Use `pnpm` with Node `24.14.1`.
+- For every non-minor task, create and maintain a dated markdown spec/tracker in `.ai/` using `YYYY-MM-DD-short-description.md`.
+- Run `pnpm check` before finishing non-trivial changes. Run `pnpm build` when route behavior, metadata, env usage, or bundling changes.
+- When architecture, tech choices, config, environment, deployment, or workflow assumptions change, update every relevant instruction file in the same change.
+- Keep `src/routes` responsible for routing, route data, and metadata.
+- Keep `src/lib/components` responsible for reusable rendering. Keep UI primitives domain-agnostic.
+- Treat `src/lib/data` as the canonical lesson-content source of truth and `src/lib/stores` as client-state and persistence boundaries.
+- In Svelte 5, prefer `$derived` over `$effect` for computed state.
+- Prefer runes-mode APIs over legacy patterns in new code.
+- For new shared state or extracted reactive logic, prefer rune-powered `.svelte.ts` modules over classic stores unless a store contract is specifically required.
+- Prefer SvelteKit remote functions for first-party typed client-server reads and mutations when they fit the feature and current framework support. Use `+server.ts` for true HTTP endpoints, webhooks, third-party integrations, or when remote functions are a poor fit.
+- Treat props as read-only, prefer callback props for child-to-parent communication, and use `$bindable` only for intentional two-way APIs.
+- Preserve accessible semantic HTML, descriptive titles, useful page copy, and human-readable URLs.
+- Do not duplicate lesson content or create abstractions with only one speculative use.
+- Use server-only SvelteKit modules for secrets, writes, or privileged data.
+- If Supabase-backed auth or server data is added, use `@supabase/ssr`; never put admin credentials in client code.
+- Any work involving environment variables, auth, sessions, databases, secure routes, storage, or production secrets is high-risk and must be researched against current docs, designed conservatively, and explicitly signed off on before deployment.
+- Never expose, log, serialize, or commit secrets. Verify public versus private env boundaries every time.
