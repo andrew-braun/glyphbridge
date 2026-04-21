@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from "svelte"
+	import type { Snippet } from "svelte";
 
 	let {
 		badge,
@@ -9,13 +9,13 @@
 		align = "center",
 		children,
 	}: {
-		badge?: string
-		title: string
-		highlight?: string
-		subtitle: string
-		align?: "left" | "center"
-		children?: Snippet
-	} = $props()
+		badge?: string;
+		title: string;
+		highlight?: string;
+		subtitle: string;
+		align?: "left" | "center";
+		children?: Snippet;
+	} = $props();
 </script>
 
 <section class="page-hero" class:page-hero--left={align === "left"}>
@@ -66,7 +66,7 @@
 			margin-top: $space-lg;
 			font-size: $font-size-lg;
 			color: $color-text-light;
-			max-width: 560px;
+			max-width: var(--text-max-width);
 			margin-left: auto;
 			margin-right: auto;
 		}

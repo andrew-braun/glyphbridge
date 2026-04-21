@@ -13,60 +13,43 @@
   This page manages the step state machine and progress persistence.
 -->
 <script lang="ts">
-	import { goto } from "$app/navigation"
-	import Button from "$lib/components/ui/Button.svelte"
-	import { thaiPack } from "$lib/data/thai"
-	import { completeLesson } from "$lib/stores/progress"
-	import type { PageData } from "./$types"
+	import { goto } from "$app/navigation";
+	import Button from "$lib/components/ui/Button.svelte";
+	import { thaiPack } from "$lib/data/thai";
+	import { completeLesson } from "$lib/stores/progress";
+	import type { PageData } from "./$types";
 	// Step components
-	import StepBreakdown from "$lib/components/lesson/StepBreakdown.svelte"
-	import StepComplete from "$lib/components/lesson/StepComplete.svelte"
-	import StepDrills from "$lib/components/lesson/StepDrills.svelte"
-	import StepIntro from "$lib/components/lesson/StepIntro.svelte"
-	import StepLetters from "$lib/components/lesson/StepLetters.svelte"
-	import StepRules from "$lib/components/lesson/StepRules.svelte"
+	import StepBreakdown from "$lib/components/lesson/StepBreakdown.svelte";
+	import StepComplete from "$lib/components/lesson/StepComplete.svelte";
+	import StepDrills from "$lib/components/lesson/StepDrills.svelte";
+	import StepIntro from "$lib/components/lesson/StepIntro.svelte";
+	import StepLetters from "$lib/components/lesson/StepLetters.svelte";
+	import StepRules from "$lib/components/lesson/StepRules.svelte";
 
-	let { data }: { data: PageData } = $props()
-	const lesson = $derived(data.lesson)
+	let { data }: { data: PageData } = $props();
+	const lesson = $derived(data.lesson);
 
 	// --- Step state machine ---
 	// The lesson progresses linearly through these steps.
-	type Step =
-		| "intro"
-		| "breakdown"
-		| "letters"
-		| "rules"
-		| "drills"
-		| "complete"
-	const stepOrder: Step[] = [
-		"intro",
-		"breakdown",
-		"letters",
-		"rules",
-		"drills",
-		"complete",
-	]
+	type Step = "intro" | "breakdown" | "letters" | "rules" | "drills" | "complete";
+	const stepOrder: Step[] = ["intro", "breakdown", "letters", "rules", "drills", "complete"];
 
-	let currentStepIndex = $state(0)
-	let currentStep = $derived(stepOrder[currentStepIndex])
+	let currentStepIndex = $state(0);
+	let currentStep = $derived(stepOrder[currentStepIndex]);
 
 	// Drill results — passed from StepDrills to StepComplete
-	let drillCorrectCount = $state(0)
+	let drillCorrectCount = $state(0);
 
 	// Progress bar percentage (0% at intro, 100% at complete)
-	const progressPercent = $derived(
-		(currentStepIndex / (stepOrder.length - 1)) * 100,
-	)
+	const progressPercent = $derived((currentStepIndex / (stepOrder.length - 1)) * 100);
 
 	// Check if there's a lesson after this one
-	const hasNextLesson = $derived(
-		!!thaiPack.lessons.find((l) => l.id > lesson.id),
-	)
+	const hasNextLesson = $derived(!!thaiPack.lessons.find((l) => l.id > lesson.id));
 
 	/** Advance to the next step in the lesson flow. */
 	function nextStep() {
 		if (currentStepIndex < stepOrder.length - 1) {
-			currentStepIndex++
+			currentStepIndex++;
 		}
 	}
 
@@ -75,25 +58,29 @@
 	 * Saves progress to localStorage and advances to the complete step.
 	 */
 	function handleDrillsComplete(correctCount: number) {
-		drillCorrectCount = correctCount
-		const score = Math.round((correctCount / lesson.drills.length) * 100)
-		completeLesson(lesson.id, score)
-		nextStep()
+		drillCorrectCount = correctCount;
+		const score = Math.round((correctCount / lesson.drills.length) * 100);
+		completeLesson(lesson.id, score);
+		nextStep();
 	}
 
 	/** Navigate to the next lesson in the curriculum. */
 	function goToNextLesson() {
-		const next = thaiPack.lessons.find((l) => l.id > lesson.id)
+		const next = thaiPack.lessons.find((l) => l.id > lesson.id);
 		if (next) {
-			goto(`/learn/${next.id}`)
+			goto(`/learn/${next.id}`);
 		} else {
-			goto("/learn")
+			goto("/learn");
 		}
 	}
 </script>
 
 <svelte:head>
 	<title>{lesson.title} — GlyphBridge</title>
+	<meta
+		name="description"
+		content={`Learn to read ${lesson.anchorWord.thai}, meaning ${lesson.anchorWord.meaning}, through letters, reading rules, and short Thai practice drills.`}
+	/>
 </svelte:head>
 
 <div class="lesson container">
@@ -103,9 +90,7 @@
 		<div class="progress-bar" style="flex:1">
 			<div class="progress-bar__fill" style="width: {progressPercent}%"></div>
 		</div>
-		<span class="lesson__step-label"
-			>{currentStepIndex + 1} / {stepOrder.length}</span
-		>
+		<span class="lesson__step-label">{currentStepIndex + 1} / {stepOrder.length}</span>
 	</div>
 
 	<!-- Render the current step component -->

@@ -29,7 +29,7 @@ const THAI_COMBINING_REGEX = /^[\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]$/;
  * dictionaries, linguistics texts, and script-learning materials all
  * use ◌ + vowel to show vowel shapes without implying a specific consonant.
  */
-const DOTTED_CIRCLE = '\u25CC';
+const DOTTED_CIRCLE = "\u25CC";
 
 /**
  * Returns true if the given string contains at least one Thai character.

@@ -14,71 +14,66 @@
   and capped at the session size (default: 10 questions).
 -->
 <script lang="ts">
-	import DrillExercise from "$lib/components/exercises/DrillExercise.svelte"
-	import Button from "$lib/components/ui/Button.svelte"
-	import { thaiPack } from "$lib/data/thai"
-	import type { DrillQuestion } from "$lib/data/types"
-	import { knownLetters, knownWords, progress } from "$lib/stores/progress"
+	import DrillExercise from "$lib/components/exercises/DrillExercise.svelte";
+	import Button from "$lib/components/ui/Button.svelte";
+	import { thaiPack } from "$lib/data/thai";
+	import type { DrillQuestion } from "$lib/data/types";
+	import { knownLetters, knownWords, progress } from "$lib/stores/progress";
 
 	// --- Gather available drills from completed lessons ---
 	// Reactively re-computed when progress changes (e.g. after completing a new lesson).
 	const availableDrills = $derived.by(() => {
 		const completedIds = $progress.lessonProgress
 			.filter((lp) => lp.completed)
-			.map((lp) => lp.lessonId)
-		return thaiPack.lessons
-			.filter((l) => completedIds.includes(l.id))
-			.flatMap((l) => l.drills)
-	})
+			.map((lp) => lp.lessonId);
+		return thaiPack.lessons.filter((l) => completedIds.includes(l.id)).flatMap((l) => l.drills);
+	});
 
 	// --- Session configuration ---
-	const SESSION_SIZE = 10
+	const SESSION_SIZE = 10;
 
 	// --- Session state ---
-	let drillPool = $state<DrillQuestion[]>([])
-	let currentDrillIndex = $state(0)
-	let correctCount = $state(0)
-	let totalAnswered = $state(0)
-	let sessionActive = $state(false)
+	let drillPool = $state<DrillQuestion[]>([]);
+	let currentDrillIndex = $state(0);
+	let correctCount = $state(0);
+	let totalAnswered = $state(0);
+	let sessionActive = $state(false);
 
 	// Derived state
-	const currentDrill = $derived<DrillQuestion | undefined>(
-		drillPool[currentDrillIndex],
-	)
+	const currentDrill = $derived<DrillQuestion | undefined>(drillPool[currentDrillIndex]);
 	const sessionComplete = $derived(
-		sessionActive &&
-			(totalAnswered >= SESSION_SIZE || currentDrillIndex >= drillPool.length),
-	)
+		sessionActive && (totalAnswered >= SESSION_SIZE || currentDrillIndex >= drillPool.length),
+	);
 
 	/** Fisher-Yates shuffle to randomize drill order each session. */
 	function shuffle<T>(arr: T[]): T[] {
-		const shuffled = [...arr]
+		const shuffled = [...arr];
 		for (let i = shuffled.length - 1; i > 0; i--) {
-			const j = Math.floor(Math.random() * (i + 1))
-			;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+			const j = Math.floor(Math.random() * (i + 1));
+			[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
 		}
-		return shuffled
+		return shuffled;
 	}
 
 	/** Initialize a new practice session with shuffled drills. */
 	function startSession() {
-		drillPool = shuffle(availableDrills).slice(0, SESSION_SIZE)
-		currentDrillIndex = 0
-		correctCount = 0
-		totalAnswered = 0
-		sessionActive = true
+		drillPool = shuffle(availableDrills).slice(0, SESSION_SIZE);
+		currentDrillIndex = 0;
+		correctCount = 0;
+		totalAnswered = 0;
+		sessionActive = true;
 	}
 
 	/** Called by DrillExercise after user selects an answer. */
 	function handleAnswer(isCorrect: boolean) {
-		totalAnswered++
-		if (isCorrect) correctCount++
+		totalAnswered++;
+		if (isCorrect) correctCount++;
 	}
 
 	/** Called by DrillExercise when user clicks "Next". */
 	function handleNext() {
 		if (currentDrillIndex < drillPool.length - 1) {
-			currentDrillIndex++
+			currentDrillIndex++;
 		}
 		// sessionComplete derived state will flip to true on the last question
 	}
@@ -86,13 +81,15 @@
 
 <svelte:head>
 	<title>Practice — GlyphBridge</title>
+	<meta
+		name="description"
+		content="Practice Thai reading with randomized drills drawn from the lessons you have completed and review the letters and words you already know."
+	/>
 </svelte:head>
 
 <div class="practice container">
 	<h1>Practice</h1>
-	<p class="practice__subtitle">
-		Review what you've learned with randomized drills.
-	</p>
+	<p class="practice__subtitle">Review what you've learned with randomized drills.</p>
 
 	<!-- STATE: No drills available (user hasn't completed any lessons) -->
 	{#if availableDrills.length === 0}
@@ -100,9 +97,7 @@
 			<div class="empty__icon">&#127947;</div>
 			<h2>Nothing to practice yet!</h2>
 			<p>Complete at least one lesson to unlock practice drills.</p>
-			<Button href="/learn" variant="primary" size="large"
-				>Start Learning</Button
-			>
+			<Button href="/learn" variant="primary" size="large">Start Learning</Button>
 		</div>
 
 		<!-- STATE: Session not started — show stats and start button -->
@@ -110,8 +105,7 @@
 		<div class="start card">
 			<h2>Ready to practice?</h2>
 			<p>
-				You have <strong>{availableDrills.length}</strong> drill questions from completed
-				lessons.
+				You have <strong>{availableDrills.length}</strong> drill questions from completed lessons.
 			</p>
 			<div class="start__stats">
 				<div class="stat">
@@ -151,12 +145,9 @@
 				{Math.round((correctCount / totalAnswered) * 100)}%
 			</div>
 			<div class="results__actions">
-				<Button variant="primary" size="large" onclick={startSession}
-					>Practice Again</Button
+				<Button variant="primary" size="large" onclick={startSession}>Practice Again</Button
 				>
-				<Button href="/learn" variant="secondary" size="large"
-					>Back to Lessons</Button
-				>
+				<Button href="/learn" variant="secondary" size="large">Back to Lessons</Button>
 			</div>
 		</div>
 
@@ -172,10 +163,7 @@
 					></div>
 				</div>
 				<span class="session__count"
-					>{totalAnswered + 1} / {Math.min(
-						SESSION_SIZE,
-						drillPool.length,
-					)}</span
+					>{totalAnswered + 1} / {Math.min(SESSION_SIZE, drillPool.length)}</span
 				>
 			</div>
 
@@ -186,8 +174,7 @@
 				correctIndex={currentDrill.correctIndex}
 				onAnswer={handleAnswer}
 				onNext={handleNext}
-				nextLabel={currentDrillIndex < drillPool.length - 1 &&
-				totalAnswered < SESSION_SIZE
+				nextLabel={currentDrillIndex < drillPool.length - 1 && totalAnswered < SESSION_SIZE
 					? "Next Question →"
 					: "See Results →"}
 			/>
@@ -220,7 +207,7 @@
 		flex-direction: column;
 		align-items: center;
 		gap: $space-lg;
-		max-width: 500px;
+		max-width: var(--content-max-width);
 		margin: 0 auto;
 	}
 
@@ -271,7 +258,7 @@
 
 	// Active session layout
 	.session {
-		max-width: 640px;
+		max-width: var(--content-max-width);
 		margin: 0 auto;
 		display: flex;
 		flex-direction: column;

@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { Snippet } from "svelte"
+	import type { Snippet } from "svelte";
 
-	type ButtonVariant = "primary" | "secondary" | "ghost" | "success"
-	type ButtonSize = "md" | "large"
-	type NativeButtonType = "button" | "submit" | "reset"
+	type ButtonVariant = "primary" | "secondary" | "ghost" | "success";
+	type ButtonSize = "md" | "large";
+	type NativeButtonType = "button" | "submit" | "reset";
 
 	let {
 		href,
@@ -16,36 +16,34 @@
 		onclick,
 		children,
 	}: {
-		href?: string
-		variant?: ButtonVariant
-		size?: ButtonSize
-		fullWidth?: boolean
-		disabled?: boolean
-		type?: NativeButtonType
-		class?: string
-		onclick?: (event: MouseEvent) => void
-		children?: Snippet
-	} = $props()
+		href?: string;
+		variant?: ButtonVariant;
+		size?: ButtonSize;
+		fullWidth?: boolean;
+		disabled?: boolean;
+		type?: NativeButtonType;
+		class?: string;
+		onclick?: (event: MouseEvent) => void;
+		children?: Snippet;
+	} = $props();
 
-	const variantClass = $derived(`btn--${variant}`)
-	const sizeClass = $derived(size === "large" ? "btn--large" : "")
-	const fullWidthClass = $derived(fullWidth ? "btn--full" : "")
+	const variantClass = $derived(`btn--${variant}`);
+	const sizeClass = $derived(size === "large" ? "btn--large" : "");
+	const fullWidthClass = $derived(fullWidth ? "btn--full" : "");
 	const classes = $derived(
-		["btn", variantClass, sizeClass, fullWidthClass, className]
-			.filter(Boolean)
-			.join(" "),
-	)
+		["btn", variantClass, sizeClass, fullWidthClass, className].filter(Boolean).join(" "),
+	);
 
 	function handleAnchorClick(event: MouseEvent) {
 		if (disabled) {
-			event.preventDefault()
-			return
+			event.preventDefault();
+			return;
 		}
-		onclick?.(event)
+		onclick?.(event);
 	}
 
 	function handleButtonClick(event: MouseEvent) {
-		onclick?.(event)
+		onclick?.(event);
 	}
 </script>
 

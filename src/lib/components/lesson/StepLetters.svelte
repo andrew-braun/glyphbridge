@@ -12,27 +12,27 @@
   to the rules step.
 -->
 <script lang="ts">
-	import Button from "$lib/components/ui/Button.svelte"
-	import type { Letter } from "$lib/data/types"
+	import Button from "$lib/components/ui/Button.svelte";
+	import type { Letter } from "$lib/data/types";
 
 	let {
 		letters,
 		onComplete,
 	}: {
-		letters: Letter[]
-		onComplete: () => void
-	} = $props()
+		letters: Letter[];
+		onComplete: () => void;
+	} = $props();
 
 	// Track which letter the learner is currently viewing
-	let currentIndex = $state(0)
-	const currentLetter = $derived(letters[currentIndex])
+	let currentIndex = $state(0);
+	const currentLetter = $derived(letters[currentIndex]);
 
 	/** Advance to next letter, or move to rules step if all letters shown. */
 	function next() {
 		if (currentIndex < letters.length - 1) {
-			currentIndex++
+			currentIndex++;
 		} else {
-			onComplete()
+			onComplete();
 		}
 	}
 </script>
@@ -44,10 +44,7 @@
 
 	<div class="letter-intro">
 		<!-- Large character display -->
-		<div
-			class="letter-intro__char thai"
-			style="font-size: 5rem; line-height: 1;"
-		>
+		<div class="letter-intro__char thai" style="font-size: 5rem; line-height: 1;">
 			{currentLetter.character}
 		</div>
 
@@ -88,9 +85,7 @@
 	</div>
 
 	<Button variant="primary" size="large" fullWidth={true} onclick={next}>
-		{currentIndex < letters.length - 1
-			? "Next Letter ->"
-			: "Learn the Rules ->"}
+		{currentIndex < letters.length - 1 ? "Next Letter ->" : "Learn the Rules ->"}
 	</Button>
 </div>
 
@@ -99,7 +94,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: $space-xl;
-		max-width: 640px;
+		max-width: var(--content-max-width);
 		margin: 0 auto;
 		@include fade-in-animation;
 

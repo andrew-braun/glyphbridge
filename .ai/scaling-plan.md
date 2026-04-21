@@ -10,19 +10,19 @@ Tick items off as they ship.
 
 ## Verdict summary
 
-| Area | State | Risk if unaddressed |
-| --- | --- | --- |
-| Documented conventions (AGENTS.md) | Excellent | Low |
-| Enforcement tooling (lint/format/test/CI) | Missing | High — drift is already happening |
-| Design system tokens | Duplicated across files, no CSS variables | High — can't theme, can't dark-mode, hardcoded colors already sneaking in |
-| TypeScript strictness | Strict on, but env access bypasses `$env/*` | Medium |
-| Data model scalability | Single inline `thaiPack` array, no schema validation | Medium — becomes painful past ~10 lessons |
-| SPA vs SSR posture | `ssr:false` + `prerender:true` globally; docs talk about server boundaries | Medium |
-| Accessibility primitives | No focus-visible, no reduced-motion, locked `<a href="#">` anti-pattern | Medium |
-| Svelte 5 store layer | Uses legacy `svelte/store`, has a subscription leak in `initProgress` | Low–Medium |
-| SEO / metadata | Titles only; no descriptions, OG tags, sitemap; fonts are render-blocking | Medium |
-| Tests | None | High — core pedagogy has no regression net |
-| Documentation for humans | `README.md` is default boilerplate | Low but embarrassing |
+| Area                                      | State                                                                      | Risk if unaddressed                                                       |
+| ----------------------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| Documented conventions (AGENTS.md)        | Excellent                                                                  | Low                                                                       |
+| Enforcement tooling (lint/format/test/CI) | Missing                                                                    | High — drift is already happening                                         |
+| Design system tokens                      | Duplicated across files, no CSS variables                                  | High — can't theme, can't dark-mode, hardcoded colors already sneaking in |
+| TypeScript strictness                     | Strict on, but env access bypasses `$env/*`                                | Medium                                                                    |
+| Data model scalability                    | Single inline `thaiPack` array, no schema validation                       | Medium — becomes painful past ~10 lessons                                 |
+| SPA vs SSR posture                        | `ssr:false` + `prerender:true` globally; docs talk about server boundaries | Medium                                                                    |
+| Accessibility primitives                  | No focus-visible, no reduced-motion, locked `<a href="#">` anti-pattern    | Medium                                                                    |
+| Svelte 5 store layer                      | Uses legacy `svelte/store`, has a subscription leak in `initProgress`      | Low–Medium                                                                |
+| SEO / metadata                            | Titles only; no descriptions, OG tags, sitemap; fonts are render-blocking  | Medium                                                                    |
+| Tests                                     | None                                                                       | High — core pedagogy has no regression net                                |
+| Documentation for humans                  | `README.md` is default boilerplate                                         | Low but embarrassing                                                      |
 
 ---
 
@@ -60,7 +60,7 @@ No `.github/workflows/` exists. Add one `ci.yml` on PR:
 - [ ] `pnpm test`
 - [ ] `pnpm build`
 - [ ] Cache `pnpm` + Playwright browsers
-- [ ] Pin Node to `24.14.1` via `actions/setup-node` reading `.nvmrc` (add it — `volta` alone doesn't cover teammates on `nvm`/`fnm`/CI).
+- [ ] Pin Node to `24.15.0` via `actions/setup-node` reading `.nvmrc` (add it — `volta` alone doesn't cover teammates on `nvm`/`fnm`/CI).
 
 ### 1.3 Collapse the duplicated design system
 
@@ -128,9 +128,9 @@ Options:
 
 ```ts
 export function initProgress() {
-  const loaded = loadProgress()
-  progress.set(loaded)
-  progress.subscribe(saveProgress)
+  const loaded = loadProgress();
+  progress.set(loaded);
+  progress.subscribe(saveProgress);
 }
 ```
 
@@ -146,12 +146,16 @@ Runes are enabled project-wide (`svelte.config.js` sets `runes: true`), but `pro
 - [ ] Migrate to `progress.svelte.ts`:
 
 ```ts
-const state = $state<AppProgress>(createInitial())
+const state = $state<AppProgress>(createInitial());
 export const progress = {
-  get value() { return state },
-  completeLesson(id, score) { /* mutate state */ },
+  get value() {
+    return state;
+  },
+  completeLesson(id, score) {
+    /* mutate state */
+  },
   // ...
-}
+};
 ```
 
 - [ ] Preserve the public API so call sites don't churn.

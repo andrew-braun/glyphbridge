@@ -1,27 +1,31 @@
 <script lang="ts">
-	import Button from "$lib/components/ui/Button.svelte"
-	import { thaiPack } from "$lib/data/thai"
-	import type { Letter } from "$lib/data/types"
-	import { knownLetters, progress } from "$lib/stores/progress"
+	import Button from "$lib/components/ui/Button.svelte";
+	import { thaiPack } from "$lib/data/thai";
+	import type { Letter } from "$lib/data/types";
+	import { knownLetters } from "$lib/stores/progress";
 
 	// Build a flat list of every letter introduced across all lessons
-	const allLetters: Letter[] = thaiPack.lessons.flatMap((l) => l.newLetters)
+	const allLetters: Letter[] = thaiPack.lessons.flatMap((l) => l.newLetters);
 
 	// Reactively partition letters into consonants and vowels for separate grid sections
-	const consonants = $derived(allLetters.filter((l) => l.type === "consonant"))
-	const vowels = $derived(allLetters.filter((l) => l.type === "vowel"))
+	const consonants = $derived(allLetters.filter((l) => l.type === "consonant"));
+	const vowels = $derived(allLetters.filter((l) => l.type === "vowel"));
 
 	// Check whether the user has unlocked a letter by completing its lesson
 	function isKnown(char: string): boolean {
-		return $knownLetters.includes(char)
+		return $knownLetters.includes(char);
 	}
 
 	// Tracks which letter tile is expanded in the detail panel; null means panel is closed
-	let selectedLetter = $state<Letter | null>(null)
+	let selectedLetter = $state<Letter | null>(null);
 </script>
 
 <svelte:head>
 	<title>Alphabet — GlyphBridge</title>
+	<meta
+		name="description"
+		content="Review the Thai letters you have unlocked so far, grouped by consonants and vowels with pronunciation details and memory cues."
+	/>
 </svelte:head>
 
 <!--
@@ -36,9 +40,7 @@
 <div class="alphabet container">
 	<h1>Your Thai Alphabet</h1>
 	<p class="alphabet__subtitle">
-		Letters unlock as you complete lessons. You know <strong
-			>{$knownLetters.length}</strong
-		>
+		Letters unlock as you complete lessons. You know <strong>{$knownLetters.length}</strong>
 		of {allLetters.length} letters taught so far.
 	</p>
 
@@ -59,8 +61,7 @@
 				<button
 					class="letter-tile"
 					class:letter-tile--known={isKnown(letter.character)}
-					class:letter-tile--selected={selectedLetter?.character ===
-						letter.character}
+					class:letter-tile--selected={selectedLetter?.character === letter.character}
 					onclick={() =>
 						(selectedLetter =
 							selectedLetter?.character === letter.character ? null : letter)}
@@ -85,8 +86,7 @@
 				<button
 					class="letter-tile"
 					class:letter-tile--known={isKnown(letter.character)}
-					class:letter-tile--selected={selectedLetter?.character ===
-						letter.character}
+					class:letter-tile--selected={selectedLetter?.character === letter.character}
 					onclick={() =>
 						(selectedLetter =
 							selectedLetter?.character === letter.character ? null : letter)}
@@ -113,10 +113,7 @@
 			>
 				&times;
 			</Button>
-			<div
-				class="detail-panel__char thai"
-				style="font-size: 4rem; color: var(--primary);"
-			>
+			<div class="detail-panel__char thai" style="font-size: 4rem; color: var(--primary);">
 				{selectedLetter.character}
 			</div>
 			<div class="detail-panel__info">

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Button from "$lib/components/ui/Button.svelte"
-	import { isThai } from "$lib/utils/thai"
+	import Button from "$lib/components/ui/Button.svelte";
+	import { isThai } from "$lib/utils/thai";
 
 	let {
 		prompt,
@@ -10,30 +10,30 @@
 		onNext,
 		nextLabel = "Next Question ->",
 	}: {
-		prompt: string
-		options: string[]
-		correctIndex: number
-		onAnswer: (isCorrect: boolean) => void
-		onNext: () => void
-		nextLabel?: string
-	} = $props()
+		prompt: string;
+		options: string[];
+		correctIndex: number;
+		onAnswer: (isCorrect: boolean) => void;
+		onNext: () => void;
+		nextLabel?: string;
+	} = $props();
 
-	let selectedAnswer = $state<number | null>(null)
-	let answered = $state(false)
+	let selectedAnswer = $state<number | null>(null);
+	let answered = $state(false);
 
-	const isCorrect = $derived(selectedAnswer === correctIndex)
+	const isCorrect = $derived(selectedAnswer === correctIndex);
 
 	function selectAnswer(index: number) {
-		if (answered) return
-		selectedAnswer = index
-		answered = true
-		onAnswer(index === correctIndex)
+		if (answered) return;
+		selectedAnswer = index;
+		answered = true;
+		onAnswer(index === correctIndex);
 	}
 
 	function handleNext() {
-		selectedAnswer = null
-		answered = false
-		onNext()
+		selectedAnswer = null;
+		answered = false;
+		onNext();
 	}
 </script>
 
@@ -46,9 +46,7 @@
 				class="drill__option"
 				class:drill__option--selected={selectedAnswer === i}
 				class:drill__option--correct={answered && i === correctIndex}
-				class:drill__option--wrong={answered &&
-					selectedAnswer === i &&
-					i !== correctIndex}
+				class:drill__option--wrong={answered && selectedAnswer === i && i !== correctIndex}
 				onclick={() => selectAnswer(i)}
 				disabled={answered}
 			>
@@ -73,12 +71,7 @@
 			{/if}
 		</div>
 
-		<Button
-			variant="primary"
-			size="large"
-			fullWidth={true}
-			onclick={handleNext}
-		>
+		<Button variant="primary" size="large" fullWidth={true} onclick={handleNext}>
 			{nextLabel}
 		</Button>
 	{/if}

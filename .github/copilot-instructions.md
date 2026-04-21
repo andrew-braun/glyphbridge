@@ -2,8 +2,9 @@
 
 - This file is the repo-wide Copilot baseline. Path-specific rules live in `.github/instructions/*.instructions.md`.
 - Also respect the nearest `AGENTS.md` when working in a subdirectory.
-- Use `pnpm` with Node `24.14.1`.
+- Use `pnpm` with Node `24.15.0`.
 - For every non-minor task, create and maintain a dated markdown spec/tracker in `.ai/` using `YYYY-MM-DD-short-description.md`.
+- Use `docs/` for durable reference documentation and `.ai/` for task-scoped tracking and backlog notes.
 - Run `pnpm check` before finishing non-trivial changes. Run `pnpm build` when route behavior, metadata, env usage, or bundling changes.
 - When architecture, tech choices, config, environment, deployment, or workflow assumptions change, update every relevant instruction file in the same change.
 - Keep `src/routes` responsible for routing, route data, and metadata.

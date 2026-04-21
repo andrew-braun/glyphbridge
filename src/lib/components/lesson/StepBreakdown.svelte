@@ -9,10 +9,10 @@
   of the word — the bridge between "whole word" and "letter-level".
 -->
 <script lang="ts">
-	import Button from "$lib/components/ui/Button.svelte"
-	import type { Lesson } from "$lib/data/types"
+	import Button from "$lib/components/ui/Button.svelte";
+	import type { Lesson } from "$lib/data/types";
 
-	let { lesson, onNext }: { lesson: Lesson; onNext: () => void } = $props()
+	let { lesson, onNext }: { lesson: Lesson; onNext: () => void } = $props();
 </script>
 
 <div class="step">
@@ -35,9 +35,7 @@
 
 		<!-- Combined pronunciation and meaning -->
 		<div class="breakdown__full">
-			<span class="breakdown__pronunciation"
-				>{lesson.anchorWord.pronunciation}</span
-			>
+			<span class="breakdown__pronunciation">{lesson.anchorWord.pronunciation}</span>
 			<span class="breakdown__meaning">= "{lesson.anchorWord.meaning}"</span>
 		</div>
 	</div>
@@ -52,7 +50,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: $space-xl;
-		max-width: 640px;
+		max-width: var(--content-max-width);
 		margin: 0 auto;
 		@include fade-in-animation;
 	}

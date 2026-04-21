@@ -1,23 +1,38 @@
 <script lang="ts">
-	import { thaiPack } from "$lib/data/thai"
-	import { currentLessonId, knownWords } from "$lib/stores/progress"
+	import Heading from "$lib/components/ui/Heading.svelte";
+	import { thaiPack } from "$lib/data/thai";
+	import type { Word } from "$lib/data/types";
+
+	interface Props {
+		currentLessonId: number;
+		knownWords: Word[];
+	}
+
+	let { currentLessonId, knownWords }: Props = $props();
+
+	function handleLessonCardClick(event: MouseEvent, isLocked: boolean) {
+		if (isLocked) {
+			event.preventDefault();
+		}
+	}
 </script>
 
 <section class="upcoming">
-	<h2>Your Lessons</h2>
+	<Heading>Your Lessons</Heading>
 	<div class="lesson-list">
 		{#each thaiPack.lessons as lesson}
-			{@const isCompleted = $knownWords.some(
-				(w) => w.thai === lesson.anchorWord.thai,
-			)}
-			{@const isCurrent = lesson.id === $currentLessonId}
-			{@const isLocked = lesson.id > $currentLessonId}
+			{@const isCompleted = knownWords.some((w) => w.thai === lesson.anchorWord.thai)}
+			{@const isCurrent = lesson.id === currentLessonId}
+			{@const isLocked = lesson.id > currentLessonId}
 			<a
 				href={isLocked ? "#" : `/learn/${lesson.id}`}
 				class="lesson-item card"
 				class:lesson-item--completed={isCompleted}
 				class:lesson-item--current={isCurrent}
 				class:lesson-item--locked={isLocked}
+				aria-disabled={isLocked}
+				tabindex={isLocked ? -1 : undefined}
+				onclick={(event) => handleLessonCardClick(event, isLocked)}
 			>
 				<div class="lesson-item__status">
 					{#if isCompleted}
@@ -30,21 +45,16 @@
 				</div>
 
 				<div class="lesson-item__content">
-					<span class="lesson-item__stage badge badge--primary"
-						>Stage {lesson.stage}</span
+					<span class="lesson-item__stage badge badge--primary">Stage {lesson.stage}</span
 					>
 					<h3 class="lesson-item__title">{lesson.title}</h3>
-					<span class="lesson-item__word thai thai--sm"
-						>{lesson.anchorWord.thai}</span
-					>
+					<span class="lesson-item__word thai thai--sm">{lesson.anchorWord.thai}</span>
 					<span class="lesson-item__meaning">{lesson.anchorWord.meaning}</span>
 				</div>
 
 				<div class="lesson-item__letters">
 					{#each lesson.newLetters as letter}
-						<span class="lesson-item__letter thai thai--sm"
-							>{letter.character}</span
-						>
+						<span class="lesson-item__letter thai thai--sm">{letter.character}</span>
 					{/each}
 				</div>
 			</a>
@@ -53,6 +63,11 @@
 </section>
 
 <style lang="scss">
+	.upcoming {
+		display: flex;
+		flex-direction: column;
+	}
+
 	.lesson-list {
 		display: flex;
 		flex-direction: column;

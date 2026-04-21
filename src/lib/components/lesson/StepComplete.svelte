@@ -8,8 +8,8 @@
     - Navigation to the next lesson or back to the lesson list
 -->
 <script lang="ts">
-	import Button from "$lib/components/ui/Button.svelte"
-	import type { Lesson } from "$lib/data/types"
+	import Button from "$lib/components/ui/Button.svelte";
+	import type { Lesson } from "$lib/data/types";
 
 	let {
 		lesson,
@@ -18,12 +18,12 @@
 		onNextLesson,
 		hasNextLesson,
 	}: {
-		lesson: Lesson
-		correctCount: number
-		totalDrills: number
-		onNextLesson: () => void
-		hasNextLesson: boolean
-	} = $props()
+		lesson: Lesson;
+		correctCount: number;
+		totalDrills: number;
+		onNextLesson: () => void;
+		hasNextLesson: boolean;
+	} = $props();
 </script>
 
 <div class="step">
@@ -49,8 +49,7 @@
 			<div class="complete__letter-grid">
 				{#each lesson.newLetters as letter}
 					<div class="complete__letter">
-						<span class="thai" style="font-size:2.5rem">{letter.character}</span
-						>
+						<span class="thai" style="font-size:2.5rem">{letter.character}</span>
 						<span>{letter.romanization}</span>
 					</div>
 				{/each}
@@ -68,8 +67,7 @@
 					Practice What You've Learned
 				</Button>
 			{/if}
-			<Button href="/learn" variant="secondary" size="large">All Lessons</Button
-			>
+			<Button href="/learn" variant="secondary" size="large">All Lessons</Button>
 		</div>
 	</div>
 </div>
@@ -79,7 +77,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: $space-xl;
-		max-width: 640px;
+		max-width: var(--content-max-width);
 		margin: 0 auto;
 		@include fade-in-animation;
 	}

@@ -1,7 +1,13 @@
 <script lang="ts">
-	import PageHero from "$lib/components/layout/page/PageHero.svelte"
-	import Button from "$lib/components/ui/Button.svelte"
-	import { currentLessonId, knownLetters } from "$lib/stores/progress"
+	import PageHero from "$lib/components/layout/page/PageHero.svelte";
+	import Button from "$lib/components/ui/Button.svelte";
+
+	interface Props {
+		hasStartedLearning?: boolean;
+		showPractice?: boolean;
+	}
+
+	let { hasStartedLearning = false, showPractice = false }: Props = $props();
 </script>
 
 <PageHero
@@ -12,13 +18,10 @@
 >
 	{#snippet children()}
 		<Button href="/learn" variant="primary" size="large">
-			{$currentLessonId === 1 && $knownLetters.length === 0
-				? "Start Learning"
-				: "Continue Learning"}
+			{hasStartedLearning ? "Continue Learning" : "Start Learning"}
 		</Button>
-		{#if $knownLetters.length > 0}
-			<Button href="/practice" variant="secondary" size="large">Practice</Button
-			>
+		{#if showPractice}
+			<Button href="/practice" variant="secondary" size="large">Practice</Button>
 		{/if}
 	{/snippet}
 </PageHero>

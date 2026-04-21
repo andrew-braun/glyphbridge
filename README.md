@@ -29,7 +29,7 @@ The current app focuses on the early Thai reading journey.
 - Svelte 5 runes mode
 - TypeScript
 - SCSS
-- `pnpm` with Node `24.14.1`
+- `pnpm` with Node `24.15.0`
 - `@supabase/supabase-js` today, with `@supabase/ssr` planned for any real auth or server-backed data work
 
 The project is intentionally component-centric. Routes own page orchestration and metadata. Reusable UI lives in `src/lib/components`. Canonical curriculum data lives in `src/lib/data`. Client-state and persistence boundaries live in `src/lib/stores`.
@@ -63,6 +63,7 @@ pnpm build
 ## Working Conventions
 
 - Non-minor work gets a dated task/spec tracker in `.ai/`
+- Durable reference documentation lives in `docs/`
 - Repo-wide standards live in `AGENTS.md`
 - Claude compatibility lives in `CLAUDE.md`
 - Copilot guidance lives in `.github/copilot-instructions.md` and `.github/instructions/*.instructions.md`

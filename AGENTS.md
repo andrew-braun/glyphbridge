@@ -17,7 +17,7 @@
 ## Stack And Runtime
 
 - Package manager: `pnpm`
-- Runtime: Node `24.14.1`
+- Runtime: Node `24.15.0`
 - Framework: SvelteKit 2, Svelte 5 runes, TypeScript, SCSS
 - Data layer today: static lesson data plus localStorage-backed progress
 - Optional backend path: Supabase
@@ -36,8 +36,15 @@
 - Create the task file before or at the start of implementation, then keep it updated with scope, decisions, progress, blockers, and follow-up work.
 - Treat the `.ai` file as the durable handoff artifact for resuming work later.
 
+## Durable Documentation
+
+- Use `docs/` for durable project documents that should outlive a single task, such as security checklists, architecture notes, workflow guides, and operational references.
+- Use `.ai/` for task-scoped specs, trackers, and backlog notes rather than long-lived reference documentation.
+- When a durable project fact is worth keeping beyond a task, move or summarize it into `docs/`.
+
 ## Architecture Map
 
+- `docs`: durable reference docs, review checklists, and long-lived workflow guides
 - `src/routes`: route composition, data loading, metadata, and page-level orchestration
 - `src/lib/components`: reusable rendering building blocks
 - `src/lib/data`: canonical curriculum content and shared types
@@ -132,5 +139,5 @@
 
 - Make the smallest coherent change that solves the actual problem.
 - If a new pattern is warranted, document it in the nearest `AGENTS.md` and the matching Copilot instruction file.
-- Update `.ai` task files, README, env examples, and relevant instruction files when project facts change.
+- Update `docs/`, `.ai` task files, README, env examples, and relevant instruction files when project facts change.
 - Leave the touched area more regular than you found it, but do not widen scope into unrelated refactors.

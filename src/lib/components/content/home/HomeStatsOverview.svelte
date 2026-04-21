@@ -1,38 +1,44 @@
 <script lang="ts">
-	import Row from "$lib/components/layout/Row.svelte"
-	import StatCard from "$lib/components/ui/StatCard.svelte"
-	import {
-		currentLessonId,
-		knownLetters,
-		knownWords,
-		totalLessons,
-	} from "$lib/stores/progress"
+	import Row from "$lib/components/layout/Row.svelte";
+	import StatCard from "$lib/components/ui/StatCard.svelte";
+	import type { Word } from "$lib/data/types";
+
+	interface Props {
+		knownLetters: string[];
+		knownWords: Word[];
+		currentLessonId: number;
+		totalLessons: number;
+	}
+
+	let { knownLetters, knownWords, currentLessonId, totalLessons }: Props = $props();
+
+	const completedLessonCount = $derived(Math.max(0, currentLessonId - 1));
+	const lessonProgressPercent = $derived(
+		totalLessons === 0 ? 0 : (completedLessonCount / totalLessons) * 100,
+	);
 </script>
 
-{#if $knownLetters.length > 0}
+{#if knownLetters.length > 0}
 	<section>
 		<Row gap="1.5rem" stackAt="md" class="stats-row">
-			<StatCard value={$knownLetters.length.toString()} label="Letters Learned">
+			<StatCard value={knownLetters.length.toString()} label="Letters Learned">
 				{#snippet children()}
-					<div class="thai thai--sm">{$knownLetters.join(" ")}</div>
+					<div class="thai thai--sm">{knownLetters.join(" ")}</div>
 				{/snippet}
 			</StatCard>
-			<StatCard value={$knownWords.length.toString()} label="Words Known">
+			<StatCard value={knownWords.length.toString()} label="Words Known">
 				{#snippet children()}
 					<div class="thai thai--sm">
-						{$knownWords.map((w) => w.thai).join(" ")}
+						{knownWords.map((word) => word.thai).join(" ")}
 					</div>
 				{/snippet}
 			</StatCard>
-			<StatCard
-				value={`${$currentLessonId - 1}/${totalLessons}`}
-				label="Lessons Complete"
-			>
+			<StatCard value={`${completedLessonCount}/${totalLessons}`} label="Lessons Complete">
 				{#snippet children()}
 					<div class="progress-bar">
 						<div
 							class="progress-bar__fill"
-							style="width: {(($currentLessonId - 1) / totalLessons) * 100}%"
+							style="width: {lessonProgressPercent}%"
 						></div>
 					</div>
 				{/snippet}

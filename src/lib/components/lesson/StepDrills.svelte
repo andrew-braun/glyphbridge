@@ -6,35 +6,35 @@
   correct/wrong counts to report to the parent when all drills are done.
 -->
 <script lang="ts">
-	import DrillExercise from "$lib/components/exercises/DrillExercise.svelte"
-	import type { DrillQuestion } from "$lib/data/types"
+	import DrillExercise from "$lib/components/exercises/DrillExercise.svelte";
+	import type { DrillQuestion } from "$lib/data/types";
 
 	let {
 		drills,
 		onComplete,
 	}: {
-		drills: DrillQuestion[]
-		onComplete: (correctCount: number) => void
-	} = $props()
+		drills: DrillQuestion[];
+		onComplete: (correctCount: number) => void;
+	} = $props();
 
 	// --- Drill progress state ---
-	let currentIndex = $state(0)
-	let correctCount = $state(0)
+	let currentIndex = $state(0);
+	let correctCount = $state(0);
 
-	const currentDrill = $derived(drills[currentIndex])
+	const currentDrill = $derived(drills[currentIndex]);
 
 	/** Called by DrillExercise after the user selects an answer. */
 	function handleAnswer(isCorrect: boolean) {
-		if (isCorrect) correctCount++
+		if (isCorrect) correctCount++;
 	}
 
 	/** Called by DrillExercise when user clicks "Next". */
 	function handleNext() {
 		if (currentIndex < drills.length - 1) {
-			currentIndex++
+			currentIndex++;
 		} else {
 			// All drills done — report score to parent
-			onComplete(correctCount)
+			onComplete(correctCount);
 		}
 	}
 </script>
@@ -51,9 +51,7 @@
 			correctIndex={currentDrill.correctIndex}
 			onAnswer={handleAnswer}
 			onNext={handleNext}
-			nextLabel={currentIndex < drills.length - 1
-				? "Next Question →"
-				: "See Results →"}
+			nextLabel={currentIndex < drills.length - 1 ? "Next Question →" : "See Results →"}
 		/>
 	{/if}
 </div>
@@ -63,7 +61,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: $space-xl;
-		max-width: 640px;
+		max-width: var(--content-max-width);
 		margin: 0 auto;
 		@include fade-in-animation;
 

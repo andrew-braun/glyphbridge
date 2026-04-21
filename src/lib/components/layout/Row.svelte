@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { Snippet } from "svelte"
+	import type { Snippet } from "svelte";
 
-	type RowAlign = "stretch" | "start" | "center" | "end"
-	type RowJustify = "start" | "center" | "end" | "between"
+	type RowAlign = "stretch" | "start" | "center" | "end";
+	type RowJustify = "start" | "center" | "end" | "between";
 
 	let {
 		gap = "1rem",
@@ -13,14 +13,14 @@
 		class: className = "",
 		children,
 	}: {
-		gap?: string
-		align?: RowAlign
-		justify?: RowJustify
-		wrap?: boolean
-		stackAt?: "none" | "sm" | "md"
-		class?: string
-		children?: Snippet
-	} = $props()
+		gap?: string;
+		align?: RowAlign;
+		justify?: RowJustify;
+		wrap?: boolean;
+		stackAt?: "none" | "sm" | "md";
+		class?: string;
+		children?: Snippet;
+	} = $props();
 
 	const classes = $derived(
 		[
@@ -33,7 +33,7 @@
 		]
 			.filter(Boolean)
 			.join(" "),
-	)
+	);
 </script>
 
 <div class={classes} style={`--row-gap: ${gap};`}>

@@ -11,13 +11,13 @@ export interface Letter {
 	/** Human-friendly pronunciation guide (e.g. 'h as in "hello"') */
 	pronunciation: string;
 	/** Classification of the letter within the Thai writing system */
-	type: 'consonant' | 'vowel' | 'tone_mark';
+	type: "consonant" | "vowel" | "tone_mark";
 	/** Consonant class used in Thai tone rules; only applicable to consonants */
-	class?: 'low' | 'mid' | 'high';
+	class?: "low" | "mid" | "high";
 	/** A memorable visual or conceptual association to help the learner remember the character */
 	mnemonic: string;
 	/** Where this character is written relative to its associated consonant */
-	position?: 'left' | 'right' | 'above' | 'below' | 'around' | 'standalone';
+	position?: "left" | "right" | "above" | "below" | "around" | "standalone";
 }
 
 /**
@@ -62,7 +62,7 @@ export interface DrillQuestion {
 	 * - 'sound': choose the correct pronunciation
 	 * - 'spot': visually identify the correct word among look-alikes
 	 */
-	type: 'recognize' | 'match' | 'sound' | 'spot';
+	type: "recognize" | "match" | "sound" | "spot";
 	/** The question text shown to the learner */
 	prompt: string;
 	/** The answer choices displayed as buttons or cards */
@@ -85,7 +85,7 @@ export interface Word {
 	/** Romanized pronunciation with tone markers */
 	pronunciation: string;
 	/** Thematic category the word belongs to, used for grouping and review */
-	category: 'place' | 'food' | 'transport' | 'daily' | 'sign';
+	category: "place" | "food" | "transport" | "daily" | "sign";
 	/** Syllable-by-syllable breakdown for step-by-step reading practice */
 	syllables: SyllableBreakdown[];
 	/** Real-world context explaining where and how a learner would encounter this word */
@@ -146,6 +146,17 @@ export interface AppProgress {
 	currentLessonId: number;
 }
 
+/** Versioned persistence wrapper for local progress snapshots stored on the client */
+export interface ProgressSnapshotV1 {
+	/** Storage schema version for this snapshot payload */
+	version: 1;
+	/** Normalized learner progress payload */
+	progress: AppProgress;
+}
+
+/** Current union of supported persisted progress snapshot shapes */
+export type ProgressSnapshot = ProgressSnapshotV1;
+
 /**
  * A complete language curriculum package. The app is designed to support multiple
  * languages in the future; each language provides its own pack with lessons.
@@ -158,7 +169,7 @@ export interface LanguagePack {
 	/** The language name written in its own script (e.g. 'ภาษาไทย') */
 	nativeName: string;
 	/** Text direction: left-to-right or right-to-left */
-	direction: 'ltr' | 'rtl';
+	direction: "ltr" | "rtl";
 	/** The ordered sequence of lessons in this curriculum */
 	lessons: Lesson[];
 }

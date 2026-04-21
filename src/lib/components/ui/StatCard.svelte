@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from "svelte"
+	import type { Snippet } from "svelte";
 
 	let {
 		value,
@@ -7,11 +7,11 @@
 		class: className = "",
 		children,
 	}: {
-		value: string
-		label: string
-		class?: string
-		children?: Snippet
-	} = $props()
+		value: string;
+		label: string;
+		class?: string;
+		children?: Snippet;
+	} = $props();
 </script>
 
 <div class={`stat-card card ${className}`}>

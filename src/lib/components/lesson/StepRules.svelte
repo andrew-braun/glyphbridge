@@ -11,27 +11,27 @@
     - Concrete examples the learner can already (mostly) read
 -->
 <script lang="ts">
-	import Button from "$lib/components/ui/Button.svelte"
-	import type { Rule } from "$lib/data/types"
+	import Button from "$lib/components/ui/Button.svelte";
+	import type { Rule } from "$lib/data/types";
 
 	let {
 		rules,
 		onComplete,
 	}: {
-		rules: Rule[]
-		onComplete: () => void
-	} = $props()
+		rules: Rule[];
+		onComplete: () => void;
+	} = $props();
 
 	// Track which rule the learner is currently viewing
-	let currentIndex = $state(0)
-	const currentRule = $derived(rules[currentIndex])
+	let currentIndex = $state(0);
+	const currentRule = $derived(rules[currentIndex]);
 
 	/** Advance to next rule, or move to drills if all rules shown. */
 	function next() {
 		if (currentIndex < rules.length - 1) {
-			currentIndex++
+			currentIndex++;
 		} else {
-			onComplete()
+			onComplete();
 		}
 	}
 </script>
@@ -72,7 +72,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: $space-xl;
-		max-width: 640px;
+		max-width: var(--content-max-width);
 		margin: 0 auto;
 		@include fade-in-animation;
 

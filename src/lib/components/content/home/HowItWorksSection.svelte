@@ -1,41 +1,55 @@
 <script lang="ts">
-	import Row from "$lib/components/layout/Row.svelte"
-	import IconBox from "$lib/components/ui/IconBox.svelte"
+	import Row from "$lib/components/layout/Row.svelte";
+	import Heading from "$lib/components/ui/Heading.svelte";
+	import IconBox from "$lib/components/ui/IconBox.svelte";
 
-	const steps = [
+	type StepTone = "primary" | "accent" | "success" | "warning";
+
+	const steps: Array<{
+		number: number;
+		tone: StepTone;
+		title: string;
+		description: string;
+	}> = [
 		{
 			number: 1,
-			title: "See a real word",
+			tone: "primary",
+			title: "Start with a real word",
 			description:
-				"Each lesson starts with a word you'd actually see in Thailand - on a sign, menu, or map.",
+				"Every lesson begins with Thai you will actually meet on a sign, menu, appliance, or street corner.",
 		},
+
 		{
 			number: 2,
-			title: "Break it down",
+			tone: "success",
+			title: "Unlock only the letters you need",
 			description:
-				"We show you how the word splits into syllables and which letters make which sounds.",
+				"Instead of a giant alphabet dump, you learn just enough new script to read the word with confidence.",
 		},
 		{
 			number: 3,
-			title: "Learn the letters",
+			tone: "warning",
+			title: "Read it back in drills",
 			description:
-				"Only 1-3 new letters per lesson. Each one comes with a memory trick and examples.",
+				"Quick practice locks the pattern in so you can recognize the same letters out in the real world.",
 		},
-		{
-			number: 4,
-			title: "Practice and drill",
-			description:
-				"Quick drills using only letters you know. Builds real pattern recognition.",
-		},
-	]
+	];
 </script>
 
 <section class="method">
-	<h2 class="method__title">How it works</h2>
-	<Row class="method__steps" gap="1.5rem" stackAt="md" align="start">
+	<div class="method__header">
+		<Heading class="method__title" align="center">How it works</Heading>
+		<p class="method__lead">
+			GlyphBridge teaches reading the way you actually use it: spot the word, understand the
+			pieces, then read it back yourself.
+		</p>
+	</div>
+	<Row class="method__steps" gap="1.25rem" stackAt="md" align="stretch">
 		{#each steps as step}
 			<IconBox
 				number={step.number}
+				tone={step.tone}
+				align="start"
 				title={step.title}
 				description={step.description}
 				class="method__step"
@@ -46,9 +60,49 @@
 
 <style lang="scss">
 	.method {
-		&__title {
+		padding: clamp($space-xl, 4vw, $space-2xl);
+		border-radius: calc($radius-xl * 1.25);
+		background:
+			radial-gradient(circle at top left, rgba($color-accent, 0.14), transparent 34%),
+			linear-gradient(180deg, rgba($color-primary, 0.05), rgba(white, 0.88));
+		border: 1px solid rgba($color-primary, 0.08);
+
+		&__header {
+			max-width: var(--text-max-width);
+			margin: 0 auto $space-2xl;
+		}
+
+		:global(.method__title) {
+			margin-bottom: $space-md;
+		}
+
+		&__lead {
 			text-align: center;
-			margin-bottom: $space-xl;
+			color: $color-text-light;
+			font-size: $font-size-lg;
+			line-height: 1.65;
+		}
+
+		:global(.method__steps) {
+			align-items: stretch;
+		}
+
+		:global(.method__step) {
+			flex: 1 1 15rem;
+		}
+	}
+
+	@media (max-width: $bp-sm) {
+		.method {
+			padding: $space-lg;
+
+			&__header {
+				margin-bottom: $space-xl;
+			}
+
+			&__lead {
+				font-size: $font-size-base;
+			}
 		}
 	}
 </style>

@@ -9,10 +9,10 @@
   before any breakdown or instruction happens.
 -->
 <script lang="ts">
-	import Button from "$lib/components/ui/Button.svelte"
-	import type { Lesson } from "$lib/data/types"
+	import Button from "$lib/components/ui/Button.svelte";
+	import type { Lesson } from "$lib/data/types";
 
-	let { lesson, onNext }: { lesson: Lesson; onNext: () => void } = $props()
+	let { lesson, onNext }: { lesson: Lesson; onNext: () => void } = $props();
 </script>
 
 <div class="step step--intro">
@@ -42,7 +42,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: $space-xl;
-		max-width: 640px;
+		max-width: var(--content-max-width);
 		margin: 0 auto;
 		@include fade-in-animation;
 
@@ -55,11 +55,7 @@
 	.word-reveal {
 		text-align: center;
 		padding: $space-2xl;
-		background: linear-gradient(
-			135deg,
-			rgba($color-primary, 0.04),
-			rgba($color-accent, 0.04)
-		);
+		background: linear-gradient(135deg, rgba($color-primary, 0.04), rgba($color-accent, 0.04));
 		border-radius: $radius-xl;
 
 		&__thai {

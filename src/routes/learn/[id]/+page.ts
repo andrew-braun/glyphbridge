@@ -1,6 +1,6 @@
-import { thaiPack } from '$lib/data/thai';
-import { error } from '@sveltejs/kit';
-import type { PageLoad } from './$types';
+import { thaiPack } from "$lib/data/thai";
+import { error } from "@sveltejs/kit";
+import type { PageLoad } from "./$types";
 
 export const prerender = false;
 
@@ -9,7 +9,7 @@ export const load: PageLoad = ({ params }) => {
 	const lesson = thaiPack.lessons.find((l) => l.id === lessonId);
 
 	if (!lesson) {
-		throw error(404, 'Lesson not found');
+		throw error(404, "Lesson not found");
 	}
 
 	return { lesson };

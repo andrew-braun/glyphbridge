@@ -1,13 +1,20 @@
 <script lang="ts">
-	// currentLessonId tracks the user's furthest unlocked lesson
-	import { currentLesson, currentLessonId } from '$lib/stores/progress';
-	import { goto } from '$app/navigation';
-	import { thaiPack } from '$lib/data/thai';
+	import { thaiPack } from "$lib/data/thai";
+	import { currentLessonId } from "$lib/stores/progress";
 
+	function handleLessonCardClick(event: MouseEvent, isUnlocked: boolean) {
+		if (!isUnlocked) {
+			event.preventDefault();
+		}
+	}
 </script>
 
 <svelte:head>
 	<title>Learn — GlyphBridge</title>
+	<meta
+		name="description"
+		content="Work through step-by-step Thai reading lessons built around real words, new letters, pronunciation rules, and quick drills."
+	/>
 </svelte:head>
 
 <!--
@@ -22,7 +29,9 @@
 -->
 <div class="learn container">
 	<h1>Lessons</h1>
-	<p class="learn__subtitle">Each lesson teaches you a real Thai word and the letters inside it.</p>
+	<p class="learn__subtitle">
+		Each lesson teaches you a real Thai word and the letters inside it.
+	</p>
 
 	<div class="lessons-grid">
 		{#each thaiPack.lessons as lesson}
@@ -30,11 +39,14 @@
 			{@const isCurrent = lesson.id === $currentLessonId}
 			{@const isUnlocked = lesson.id <= $currentLessonId}
 			<a
-				href={isUnlocked ? `/learn/${lesson.id}` : '#'}
+				href={isUnlocked ? `/learn/${lesson.id}` : "#"}
 				class="lesson-card card"
 				class:lesson-card--current={isCurrent}
 				class:lesson-card--locked={!isUnlocked}
 				class:lesson-card--done={lesson.id < $currentLessonId}
+				aria-disabled={!isUnlocked}
+				tabindex={!isUnlocked ? -1 : undefined}
+				onclick={(event) => handleLessonCardClick(event, isUnlocked)}
 			>
 				<!-- Header badges: stage number + completion state (Complete / Current / none) -->
 				<div class="lesson-card__header">

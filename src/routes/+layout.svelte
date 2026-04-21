@@ -8,19 +8,17 @@
 -->
 <script lang="ts">
 	// Global SCSS — must be imported here so it applies to all routes
-	import MainNav from "$lib/components/navigation/MainNav.svelte"
-	import { initProgress } from "$lib/stores/progress"
-	import "$lib/styles/global.scss"
-	import { onMount } from "svelte"
+	import MainNav from "$lib/components/navigation/MainNav.svelte";
+	import { initProgress } from "$lib/stores/progress";
+	import "$lib/styles/global.scss";
+	import { onMount } from "svelte";
 
-	let { children } = $props()
+	let { children } = $props();
 
-	// Load saved progress from localStorage when the app first mounts.
-	// This hydrates the progress store so all pages and components
-	// can read the user's known letters, words, and lesson state.
+	// Initialize client-side progress once when the root layout mounts.
 	onMount(() => {
-		initProgress()
-	})
+		initProgress();
+	});
 </script>
 
 <div class="app">

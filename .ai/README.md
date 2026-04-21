@@ -2,6 +2,8 @@
 
 This directory holds durable task specs and progress trackers for non-minor work.
 
+If a document should live beyond a single task, put it in `docs/` instead.
+
 ## Naming
 
 - Create one markdown file per non-minor task.
