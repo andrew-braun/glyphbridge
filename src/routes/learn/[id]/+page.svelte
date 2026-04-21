@@ -93,7 +93,7 @@
 </script>
 
 <svelte:head>
-	<title>{lesson.title} — SparkScripts</title>
+	<title>{lesson.title} — GlyphBridge</title>
 </svelte:head>
 
 <div class="lesson container">

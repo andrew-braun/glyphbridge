@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-	<title>Learn — SparkScripts</title>
+	<title>Learn — GlyphBridge</title>
 </svelte:head>
 
 <!--

@@ -85,7 +85,7 @@
 </script>
 
 <svelte:head>
-	<title>Practice — SparkScripts</title>
+	<title>Practice — GlyphBridge</title>
 </svelte:head>
 
 <div class="practice container">

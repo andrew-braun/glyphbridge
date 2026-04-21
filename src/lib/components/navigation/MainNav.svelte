@@ -6,8 +6,8 @@
 <nav class="nav">
 	<div class="nav__inner container">
 		<a href="/" class="nav__logo">
-			<span class="nav__logo-spark">Spark</span><span class="nav__logo-scripts"
-				>Scripts</span
+			<span class="nav__logo-spark">Glyph</span><span class="nav__logo-scripts"
+				>Bridge</span
 			>
 		</a>
 

@@ -5,7 +5,7 @@
 </script>
 
 <svelte:head>
-	<title>Known Words — SparkScripts</title>
+	<title>Known Words — GlyphBridge</title>
 </svelte:head>
 
 <!--

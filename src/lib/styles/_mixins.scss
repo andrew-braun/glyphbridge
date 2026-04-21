@@ -1,4 +1,4 @@
-// === SparkScripts SCSS Mixins ===
+// === GlyphBridge SCSS Mixins ===
 // Reusable patterns extracted from repeated component styles.
 // Import via `@use '$lib/styles/mixins' as *;` or rely on
 // vite's additionalData injection (configured in vite.config.ts).
@@ -6,7 +6,7 @@
 // Note: This file uses @use to import variables because @use creates
 // module boundaries in modern Sass. The variables must be explicitly
 // imported here even though they're also injected via additionalData.
-@use '$lib/styles/variables' as *;
+@use "$lib/styles/variables" as *;
 
 // ---------------------------------------------------------------------------
 // Drill option buttons — used in lesson drills and practice drills.
@@ -161,6 +161,12 @@
 }
 
 @keyframes fadeIn {
-	from { opacity: 0; transform: translateY(8px); }
-	to { opacity: 1; transform: translateY(0); }
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }

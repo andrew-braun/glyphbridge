@@ -14,7 +14,7 @@
 </script>
 
 <svelte:head>
-	<title>SparkScripts — Learn Thai Through Real Words</title>
+	<title>GlyphBridge — Learn Thai Through Real Words</title>
 </svelte:head>
 
 <div class="home container">
