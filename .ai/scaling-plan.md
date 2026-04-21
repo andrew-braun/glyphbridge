@@ -128,9 +128,9 @@ Options:
 
 ```ts
 export function initProgress() {
-  const loaded = loadProgress();
-  progress.set(loaded);
-  progress.subscribe(saveProgress);
+	const loaded = loadProgress();
+	progress.set(loaded);
+	progress.subscribe(saveProgress);
 }
 ```
 
@@ -148,13 +148,13 @@ Runes are enabled project-wide (`svelte.config.js` sets `runes: true`), but `pro
 ```ts
 const state = $state<AppProgress>(createInitial());
 export const progress = {
-  get value() {
-    return state;
-  },
-  completeLesson(id, score) {
-    /* mutate state */
-  },
-  // ...
+	get value() {
+		return state;
+	},
+	completeLesson(id, score) {
+		/* mutate state */
+	},
+	// ...
 };
 ```
 
@@ -188,7 +188,7 @@ AGENTS.md says every page needs a meta description, unique title, OG cards where
 
 `thai.ts` inlines every lesson. At ~15 lessons this file becomes un-reviewable. Plan the split now, execute before outgrowing it:
 
-```
+```text
 src/lib/data/packs/thai/
   lessons/
     01-hua-hin.ts

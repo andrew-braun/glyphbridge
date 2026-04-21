@@ -2,7 +2,7 @@
 
 - Start date: 2026-04-21
 - Owner: GitHub Copilot
-- Status: in-progress
+- Status: done
 
 ## Goal
 
@@ -41,13 +41,18 @@ Harden the local progress persistence layer so browser restores are normalized, 
 
 - [x] Discovery and research
 - [x] Implementation
-- [ ] Validation
-- [ ] Documentation updates
+- [x] Validation
+- [x] Documentation updates
 
 ## Open Questions
 
 - Whether a future pass should move progress persistence behind a dedicated repository/helper module if account sync is introduced.
 
+## Validation
+
+- `pnpm check`
+- `pnpm build`
+
 ## Follow-Up
 
-- Run `pnpm check` and record the result.
+- None yet.
