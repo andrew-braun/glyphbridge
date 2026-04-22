@@ -28,3 +28,9 @@ If a document should live beyond a single task, put it in `docs/` instead.
 - Create the file before or at the start of implementation.
 - Update it as the work evolves.
 - Keep it accurate enough that someone can resume the task later without reconstructing the context from chat history.
+
+## Archive
+
+- Move dated task files to `archive/` once they are complete.
+- Treat a task as complete when its status is `done` and its progress checklist is fully checked.
+- Keep active, planned, blocked, backlog, and evergreen planning docs at the root of `.ai/`.
