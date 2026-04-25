@@ -6,6 +6,7 @@
 - Stores do not own canonical curriculum content.
 - Stores should expose a small, intentional API of readable stores and mutation functions.
 - For new shared reactive logic, first consider whether a rune-powered `.svelte.ts` module is the better fit than a classic store.
+- For backend persistence or sync work, start with `docs/db.md` and `docs/database-dto-spec.md` before changing store ownership or persistence boundaries.
 
 ## Reactivity Standards
 
@@ -21,6 +22,7 @@
 - Keep storage keys stable and explicit.
 - Persist only the minimum durable state required to restore user progress.
 - Data loaded from stores should stay serializable and migration-friendly.
+- Client stores may queue learner activity, but they must not bypass the server-owned attempt-to-progress projection contract.
 
 ## Scope Control
 

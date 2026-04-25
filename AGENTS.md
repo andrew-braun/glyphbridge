@@ -19,7 +19,8 @@
 - Package manager: `pnpm`
 - Runtime: Node `24.15.0`
 - Framework: SvelteKit 2, Svelte 5 runes, TypeScript, SCSS
-- Data layer today: static lesson data plus localStorage-backed progress
+- Runtime lesson content today: static lesson data plus localStorage-backed progress
+- Local backend foundation: `supabase/` now contains the baseline SQL schema, RLS, seed entry point, and privileged sync helpers for future server-backed curriculum and learner state
 - Optional backend path: Supabase
 
 ## Validation Workflow
@@ -41,10 +42,12 @@
 - Use `docs/` for durable project documents that should outlive a single task, such as security checklists, architecture notes, workflow guides, and operational references.
 - Use `.ai/` for task-scoped specs, trackers, and backlog notes rather than long-lived reference documentation.
 - When a durable project fact is worth keeping beyond a task, move or summarize it into `docs/`.
+- For database and Supabase work, start with `docs/db.md` and use `docs/database-dto-spec.md` for the exact schema and DTO contract.
 
 ## Architecture Map
 
 - `docs`: durable reference docs, review checklists, and long-lived workflow guides
+- `supabase`: local Supabase config, migrations, seed entry point, and privileged SQL functions
 - `src/routes`: route composition, data loading, metadata, and page-level orchestration
 - `src/lib/components`: reusable rendering building blocks
 - `src/lib/data`: canonical curriculum content and shared types
@@ -134,6 +137,8 @@
 - Authorization must rely on verified server-side user lookups, not unverified client session assumptions.
 - Use row-level security and least-privilege database access patterns when database-backed features are introduced.
 - Treat Supabase auth, storage, and database schema changes as sign-off-required security-sensitive work.
+- For schema, SQL, RLS, sync, or publication work, read `docs/db.md` first and `docs/database-dto-spec.md` before editing migrations or server-side DB access.
+- Preserve the current schema boundaries: `curriculum` and `internal_api` are private implementation schemas; learner-facing runtime reads should go through `delivery` and `learner` server-controlled paths.
 
 ## Change Discipline
 

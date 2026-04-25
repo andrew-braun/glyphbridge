@@ -49,3 +49,15 @@ Turn the database and DTO design into the first real Supabase SQL migrations so 
 
 - Passed: `pnpm exec supabase start`
 - Passed: `pnpm exec supabase db reset --yes`
+
+## Current State
+
+- The baseline SQL foundation is in place and validates locally.
+- Schema, RLS, grants, and the initial sync function exist, but no curriculum content has been seeded and no app route reads or writes through this database surface yet.
+
+## Next Steps
+
+- Seed the Thai curriculum into `curriculum.*`.
+- Generate the first `delivery.course_publication_lessons` payloads from that canonical content.
+- Add SvelteKit server-side integration for published lesson reads and learner attempt sync.
+- Add migration smoke tests or integration checks once app code starts depending on the DB surface.

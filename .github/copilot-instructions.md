@@ -5,6 +5,7 @@
 - Use `pnpm` with Node `24.15.0`.
 - For every non-minor task, create and maintain a dated markdown spec/tracker in `.ai/` using `YYYY-MM-DD-short-description.md`.
 - Use `docs/` for durable reference documentation and `.ai/` for task-scoped tracking and backlog notes.
+- For database or Supabase work, start with `docs/db.md`; use `docs/database-dto-spec.md` for the exact schema and DTO contract, and `supabase/migrations/*.sql` for the live implementation.
 - Run `pnpm check` before finishing non-trivial changes. Run `pnpm build` when route behavior, metadata, env usage, or bundling changes.
 - When architecture, tech choices, config, environment, deployment, or workflow assumptions change, update every relevant instruction file in the same change.
 - Keep `src/routes` responsible for routing, route data, and metadata.
@@ -19,5 +20,6 @@
 - Do not duplicate lesson content or create abstractions with only one speculative use.
 - Use server-only SvelteKit modules for secrets, writes, or privileged data.
 - If Supabase-backed auth or server data is added, use `@supabase/ssr`; never put admin credentials in client code.
+- Preserve the database schema boundaries in future work: `curriculum` and `internal_api` stay private, `delivery` is the runtime content boundary, and `learner` is the RLS-protected learner-state boundary.
 - Any work involving environment variables, auth, sessions, databases, secure routes, storage, or production secrets is high-risk and must be researched against current docs, designed conservatively, and explicitly signed off on before deployment.
 - Never expose, log, serialize, or commit secrets. Verify public versus private env boundaries every time.

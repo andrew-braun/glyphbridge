@@ -20,9 +20,11 @@
 - Use private env modules for secrets.
 - Never place service-role or admin credentials in public env vars or client code.
 - Any new secure endpoint, auth flow, env wiring, or database access path requires current-doc research and explicit sign-off before deployment.
+- For DB-backed handlers, start with `docs/db.md` and `docs/database-dto-spec.md` before designing the request or response contract.
 
 ## Design Rules
 
 - Keep endpoint contracts small, explicit, and stable.
 - Prefer one clear responsibility per endpoint.
 - Put shared server-only helpers in server-only modules rather than duplicating logic across handlers.
+- Do not expose private `curriculum` or `internal_api` schema details as public HTTP surfaces; handlers should orchestrate allowed server-side reads and writes only.

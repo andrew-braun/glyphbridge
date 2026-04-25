@@ -48,3 +48,13 @@ Create a concise, durable product philosophy document in `docs/` that turns the 
 ## Validation
 
 - Passed: `pnpm check`
+
+## Current State
+
+- Complete. `docs/app-philosophy.md` is now the durable product and pedagogy reference for lesson flow, vocabulary, and progress modeling.
+- The database DTO spec, SQL foundation, and DB reference docs already depend on this document as an upstream guardrail.
+
+## Next Steps
+
+- Use `docs/app-philosophy.md` as the product check while seeding Thai curriculum data and publishing learner-facing lesson bundles.
+- Revisit this tracker only if the six-step lesson contract, core domain vocabulary, or derived-progress model changes.

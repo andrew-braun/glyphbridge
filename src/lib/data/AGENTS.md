@@ -5,6 +5,7 @@
 - `types.ts` defines the canonical schema.
 - Lesson content files are the single source of truth for curriculum structure and teaching copy.
 - Keep all data plain, serializable TypeScript data with no presentation markup or framework-specific objects.
+- For database-backed schema work, start with `docs/db.md` and use `docs/database-dto-spec.md` before reshaping shared types or content mappers.
 
 ## Modeling Standards
 
@@ -12,6 +13,7 @@
 - Keep lesson IDs stable once introduced.
 - Preserve ordering guarantees; curriculum order is product behavior.
 - Add fields only when multiple lessons or UI paths need them.
+- Do not reshape lesson content to mirror raw SQL table layout unless that mapping is an intentional migration or publication boundary.
 
 ## Pedagogical Data Quality
 

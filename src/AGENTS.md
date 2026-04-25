@@ -29,6 +29,12 @@
 - Assume code may eventually run with more SSR enabled than today. Do not bake in unnecessary client-only assumptions.
 - Guard browser APIs and keep persistence or side effects behind clear boundaries.
 
+## Database Boundaries
+
+- For database-backed source work, start with `docs/db.md` and use `docs/database-dto-spec.md` for the exact schema and DTO contract.
+- Learner-facing source modules must not query private `curriculum` or `internal_api` schemas directly.
+- Runtime reads should flow through server-side boundaries that expose published `delivery` content or `learner` state intentionally.
+
 ## Abstraction Discipline
 
 - Prefer composition over inheritance-like layering.

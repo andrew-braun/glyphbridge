@@ -2,7 +2,7 @@
 
 - Start date: 2026-04-22
 - Owner: GitHub Copilot
-- Status: in-progress
+- Status: completed
 
 ## Latest Decision Snapshot
 
@@ -11,6 +11,7 @@
 - Resolved enum discipline: keep PostgreSQL enums for truly closed sets only; use text keys for categories and script-specific pedagogy labels.
 - Resolved instrumentation scope: store `time_spent_ms` on lesson attempts only in v1.
 - Output added: `docs/database-dto-spec.md`.
+- Planning outputs implemented: the repo now has validated Supabase migrations, a DB operations reference, and updated instruction files that point future work at the schema docs.
 
 ## Goal
 
@@ -372,12 +373,17 @@ If the schema requires dumping the core teaching entities into opaque JSON to ge
 
 - [x] Discovery and research
 - [x] Schema spec with exact tables, columns, constraints, and indexes
-- [ ] Supabase RLS plan
+- [x] Supabase RLS plan
 - [x] Publication and sync design spec
-- [ ] Migration plan from static Thai content
-- [ ] Validation and implementation planning
+- [x] Validation and implementation planning
+- [x] Initial SQL schema foundation implemented and validated locally
 
-## Open Questions
+## Current State
+
+- The planning phase is complete enough to have produced `docs/database-dto-spec.md`, the baseline Supabase migrations, `docs/db.md`, and the repo instruction updates.
+- The project now has a concrete database foundation, but the runtime app still serves static curriculum data and client-side progress only.
+
+## Open Follow-On Questions
 
 - ~~How should course versioning be expressed operationally?~~ Resolved: monotonic `version_ordinal int` is the operational hinge; `display_version text` is decoration only.
 - ~~Should publication snapshots be a single bundle or chunked?~~ Resolved: chunked per lesson; runtime client prefetches the current lesson plus the next three.
@@ -397,11 +403,10 @@ These were flagged during the audit as worth committing to before migrations are
 - **First-sync backfill from localStorage.** Define the path for existing learners: on first auth, the client posts its localStorage snapshot as a stream of synthetic `lesson_attempts`, server-side projection rebuilds `lesson_progress`. One-shot but easy to forget.
 - **i18n boundary.** Lesson titles, mnemonics, and context notes are currently in English. The schema does not yet model translation locale separately from the target script language. Acceptable for v1; flag explicitly so future locale support does not become a destructive migration.
 
-## Follow-Up
+## Next Steps
 
-- Draft the exact table-by-table schema next, including keys, foreign keys, uniqueness rules, and index strategy.
-- Draft the RLS model for learner-owned tables before any implementation begins.
-- Define publication generation and client sync semantics before writing migrations.
-- Define the supported course-version upgrade matrix and the publish-time validation needed to guarantee migration previews.
-- Map the current Thai pack one-to-one into the proposed schema as a parity check.
-- Keep this file updated as decisions harden.
+- Seed the current Thai course into `curriculum.*` and validate parity against `src/lib/data/thai.ts`.
+- Publish the first learner-facing lesson bundles into `delivery.*` so runtime reads can move off raw static content.
+- Add the first server-side SvelteKit read/write boundary for published lesson delivery and `internal_api.sync_lesson_attempt_batch(...)`.
+- Decide whether Drizzle should land before or after the first DB-backed route and sync path.
+- Keep this file aligned with the implementation docs if future backend work changes the foundation assumptions.

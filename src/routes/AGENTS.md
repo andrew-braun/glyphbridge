@@ -23,6 +23,8 @@
 - Validate params and query inputs early.
 - Return the smallest data shape the page actually needs.
 - Transform backend or content payloads before they hit presentation components.
+- For database-backed route work, start with `docs/db.md` and `docs/database-dto-spec.md`.
+- Learner-facing routes should read published `delivery` content or `learner` projections through server-controlled boundaries, not raw `curriculum` tables.
 
 ## Layout Rules
 
@@ -40,3 +42,4 @@
 
 - Any route work touching environment variables, auth, sessions, cookies, databases, storage, or secure endpoints is high-risk and requires current-doc research plus human sign-off before deployment.
 - Never expose private env data or trust client state for authorization.
+- Do not expose `internal_api` SQL helpers or private schema details as route-level public contracts.
