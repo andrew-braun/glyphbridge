@@ -2,23 +2,7 @@
 
 - Start date: 2026-04-22
 - Owner: GitHub Copilot
-- Status: completed
-
-## Related Docs
-
-- `README.md` for the bundle index and redundancy assessment
-- `implementation-status.md` for what actually landed and what still needs to happen next
-- `auth-sync-strategy.md` for the future authenticated rollout work
-
-## Latest Decision Snapshot
-
-- Resolved projector mechanism: use a batch `SECURITY DEFINER` SQL function in `internal_api`, invoked from a thin server-side SvelteKit boundary.
-- Resolved canonical curriculum naming: use `anchor_targets` and `anchor_segments`.
-- Resolved enum discipline: keep PostgreSQL enums for truly closed sets only; use text keys for categories and script-specific pedagogy labels.
-- Resolved instrumentation scope: store `time_spent_ms` on lesson attempts only in v1.
-- Output added: `docs/database-dto-spec.md`.
-- Planning outputs implemented: the repo now has validated Supabase migrations, a DB operations reference, and updated instruction files that point future work at the schema docs.
-- Deferred rollout gates captured: request-scoped `@supabase/ssr`, hosted-auth hardening, deployment SSL/network requirements, anonymous-auth gating, and DB lint workflow belong to the authenticated implementation phase rather than the baseline schema pass.
+- Status: in-progress
 
 ## Goal
 
@@ -201,7 +185,7 @@ Every learner-owned table carries `user_id uuid not null references auth.users(i
 
 Do not create canonical tables for known graphemes, known words, or unlock state unless a later performance bottleneck proves the need for projections.
 
-## Attempt → Progress Projection (Resolved)
+## Attempt → Progress Projection (Unresolved)
 
 `lesson_progress` is canonical learner state. `lesson_attempts` is the append-only event log written by clients (often offline-batched). Something has to read attempts and produce `lesson_progress`. The plan does not yet commit to _what_, and this gap must be closed before the schema spec phase begins.
 
@@ -211,30 +195,36 @@ Do not create canonical tables for known graphemes, known words, or unlock state
 - Lesson completion must be monotonic: once completed, stays completed. Best score should be `MAX` across attempts. Latest score is the most recent attempt by `completed_at`. Attempt count is monotonic. These rules need a single owner.
 - Without a clear projector, two code paths will eventually start writing `lesson_progress` directly and the canonical fact will drift from the event log.
 
-### Chosen mechanism
+### Three candidate mechanisms
 
-Use one batch `SECURITY DEFINER` SQL function in `internal_api`, called by a thin server-side SvelteKit boundary after authentication has been verified.
+1. **Postgres trigger** on `INSERT INTO lesson_attempts`.
+   - Pro: implicit, cannot be bypassed by clients.
+   - Con: triggers under RLS are awkward; a single sync transaction inserting N attempts fires the trigger N times, making batched offline sync harder to reason about for both performance and correctness.
 
-### Fixed contract
+2. **Server-side `SECURITY DEFINER` function** in a private schema, called explicitly from a SvelteKit remote function after the client uploads its attempt batch.
+   - Pro: explicit, testable, idempotent, easy to retry, easy to backfill, transactional in one well-defined call.
+   - Con: requires the client sync code to actually invoke the projector. Mitigated by making "upload attempts" and "project to progress" a single remote function under one transaction.
+   - **Recommended.**
 
-- Function: `internal_api.sync_lesson_attempt_batch(p_enrollment_id uuid, p_device_id uuid, p_attempts jsonb)`
-- Transaction scope: one enrollment and one authenticated user per call
-- Idempotency key: `(enrollment_id, client_attempt_id)`
-- Ordering: `completed_at asc`, then `client_attempt_id asc`
-- Projection target: `learner.lesson_progress` plus `learner.course_enrollments.current_lesson_id`
-- Process marker: `processed_at` is set inside the same transaction as the progress upsert
-- Failure mode: no partial processed state; retries are safe
+3. **Materialised view** over `lesson_attempts`.
+   - Pro: derived state by construction, no projector code.
+   - Con: works for "best score" and "attempt count" but not for monotonic state transitions, conflict resolution, or partial updates. Refresh strategy is its own problem.
 
-### Merge semantics
+### What needs to be resolved before schema implementation
 
-- `best_score = MAX(existing.best_score, incoming.score)`
-- `latest_score = newest processed attempt score`
-- `attempt_count` increases by newly inserted attempts only
-- `completed` is sticky once true
-- `first_completed_at` is the earliest completion timestamp ever observed
-- `last_attempt_at` is the latest processed attempt timestamp
+- Pick a mechanism. Recommendation is option 2.
+- Define the projector's input contract: takes a set of newly-uploaded attempts scoped to one `(user_id, enrollment_id)`, runs in a single transaction, can never see attempts from other users.
+- Define merge semantics explicitly:
+  - `best_score = MAX(score)` across attempts
+  - `latest_score = score` of most recent attempt by `completed_at`
+  - `attempt_count` increments monotonically
+  - `completed = true` is sticky once set
+- Decide how `processed_at` is set: by the projector itself, atomically with the `lesson_progress` upsert, in the same transaction.
+- Decide failure mode: if the projector fails mid-batch, attempts stay unprocessed and a retry picks them up — never partial state.
+- Lock down RLS so the projector is the only writer of `lesson_progress`. Clients have INSERT and SELECT on `lesson_attempts` (scoped to their own `user_id`) and SELECT only on `lesson_progress`. Direct UPDATE/INSERT into `lesson_progress` from the client is denied at the policy level.
+- Decide where the projector lives in the codebase: a SQL function in the migration set, called by a thin SvelteKit remote function, is the recommended split.
 
-The exact runtime and DTO contract is captured in `docs/database-dto-spec.md`.
+This section must be closed out (decisions made and documented) before writing the schema spec or any migrations.
 
 ## Sync and Offline Direction
 
@@ -247,14 +237,6 @@ The exact runtime and DTO contract is captured in `docs/database-dto-spec.md`.
 - Resume pointers can use last-write-wins.
 - Lesson completion should be monotonic.
 - Merges should preserve earliest completion timestamps and best scores where relevant.
-
-## Authenticated Rollout Gates
-
-The baseline schema work and the first authenticated runtime rollout are now split deliberately.
-
-- Baseline DB hardening must land first: remove client-direct attempt writes, derive sync identity inside SQL, pin `SECURITY DEFINER` search paths, and add input bounds.
-- The next authenticated phase then owns request-scoped `@supabase/ssr`, any intentional client-write surfaces, anonymous-auth design, and hosted deployment hardening.
-- Do not treat the first server-backed route as the place to discover missing DB safeguards. The route phase should assume the DB hardening work is already complete.
 
 ### Assessment of candidate tools
 
@@ -387,41 +369,24 @@ If the schema requires dumping the core teaching entities into opaque JSON to ge
 ## Progress
 
 - [x] Discovery and research
-- [x] Schema spec with exact tables, columns, constraints, and indexes
-- [x] Supabase RLS plan
-- [x] Publication and sync design spec
-- [x] Validation and implementation planning
-- [x] Initial SQL schema foundation implemented and validated locally
+- [ ] Schema spec with exact tables, columns, constraints, and indexes
+- [ ] Supabase RLS plan
+- [ ] Publication and sync design spec
+- [ ] Migration plan from static Thai content
+- [ ] Validation and implementation planning
 
-## Current State
+## Open Questions
 
-- The planning phase is complete enough to have produced `docs/database-dto-spec.md`, the baseline Supabase migrations, `docs/db.md`, and the repo instruction updates.
-- The project now has a concrete database foundation, but the runtime app still serves static curriculum data and client-side progress only.
-
-## Open Follow-On Questions
-
-- ~~How should course versioning be expressed operationally?~~ Resolved: monotonic `version_ordinal int` is the operational hinge; `display_version text` is decoration only.
-- ~~Should publication snapshots be a single bundle or chunked?~~ Resolved: chunked per lesson; runtime client prefetches the current lesson plus the next three.
-- ~~How does the projector resolve attempts → progress in detail?~~ Resolved in `docs/database-dto-spec.md`.
+- How should course versioning be expressed operationally: semantic versions, monotonically increasing releases, or both?
+- Should publication snapshots be stored as a single bundle per course version or as a manifest plus chunked lesson payloads?
 - At what point does review or spaced repetition become important enough to warrant dedicated projection tables?
 - Which local persistence layer should the eventual mobile clients standardize on for immutable content bundles and queued attempts?
 
-## Smaller Items to Revisit at Schema-Design Step
+## Follow-Up
 
-These were flagged during the audit as worth committing to before migrations are written, but do not change the direction of the plan. Revisit each during the schema spec phase:
-
-- **Soft-delete vs hard-delete policy.** Curriculum content tied to any published version is never hard-deleted; mark `course_versions.is_archived` instead. Learner data hard-deletes via `auth.users → profiles → enrollments → progress/attempts` cascade for GDPR/CCPA. Spell out cascade chains in the schema.
-- **Audit lineage.** Add `created_by uuid` to `course_versions` and `course_publications` now, even though authoring is migration/seed-only in v1. Cheap to add; expensive to backfill once a CMS arrives.
-- **Naming.** Consider `anchors` / `anchor_segments` instead of `text_targets` / `text_segments` to match the philosophy doc's existing vocabulary ("anchor word"). Decide before tables are created.
-- **Instrumentation.** Decide whether to include `time_spent_ms` (or similar) on `lesson_progress` / `lesson_attempts` now or defer. Either is acceptable, but commit explicitly.
-- **Migration ordering discipline.** State the canonical order in the schema spec: create tables → add RLS + policies → add indexes → seed. Drizzle migrations don't enforce this order; humans do.
-- **First-sync backfill from localStorage.** Define the path for existing learners: on first auth, the client posts its localStorage snapshot as a stream of synthetic `lesson_attempts`, server-side projection rebuilds `lesson_progress`. One-shot but easy to forget.
-- **i18n boundary.** Lesson titles, mnemonics, and context notes are currently in English. The schema does not yet model translation locale separately from the target script language. Acceptable for v1; flag explicitly so future locale support does not become a destructive migration.
-
-## Next Steps
-
-- Seed the current Thai course into `curriculum.*` and validate parity against `src/lib/data/thai.ts`.
-- Publish the first learner-facing lesson bundles into `delivery.*` so runtime reads can move off raw static content.
-- Add the first server-side SvelteKit read/write boundary for published lesson delivery and `internal_api.sync_lesson_attempt_batch(...)`.
-- Decide whether Drizzle should land before or after the first DB-backed route and sync path.
-- Keep this file aligned with the implementation docs if future backend work changes the foundation assumptions.
+- Draft the exact table-by-table schema next, including keys, foreign keys, uniqueness rules, and index strategy.
+- Draft the RLS model for learner-owned tables before any implementation begins.
+- Define publication generation and client sync semantics before writing migrations.
+- Define the supported course-version upgrade matrix and the publish-time validation needed to guarantee migration previews.
+- Map the current Thai pack one-to-one into the proposed schema as a parity check.
+- Keep this file updated as decisions harden.

@@ -24,6 +24,11 @@
 - Keep modules top-down and readable: imports, types, props or state, derived values, handlers, markup, styles.
 - Comments should explain intent, constraints, or non-obvious tradeoffs, not restate syntax.
 
+## Interaction Standards
+
+- Prefer Bits UI for new reusable interactive components and refactor ad hoc interaction patterns toward it where the library provides a fitting primitive.
+- Keep native HTML for simple buttons, links, and form controls that do not benefit from an added headless abstraction.
+
 ## Browser And Runtime Safety
 
 - Assume code may eventually run with more SSR enabled than today. Do not bake in unnecessary client-only assumptions.

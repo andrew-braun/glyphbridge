@@ -264,9 +264,10 @@ let persistProgressUnsubscribe: Unsubscriber | null = null;
 /**
  * Initializes the progress store by loading saved state from localStorage
  * and subscribing to future changes so they are automatically persisted.
- * Should be called once when the app mounts on the client side.
+ * The store self-initializes in the browser so routes can rely on it without
+ * an explicit layout-level lifecycle hook.
  */
-export function initProgress() {
+function ensureProgressInitialized() {
 	if (typeof window === "undefined") return;
 	if (hasInitializedProgress) return;
 	hasInitializedProgress = true;
@@ -275,17 +276,14 @@ export function initProgress() {
 	persistProgressUnsubscribe ??= progress.subscribe(saveProgress);
 }
 
+ensureProgressInitialized();
+
 /** Derived store: array of all Thai characters the learner has encountered */
 export const knownLetters = derived(progress, ($p) => $p.knownLetters);
 /** Derived store: array of all anchor words from completed lessons */
 export const knownWords = derived(progress, ($p) => $p.knownWords);
 /** Derived store: the numeric ID of the learner's current (or next) lesson */
 export const currentLessonId = derived(progress, ($p) => $p.currentLessonId);
-
-/** Derived store: the full Lesson object for the learner's current lesson, falling back to lesson 1 */
-export const currentLesson = derived(progress, ($p) => {
-	return lessonById.get($p.currentLessonId) ?? lessons[0];
-});
 
 /** Total number of lessons available in the Thai curriculum */
 export const totalLessons = lessons.length;
@@ -348,31 +346,7 @@ export function completeLesson(lessonId: number, drillScore: number) {
  * @param lessonId - The ID of the lesson to check
  * @returns true if the lesson is marked as completed
  */
-export function isLessonCompleted(lessonId: number): boolean {
+function isLessonCompleted(lessonId: number): boolean {
 	const $p = get(progress);
 	return $p.lessonProgress.some((entry) => entry.lessonId === lessonId && entry.completed);
-}
-
-/**
- * Determines whether a lesson is unlocked and available to the learner.
- * Lesson 1 is always unlocked; subsequent lessons require the previous lesson
- * to be completed.
- *
- * @param lessonId - The ID of the lesson to check
- * @returns true if the learner is allowed to start this lesson
- */
-export function isLessonUnlocked(lessonId: number): boolean {
-	const lessonIndex = lessonIds.indexOf(lessonId);
-	if (lessonIndex <= 0) return lessonId === firstLessonId;
-
-	const previousLessonId = lessonIds[lessonIndex - 1];
-	return isLessonCompleted(previousLessonId);
-}
-
-/**
- * Resets all learner progress back to the initial blank state.
- * The store subscription will automatically clear localStorage.
- */
-export function resetProgress() {
-	progress.set(createInitialProgress());
 }

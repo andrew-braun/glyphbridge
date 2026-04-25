@@ -1,0 +1,12 @@
+{
+	"$schema": "https://unpkg.com/knip@6/schema.json",
+	"entry": ["src/routes/**/*.{svelte,ts,js}", "stylelint.sort.config.mjs"],
+	"project": ["src/**/*.{svelte,ts,js}"],
+	"ignore": ["src/lib/supabase.ts"],
+	"ignoreFiles": ["src/lib/components/navigation/MainNav.svelte"],
+	"ignoreDependencies": ["@supabase/supabase-js", "bits-ui"],
+	"ignoreExportsUsedInFile": {
+		"interface": true,
+		"type": true
+	}
+}

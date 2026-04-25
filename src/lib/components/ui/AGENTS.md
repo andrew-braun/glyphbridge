@@ -14,7 +14,8 @@
 
 - Expose only stable, reusable props.
 - Add variants only when they map to a deliberate design token or a repeated product need.
-- Prefer native HTML elements unless an accessible headless primitive is required.
+- Prefer Bits UI for interactive primitives and composite controls wherever possible.
+- Keep plain native elements for cases where a headless primitive adds no value.
 - If using Bits UI, preserve its accessibility guarantees rather than fighting them with ad hoc markup.
 
 ## Quality Standards

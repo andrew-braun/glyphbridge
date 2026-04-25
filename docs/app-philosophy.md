@@ -50,6 +50,7 @@ Each lesson should define a stable identifier, stage, title, anchor word, new gr
 - Curriculum content is canonical data. It must stay serializable, schema-driven, stable, and free of presentation markup.
 - Routes own page orchestration and metadata.
 - Reusable components own rendering.
+- Prefer Bits UI for reusable interactive controls where a headless primitive improves consistency; keep native elements for simple interactions that do not need extra abstraction.
 - State layers own persistence and derived learner progress.
 - Database access, auth, and privileged mutations belong behind server-only boundaries.
 - Components and DTOs must be script-agnostic. Prefer names such as `course`, `text`, `segments`, and `graphemes` over language-specific field names.

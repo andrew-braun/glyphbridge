@@ -115,23 +115,23 @@ Indexes:
 
 Purpose: learner-facing course container.
 
-| Column                         | Type          | Constraints                                                        |
-| ------------------------------ | ------------- | ------------------------------------------------------------------ |
-| `id`                           | `uuid`        | PK default `gen_random_uuid()`                                     |
-| `slug`                         | `text`        | not null unique                                                    |
-| `language_code`                | `text`        | not null FK -> `curriculum.languages(code)` on delete restrict     |
-| `script_system_id`             | `uuid`        | not null FK -> `curriculum.script_systems(id)` on delete restrict  |
-| `name`                         | `text`        | not null                                                           |
-| `native_name`                  | `text`        | not null                                                           |
-| `hero_title`                   | `text`        | not null                                                           |
-| `hero_subtitle`                | `text`        | not null                                                           |
-| `seo_title`                    | `text`        | not null                                                           |
-| `seo_description`              | `text`        | not null                                                           |
-| `ui_config`                    | `jsonb`       | not null default `'{}'::jsonb`                                     |
-| `is_active`                    | `boolean`     | not null default `false`                                           |
-| `current_published_version_id` | `uuid`        | nullable FK -> `curriculum.course_versions(id)` on delete set null |
-| `created_at`                   | `timestamptz` | not null default `now()`                                           |
-| `updated_at`                   | `timestamptz` | not null default `now()`                                           |
+| Column                         | Type          | Constraints                                                                            |
+| ------------------------------ | ------------- | -------------------------------------------------------------------------------------- |
+| `id`                           | `uuid`        | PK default `gen_random_uuid()`                                                         |
+| `slug`                         | `text`        | not null unique                                                                        |
+| `language_code`                | `text`        | not null FK -> `curriculum.languages(code)` on delete restrict                         |
+| `script_system_id`             | `uuid`        | not null FK -> `curriculum.script_systems(id)` on delete restrict                      |
+| `name`                         | `text`        | not null                                                                               |
+| `native_name`                  | `text`        | not null                                                                               |
+| `hero_title`                   | `text`        | not null                                                                               |
+| `hero_subtitle`                | `text`        | not null                                                                               |
+| `seo_title`                    | `text`        | not null                                                                               |
+| `seo_description`              | `text`        | not null                                                                               |
+| `ui_config`                    | `jsonb`       | not null default `'{}'::jsonb`                                                         |
+| `is_active`                    | `boolean`     | not null default `false`                                                               |
+| `current_published_version_id` | `uuid`        | nullable FK -> matching `curriculum.course_versions(course_id, id)` on delete set null |
+| `created_at`                   | `timestamptz` | not null default `now()`                                                               |
+| `updated_at`                   | `timestamptz` | not null default `now()`                                                               |
 
 Indexes:
 
@@ -157,13 +157,17 @@ Purpose: immutable curriculum releases for a course.
 | `release_notes`   | `jsonb`                 | not null default `'{}'::jsonb`                             |
 | `content_hash`    | `text`                  | nullable                                                   |
 | `released_at`     | `timestamptz`           | nullable                                                   |
-| `created_by`      | `uuid`                  | nullable                                                   |
+| `created_by`      | `uuid`                  | nullable FK -> `auth.users(id)` on delete set null         |
 | `created_at`      | `timestamptz`           | not null default `now()`                                   |
 
 Indexes:
 
 - unique on `(course_id, version_ordinal)`
 - index on `(course_id, status)`
+
+Additional rule:
+
+- published versions are immutable except for an optional status transition from `published` to `archived`
 
 ### `curriculum.graphemes`
 
@@ -419,7 +423,7 @@ Purpose: immutable publication manifests for runtime delivery.
 | `course_version_id` | `uuid`        | not null FK -> `curriculum.course_versions(id)` on delete restrict |
 | `manifest_hash`     | `text`        | not null unique                                                    |
 | `is_active`         | `boolean`     | not null default `false`                                           |
-| `created_by`        | `uuid`        | nullable                                                           |
+| `created_by`        | `uuid`        | nullable FK -> `auth.users(id)` on delete set null                 |
 | `created_at`        | `timestamptz` | not null default `now()`                                           |
 
 Indexes:
@@ -460,16 +464,22 @@ Purpose: user profile shell tied to Supabase auth.
 | `created_at`   | `timestamptz` | not null default `now()`                    |
 | `updated_at`   | `timestamptz` | not null default `now()`                    |
 
+Constraint notes:
+
+- `display_name` is nullable, but if present it must trim to 1-64 characters.
+
 ### `learner.devices`
 
 Purpose: known learner devices or installations for sync and diagnostics.
+
+Current write boundary: keep this table read-only to authenticated clients until a dedicated server-owned registration path exists.
 
 | Column             | Type          | Constraints                                       |
 | ------------------ | ------------- | ------------------------------------------------- |
 | `id`               | `uuid`        | PK default `gen_random_uuid()`                    |
 | `user_id`          | `uuid`        | not null FK -> `auth.users(id)` on delete cascade |
-| `client_device_id` | `text`        | not null                                          |
-| `platform`         | `text`        | nullable                                          |
+| `client_device_id` | `text`        | not null check `length between 1 and 128`         |
+| `platform`         | `text`        | nullable check `length <= 64`                     |
 | `last_seen_at`     | `timestamptz` | not null default `now()`                          |
 | `created_at`       | `timestamptz` | not null default `now()`                          |
 
@@ -512,11 +522,11 @@ Purpose: append-only learner sync units.
 | `enrollment_id`     | `uuid`        | not null FK -> `learner.course_enrollments(id)` on delete cascade |
 | `lesson_id`         | `uuid`        | not null FK -> `curriculum.lessons(id)` on delete restrict        |
 | `device_id`         | `uuid`        | nullable FK -> `learner.devices(id)` on delete set null           |
-| `client_attempt_id` | `text`        | not null                                                          |
+| `client_attempt_id` | `text`        | not null check `length between 1 and 64`                          |
 | `score`             | `integer`     | nullable check `score between 0 and 100`                          |
 | `completed`         | `boolean`     | not null default `false`                                          |
-| `time_spent_ms`     | `integer`     | nullable check `time_spent_ms >= 0`                               |
-| `attempt_payload`   | `jsonb`       | not null default `'{}'::jsonb`                                    |
+| `time_spent_ms`     | `integer`     | nullable check `time_spent_ms >= 0 and <= 86400000`               |
+| `attempt_payload`   | `jsonb`       | not null default `'{}'::jsonb`, size-capped to 32 KiB             |
 | `completed_at`      | `timestamptz` | not null                                                          |
 | `processed_at`      | `timestamptz` | nullable                                                          |
 | `created_at`        | `timestamptz` | not null default `now()`                                          |
@@ -571,40 +581,40 @@ The app should consume delivery DTOs and learner DTOs, not normalized curriculum
 
 ```ts
 export type CourseSummaryDTO = {
-	id: string;
-	slug: string;
-	name: string;
-	nativeName: string;
-	languageCode: string;
-	scriptSystem: {
-		slug: string;
-		name: string;
-		direction: "ltr" | "rtl";
-	};
-	currentVersion: {
-		id: string;
-		displayVersion: string;
-		versionOrdinal: number;
-	};
-	heroTitle: string;
-	heroSubtitle: string;
-	seoTitle: string;
-	seoDescription: string;
-	totalLessons: number;
+ id: string;
+ slug: string;
+ name: string;
+ nativeName: string;
+ languageCode: string;
+ scriptSystem: {
+  slug: string;
+  name: string;
+  direction: "ltr" | "rtl";
+ };
+ currentVersion: {
+  id: string;
+  displayVersion: string;
+  versionOrdinal: number;
+ };
+ heroTitle: string;
+ heroSubtitle: string;
+ seoTitle: string;
+ seoDescription: string;
+ totalLessons: number;
 };
 
 export type LessonListItemDTO = {
-	id: string;
-	slug: string;
-	lessonOrdinal: number;
-	stage: number;
-	title: string;
-	anchor: {
-		text: string;
-		meaning: string;
-	};
-	newGraphemeIds: string[];
-	reviewGraphemeIds: string[];
+ id: string;
+ slug: string;
+ lessonOrdinal: number;
+ stage: number;
+ title: string;
+ anchor: {
+  text: string;
+  meaning: string;
+ };
+ newGraphemeIds: string[];
+ reviewGraphemeIds: string[];
 };
 ```
 
@@ -612,83 +622,83 @@ export type LessonListItemDTO = {
 
 ```ts
 export type GraphemeDTO = {
-	id: string;
-	text: string;
-	kind: string;
-	romanization?: string;
-	pronunciationHint?: string;
-	mnemonic?: string;
-	position?: string;
-	pedagogicalGroupKey?: string;
-	pedagogicalGroupLabel?: string;
-	details?: Record<string, unknown>;
-	tags?: string[];
+ id: string;
+ text: string;
+ kind: string;
+ romanization?: string;
+ pronunciationHint?: string;
+ mnemonic?: string;
+ position?: string;
+ pedagogicalGroupKey?: string;
+ pedagogicalGroupLabel?: string;
+ details?: Record<string, unknown>;
+ tags?: string[];
 };
 
 export type AnchorSegmentDTO = {
-	text: string;
-	sound: string;
-	kind?: string;
+ text: string;
+ sound: string;
+ kind?: string;
 };
 
 export type AnchorTargetDTO = {
-	id: string;
-	slug: string;
-	text: string;
-	meaning: string;
-	pronunciation: string;
-	categoryKey?: string;
-	contextNote?: string;
-	segments: AnchorSegmentDTO[];
+ id: string;
+ slug: string;
+ text: string;
+ meaning: string;
+ pronunciation: string;
+ categoryKey?: string;
+ contextNote?: string;
+ segments: AnchorSegmentDTO[];
 };
 
 export type RuleDTO = {
-	id: string;
-	key: string;
-	name: string;
-	shortDescription: string;
-	explanation: string;
-	examples: Array<{
-		text: string;
-		translation?: string;
-	}>;
+ id: string;
+ key: string;
+ name: string;
+ shortDescription: string;
+ explanation: string;
+ examples: Array<{
+  text: string;
+  translation?: string;
+ }>;
 };
 
 export type DrillOptionDTO = {
-	text: string;
-	isCorrect?: boolean;
-	rationale?: string;
+ text: string;
+ isCorrect?: boolean;
+ rationale?: string;
 };
 
 export type DrillDTO = {
-	id: string;
-	key: string;
-	type: "recognize" | "match" | "sound" | "spot";
-	prompt: string;
-	hint?: string;
-	payload?: Record<string, unknown>;
-	options: DrillOptionDTO[];
+ id: string;
+ key: string;
+ type: "recognize" | "match" | "sound" | "spot";
+ prompt: string;
+ hint?: string;
+ payload?: Record<string, unknown>;
+ options: DrillOptionDTO[];
 };
 
 export type LessonBundleDTO = {
-	course: {
-		id: string;
-		slug: string;
-		versionId: string;
-		displayVersion: string;
-	};
-	lesson: {
-		id: string;
-		slug: string;
-		lessonOrdinal: number;
-		stage: number;
-		title: string;
-		anchor: AnchorTargetDTO;
-		newGraphemes: GraphemeDTO[];
-		reviewGraphemes: GraphemeDTO[];
-		rules: RuleDTO[];
-		drills: DrillDTO[];
-	};
+ course: {
+  id: string;
+  slug: string;
+  versionId: string;
+  displayVersion: string;
+ };
+ lesson: {
+  id: string;
+  slug: string;
+  lessonOrdinal: number;
+  stage: number;
+  title: string;
+  anchor: AnchorTargetDTO;
+  newGraphemes: GraphemeDTO[];
+  reviewGraphemes: GraphemeDTO[];
+  rules: RuleDTO[];
+  drills: DrillDTO[];
+ };
 };
 ```
 
@@ -696,44 +706,44 @@ export type LessonBundleDTO = {
 
 ```ts
 export type EnrollmentProgressDTO = {
-	enrollmentId: string;
-	courseSlug: string;
-	courseVersionId: string;
-	currentLessonSlug?: string;
-	completedLessonSlugs: string[];
-	lessonProgress: Array<{
-		lessonSlug: string;
-		status: "not_started" | "in_progress" | "completed";
-		bestScore?: number;
-		latestScore?: number;
-		attemptCount: number;
-		firstCompletedAt?: string;
-		lastAttemptAt?: string;
-	}>;
+ enrollmentId: string;
+ courseSlug: string;
+ courseVersionId: string;
+ currentLessonSlug?: string;
+ completedLessonSlugs: string[];
+ lessonProgress: Array<{
+  lessonSlug: string;
+  status: "not_started" | "in_progress" | "completed";
+  bestScore?: number;
+  latestScore?: number;
+  attemptCount: number;
+  firstCompletedAt?: string;
+  lastAttemptAt?: string;
+ }>;
 };
 
 export type LessonAttemptInputDTO = {
-	clientAttemptId: string;
-	lessonId: string;
-	completed: boolean;
-	score?: number;
-	timeSpentMs?: number;
-	attemptPayload?: Record<string, unknown>;
-	completedAt: string;
+ clientAttemptId: string;
+ lessonId: string;
+ completed: boolean;
+ score?: number;
+ timeSpentMs?: number;
+ attemptPayload?: Record<string, unknown>;
+ completedAt: string;
 };
 
 export type SyncLessonAttemptBatchInputDTO = {
-	enrollmentId: string;
-	deviceId?: string;
-	attempts: LessonAttemptInputDTO[];
+ enrollmentId: string;
+ deviceId?: string;
+ attempts: LessonAttemptInputDTO[];
 };
 
 export type SyncLessonAttemptBatchResultDTO = {
-	insertedAttemptCount: number;
-	updatedLessonCount: number;
-	currentLessonId?: string;
-	currentLessonSlug?: string;
-	processedAt: string;
+ insertedAttemptCount: number;
+ updatedLessonCount: number;
+ currentLessonId?: string;
+ currentLessonSlug?: string;
+ processedAt: string;
 };
 ```
 
@@ -741,11 +751,13 @@ export type SyncLessonAttemptBatchResultDTO = {
 
 Projection is handled by one server-owned function:
 
-- `internal_api.sync_lesson_attempt_batch(p_user_id uuid, p_enrollment_id uuid, p_device_id uuid, p_attempts jsonb)`
+- `internal_api.sync_lesson_attempt_batch(p_enrollment_id uuid, p_device_id uuid, p_attempts jsonb)`
 
 Required behavior:
 
+- Derive the authenticated user inside the function from the request auth context and reject unauthenticated calls.
 - Insert only attempts whose `(enrollment_id, client_attempt_id)` pair does not already exist.
+- Reject batches larger than the configured limit and reject attempts with out-of-window timestamps, oversized payloads, or invalid identifiers.
 - Process attempts in ascending `completed_at`, then ascending `client_attempt_id` for deterministic ties.
 - Upsert `learner.lesson_progress` in the same transaction.
 - Set `processed_at` on inserted attempts in the same transaction.
@@ -771,12 +783,13 @@ Failure behavior:
 This spec is not a full policy document, but these rules are fixed:
 
 - `curriculum.*` is not exposed to `anon` or `authenticated`.
+- `curriculum.*` also has deny-by-default RLS enabled as a defense-in-depth guard.
 - `delivery.*` is read-only for runtime access.
 - `learner.*` is user-owned and policy-scoped on `user_id = auth.uid()`.
-- Clients may `select` and `insert` into `learner.lesson_attempts` for their own rows.
+- Clients may `select` from `learner.lesson_attempts` for their own rows, but attempt insertion is server-owned.
 - Clients may only `select` from `learner.lesson_progress` and `learner.course_enrollments` for their own rows.
 - Clients may not directly `insert`, `update`, or `delete` `learner.lesson_progress`.
-- Server-side code calls `internal_api.sync_lesson_attempt_batch(...)` after verifying the authenticated user and enrollment.
+- Server-side code calls `internal_api.sync_lesson_attempt_batch(...)` and the function re-validates the authenticated user against the enrollment.
 
 ## Migration Order
 

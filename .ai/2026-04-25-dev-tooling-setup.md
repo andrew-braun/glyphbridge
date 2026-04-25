@@ -59,13 +59,24 @@ Set up a modern linting and formatting toolchain for the SvelteKit + TypeScript 
 - [x] Validation
 - [x] Documentation updates
 
+## Addendum 2026-04-25 Follow-Up
+
+- Added `husky` with `pre-commit` and `pre-push` hooks so staged-file fixes stay local and the full validation suite runs before pushes.
+- Added `lint-staged` so staged TypeScript, Svelte, styles, Markdown, and JSON files are fixed with the matching toolchain instead of running broad repo-wide autofix on every commit.
+- Added `knip` with explicit SvelteKit route/config entry points in `knip.json` so the analyzer follows the real app graph instead of reporting most `.svelte` files as unreachable.
+- Added `supabase` CLI package scripts (`db:start`, `db:stop`, `db:reset`, `db:lint`) so the local DB workflow is first-class and no longer looks unused to dependency analysis.
+- Restored `bits-ui` as an intentional runtime dependency even though the current app does not import it yet, because Bits UI is the explicit default primitive layer for the upcoming interactivity refactor. `knip` ignores it until that refactor lands.
+- Kept `src/lib/supabase.ts` out of `knip` for now because it is an intentional placeholder until the authenticated `@supabase/ssr` boundary lands.
+- CSS property sorting is enabled on the fix path: `pnpm stylelint:fix` and the staged-file hook alphabetize properties through `stylelint.sort.config.mjs`, while plain `pnpm stylelint` stays low-churn and does not fail unsorted legacy blocks.
+
 ## Open Questions
 
-- None.
+- Remove the temporary `src/lib/supabase.ts` `knip` ignore when the authenticated Supabase work replaces the placeholder module with a real request-scoped boundary.
 
 ## Follow-Up
 
-- Consider adding `knip` for unused-file and unused-dependency detection once the new lint baseline has had a little time in daily use.
+- Tighten the temporary `knip` ignore list once the Supabase runtime integration lands and the placeholder client module is either wired up or removed.
+- Remove the temporary `bits-ui` `knip` ignore as part of the planned interactivity refactor that starts using Bits UI primitives in shared components.
 
 ## Validation
 
@@ -73,6 +84,8 @@ Set up a modern linting and formatting toolchain for the SvelteKit + TypeScript 
 - Passed: `pnpm install && pnpm stylelint`
 - Passed: `pnpm check:all`
 - Passed: `pnpm build`
+- Passed: `pnpm knip`
+- Pending follow-up validation: `pnpm check:all` after restoring the intentional `bits-ui` dependency and updating the temporary `knip` ignore list.
 
 ## Addendum 2026-04-25
 

@@ -13,6 +13,7 @@
 - When architecture, tech choices, config, environment, deployment, or workflow assumptions change, update every relevant instruction file in the same change.
 - Keep `src/routes` responsible for routing, route data, and metadata.
 - Keep `src/lib/components` responsible for reusable rendering. Keep UI primitives domain-agnostic.
+- Prefer Bits UI for reusable interactive primitives and composite controls wherever possible instead of hand-rolling accessibility behavior.
 - Treat `src/lib/data` as the canonical lesson-content source of truth and `src/lib/stores` as client-state and persistence boundaries.
 - In Svelte 5, prefer `$derived` over `$effect` for computed state.
 - Prefer runes-mode APIs over legacy patterns in new code.

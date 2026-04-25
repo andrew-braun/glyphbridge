@@ -79,8 +79,8 @@ The database is designed around a one-way content flow and a one-way progress fl
 ### Learner flow
 
 1. A learner is enrolled in a course version through `learner.course_enrollments`.
-2. The client sends lesson attempts into `learner.lesson_attempts`.
-3. Server-side code calls `internal_api.sync_lesson_attempt_batch(...)`.
+2. The client sends lesson attempts to a server-owned SvelteKit boundary.
+3. Server-side code calls `internal_api.sync_lesson_attempt_batch(...)`, which inserts validated attempts into `learner.lesson_attempts`.
 4. That function updates `learner.lesson_progress` and the learner's current lesson pointer.
 
 ## Runtime Boundaries
@@ -89,8 +89,10 @@ These rules are the most important part of the database design.
 
 - Do not read `curriculum.*` directly from learner-facing routes or components.
 - Read published lesson content from `delivery.*`.
+- Do not let clients write directly to `learner.lesson_attempts`; route attempt sync through server-owned code.
 - Do not let clients write directly to `learner.lesson_progress`.
-- Let clients write attempts, then project progress through `internal_api.sync_lesson_attempt_batch(...)`.
+- Treat `learner.devices` as a future server-owned registration surface, not an open client-write table.
+- Project progress through `internal_api.sync_lesson_attempt_batch(...)`.
 - Treat `curriculum` and `internal_api` as private implementation schemas.
 
 If a feature crosses these boundaries, stop and review the design before adding code.

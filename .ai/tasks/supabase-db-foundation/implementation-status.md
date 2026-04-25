@@ -29,6 +29,19 @@ Track the implemented foundation of the Supabase and database workstream, summar
 - Database-aware instruction files now point future work at the correct docs and preserve the `curriculum` / `internal_api` versus `delivery` / `learner` boundary.
 - The shipped app runtime still uses static lesson data in `src/lib/data/*` and local client persistence; no seeded curriculum, publication data, or server-backed runtime path has landed yet.
 
+## Security Review Outcome
+
+- The 2026-04-25 audit found real boundary and surface-area issues in the baseline DB design; the foundation is not ready for the first authenticated learner route yet.
+- The critical findings around direct `lesson_attempts` writes, trusted caller identity, and mutable `SECURITY DEFINER` search paths are accepted as true positives and should be fixed before seeding resumes.
+- The active remediation tracker is `.ai/2026-04-25-supabase-security-remediation-plan.md`.
+- `docs/database-dto-spec.md` and `docs/db.md` still describe the current implemented foundation; update them in the same change that lands the hardening migrations and app-boundary changes.
+
+## Active Remediation
+
+- Added `supabase/migrations/20260425143000_security_hardening_phase1.sql` to remove client-direct attempt writes, derive authenticated identity inside `internal_api.sync_lesson_attempt_batch(...)`, pin function search paths, shrink unused learner write surfaces, and add the first wave of DB-side bounds and invariants.
+- Validated the first hardening migration with `pnpm exec supabase db reset --yes`.
+- The next immediate checks are config alignment, DB doc updates, and `pnpm exec supabase db lint`.
+
 ## Deliverables Produced
 
 - `supabase/config.toml`
@@ -43,14 +56,17 @@ Track the implemented foundation of the Supabase and database workstream, summar
 - Passed: `pnpm exec supabase start`
 - Passed: `pnpm exec supabase db reset --yes`
 - Passed: `pnpm check`
+- Passed: `pnpm exec supabase db reset --yes` after adding `20260425143000_security_hardening_phase1.sql`
+- Pending workflow gap: `pnpm exec supabase db lint` is not yet part of the DB migration workflow and should be added during remediation.
 
 ## Near-Term Next Steps
 
-- Seed the current Thai course into `curriculum.*` and validate parity against `src/lib/data/thai.ts`.
-- Generate the first `delivery.course_publication_lessons` payloads from that canonical content.
-- Add the first server-side SvelteKit boundary for published lesson reads and `internal_api.sync_lesson_attempt_batch(...)`.
-- Decide whether to add Drizzle before or after the first DB-backed route and sync path.
-- Add migration smoke tests or integration checks once app code starts depending on the DB surface.
+- Land the DB hardening migration wave from `.ai/2026-04-25-supabase-security-remediation-plan.md` before exposing any authenticated learner write path.
+- Land the input-bounds migration wave for attempts, timestamps, text fields, and JSON payloads.
+- Replace the module-scoped Supabase client with request-scoped `@supabase/ssr` integration before any server route or load function imports Supabase.
+- After the hardening work passes validation, seed the current Thai course into `curriculum.*` and validate parity against `src/lib/data/thai.ts`.
+- Generate the first `delivery.course_publication_lessons` payloads, then add the first server-side boundary for published lesson reads and learner attempt sync.
+- Add `supabase db lint` and targeted SQL smoke tests to the DB workflow as follow-on guardrails.
 
 ## Maintenance Rule
 

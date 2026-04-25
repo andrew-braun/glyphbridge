@@ -59,6 +59,17 @@ Plan a secure, low-cost path for adding user accounts and progress syncing to Gl
 - Add request-scoped Supabase clients via `@supabase/ssr`, validate sessions server-side, and expose only the minimum session data to the app shell.
 - Store per-user progress in a small relational model and merge anonymous local progress into that model on first authenticated session.
 
+## Next-Phase Security Gates
+
+These items are intentionally deferred until the authenticated SvelteKit boundary work starts. They should ship as part of that next phase, not as optional cleanup after it.
+
+- Replace the module-scoped client in `src/lib/supabase.ts` with request-scoped `@supabase/ssr` clients and add the matching `hooks.server.ts` session flow. Covers `H5` and `L5` from the DB audit.
+- Keep anonymous auth disabled until the anon-to-account merge flow, captcha posture, and rate limits are designed together. Covers `M11`.
+- Keep authenticated writes server-owned by default, then add column-level grants only for any learner table that is intentionally exposed for direct client writes. Covers the deferred portion of `H8`.
+- Treat the current local auth config as non-production. Before hosted rollout, harden password policy, email confirmation, secure password change, captcha, and MFA settings. Covers `H4`.
+- Add production deployment requirements for SSL enforcement and network restrictions alongside the deployment target decision. Covers `M8`.
+- Add `pnpm exec supabase db lint` and advisor review to the DB change workflow before more authenticated DB work lands. Covers `L6`.
+
 ## Open Questions
 
 - Whether the first authenticated persistence shape should be a JSON snapshot table or fully normalized lesson-progress rows.
@@ -68,3 +79,4 @@ Plan a secure, low-cost path for adding user accounts and progress syncing to Gl
 
 - Draft the route, schema, and RLS plan before touching auth code.
 - Define the one-time local-to-account merge behavior and conflict rules in detail.
+- Land the DB hardening and input-bounds remediation phases before starting the authenticated route work tracked here.

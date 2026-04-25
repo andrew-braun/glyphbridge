@@ -36,5 +36,11 @@
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
 	"svelte.enable-ts-plugin": true,
-	"typescript.tsdk": "node_modules/typescript/lib"
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"chat.tools.terminal.autoApprove": {
+		"/^cd /home/andri/code/projects/glyphbridge && pnpm knip$/": {
+			"approve": true,
+			"matchCommandLine": true
+		}
+	}
 }

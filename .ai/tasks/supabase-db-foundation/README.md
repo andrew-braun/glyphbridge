@@ -13,9 +13,11 @@ This directory groups the active and recently completed `.ai` task documents for
    - Current implementation state, completed foundation outputs, validation status, and concrete next steps.
    - Start here when resuming hands-on work.
 3. `database-security-audit.md`
-  - Security findings, severity, and recommended remediation for the current DB foundation.
-  - Read before exposing the first server-backed learner route or auth flow.
-4. `auth-sync-strategy.md`
+
+- Security findings, severity, and recommended remediation for the current DB foundation.
+- Read before exposing the first server-backed learner route or auth flow.
+
+1. `auth-sync-strategy.md`
    - Future auth and account-linked progress rollout.
    - Read when starting authenticated sessions, merge flows, or account persistence.
 
@@ -64,8 +66,9 @@ This directory groups the active and recently completed `.ai` task documents for
 
 ## Current Resume Point
 
-- Seed the Thai curriculum into `curriculum.*`.
+- Finish the DB hardening and input-bounds remediation phases before seeding or adding the first authenticated route.
+- Carry the next authenticated-phase security items in `auth-sync-strategy.md`: request-scoped `@supabase/ssr`, anonymous-auth gating, hosted auth hardening, deployment SSL/network requirements, and DB lint workflow.
+- After hardening passes, seed the Thai curriculum into `curriculum.*`.
 - Publish the first learner-facing bundles into `delivery.*`.
-- Address the critical and high-severity items in `database-security-audit.md` before exposing the first authenticated server route.
 - Add the first server-side SvelteKit boundary for published lesson reads and learner attempt sync.
 - Decide whether Drizzle lands before or after that first DB-backed runtime path.
