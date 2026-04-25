@@ -1,0 +1,3 @@
+-- Seed data is intentionally empty for now.
+-- The first curriculum seed should load the current Thai course after the
+-- baseline schema is verified locally.
