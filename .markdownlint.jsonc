@@ -1,0 +1,4 @@
+{
+	// Let Prettier own Markdown table formatting; markdownlint cannot auto-fix MD060.
+	"MD060": false
+}

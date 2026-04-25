@@ -4,6 +4,12 @@
 - Owner: GitHub Copilot
 - Status: planned
 
+## Related Docs
+
+- `README.md` for the bundle index and redundancy assessment
+- `foundation-plan.md` for the broader database architecture and schema direction
+- `implementation-status.md` for the current implemented foundation and the immediate pre-auth next steps
+
 ## Goal
 
 Plan a secure, low-cost path for adding user accounts and progress syncing to GlyphBridge without paying for premium auth SaaS or hand-rolling authentication.

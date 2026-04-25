@@ -4,6 +4,12 @@
 - Owner: GitHub Copilot
 - Status: completed
 
+## Related Docs
+
+- `README.md` for the bundle index and redundancy assessment
+- `implementation-status.md` for what actually landed and what still needs to happen next
+- `auth-sync-strategy.md` for the future authenticated rollout work
+
 ## Latest Decision Snapshot
 
 - Resolved projector mechanism: use a batch `SECURITY DEFINER` SQL function in `internal_api`, invoked from a thin server-side SvelteKit boundary.

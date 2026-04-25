@@ -4,6 +4,12 @@
 - Owner: GitHub Copilot
 - Status: planned
 
+## Related Docs
+
+- `README.md` for the bundle index and redundancy assessment
+- `thai-curriculum-strategy.md` for the Thai content path this audio layer would support
+- `multi-course-architecture.md` for the broader course-aware app direction
+
 ## Goal
 
 Define the lowest-cost, highest-quality path for adding Thai pronunciation support to the app, with a clean MVP and an upgrade path for future content expansion.

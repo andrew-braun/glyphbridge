@@ -4,6 +4,13 @@
 - Owner: GitHub Copilot
 - Status: planned
 
+## Related Docs
+
+- `README.md` for the bundle index and redundancy assessment
+- `thai-curriculum-strategy.md` for Thai-specific sequencing strategy
+- `thai-audio-pronunciation-strategy.md` for the pronunciation workstream
+- `../supabase-db-foundation/foundation-plan.md` for the database-side architecture this plan now depends on
+
 ## Goal
 
 Define a simple, scalable architecture for evolving GlyphBridge from a Thai-only app into a multi-course reading app that can launch with Thai, Georgian, Greek, Ukrainian, and Korean, while making future script and course additions standardized and low-friction.

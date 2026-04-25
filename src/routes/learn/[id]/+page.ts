@@ -1,5 +1,7 @@
-import { thaiPack } from "$lib/data/thai";
 import { error } from "@sveltejs/kit";
+
+import { thaiPack } from "$lib/data/thai";
+
 import type { PageLoad } from "./$types";
 
 export const prerender = false;

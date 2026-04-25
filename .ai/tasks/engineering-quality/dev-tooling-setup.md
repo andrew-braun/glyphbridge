@@ -4,6 +4,11 @@
 - Owner: GitHub Copilot
 - Status: completed
 
+## Related Docs
+
+- `README.md` for the bundle index and redundancy assessment
+- `scaling-plan.md` for the broader engineering audit and priority order
+
 ## Goal
 
 Set up a modern linting and formatting toolchain for the SvelteKit + TypeScript + SCSS stack, tighten alias ergonomics, and document additional tooling that will help keep the workspace consistent and maintainable.
@@ -71,12 +76,12 @@ Set up a modern linting and formatting toolchain for the SvelteKit + TypeScript 
 
 - Passed: `pnpm lint:fix && pnpm lint`
 - Passed: `pnpm install && pnpm stylelint`
+- Passed: `pnpm markdownlint docs/concept/approach-thai.md`
 - Passed: `pnpm check:all`
 - Passed: `pnpm build`
 
 ## Addendum 2026-04-25
 
 - Added `markdownlint-cli2` and repo-level Markdown scripts.
-- Kept Markdown lint as an explicit script instead of adding it to `check:all`, because the existing docs set still has broader Markdown-rule debt that should be staged separately.
-- Disabled `MD060/table-column-style` at the repo level because it conflicts with the current Prettier-driven Markdown formatting and `markdownlint` does not auto-fix it.
-- Kept Prettier as the Markdown formatter and `markdownlint` as the opt-in structural checker.
+- Configured `MD060/table-column-style` as `style: "any"` so valid Markdown tables are accepted even when Prettier does not vertically align pipes.
+- Kept Prettier as the Markdown formatter because `markdownlint` does not auto-fix `MD060`.

@@ -5,6 +5,8 @@
  * Provides writable and derived stores for tracking known letters, known words,
  * lesson completion, and the current lesson. All mutations auto-persist to localStorage.
  */
+import { derived, get, type Unsubscriber, writable } from "svelte/store";
+
 import { thaiPack } from "$lib/data/thai";
 import type {
 	AppProgress,
@@ -13,7 +15,6 @@ import type {
 	ProgressSnapshotV1,
 	Word,
 } from "$lib/data/types";
-import { derived, get, writable, type Unsubscriber } from "svelte/store";
 
 /** localStorage key under which the serialized progress JSON is stored */
 const STORAGE_KEY = "glyphbridge_progress";

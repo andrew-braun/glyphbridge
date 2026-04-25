@@ -1,5 +1,7 @@
 # GlyphBridge — Scaling Plan
 
+Related docs: `README.md` for the bundle index and `dev-tooling-setup.md` for the concrete tooling implementation slice that already shipped.
+
 A senior-review punch list of early flaws and scalability gaps, with a concrete
 order of operations for fixing them. Work top-down: each section is ordered by
 risk/impact, and the numbered PR sequence at the bottom minimizes rebase pain.

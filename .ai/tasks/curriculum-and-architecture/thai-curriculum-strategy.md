@@ -4,6 +4,12 @@
 - Owner: GitHub Copilot
 - Status: planned
 
+## Related Docs
+
+- `README.md` for the bundle index and redundancy assessment
+- `multi-course-architecture.md` for the broader course-aware architecture
+- `../../../docs/app-philosophy.md` for the durable pedagogy guardrail
+
 ## Goal
 
 Define a real-world-first Thai reading curriculum strategy that helps learners decode useful words as quickly as possible instead of memorizing the alphabet in traditional order.

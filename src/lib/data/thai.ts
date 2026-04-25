@@ -15,7 +15,7 @@
  * Each lesson builds on previously learned letters and rules, with explicit review
  * of earlier characters via the `reviewLetters` array.
  */
-import type { Lesson, LanguagePack } from "./types";
+import type { LanguagePack, Lesson } from "./types";
 
 const lessons: Lesson[] = [
 	// ---------------------------------------------------------------

@@ -6,7 +6,10 @@
 - For every non-minor task, create and maintain a dated markdown spec/tracker in `.ai/` using `YYYY-MM-DD-short-description.md`.
 - Use `docs/` for durable reference documentation and `.ai/` for task-scoped tracking and backlog notes.
 - For database or Supabase work, start with `docs/db.md`; use `docs/database-dto-spec.md` for the exact schema and DTO contract, and `supabase/migrations/*.sql` for the live implementation.
-- Run `pnpm check` before finishing non-trivial changes. Run `pnpm build` when route behavior, metadata, env usage, or bundling changes.
+- Run `pnpm check` before finishing non-trivial changes.
+- Use `pnpm check:all` when a change affects formatting, linting, aliases, or SCSS styling conventions.
+- Use `pnpm lint` and `pnpm stylelint` for focused TypeScript, Svelte, and style validation.
+- Run `pnpm build` when route behavior, metadata, env usage, or bundling changes.
 - When architecture, tech choices, config, environment, deployment, or workflow assumptions change, update every relevant instruction file in the same change.
 - Keep `src/routes` responsible for routing, route data, and metadata.
 - Keep `src/lib/components` responsible for reusable rendering. Keep UI primitives domain-agnostic.

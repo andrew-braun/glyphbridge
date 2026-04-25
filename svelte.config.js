@@ -1,6 +1,7 @@
+import { relative, sep } from "node:path";
+
 import adapter from "@sveltejs/adapter-static";
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
-import { relative, sep } from "node:path";
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -16,6 +17,14 @@ const config = {
 	},
 	preprocess: vitePreprocess(),
 	kit: {
+		alias: {
+			$assets: "src/lib/assets",
+			$components: "src/lib/components",
+			$data: "src/lib/data",
+			$stores: "src/lib/stores",
+			$styles: "src/lib/styles",
+			$utils: "src/lib/utils",
+		},
 		typescript: {
 			config(config) {
 				config.compilerOptions ??= {};

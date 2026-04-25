@@ -27,6 +27,8 @@
 
 - Install with `pnpm install`.
 - Run `pnpm check` before finishing any non-trivial change.
+- Use `pnpm check:all` when a change affects formatting, linting, or SCSS styling conventions.
+- Use `pnpm lint` and `pnpm stylelint` directly when tightening a focused TypeScript, Svelte, or style slice.
 - Run `pnpm build` whenever a change affects routes, metadata, environment variables, bundling, or deploy behavior.
 - Use `pnpm dev` for manual UI verification.
 

@@ -54,6 +54,19 @@ Run project checks:
 pnpm check
 ```
 
+Run the full formatting and linting suite:
+
+```sh
+pnpm check:all
+```
+
+Run the targeted lint commands:
+
+```sh
+pnpm lint
+pnpm stylelint
+```
+
 Build for production verification:
 
 ```sh

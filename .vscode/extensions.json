@@ -1,9 +1,12 @@
 {
-  "recommendations": [
-    "svelte.svelte-vscode",
-    "esbenp.prettier-vscode",
-    "editorconfig.editorconfig",
-    "ms-ossdata.vscode-pgsql"
-  ],
-  "unwantedRecommendations": ["ms-mssql.mssql"]
+	"recommendations": [
+		"svelte.svelte-vscode",
+		"dbaeumer.vscode-eslint",
+		"davidanson.vscode-markdownlint",
+		"esbenp.prettier-vscode",
+		"editorconfig.editorconfig",
+		"stylelint.vscode-stylelint",
+		"ms-ossdata.vscode-pgsql"
+	],
+	"unwantedRecommendations": ["ms-mssql.mssql"]
 }

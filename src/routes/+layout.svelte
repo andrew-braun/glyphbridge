@@ -8,10 +8,12 @@
 -->
 <script lang="ts">
 	// Global SCSS — must be imported here so it applies to all routes
+	import "$lib/styles/global.scss";
+
+	import { onMount } from "svelte";
+
 	import MainNav from "$lib/components/navigation/MainNav.svelte";
 	import { initProgress } from "$lib/stores/progress";
-	import "$lib/styles/global.scss";
-	import { onMount } from "svelte";
 
 	let { children } = $props();
 

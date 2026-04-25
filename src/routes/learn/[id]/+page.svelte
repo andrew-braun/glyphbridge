@@ -14,10 +14,6 @@
 -->
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import Button from "$lib/components/ui/Button.svelte";
-	import { thaiPack } from "$lib/data/thai";
-	import { completeLesson } from "$lib/stores/progress";
-	import type { PageData } from "./$types";
 	// Step components
 	import StepBreakdown from "$lib/components/lesson/StepBreakdown.svelte";
 	import StepComplete from "$lib/components/lesson/StepComplete.svelte";
@@ -25,6 +21,11 @@
 	import StepIntro from "$lib/components/lesson/StepIntro.svelte";
 	import StepLetters from "$lib/components/lesson/StepLetters.svelte";
 	import StepRules from "$lib/components/lesson/StepRules.svelte";
+	import Button from "$lib/components/ui/Button.svelte";
+	import { thaiPack } from "$lib/data/thai";
+	import { completeLesson } from "$lib/stores/progress";
+
+	import type { PageData } from "./$types";
 
 	let { data }: { data: PageData } = $props();
 	const lesson = $derived(data.lesson);

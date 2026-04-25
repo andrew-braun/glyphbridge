@@ -28,9 +28,13 @@ If a document should live beyond a single task, put it in `docs/` instead.
 - Create the file before or at the start of implementation.
 - Update it as the work evolves.
 - Keep it accurate enough that someone can resume the task later without reconstructing the context from chat history.
+- For larger workstreams that naturally split into multiple related task files, group them under `.ai/tasks/<task-slug>/` and add a local `README.md` that explains the document roles and reading order.
+- Inside `.ai/tasks/<task-slug>/`, prefer semantic filenames and use the bundle `README.md` to record overlap, completion, and consolidation decisions.
 
 ## Archive
 
 - Move dated task files to `archive/` once they are complete.
+- If multiple completed task slices are mostly status duplicates, consolidate them into fewer files inside the relevant `.ai/tasks/<task-slug>/` bundle before archiving or deleting the redundant slices.
 - Treat a task as complete when its status is `done` and its progress checklist is fully checked.
-- Keep active, planned, blocked, backlog, and evergreen planning docs at the root of `.ai/`.
+- Keep active, planned, blocked, backlog, and evergreen planning docs at the root of `.ai/` unless they are part of a dedicated multi-document task bundle under `.ai/tasks/`.
+- When a narrow tracker mainly points at a durable doc in `docs/`, prefer consolidating that tracker into the bundle `README.md` instead of keeping a separate file.
