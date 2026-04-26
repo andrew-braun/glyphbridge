@@ -9,6 +9,9 @@
 - `README.md` for the bundle index and redundancy assessment
 - `implementation-status.md` for what actually landed and what still needs to happen next
 - `auth-sync-strategy.md` for the future authenticated rollout work
+- `../../2026-04-26-thai-content-seeding-plan.md` for the current Thai content-seeding plan and approval gate
+- `thai-curriculum-seed-dataset.md` for the DB-ready Thai source inventory
+- `../../../docs/concept/approach-thai.md` for the durable Thai grapheme and lesson sequencing concept source
 
 ## Latest Decision Snapshot
 
@@ -19,10 +22,19 @@
 - Output added: `docs/database-dto-spec.md`.
 - Planning outputs implemented: the repo now has validated Supabase migrations, a DB operations reference, and updated instruction files that point future work at the schema docs.
 - Deferred rollout gates captured: request-scoped `@supabase/ssr`, hosted-auth hardening, deployment SSL/network requirements, anonymous-auth gating, and DB lint workflow belong to the authenticated implementation phase rather than the baseline schema pass.
+- Resolved vocabulary direction: add first-class reusable lesson vocabulary via `vocabulary_items`, `vocabulary_segments`, and `lesson_vocabulary`, while keeping `anchor_targets` as the featured lesson-word projection during the runtime transition.
+- Immediate implementation split: populate the approved rewritten Thai curriculum into `curriculum.*` and generate first delivery bundles as the next content step, while treating request-scoped `@supabase/ssr` as the separate runtime/auth gate that must land before the first authenticated route or sync path.
+- Source reconciliation rule for the content seed: the approved frequency-first rewrite has now landed in `src/lib/data/thai.ts`, and that runtime course is the seed source of truth for the first Thai course version.
 
 ## Goal
 
 Define the database foundation for GlyphBridge so curriculum content, lesson structures, and learner progress can move from static TypeScript data into a scalable Supabase-backed PostgreSQL model without breaking the app's teaching philosophy or creating avoidable technical debt.
+
+## Authority
+
+- This is the authoritative architecture and schema-rationale document for the DB foundation workstream.
+- Do not use this file as the primary resume-point or sequencing tracker.
+- For concrete next steps and current execution order, use `implementation-status.md`.
 
 ## Scope
 

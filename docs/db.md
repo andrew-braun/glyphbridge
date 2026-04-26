@@ -29,10 +29,15 @@ Private authoring data. The app runtime should not query this schema directly.
 Main table groups:
 
 - course metadata: `languages`, `script_systems`, `courses`, `course_versions`
-- lesson content: `lessons`, `anchor_targets`, `anchor_segments`
+- lesson content: `lessons`, `vocabulary_items`, `vocabulary_segments`, `anchor_targets`, `anchor_segments`
 - script teaching model: `graphemes`, `course_version_graphemes`
 - rules and drills: `orthography_rules`, `orthography_rule_examples`, `drills`, `drill_options`
-- lesson joins: `lesson_graphemes`, `lesson_rules`, `lesson_drills`
+- lesson joins: `lesson_graphemes`, `lesson_rules`, `lesson_drills`, `lesson_vocabulary`
+
+Anchor note:
+
+- `anchor_targets` remains the featured lesson word for the current runtime contract.
+- Reusable lesson vocabulary now belongs in `vocabulary_items` and `lesson_vocabulary` so the same word can appear in multiple lessons and later power standalone vocabulary drilling.
 
 ### `delivery`
 

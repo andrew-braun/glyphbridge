@@ -15,6 +15,8 @@ These decisions close the remaining gaps in the planning docs.
 - Keep PostgreSQL enums only for genuinely closed sets such as direction, drill type, lesson-grapheme role, and progress status.
 - Use text keys instead of PostgreSQL enums for fields expected to grow or vary by course, such as anchor category and pedagogical grouping.
 - Use `anchor_targets` and `anchor_segments` as the canonical curriculum names. They match the product vocabulary better than `text_targets` and `text_segments`.
+- Add `vocabulary_items`, `vocabulary_segments`, and `lesson_vocabulary` as first-class curriculum entities so lessons can teach and drill multiple words without burying them inside drill JSON.
+- Keep `anchor_targets` and `anchor_segments` as the featured lesson-word projection for the current runtime contract while the app transitions to the broader vocabulary model.
 - Store instrumentation on `learner.lesson_attempts.time_spent_ms`. Do not duplicate it on canonical progress rows in v1.
 - Keep translation locale modeling out of v1, but include `source_locale` on `curriculum.course_versions` so later localization work does not require a destructive rename.
 
@@ -23,7 +25,7 @@ These decisions close the remaining gaps in the planning docs.
 Build now:
 
 - Reference metadata for languages, scripts, courses, and course versions
-- Normalized curriculum tables for lessons, anchor targets, graphemes, rules, drills, and joins
+- Normalized curriculum tables for lessons, reusable vocabulary, featured anchor targets, graphemes, rules, drills, and joins
 - Published delivery bundles per lesson
 - Learner enrollments, lesson attempts, lesson progress, device identities, and preferences
 - Batch attempt sync and batch progress projection
@@ -75,7 +77,7 @@ These enum types live in the private `curriculum` schema, not in `public`.
 - `drill_type`: `recognize | match | sound | spot`
 - `lesson_progress_status`: `not_started | in_progress | completed`
 
-Do not use PostgreSQL enums for pedagogical grouping, anchor categories, or script-specific labels.
+Do not use PostgreSQL enums for pedagogical grouping, anchor categories, vocabulary roles, or script-specific labels.
 
 ## Text Length Bounds
 
@@ -288,9 +290,74 @@ Indexes:
 - unique on `(course_version_id, lesson_ordinal)`
 - index on `(course_version_id, stage)`
 
+### `curriculum.vocabulary_items`
+
+Purpose: canonical reusable words and short phrases within a course version.
+
+| Column              | Type          | Constraints                                                       |
+| ------------------- | ------------- | ----------------------------------------------------------------- |
+| `id`                | `uuid`        | PK default `gen_random_uuid()`                                    |
+| `course_version_id` | `uuid`        | not null FK -> `curriculum.course_versions(id)` on delete cascade |
+| `key`               | `text`        | not null                                                          |
+| `display_text`      | `text`        | not null                                                          |
+| `normalized_text`   | `text`        | not null                                                          |
+| `meaning`           | `text`        | not null                                                          |
+| `pronunciation`     | `text`        | not null                                                          |
+| `category_key`      | `text`        | nullable                                                          |
+| `context_note`      | `text`        | nullable                                                          |
+| `metadata`          | `jsonb`       | not null default `'{}'::jsonb`                                    |
+| `created_at`        | `timestamptz` | not null default `now()`                                          |
+
+Indexes:
+
+- unique on `(course_version_id, key)`
+- unique on `(course_version_id, normalized_text)`
+- index on `(course_version_id, category_key)`
+
+### `curriculum.vocabulary_segments`
+
+Purpose: ordered readable segments of a vocabulary item.
+
+| Column               | Type      | Constraints                                                        |
+| -------------------- | --------- | ------------------------------------------------------------------ |
+| `id`                 | `uuid`    | PK default `gen_random_uuid()`                                     |
+| `vocabulary_item_id` | `uuid`    | not null FK -> `curriculum.vocabulary_items(id)` on delete cascade |
+| `segment_order`      | `integer` | not null check `segment_order > 0`                                 |
+| `text`               | `text`    | not null                                                           |
+| `sound`              | `text`    | not null                                                           |
+| `kind`               | `text`    | nullable                                                           |
+| `metadata`           | `jsonb`   | not null default `'{}'::jsonb`                                     |
+
+Indexes:
+
+- unique on `(vocabulary_item_id, segment_order)`
+
+### `curriculum.lesson_vocabulary`
+
+Purpose: ordered lesson membership for anchor, taught, review, and extension vocabulary.
+
+| Column               | Type      | Constraints                                                         |
+| -------------------- | --------- | ------------------------------------------------------------------- |
+| `lesson_id`          | `uuid`    | not null FK -> `curriculum.lessons(id)` on delete cascade           |
+| `vocabulary_item_id` | `uuid`    | not null FK -> `curriculum.vocabulary_items(id)` on delete restrict |
+| `role_key`           | `text`    | not null                                                            |
+| `ordinal_in_role`    | `integer` | not null check `ordinal_in_role > 0`                                |
+| `is_drill_target`    | `boolean` | not null default `false`                                            |
+| `metadata`           | `jsonb`   | not null default `'{}'::jsonb`                                      |
+
+Primary key:
+
+- `(lesson_id, vocabulary_item_id)`
+
+Indexes:
+
+- unique on `(lesson_id, role_key, ordinal_in_role)`
+- index on `(vocabulary_item_id)`
+- index on `(lesson_id, is_drill_target)`
+
 ### `curriculum.anchor_targets`
 
-Purpose: the anchor word or tightly related reading target for a lesson.
+Purpose: the featured lesson word for the current runtime contract.
 
 | Column            | Type    | Constraints                                                      |
 | ----------------- | ------- | ---------------------------------------------------------------- |
@@ -311,9 +378,14 @@ Indexes:
 - unique on `(lesson_id, slug)`
 - index on `category_key`
 
+Notes:
+
+- `anchor_targets` remains the featured lesson-word projection used by the current lesson UI.
+- The same word should also exist in `curriculum.vocabulary_items` and `curriculum.lesson_vocabulary` with `role_key = 'anchor'` so additional lesson vocabulary and later vocabulary-mode features use one reusable source.
+
 ### `curriculum.anchor_segments`
 
-Purpose: ordered readable segments of an anchor target.
+Purpose: ordered readable segments of the featured lesson anchor.
 
 | Column             | Type      | Constraints                                                      |
 | ------------------ | --------- | ---------------------------------------------------------------- |
@@ -667,6 +739,31 @@ export type AnchorTargetDTO = {
  segments: AnchorSegmentDTO[];
 };
 
+export type VocabularySegmentDTO = {
+ text: string;
+ sound: string;
+ kind?: string;
+};
+
+export type VocabularyItemDTO = {
+ id: string;
+ key: string;
+ text: string;
+ meaning: string;
+ pronunciation: string;
+ categoryKey?: string;
+ contextNote?: string;
+ segments: VocabularySegmentDTO[];
+ metadata?: Record<string, unknown>;
+};
+
+export type LessonVocabularyDTO = {
+ roleKey: string;
+ ordinalInRole: number;
+ isDrillTarget: boolean;
+ item: VocabularyItemDTO;
+};
+
 export type RuleDTO = {
  id: string;
  key: string;
@@ -709,6 +806,7 @@ export type LessonBundleDTO = {
   stage: number;
   title: string;
   anchor: AnchorTargetDTO;
+  vocabulary: LessonVocabularyDTO[];
   newGraphemes: GraphemeDTO[];
   reviewGraphemes: GraphemeDTO[];
   rules: RuleDTO[];
@@ -827,19 +925,27 @@ Current runtime model to target backend model:
 
 - `LanguagePack` -> `curriculum.courses` + `curriculum.course_versions` + published `CourseSummaryDTO`
 - `Lesson` -> `curriculum.lessons` + joins + published `LessonBundleDTO.lesson`
-- `Word` -> `curriculum.anchor_targets`
-- `SyllableBreakdown` -> `curriculum.anchor_segments`
+- `Lesson.anchorWord` -> `curriculum.anchor_targets` + `curriculum.lesson_vocabulary` with `role_key = 'anchor'`
+- `Word` -> `curriculum.vocabulary_items`
+- `SyllableBreakdown` -> `curriculum.vocabulary_segments`
+- current featured lesson-word projection -> `curriculum.anchor_targets` + `curriculum.anchor_segments`
 - `Letter` -> `curriculum.graphemes` + `curriculum.course_version_graphemes`
 - `Rule` -> `curriculum.orthography_rules` + `curriculum.orthography_rule_examples`
 - `DrillQuestion` -> `curriculum.drills` + `curriculum.drill_options`
 - `LessonProgress` -> `learner.lesson_progress`
 - `AppProgress.currentLessonId` -> `learner.course_enrollments.current_lesson_id`
-- `knownLetters` and `knownWords` -> derived from completed lessons, not stored canonically
+- `knownLetters` and `knownWords` -> derived from completed lessons and lesson vocabulary, not stored canonically
+
+Current runtime gap:
+
+- `src/lib/data/types.ts` still models one `anchorWord` per lesson and has no shared lesson-vocabulary collection yet.
+- The publication DTO now reserves that richer lesson vocabulary surface ahead of the runtime refactor.
 
 ## Build-Now Checklist
 
 - Implement the schemas, enums, and tables in this document.
 - Seed the current Thai course into the normalized curriculum model.
-- Implement one publication generator that emits `LessonBundleDTO` payloads into `delivery.course_publication_lessons`.
+- Materialize anchor words into both `curriculum.anchor_targets` and `curriculum.lesson_vocabulary`, then add supporting lesson vocabulary as the source inventory expands.
+- Implement one publication generator that emits `LessonBundleDTO` payloads into `delivery.course_publication_lessons`, including the lesson vocabulary list.
 - Implement one server-side batch sync function for lesson attempts.
 - Keep route and component code bound only to the DTOs in this document.

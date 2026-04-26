@@ -8,6 +8,12 @@
 
 Track the implemented foundation of the Supabase and database workstream, summarize what landed, and capture the concrete next steps required to move the app from static data and local progress to seeded curriculum, published bundles, and server-backed sync.
 
+## Authority
+
+- This is the authoritative resume-point and next-steps document for the Supabase DB foundation workstream.
+- When the question is what should happen next, update and consult this file first.
+- Keep architectural rationale in `foundation-plan.md` and auth-specific rollout planning in `auth-sync-strategy.md`.
+
 ## Consolidated From
 
 - `2026-04-25-supabase-sql-schema-foundation.md`
@@ -24,10 +30,13 @@ Track the implemented foundation of the Supabase and database workstream, summar
 
 ## Current State
 
-- Durable references now exist in `docs/app-philosophy.md`, `docs/database-dto-spec.md`, and `docs/db.md`.
+- Durable references now exist in `docs/app-philosophy.md`, `docs/concept/approach-thai.md`, `docs/database-dto-spec.md`, and `docs/db.md`.
 - The local Supabase foundation exists under `supabase/` with baseline schema, grants, RLS, and the initial sync function.
 - Database-aware instruction files now point future work at the correct docs and preserve the `curriculum` / `internal_api` versus `delivery` / `learner` boundary.
-- The shipped app runtime still uses static lesson data in `src/lib/data/*` and local client persistence; no seeded curriculum, publication data, or server-backed runtime path has landed yet.
+- The shipped app runtime still uses static lesson data in `src/lib/data/*` and local client persistence, but that lesson data has now been rewritten into the approved 13-lesson frequency-first Thai curriculum.
+- `src/lib/stores/progress.ts` now uses snapshot version `2` so older local progress does not map onto the rewritten lesson IDs.
+- Thai content seeding planning now lives in `../../2026-04-26-thai-content-seeding-plan.md` and `thai-curriculum-seed-dataset.md`, which now treat the rewritten runtime curriculum as the next seed source.
+- `docs/database-dto-spec.md` now includes first-class reusable lesson vocabulary tables so the content model can grow into vocabulary drilling without another schema redesign.
 
 ## Security Review Outcome
 
@@ -69,17 +78,24 @@ Track the implemented foundation of the Supabase and database workstream, summar
 - Passed: `pnpm exec supabase db lint` after the second hardening wave.
 - Passed: `pnpm exec supabase db reset --yes` after adding `20260426113000_text_length_constraints.sql`
 - Passed: `pnpm exec supabase db lint` after the third hardening wave.
+- Passed: `pnpm check` after rewriting `src/lib/data/thai.ts`, resetting the progress snapshot version, and adding tone-mark coverage to the alphabet route.
 
 ## Current Next Step
 
-- Implement the request-scoped `@supabase/ssr` boundary before any server route, server load function, action, or remote function imports Supabase.
-- Concretely: replace the module-scoped client in `src/lib/supabase.ts`, add `hooks.server.ts` session wiring, and expose only verified server-owned Supabase access to the first authenticated runtime path.
+- For the content/DB track, the current step is to turn the rewritten Thai grapheme, lesson, rule, drill, and anchor-backed vocabulary inventory in `src/lib/data/thai.ts` into normalized seed inputs using `thai-curriculum-seed-dataset.md`.
+- After that, seed the rewritten Thai course into `curriculum.*`, including the new lesson vocabulary tables, and validate parity against the rewritten runtime lesson contract.
+- For the runtime/auth track, the next gate remains request-scoped `@supabase/ssr` before any server route, server load function, action, or remote function imports Supabase.
+- Concretely for the runtime/auth gate: replace the module-scoped client in `src/lib/supabase.ts`, add `hooks.server.ts` session wiring, and expose only verified server-owned Supabase access to the first authenticated runtime path.
 
 ## Near-Term Next Steps
 
-- Replace the module-scoped Supabase client with request-scoped `@supabase/ssr` integration before any server route or load function imports Supabase.
-- After the hardening work passes validation, seed the current Thai course into `curriculum.*` and validate parity against `src/lib/data/thai.ts`.
-- Generate the first `delivery.course_publication_lessons` payloads, then add the first server-side boundary for published lesson reads and learner attempt sync.
+- Finalize the remaining course-level seed literals for the rewritten Thai course, especially `script_systems.native_name` and first-version release metadata.
+- Seed the rewritten Thai course scope into `curriculum.*`, including anchor-backed lesson vocabulary rows, and validate parity against `src/lib/data/thai.ts`.
+- Author the first supporting-vocabulary slice beyond the current anchor words once the seed path for `lesson_vocabulary` is in place.
+- Keep `docs/concept/approach-thai.md` and `thai-curriculum-seed-dataset.md` aligned as the authoritative Thai source inventory for future grapheme and lesson expansion, especially the not-yet-encoded level 6 material.
+- Generate the first `delivery.course_publication_lessons` payloads so learner-facing reads can stay on `delivery.*`.
+- Replace the module-scoped Supabase client with request-scoped `@supabase/ssr` integration before any authenticated server route or load function imports Supabase.
+- After both the seeded content shape and the server boundary exist, add the first server-side SvelteKit boundary for published lesson reads and learner attempt sync.
 - Add `supabase db lint` and targeted SQL smoke tests to the DB workflow as follow-on guardrails.
 
 ## Maintenance Rule

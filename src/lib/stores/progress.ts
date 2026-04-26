@@ -12,13 +12,13 @@ import type {
 	AppProgress,
 	LessonProgress,
 	ProgressSnapshot,
-	ProgressSnapshotV1,
+	ProgressSnapshotV2,
 	Word,
 } from "$lib/data/types";
 
 /** localStorage key under which the serialized progress JSON is stored */
 const STORAGE_KEY = "glyphbridge_progress";
-const STORAGE_VERSION = 1;
+const STORAGE_VERSION = 2;
 
 const lessons = thaiPack.lessons;
 const firstLessonId = lessons[0]?.id ?? 1;
@@ -217,13 +217,10 @@ function normalizeSnapshot(value: unknown): ProgressSnapshot | null {
 		return null;
 	}
 
-	return {
-		version: STORAGE_VERSION,
-		progress: normalizeProgress(value),
-	};
+	return null;
 }
 
-function createSnapshot(progress: AppProgress): ProgressSnapshotV1 {
+function createSnapshot(progress: AppProgress): ProgressSnapshotV2 {
 	return {
 		version: STORAGE_VERSION,
 		progress: normalizeProgress(progress),

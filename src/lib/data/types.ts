@@ -154,8 +154,16 @@ export interface ProgressSnapshotV1 {
 	progress: AppProgress;
 }
 
+/** Versioned persistence wrapper after the 2026-04 curriculum rewrite */
+export interface ProgressSnapshotV2 {
+	/** Storage schema version for this snapshot payload */
+	version: 2;
+	/** Normalized learner progress payload */
+	progress: AppProgress;
+}
+
 /** Current union of supported persisted progress snapshot shapes */
-export type ProgressSnapshot = ProgressSnapshotV1;
+export type ProgressSnapshot = ProgressSnapshotV1 | ProgressSnapshotV2;
 
 /**
  * A complete language curriculum package. The app is designed to support multiple

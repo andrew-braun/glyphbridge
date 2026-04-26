@@ -4,22 +4,38 @@
 
 This directory groups the active and recently completed `.ai` task documents for the Supabase and database foundation work so they are easier to scan as one workstream instead of a flat list of session slices.
 
+## Authoritative Sources
+
+- `implementation-status.md` is the authoritative next-steps and resume-point document for this workstream.
+- `foundation-plan.md` is the authoritative architecture and schema-rationale document.
+- `auth-sync-strategy.md` is the authoritative plan for the authenticated rollout lane only.
+- `../../2026-04-26-thai-content-seeding-plan.md` is the authoritative planning document for the current Thai content-seeding lane.
+- `thai-curriculum-seed-dataset.md` is the authoritative DB-ready source inventory for Thai curriculum seed inputs.
+- `../../../docs/concept/approach-thai.md` is the authoritative durable Thai concept source for grapheme sequencing, lesson expansion, and coverage targets.
+
 ## Recommended Reading Order
 
-1. `foundation-plan.md`
-   - Strategic architecture and schema direction.
-   - Keep this as the broad planning and rationale document.
-2. `implementation-status.md`
-   - Current implementation state, completed foundation outputs, validation status, and concrete next steps.
-   - Start here when resuming hands-on work.
-3. `database-security-audit.md`
+- `foundation-plan.md`
+  - Strategic architecture and schema direction.
+  - Keep this as the broad planning and rationale document.
 
-- Security findings, severity, and recommended remediation for the current DB foundation.
-- Read before exposing the first server-backed learner route or auth flow.
+- `implementation-status.md`
+  - Current implementation state, completed foundation outputs, validation status, and concrete next steps.
+  - Start here when resuming hands-on work.
 
-1. `auth-sync-strategy.md`
-   - Future auth and account-linked progress rollout.
-   - Read when starting authenticated sessions, merge flows, or account persistence.
+- `../../2026-04-26-thai-content-seeding-plan.md`
+  - Current Thai content-seeding plan, rewrite status, and implementation sequence.
+
+- `thai-curriculum-seed-dataset.md`
+  - DB-ready source inventory for the first Thai curriculum seed.
+
+- `database-security-audit.md`
+  - Security findings, severity, and recommended remediation for the current DB foundation.
+  - Read before exposing the first server-backed learner route or auth flow.
+
+- `auth-sync-strategy.md`
+  - Future auth and account-linked progress rollout.
+  - Read when starting authenticated sessions, merge flows, or account persistence.
 
 ## Consolidation Assessment
 
@@ -61,14 +77,16 @@ This directory groups the active and recently completed `.ai` task documents for
 ## Durable References Outside `.ai`
 
 - `docs/app-philosophy.md` is the product and pedagogy guardrail.
+- `docs/concept/approach-thai.md` is the durable Thai sequencing and expansion concept source.
 - `docs/database-dto-spec.md` is the exact schema and DTO contract.
 - `docs/db.md` is the operational database reference and inspection guide.
 
 ## Current Resume Point
 
 - DB hardening and input-bounds remediation are complete.
-- Immediate next step: implement the request-scoped `@supabase/ssr` boundary and verified server-owned Supabase access described in `auth-sync-strategy.md`.
-- After the app boundary lands, seed the Thai curriculum into `curriculum.*`.
+- The approved Thai curriculum rewrite has landed in `src/lib/data/thai.ts` and is now the seed source of truth.
+- Next content step: turn the rewritten curriculum inventory in `thai-curriculum-seed-dataset.md` into seed inputs, then seed `curriculum.*` and validate parity.
+- Next runtime/auth gate: implement the request-scoped `@supabase/ssr` boundary and verified server-owned Supabase access described in `auth-sync-strategy.md` before the first authenticated route or sync path lands.
 - Publish the first learner-facing bundles into `delivery.*`.
 - Add the first server-side SvelteKit boundary for published lesson reads and learner attempt sync.
 - Decide whether Drizzle lands before or after that first DB-backed runtime path.

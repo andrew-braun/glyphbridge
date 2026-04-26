@@ -7,9 +7,10 @@
 	// Build a flat list of every letter introduced across all lessons
 	const allLetters: Letter[] = thaiPack.lessons.flatMap((l) => l.newLetters);
 
-	// Reactively partition letters into consonants and vowels for separate grid sections
+	// Reactively partition letters into consonants, vowels, and tone marks for separate sections
 	const consonants = $derived(allLetters.filter((l) => l.type === "consonant"));
 	const vowels = $derived(allLetters.filter((l) => l.type === "vowel"));
+	const toneMarks = $derived(allLetters.filter((l) => l.type === "tone_mark"));
 
 	// Check whether the user has unlocked a letter by completing its lesson
 	function isKnown(char: string): boolean {
@@ -24,7 +25,7 @@
 	<title>Alphabet — GlyphBridge</title>
 	<meta
 		name="description"
-		content="Review the Thai letters you have unlocked so far, grouped by consonants and vowels with pronunciation details and memory cues."
+		content="Review the Thai consonants, vowels, and tone marks you have unlocked so far, with pronunciation details and memory cues."
 	/>
 </svelte:head>
 
@@ -103,6 +104,30 @@
 		</div>
 	</section>
 
+	<section class="letter-section">
+		<h2>Tone Marks</h2>
+		<div class="letter-grid">
+			{#each toneMarks as letter}
+				<button
+					class="letter-tile"
+					class:letter-tile--known={isKnown(letter.character)}
+					class:letter-tile--selected={selectedLetter?.character === letter.character}
+					onclick={() =>
+						(selectedLetter =
+							selectedLetter?.character === letter.character ? null : letter)}
+					disabled={!isKnown(letter.character)}
+				>
+					<span class="letter-tile__char thai">{letter.character}</span>
+					{#if isKnown(letter.character)}
+						<span class="letter-tile__sound">{letter.romanization}</span>
+					{:else}
+						<span class="letter-tile__lock">?</span>
+					{/if}
+				</button>
+			{/each}
+		</div>
+	</section>
+
 	<!-- Detail panel: shown when a known letter tile is selected -->
 	{#if selectedLetter}
 		<div class="detail-panel card">
@@ -113,7 +138,7 @@
 			>
 				&times;
 			</Button>
-			<div class="detail-panel__char thai" style="font-size: 4rem; color: var(--primary);">
+			<div class="detail-panel__char thai" style=" color: var(--primary);font-size: 4rem;">
 				{selectedLetter.character}
 			</div>
 			<div class="detail-panel__info">
@@ -158,8 +183,8 @@
 	.alphabet {
 		&__subtitle {
 			color: $color-text-light;
-			margin-top: $space-sm;
 			margin-bottom: $space-lg;
+			margin-top: $space-sm;
 		}
 	}
 
@@ -175,23 +200,23 @@
 	// Responsive grid: tiles auto-fill at a minimum of 80px wide
 	.letter-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
 		gap: $space-md;
+		grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
 	}
 
 	// Individual letter tile with known/unknown/selected states
 	.letter-tile {
-		display: flex;
-		flex-direction: column;
 		align-items: center;
-		gap: $space-xs;
-		padding: $space-md;
+		background: $color-bg-card;
 		border: 2px solid $color-border;
 		border-radius: $radius-lg;
-		background: $color-bg-card;
 		cursor: pointer;
-		transition: all $transition-fast;
+		display: flex;
+		flex-direction: column;
 		font-family: inherit;
+		gap: $space-xs;
+		padding: $space-md;
+		transition: all $transition-fast;
 
 		&:disabled {
 			cursor: default;
@@ -199,8 +224,8 @@
 		}
 
 		&--known {
-			border-color: rgba($color-primary, 0.3);
 			background: rgba($color-primary, 0.04);
+			border-color: rgba($color-primary, 0.3);
 
 			&:hover {
 				border-color: $color-primary;
@@ -210,72 +235,72 @@
 		}
 
 		&--selected {
+			background: rgba($color-primary, 0.08);
 			border-color: $color-primary !important;
 			box-shadow: $shadow-lg;
-			background: rgba($color-primary, 0.08);
 		}
 
 		&__char {
-			font-size: $font-size-2xl;
 			color: $color-primary;
+			font-size: $font-size-2xl;
 		}
 
 		&__sound {
-			font-size: $font-size-xs;
 			color: $color-text-light;
+			font-size: $font-size-xs;
 			font-weight: 600;
 		}
 
 		&__lock {
-			font-size: $font-size-xs;
 			color: $color-text-muted;
+			font-size: $font-size-xs;
 		}
 	}
 
 	// Expandable detail panel: appears below the grids when a known tile is selected
 	.detail-panel {
-		position: relative;
-		margin-top: $space-xl;
+		align-items: flex-start;
 		display: flex;
 		gap: $space-xl;
-		align-items: flex-start;
+		margin-top: $space-xl;
+		position: relative;
 
 		--primary: #{$color-primary};
 
 		:global(.detail-panel__close) {
-			position: absolute;
-			top: $space-md;
-			right: $space-md;
 			font-size: $font-size-xl;
+			position: absolute;
+			right: $space-md;
+			top: $space-md;
 		}
 
 		&__info {
-			flex: 1;
 			display: flex;
+			flex: 1;
 			flex-direction: column;
 			gap: $space-sm;
 		}
 
 		&__row {
+			border-bottom: 1px solid $color-border;
 			display: flex;
 			justify-content: space-between;
 			padding: $space-xs 0;
-			border-bottom: 1px solid $color-border;
 		}
 
 		&__label {
-			font-weight: 600;
 			color: $color-text-light;
 			font-size: $font-size-sm;
+			font-weight: 600;
 		}
 
 		&__mnemonic {
-			margin-top: $space-sm;
-			padding: $space-md;
 			background: rgba($color-primary, 0.04);
 			border-radius: $radius-md;
 			font-size: $font-size-sm;
 			line-height: 1.6;
+			margin-top: $space-sm;
+			padding: $space-md;
 		}
 	}
 
@@ -286,8 +311,8 @@
 		}
 
 		.detail-panel {
-			flex-direction: column;
 			align-items: center;
+			flex-direction: column;
 			text-align: center;
 
 			&__row {

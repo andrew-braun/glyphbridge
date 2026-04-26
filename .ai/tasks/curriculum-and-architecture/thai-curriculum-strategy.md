@@ -2,13 +2,14 @@
 
 - Start date: 2026-04-21
 - Owner: GitHub Copilot
-- Status: planned
+- Status: in-progress
 
 ## Related Docs
 
 - `README.md` for the bundle index and redundancy assessment
 - `multi-course-architecture.md` for the broader course-aware architecture
 - `../../../docs/app-philosophy.md` for the durable pedagogy guardrail
+- `../../../docs/concept/approach-thai.md` for the durable Thai sequencing concept and lesson-expansion source
 
 ## Goal
 
@@ -50,14 +51,15 @@ Define a real-world-first Thai reading curriculum strategy that helps learners d
 
 - [x] Discovery and research
 - [x] Strategy recommendation captured
-- [ ] Implementation planning
-- [ ] Curriculum updates
+- [x] Implementation planning
+- [x] Curriculum updates
 
 ## Current Recommendation
 
 - Start with high-payoff units such as `า`, `น`, `ม`, `ก`, `ง`, the `ต/ด` final family, the `ป/บ` final family, `ร`, `ส`, `อ`, `ไ◌`, `เ◌`, `ำ`, and common leading-`ห` chunks.
 - Use early anchor vocabulary themes built around money, movement, survival utilities, food, drinks, bars, streets, and common labels.
 - Measure progress by useful text coverage: how many common real-world words can be decoded after each lesson.
+- The current runtime rewrite in `src/lib/data/thai.ts` now encodes a 13-lesson sequence spanning approach levels 1 through 5 and should be treated as the current implementation baseline.
 
 ## Open Questions
 
@@ -68,3 +70,4 @@ Define a real-world-first Thai reading curriculum strategy that helps learners d
 
 - Build a small target corpus from menus, signs, packaging, and interface labels.
 - Score candidate lessons by frequency coverage and decoding payoff before expanding the curriculum.
+- Use `../../../docs/concept/approach-thai.md` to scope the remaining level 6 loanword and complex-vowel lessons that are not yet encoded in `src/lib/data/thai.ts`.
