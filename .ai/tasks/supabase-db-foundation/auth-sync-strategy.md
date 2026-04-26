@@ -59,6 +59,12 @@ Plan a secure, low-cost path for adding user accounts and progress syncing to Gl
 - Add request-scoped Supabase clients via `@supabase/ssr`, validate sessions server-side, and expose only the minimum session data to the app shell.
 - Store per-user progress in a small relational model and merge anonymous local progress into that model on first authenticated session.
 
+## Current Entry Point
+
+- The DB-side hardening prerequisites are complete.
+- Immediate next step: replace the module-scoped Supabase client in `src/lib/supabase.ts` with request-scoped `@supabase/ssr` integration and wire verified session access in `hooks.server.ts`.
+- Do not start the first authenticated route or server-backed load path until that boundary exists.
+
 ## Next-Phase Security Gates
 
 These items are intentionally deferred until the authenticated SvelteKit boundary work starts. They should ship as part of that next phase, not as optional cleanup after it.

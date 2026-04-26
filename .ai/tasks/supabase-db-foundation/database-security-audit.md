@@ -2,11 +2,17 @@
 
 - Start date: 2026-04-25
 - Owner: Security review pass
-- Status: findings captured, remediation pending
+- Status: findings captured, DB-side remediation landed, deferred app/deploy items remain
 
 ## Goal
 
 Audit the current Supabase / PostgreSQL foundation against best practices for PostgreSQL, Supabase Auth, RLS, server-side data access, and SvelteKit boundaries. Capture every concrete issue, its severity, and a recommended fix so the team can decide what to address before the first server-backed route lands.
+
+## Remediation Status
+
+- The DB-side apply-now findings from this audit have been addressed in `20260425143000_security_hardening_phase1.sql`, `20260426100000_security_hardening_phase2.sql`, and `20260426113000_text_length_constraints.sql`.
+- Deferred next-phase items such as request-scoped `@supabase/ssr`, hosted auth hardening, anonymous-auth gating, and workflow enforcement remain active and are tracked in `auth-sync-strategy.md`.
+- Keep this document as the historical audit ledger; use `implementation-status.md` for the active resume point.
 
 ## Sources Reviewed
 

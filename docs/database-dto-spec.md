@@ -77,6 +77,19 @@ These enum types live in the private `curriculum` schema, not in `public`.
 
 Do not use PostgreSQL enums for pedagogical grouping, anchor categories, or script-specific labels.
 
+## Text Length Bounds
+
+The schema enforces finite upper bounds for short and medium text fields.
+
+- locale and language codes: up to `35` characters
+- slugs and stable keys: up to `64` characters
+- names, titles, labels, meanings, and pronunciations: up to `120-160` characters depending on the field
+- summaries, prompts, hints, rationales, context notes, and example text: up to `320` characters
+- longer explanatory text such as rule explanations: up to `4000` characters
+- manifest, payload, and content hashes: up to `128` characters
+
+These bounds are deliberately generous. They are there to prevent unbounded writes and obvious data-shape mistakes, not to compress legitimate curriculum content.
+
 ## Table Spec
 
 ### `curriculum.languages`

@@ -66,9 +66,9 @@ This directory groups the active and recently completed `.ai` task documents for
 
 ## Current Resume Point
 
-- Finish the DB hardening and input-bounds remediation phases before seeding or adding the first authenticated route.
-- Carry the next authenticated-phase security items in `auth-sync-strategy.md`: request-scoped `@supabase/ssr`, anonymous-auth gating, hosted auth hardening, deployment SSL/network requirements, and DB lint workflow.
-- After hardening passes, seed the Thai curriculum into `curriculum.*`.
+- DB hardening and input-bounds remediation are complete.
+- Immediate next step: implement the request-scoped `@supabase/ssr` boundary and verified server-owned Supabase access described in `auth-sync-strategy.md`.
+- After the app boundary lands, seed the Thai curriculum into `curriculum.*`.
 - Publish the first learner-facing bundles into `delivery.*`.
 - Add the first server-side SvelteKit boundary for published lesson reads and learner attempt sync.
 - Decide whether Drizzle lands before or after that first DB-backed runtime path.

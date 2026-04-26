@@ -32,16 +32,18 @@ Track the implemented foundation of the Supabase and database workstream, summar
 ## Security Review Outcome
 
 - The 2026-04-25 audit found real boundary and surface-area issues in the baseline DB design; the foundation is not ready for the first authenticated learner route yet.
-- The critical findings around direct `lesson_attempts` writes, trusted caller identity, and mutable `SECURITY DEFINER` search paths are accepted as true positives and should be fixed before seeding resumes.
+- The critical findings around direct `lesson_attempts` writes, trusted caller identity, and mutable `SECURITY DEFINER` search paths were accepted as true positives and have been addressed in the hardening migrations.
 - The active remediation tracker is `.ai/2026-04-25-supabase-security-remediation-plan.md`.
-- `docs/database-dto-spec.md` and `docs/db.md` still describe the current implemented foundation; update them in the same change that lands the hardening migrations and app-boundary changes.
+- `docs/database-dto-spec.md` and `docs/db.md` now reflect the hardened DB boundary and current schema contract.
 
-## Active Remediation
+## Completed DB Hardening
 
 - Added `supabase/migrations/20260425143000_security_hardening_phase1.sql` to remove client-direct attempt writes, derive authenticated identity inside `internal_api.sync_lesson_attempt_batch(...)`, pin function search paths, shrink unused learner write surfaces, and add the first wave of DB-side bounds and invariants.
 - Validated the first hardening migration with `pnpm exec supabase db reset --yes`.
 - Added `supabase/migrations/20260426100000_security_hardening_phase2.sql` to move enum types into the private `curriculum` schema and narrow the remaining direct learner update grants to explicit columns.
 - Validated the second hardening migration with `pnpm exec supabase db reset --yes` and `pnpm exec supabase db lint`.
+- Added `supabase/migrations/20260426113000_text_length_constraints.sql` to set reasonable upper bounds on short and medium text fields across the private curriculum and delivery schemas.
+- Validated the third hardening migration with `pnpm exec supabase db reset --yes` and `pnpm exec supabase db lint`.
 
 ## Deliverables Produced
 
@@ -51,6 +53,7 @@ Track the implemented foundation of the Supabase and database workstream, summar
 - `supabase/migrations/20260425131000_security_and_sync.sql`
 - `supabase/migrations/20260425143000_security_hardening_phase1.sql`
 - `supabase/migrations/20260426100000_security_hardening_phase2.sql`
+- `supabase/migrations/20260426113000_text_length_constraints.sql`
 - `docs/db.md`
 - `docs/database-dto-spec.md`
 - Updated DB-aware instruction files across the repo
@@ -64,11 +67,16 @@ Track the implemented foundation of the Supabase and database workstream, summar
 - Passed: `pnpm exec supabase db lint` after the first hardening wave.
 - Passed: `pnpm exec supabase db reset --yes` after adding `20260426100000_security_hardening_phase2.sql`
 - Passed: `pnpm exec supabase db lint` after the second hardening wave.
+- Passed: `pnpm exec supabase db reset --yes` after adding `20260426113000_text_length_constraints.sql`
+- Passed: `pnpm exec supabase db lint` after the third hardening wave.
+
+## Current Next Step
+
+- Implement the request-scoped `@supabase/ssr` boundary before any server route, server load function, action, or remote function imports Supabase.
+- Concretely: replace the module-scoped client in `src/lib/supabase.ts`, add `hooks.server.ts` session wiring, and expose only verified server-owned Supabase access to the first authenticated runtime path.
 
 ## Near-Term Next Steps
 
-- Land the DB hardening migration wave from `.ai/2026-04-25-supabase-security-remediation-plan.md` before exposing any authenticated learner write path.
-- Decide whether any additional input-bounds migration is still warranted beyond the current hardening waves.
 - Replace the module-scoped Supabase client with request-scoped `@supabase/ssr` integration before any server route or load function imports Supabase.
 - After the hardening work passes validation, seed the current Thai course into `curriculum.*` and validate parity against `src/lib/data/thai.ts`.
 - Generate the first `delivery.course_publication_lessons` payloads, then add the first server-side boundary for published lesson reads and learner attempt sync.

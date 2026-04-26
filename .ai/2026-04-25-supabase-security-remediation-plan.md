@@ -2,7 +2,7 @@
 
 - Start date: 2026-04-25
 - Owner: GitHub Copilot
-- Status: in-progress
+- Status: completed
 
 ## Goal
 
@@ -11,9 +11,14 @@ Turn the current database security audit into a concrete remediation sequence, d
 ## Assessment Summary
 
 - No critical audit findings are being dismissed as false positives.
-- The current foundation is not ready for the first authenticated learner route.
+- The DB-side hardening required before the first authenticated learner route is complete.
 - The main risk is a boundary mismatch: the schema currently exposes direct client write paths that bypass the server-owned projection and request-identity model described elsewhere in the workstream.
 - Durable references in `docs/` should change only in the same PR as the migrations and app code that implement each decision.
+
+## Outcome
+
+- The apply-now DB remediation work landed across three migrations: `20260425143000_security_hardening_phase1.sql`, `20260426100000_security_hardening_phase2.sql`, and `20260426113000_text_length_constraints.sql`.
+- The deferred app-boundary and deployment items remain intentionally tracked in `auth-sync-strategy.md`.
 
 ## Decision Rules
 
@@ -95,7 +100,9 @@ Turn the current database security audit into a concrete remediation sequence, d
 - [x] Ran `pnpm exec supabase db lint` against the updated schema after the first hardening wave.
 - [x] Added `20260426100000_security_hardening_phase2.sql` for private enums and narrower direct learner update grants.
 - [x] Re-ran `pnpm exec supabase db reset --yes` and `pnpm exec supabase db lint` for phase two.
+- [x] Added `20260426113000_text_length_constraints.sql` for the third hardening pass on reasonable curriculum and delivery text bounds.
+- [x] Re-ran `pnpm exec supabase db reset --yes` and `pnpm exec supabase db lint` for phase three.
 
 ## Blocking Resume Point
 
-Do not start curriculum seeding or wire the first authenticated learner route until the DB hardening and input-bounds phases are complete.
+The DB-side blocker is cleared. The next implementation gate is request-scoped `@supabase/ssr` integration and server-owned auth/session wiring before the first authenticated route lands.
