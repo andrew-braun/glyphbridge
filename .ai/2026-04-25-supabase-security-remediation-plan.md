@@ -91,8 +91,10 @@ Turn the current database security audit into a concrete remediation sequence, d
 - [x] Deferred next-phase items recorded in the planning docs.
 - [x] Added `20260425143000_security_hardening_phase1.sql` for the first DB hardening wave.
 - [x] Validated the new migration with `pnpm exec supabase db reset --yes`.
-- [ ] Add the remaining config, docs, and workflow updates tied to this first hardening wave.
-- [ ] Run `pnpm exec supabase db lint` against the updated schema.
+- [x] Added the remaining config, docs, and workflow updates tied to the first hardening wave.
+- [x] Ran `pnpm exec supabase db lint` against the updated schema after the first hardening wave.
+- [x] Added `20260426100000_security_hardening_phase2.sql` for private enums and narrower direct learner update grants.
+- [x] Re-ran `pnpm exec supabase db reset --yes` and `pnpm exec supabase db lint` for phase two.
 
 ## Blocking Resume Point
 

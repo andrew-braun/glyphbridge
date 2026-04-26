@@ -40,7 +40,8 @@ Track the implemented foundation of the Supabase and database workstream, summar
 
 - Added `supabase/migrations/20260425143000_security_hardening_phase1.sql` to remove client-direct attempt writes, derive authenticated identity inside `internal_api.sync_lesson_attempt_batch(...)`, pin function search paths, shrink unused learner write surfaces, and add the first wave of DB-side bounds and invariants.
 - Validated the first hardening migration with `pnpm exec supabase db reset --yes`.
-- The next immediate checks are config alignment, DB doc updates, and `pnpm exec supabase db lint`.
+- Added `supabase/migrations/20260426100000_security_hardening_phase2.sql` to move enum types into the private `curriculum` schema and narrow the remaining direct learner update grants to explicit columns.
+- Validated the second hardening migration with `pnpm exec supabase db reset --yes` and `pnpm exec supabase db lint`.
 
 ## Deliverables Produced
 
@@ -48,7 +49,10 @@ Track the implemented foundation of the Supabase and database workstream, summar
 - `supabase/seed.sql`
 - `supabase/migrations/20260425130000_schema_foundation.sql`
 - `supabase/migrations/20260425131000_security_and_sync.sql`
+- `supabase/migrations/20260425143000_security_hardening_phase1.sql`
+- `supabase/migrations/20260426100000_security_hardening_phase2.sql`
 - `docs/db.md`
+- `docs/database-dto-spec.md`
 - Updated DB-aware instruction files across the repo
 
 ## Validation
@@ -57,12 +61,14 @@ Track the implemented foundation of the Supabase and database workstream, summar
 - Passed: `pnpm exec supabase db reset --yes`
 - Passed: `pnpm check`
 - Passed: `pnpm exec supabase db reset --yes` after adding `20260425143000_security_hardening_phase1.sql`
-- Pending workflow gap: `pnpm exec supabase db lint` is not yet part of the DB migration workflow and should be added during remediation.
+- Passed: `pnpm exec supabase db lint` after the first hardening wave.
+- Passed: `pnpm exec supabase db reset --yes` after adding `20260426100000_security_hardening_phase2.sql`
+- Passed: `pnpm exec supabase db lint` after the second hardening wave.
 
 ## Near-Term Next Steps
 
 - Land the DB hardening migration wave from `.ai/2026-04-25-supabase-security-remediation-plan.md` before exposing any authenticated learner write path.
-- Land the input-bounds migration wave for attempts, timestamps, text fields, and JSON payloads.
+- Decide whether any additional input-bounds migration is still warranted beyond the current hardening waves.
 - Replace the module-scoped Supabase client with request-scoped `@supabase/ssr` integration before any server route or load function imports Supabase.
 - After the hardening work passes validation, seed the current Thai course into `curriculum.*` and validate parity against `src/lib/data/thai.ts`.
 - Generate the first `delivery.course_publication_lessons` payloads, then add the first server-side boundary for published lesson reads and learner attempt sync.

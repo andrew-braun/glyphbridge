@@ -67,6 +67,8 @@ Privileged SQL functions called by server-side code only.
 
 Use PostgreSQL enums for these closed sets:
 
+These enum types live in the private `curriculum` schema, not in `public`.
+
 - `app_direction`: `ltr | rtl`
 - `course_version_status`: `draft | published | archived`
 - `grapheme_role`: `new | review`
@@ -786,6 +788,8 @@ This spec is not a full policy document, but these rules are fixed:
 - `curriculum.*` also has deny-by-default RLS enabled as a defense-in-depth guard.
 - `delivery.*` is read-only for runtime access.
 - `learner.*` is user-owned and policy-scoped on `user_id = auth.uid()`.
+- Client-direct updates on `learner.profiles` are column-limited to `display_name`.
+- Client-direct updates on `learner.preferences` are column-limited to the learner preference flags.
 - Clients may `select` from `learner.lesson_attempts` for their own rows, but attempt insertion is server-owned.
 - Clients may only `select` from `learner.lesson_progress` and `learner.course_enrollments` for their own rows.
 - Clients may not directly `insert`, `update`, or `delete` `learner.lesson_progress`.
