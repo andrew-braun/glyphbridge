@@ -22,6 +22,7 @@
 - Runtime lesson content today: static lesson data plus localStorage-backed progress
 - Local backend foundation: `supabase/` now contains the baseline SQL schema, RLS, seed entry point, and privileged sync helpers for future server-backed curriculum and learner state
 - Optional backend path: Supabase
+- Deployment posture: DB-backed lesson delivery now requires a server-capable SvelteKit runtime; do not assume static-only hosting for future route work.
 
 ## Validation Workflow
 

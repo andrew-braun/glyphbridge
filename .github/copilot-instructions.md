@@ -25,6 +25,7 @@
 - Do not duplicate lesson content or create abstractions with only one speculative use.
 - Use server-only SvelteKit modules for secrets, writes, or privileged data.
 - If Supabase-backed auth or server data is added, use `@supabase/ssr`; never put admin credentials in client code.
+- DB-backed runtime lesson delivery now assumes a server-capable SvelteKit deployment; do not treat the app as static-only when touching server-owned route reads.
 - Preserve the database schema boundaries in future work: `curriculum` and `internal_api` stay private, `delivery` is the runtime content boundary, and `learner` is the RLS-protected learner-state boundary.
 - Any work involving environment variables, auth, sessions, databases, secure routes, storage, or production secrets is high-risk and must be researched against current docs, designed conservatively, and explicitly signed off on before deployment.
 - Never expose, log, serialize, or commit secrets. Verify public versus private env boundaries every time.

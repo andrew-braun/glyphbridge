@@ -15,7 +15,7 @@ Do not use `docs/` for task-by-task implementation tracking. Task specs, in-prog
 ## Current Documents
 
 - `app-philosophy.md` — authoritative product guide covering the app model, lesson contract, progress path, and technical guardrails.
-- `db.md` — README-style database guide covering schema roles, local Supabase workflow, and inspection queries for tables, policies, and functions.
+- `db.md` — README-style database guide covering schema roles, table responsibilities, common SQL queries, local and linked Supabase CLI workflow, and remote deployment guidance.
 - `database-dto-spec.md` — build-ready PostgreSQL, Supabase, and runtime DTO specification for curriculum delivery and learner progress.
 - `concept/approach-thai.md` — detailed source concept for the initial curriculum approach that informed the generalized app philosophy.
 - `security-review-checklist.md` — deployment gate and review checklist for high-risk security-sensitive changes

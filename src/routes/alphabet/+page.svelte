@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Button from "$lib/components/ui/Button.svelte";
+	import LetterDetailPanel from "$lib/components/content/alphabet/LetterDetailPanel.svelte";
 	import Progress from "$lib/components/ui/Progress.svelte";
 	import ToggleTiles, { type ToggleTileOption } from "$lib/components/ui/ToggleTiles.svelte";
 	import { thaiPack } from "$lib/data/thai";
@@ -124,50 +124,7 @@
 		</section>
 	{/each}
 
-	<!-- Detail panel: shown when a known letter tile is selected -->
-	{#if selectedLetter}
-		<div class="detail-panel card">
-			<Button
-				variant="ghost"
-				class="detail-panel__close"
-				onclick={() => (selectedCharacter = "")}
-			>
-				&times;
-			</Button>
-			<div class="detail-panel__char thai" style=" color: var(--primary);font-size: 4rem;">
-				{selectedLetter.character}
-			</div>
-			<div class="detail-panel__info">
-				<div class="detail-panel__row">
-					<span class="detail-panel__label">Sound</span>
-					<span>{selectedLetter.romanization}</span>
-				</div>
-				<div class="detail-panel__row">
-					<span class="detail-panel__label">Pronunciation</span>
-					<span>{selectedLetter.pronunciation}</span>
-				</div>
-				<div class="detail-panel__row">
-					<span class="detail-panel__label">Type</span>
-					<span
-						>{selectedLetter.type}{selectedLetter.class
-							? ` (${selectedLetter.class} class)`
-							: ""}</span
-					>
-				</div>
-				<!-- Position row is only relevant for vowels that attach to a consonant -->
-				{#if selectedLetter.position && selectedLetter.position !== "standalone"}
-					<div class="detail-panel__row">
-						<span class="detail-panel__label">Position</span>
-						<span>Written {selectedLetter.position}</span>
-					</div>
-				{/if}
-				<div class="detail-panel__mnemonic">
-					<strong>Memory trick:</strong>
-					{selectedLetter.mnemonic}
-				</div>
-			</div>
-		</div>
-	{/if}
+	<LetterDetailPanel letter={selectedLetter} onClose={() => (selectedCharacter = "")} />
 </div>
 
 <style lang="scss">
@@ -194,67 +151,6 @@
 
 		h2 {
 			margin-bottom: $space-md;
-		}
-	}
-
-	// Expandable detail panel: appears below the grids when a known tile is selected
-	.detail-panel {
-		align-items: flex-start;
-		display: flex;
-		gap: $space-xl;
-		margin-top: $space-xl;
-		position: relative;
-
-		--primary: #{$color-primary};
-
-		:global(.detail-panel__close) {
-			font-size: $font-size-xl;
-			position: absolute;
-			right: $space-md;
-			top: $space-md;
-		}
-
-		&__info {
-			display: flex;
-			flex: 1;
-			flex-direction: column;
-			gap: $space-sm;
-		}
-
-		&__row {
-			border-bottom: 1px solid $color-border;
-			display: flex;
-			justify-content: space-between;
-			padding: $space-xs 0;
-		}
-
-		&__label {
-			color: $color-text-light;
-			font-size: $font-size-sm;
-			font-weight: 600;
-		}
-
-		&__mnemonic {
-			background: rgba($color-primary, 0.04);
-			border-radius: $radius-md;
-			font-size: $font-size-sm;
-			line-height: 1.6;
-			margin-top: $space-sm;
-			padding: $space-md;
-		}
-	}
-
-	// Mobile: smaller tiles and stacked detail panel layout
-	@media (max-width: $bp-sm) {
-		.detail-panel {
-			align-items: center;
-			flex-direction: column;
-			text-align: center;
-
-			&__row {
-				flex-direction: column;
-				gap: $space-xs;
-			}
 		}
 	}
 </style>

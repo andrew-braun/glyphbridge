@@ -2,7 +2,7 @@
 
 - Start date: 2026-04-25
 - Owner: GitHub Copilot
-- Status: in progress
+- Status: completed
 
 ## Goal
 
@@ -51,27 +51,31 @@ Make Bits UI the default accessible primitive layer for site interactivity and s
 - Added `src/lib/components/ui/RadioButtons.svelte`, `src/lib/components/ui/ToggleTiles.svelte`, and `src/lib/components/ui/CardLink.svelte`, and updated `src/lib/components/ui/Button.svelte` to compose Bits UI internally.
 - Rewired `DrillExercise.svelte`, the learn index lesson cards, the shared `LessonList.svelte`, and the alphabet letter grid to consume the new wrappers instead of importing Bits UI directly.
 - Re-audited `src/**` after the wrapper extraction and confirmed that raw `bits-ui` imports now live only inside `src/lib/components/ui` wrappers.
+- Reassessed the remaining interactive seams and confirmed that the alphabet detail panel was the last current non-native composite interaction worth migrating.
+- Added `src/lib/components/ui/CollapsiblePanel.svelte` as a Bits UI-backed wrapper for externally controlled inline disclosure content.
+- Extracted `src/lib/components/content/alphabet/LetterDetailPanel.svelte` so the alphabet route now only shapes letter data and owns the selected-letter state.
+- Rewired `src/routes/alphabet/+page.svelte` to render the extracted detail component through the shared `CollapsiblePanel` wrapper instead of keeping the panel markup and close behavior inline.
 
 ## Comprehensive Inventory 2026-04-30
 
 ### Already Backed By Bits UI
 
-| Surface                        | Files                                                                                                                                                                                                             | Bits UI Foundation    | App Wrapper    | Status | Notes                                                                                                        |
-| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | -------------- | ------ | ------------------------------------------------------------------------------------------------------------ |
-| Buttons and CTA links          | `src/lib/components/ui/Button.svelte`                                                                                                                                                                             | `Button.Root`         | `Button`       | done   | Shared button API already covers primary, secondary, ghost, success, `href`, `disabled`, and click handlers. |
-| Lesson and home card links     | `src/lib/components/ui/CardLink.svelte`, `src/routes/learn/+page.svelte`, `src/lib/components/content/lesson/LessonList.svelte`                                                                                   | `Button.Root` as link | `CardLink`     | done   | Replaced the old fake disabled-link pattern for lesson cards.                                                |
-| Drill answer choice groups     | `src/lib/components/ui/RadioButtons.svelte`, `src/lib/components/exercises/DrillExercise.svelte`                                                                                                                  | `RadioGroup`          | `RadioButtons` | done   | Covers selectable answers, disabled state after answering, and correct or wrong visual tone.                 |
-| Alphabet letter tile selection | `src/lib/components/ui/ToggleTiles.svelte`, `src/routes/alphabet/+page.svelte`                                                                                                                                    | `ToggleGroup`         | `ToggleTiles`  | done   | Covers single-select tile grids, disabled locked letters, Thai labels, and known-state styling.              |
-| Progress indicators            | `src/lib/components/ui/Progress.svelte`, `src/routes/learn/[id]/+page.svelte`, `src/routes/alphabet/+page.svelte`, `src/routes/practice/+page.svelte`, `src/lib/components/content/home/HomeStatsOverview.svelte` | `Progress`            | `Progress`     | done   | Consolidated the repeated bespoke progress bars into a single wrapper.                                       |
+| Surface                        | Files                                                                                                                                                                                                             | Bits UI Foundation    | App Wrapper        | Status | Notes                                                                                                          |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ------------------ | ------ | -------------------------------------------------------------------------------------------------------------- |
+| Buttons and CTA links          | `src/lib/components/ui/Button.svelte`                                                                                                                                                                             | `Button.Root`         | `Button`           | done   | Shared button API already covers primary, secondary, ghost, success, `href`, `disabled`, and click handlers.   |
+| Lesson and home card links     | `src/lib/components/ui/CardLink.svelte`, `src/routes/learn/+page.svelte`, `src/lib/components/content/lesson/LessonList.svelte`                                                                                   | `Button.Root` as link | `CardLink`         | done   | Replaced the old fake disabled-link pattern for lesson cards.                                                  |
+| Drill answer choice groups     | `src/lib/components/ui/RadioButtons.svelte`, `src/lib/components/exercises/DrillExercise.svelte`                                                                                                                  | `RadioGroup`          | `RadioButtons`     | done   | Covers selectable answers, disabled state after answering, and correct or wrong visual tone.                   |
+| Alphabet letter tile selection | `src/lib/components/ui/ToggleTiles.svelte`, `src/routes/alphabet/+page.svelte`                                                                                                                                    | `ToggleGroup`         | `ToggleTiles`      | done   | Covers single-select tile grids, disabled locked letters, Thai labels, and known-state styling.                |
+| Alphabet letter detail panels  | `src/lib/components/ui/CollapsiblePanel.svelte`, `src/lib/components/content/alphabet/LetterDetailPanel.svelte`, `src/routes/alphabet/+page.svelte`                                                               | `Collapsible`         | `CollapsiblePanel` | done   | Covers the inline letter-detail disclosure panel while keeping route-owned selection state and close behavior. |
+| Progress indicators            | `src/lib/components/ui/Progress.svelte`, `src/routes/learn/[id]/+page.svelte`, `src/routes/alphabet/+page.svelte`, `src/routes/practice/+page.svelte`, `src/lib/components/content/home/HomeStatsOverview.svelte` | `Progress`            | `Progress`         | done   | Consolidated the repeated bespoke progress bars into a single wrapper.                                         |
 
 ### Current App Surfaces That Could Still Become Bits UI Components
 
-| Surface                              | Files                                                       | Current Behavior                                                                                                  | Best Bits UI Fit                                                            | Suggested Wrapper                               | Priority | Trigger For Extraction                                                                                                                                     |
-| ------------------------------------ | ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ----------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Letter detail panel                  | `src/routes/alphabet/+page.svelte`                          | Inline conditional detail panel opens when a tile is selected and closes with a button.                           | `Collapsible` now, `Dialog` later if mobile or overlay behavior is needed.  | `LetterDetailPanel`                             | later    | Extract when the same detail-panel pattern appears for words, rules, or lesson references, or when the alphabet panel needs richer open or close behavior. |
-| Shared disclosure content blocks     | none yet, but likely future lesson or word reference panels | Not present yet as a reusable component, but the product is likely to grow into expandable explanations or hints. | `Collapsible` or `Accordion` depending on single vs multiple open sections. | `Disclosure` or `AccordionSection`              | later    | Add only once a second disclosure surface exists.                                                                                                          |
-| Floating reference panels            | none yet                                                    | Not present today, but any future notes, hints, or learner-help popovers would fit here.                          | `Popover` or `Tooltip`                                                      | `HelpPopover`, `Tooltip`, or `ReferencePopover` | later    | Only if the product adds dense inline help that should not live in page copy.                                                                              |
-| Overlay confirmations or modal flows | none yet                                                    | Not present today. Current navigation and completion flows are route-driven and inline.                           | `Dialog` or `AlertDialog`                                                   | `Modal` or `ConfirmDialog`                      | later    | Only if the app gains destructive actions, blocking confirmations, or richer modal lesson content.                                                         |
+| Surface                              | Files                                                       | Current Behavior                                                                                                  | Best Bits UI Fit                                                            | Suggested Wrapper                               | Priority | Trigger For Extraction                                                                             |
+| ------------------------------------ | ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ----------------------------------------------- | -------- | -------------------------------------------------------------------------------------------------- |
+| Shared disclosure content blocks     | none yet, but likely future lesson or word reference panels | Not present yet as a reusable component, but the product is likely to grow into expandable explanations or hints. | `Collapsible` or `Accordion` depending on single vs multiple open sections. | `Disclosure` or `AccordionSection`              | later    | Add only once a second disclosure surface exists.                                                  |
+| Floating reference panels            | none yet                                                    | Not present today, but any future notes, hints, or learner-help popovers would fit here.                          | `Popover` or `Tooltip`                                                      | `HelpPopover`, `Tooltip`, or `ReferencePopover` | later    | Only if the product adds dense inline help that should not live in page copy.                      |
+| Overlay confirmations or modal flows | none yet                                                    | Not present today. Current navigation and completion flows are route-driven and inline.                           | `Dialog` or `AlertDialog`                                                   | `Modal` or `ConfirmDialog`                      | later    | Only if the app gains destructive actions, blocking confirmations, or richer modal lesson content. |
 
 ### Current Surfaces That Should Stay Native
 
@@ -90,8 +94,8 @@ Make Bits UI the default accessible primitive layer for site interactivity and s
 
 ### Planning Conclusion
 
-- The migration now has a clear inventory: five wrapper-backed Bits UI components are already in production, one real later candidate exists in the alphabet detail panel family, and the rest of the current UI should stay native for now.
-- The next implementation slice should not begin until a second disclosure-style surface appears or the alphabet detail panel needs richer behavior that native conditional rendering no longer covers well.
+- The migration now has a clear inventory: six wrapper-backed Bits UI components are in production, and no current route or component is left with a clearly justified bespoke composite interaction that should be migrated immediately.
+- This pass is complete for the current product surface. The next implementation slice should begin only when a second disclosure-style surface appears or a genuinely new composite interaction pattern lands.
 
 ## Progress
 
@@ -114,8 +118,8 @@ Make Bits UI the default accessible primitive layer for site interactivity and s
 - [x] Audit the remaining `src/**` interactive surfaces after wrapper extraction
 - [x] Complete a full inventory of current and likely next Bits UI-backed component candidates
 - [x] Decide whether a current non-native composite interaction is ready for migration
-- [ ] Implement the next Bits UI wrapper-backed migration slice
-- [ ] Validate the next migration slice with focused accessibility and product checks
+- [x] Implement the next Bits UI wrapper-backed migration slice
+- [x] Validate the next migration slice with focused accessibility and product checks
 
 ## Open Questions
 
@@ -124,7 +128,6 @@ Make Bits UI the default accessible primitive layer for site interactivity and s
 
 ## Next Extraction Candidates
 
-- `LetterDetailPanel` backed by `Collapsible` if the alphabet detail pattern is reused or needs richer keyboard and motion behavior.
 - A shared disclosure wrapper for future expandable rule, word, or reference sections.
 - Revisit future dialog, popover, tooltip, menu, or tabs work with a wrapper-first Bits UI approach from the start rather than as a retrofit.
 

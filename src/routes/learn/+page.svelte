@@ -1,7 +1,11 @@
 <script lang="ts">
 	import CardLink from "$lib/components/ui/CardLink.svelte";
-	import { thaiPack } from "$lib/data/thai";
 	import { currentLessonId } from "$lib/stores/progress";
+
+	import type { PageProps } from "./$types";
+
+	let { data }: PageProps = $props();
+	const lessons = $derived(data.lessons);
 
 	function getLessonCardClasses(isCurrent: boolean, isUnlocked: boolean, isDone: boolean) {
 		return [
@@ -26,7 +30,7 @@
 
 <!--
   Learn Page (Lesson Index)
-  Displays a grid of all available lessons from the Thai language pack.
+	Displays a grid of all available lessons from the active published lesson bundle.
   Each lesson card shows:
   - A stage badge and completion/current status indicator
   - The anchor word (the real Thai word taught in the lesson)
@@ -41,7 +45,7 @@
 	</p>
 
 	<div class="lessons-grid">
-		{#each thaiPack.lessons as lesson}
+		{#each lessons as lesson}
 			<!-- Derive state flags: isCurrent marks the next lesson to do, isUnlocked allows navigation -->
 			{@const isCurrent = lesson.id === $currentLessonId}
 			{@const isUnlocked = lesson.id <= $currentLessonId}

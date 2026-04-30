@@ -23,13 +23,13 @@
 	import StepRules from "$lib/components/lesson/StepRules.svelte";
 	import Button from "$lib/components/ui/Button.svelte";
 	import Progress from "$lib/components/ui/Progress.svelte";
-	import { thaiPack } from "$lib/data/thai";
 	import { completeLesson } from "$lib/stores/progress";
 
 	import type { PageProps } from "./$types";
 
 	let { data }: PageProps = $props();
 	const lesson = $derived(data.lesson);
+	const nextLessonId = $derived(data.nextLessonId);
 
 	// --- Step state machine ---
 	// The lesson progresses linearly through these steps.
@@ -46,7 +46,7 @@
 	const progressPercent = $derived((currentStepIndex / (stepOrder.length - 1)) * 100);
 
 	// Check if there's a lesson after this one
-	const hasNextLesson = $derived(!!thaiPack.lessons.find((l) => l.id > lesson.id));
+	const hasNextLesson = $derived(nextLessonId !== null);
 
 	/** Advance to the next step in the lesson flow. */
 	function nextStep() {
@@ -68,9 +68,8 @@
 
 	/** Navigate to the next lesson in the curriculum. */
 	function goToNextLesson() {
-		const next = thaiPack.lessons.find((l) => l.id > lesson.id);
-		if (next) {
-			goto(`/learn/${next.id}`);
+		if (nextLessonId !== null) {
+			goto(`/learn/${nextLessonId}`);
 		} else {
 			goto("/learn");
 		}

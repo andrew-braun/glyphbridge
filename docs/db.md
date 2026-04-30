@@ -1,8 +1,13 @@
 # Database Guide
 
-This is the quick-reference guide for GlyphBridge's database. Use it when you need to understand how the database is organized, where a feature should read or write, and how to inspect the live schemas without re-reading the full design docs.
+This is the durable operations guide for GlyphBridge's database. Use it when you need
+to understand how the database is organized, which schema a feature should read or
+write, how to inspect the live database, which Supabase CLI commands matter day to
+day, and how to deploy the schema to a remote Supabase project safely.
 
-For the precise table-by-table contract, see [database-dto-spec.md](./database-dto-spec.md). This file is the README-style overview and inspection guide.
+For the exact table-by-table contract, constraints, and DTO mapping, see
+[database-dto-spec.md](./database-dto-spec.md). This file is the README-style
+overview and runbook.
 
 ## What The Database Is For
 
@@ -19,6 +24,20 @@ The important separation is this:
 - `delivery` is the runtime-facing published content.
 - `learner` is the user-owned progress model.
 - `internal_api` is where privileged SQL logic lives.
+
+## Current Local Seeded State
+
+At the time of writing:
+
+- the local seed contains `1` course and `1` published course version
+- the Thai seed contains `13` lessons
+- the current vocabulary model contains `39` vocabulary items
+- the current publication layer contains `13` `delivery.course_publication_lessons`
+  rows
+- `src/lib/data/thai.ts` remains the curriculum source of truth, and
+  `scripts/generate-thai-seed.mjs` regenerates `supabase/seed.sql`
+- the runtime app is not yet wired to read from `delivery.*`; the next implementation
+  step is still the first server-owned SvelteKit read boundary
 
 ## Schema Map
 
@@ -38,6 +57,61 @@ Anchor note:
 
 - `anchor_targets` remains the featured lesson word for the current runtime contract.
 - Reusable lesson vocabulary now belongs in `vocabulary_items` and `lesson_vocabulary` so the same word can appear in multiple lessons and later power standalone vocabulary drilling.
+
+## Table Role Reference
+
+Use this section when you need a fast answer to “what does this table do?” without
+opening the full DTO spec.
+
+### `curriculum` table roles
+
+| Table                       | Role                                                                                                      |
+| --------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `languages`                 | Reference list of spoken languages supported by courses.                                                  |
+| `script_systems`            | Reference list of writing systems and rendering metadata.                                                 |
+| `courses`                   | Learner-facing course container with hero copy, SEO copy, and current published version pointer.          |
+| `course_versions`           | Immutable curriculum releases for a course.                                                               |
+| `graphemes`                 | Canonical script units independent of lesson ordering.                                                    |
+| `course_version_graphemes`  | Course-version-specific pedagogy for each grapheme, such as mnemonics and pronunciation hints.            |
+| `lessons`                   | Ordered lesson metadata within a course version.                                                          |
+| `vocabulary_items`          | Reusable words taught in a course version.                                                                |
+| `vocabulary_segments`       | Ordered syllabic or segment breakdown for each vocabulary item.                                           |
+| `lesson_vocabulary`         | Join table assigning vocabulary items to lessons with `anchor` or `support` role and drill-target status. |
+| `anchor_targets`            | Featured lesson-word projection for the current runtime lesson contract.                                  |
+| `anchor_segments`           | Segment breakdown for the featured anchor target.                                                         |
+| `orthography_rules`         | Reusable reading or spelling rules introduced in lessons.                                                 |
+| `orthography_rule_examples` | Ordered examples attached to a rule.                                                                      |
+| `lesson_graphemes`          | Join table describing which graphemes are new or review content in a lesson.                              |
+| `lesson_rules`              | Ordered rule assignments for a lesson.                                                                    |
+| `drills`                    | Canonical drill prompts for a course version.                                                             |
+| `drill_options`             | Ordered answer options for a drill, including the correct option marker.                                  |
+| `lesson_drills`             | Ordered drill assignments for a lesson.                                                                   |
+
+### `delivery` table roles
+
+| Table                        | Role                                                                           |
+| ---------------------------- | ------------------------------------------------------------------------------ |
+| `course_publications`        | Immutable publication manifest for a course version.                           |
+| `course_publication_lessons` | Per-lesson published JSON bundle that learner-facing runtime reads should use. |
+
+### `learner` table roles
+
+| Table                | Role                                                                                 |
+| -------------------- | ------------------------------------------------------------------------------------ |
+| `profiles`           | User profile shell tied to Supabase Auth user IDs.                                   |
+| `devices`            | Known learner devices or installations for sync and diagnostics.                     |
+| `course_enrollments` | Learner membership in a course version, including current lesson pointer.            |
+| `lesson_attempts`    | Append-only raw learner attempts received by the server-owned sync boundary.         |
+| `lesson_progress`    | Derived canonical learner progress per lesson.                                       |
+| `preferences`        | Learner-level study preferences such as romanization and pronunciation-hint toggles. |
+
+### `internal_api` function roles
+
+| Function                         | Role                                                                                      |
+| -------------------------------- | ----------------------------------------------------------------------------------------- |
+| `handle_new_user()`              | Bootstrap helper invoked from auth-trigger flow.                                          |
+| `set_updated_at()`               | Shared trigger helper for mutable tables.                                                 |
+| `sync_lesson_attempt_batch(...)` | Privileged projector that validates attempts, inserts them, and updates learner progress. |
 
 ### `delivery`
 
@@ -120,6 +194,14 @@ pnpm exec supabase start
 
 This starts the local Postgres database, API, Studio, auth, and other Supabase services.
 
+### Stop the local stack
+
+```sh
+pnpm exec supabase stop
+```
+
+Use `--no-backup` only if you explicitly want to discard local database state.
+
 ### Reset the database from migrations
 
 ```sh
@@ -136,13 +218,23 @@ pnpm exec supabase status
 
 This is the quickest way to confirm the local stack is up and to see current service URLs.
 
-### Open Supabase Studio
+### Current local access surfaces
 
-The local config currently uses:
+When the local stack is running, `supabase status` will print the current URLs.
+Typical local values in this repo are:
 
 - Studio: `http://127.0.0.1:54323`
-- API: `http://127.0.0.1:54321`
-- Postgres port: `54322`
+- REST API: `http://127.0.0.1:54321/rest/v1`
+- GraphQL API: `http://127.0.0.1:54321/graphql/v1`
+- Postgres: `postgresql://postgres:postgres@127.0.0.1:54322/postgres`
+
+Use REST or GraphQL only for exposed schemas and least-privilege access paths. Do not
+try to build learner-facing features by reaching directly into private `curriculum` or
+`internal_api` objects from client code.
+
+### Open Supabase Studio
+
+Open the Studio URL shown by `pnpm exec supabase status`.
 
 ### Connect with `psql`
 
@@ -153,6 +245,217 @@ psql postgresql://postgres:postgres@127.0.0.1:54322/postgres
 ```
 
 If the local connection details ever change, `pnpm exec supabase status` and `pnpm exec supabase start` will print the current values.
+
+## Supabase CLI Workflow
+
+These are the commands you will use most often in this repo.
+
+### Create a migration file
+
+```sh
+pnpm exec supabase migration new add_some_change
+```
+
+This creates a timestamped SQL file in `supabase/migrations/`.
+
+### Lint the database
+
+```sh
+pnpm exec supabase db lint
+```
+
+Use this after schema changes. The CLI also supports linting the linked remote
+project with `pnpm exec supabase db lint --linked`.
+
+### Run database advisors
+
+```sh
+pnpm exec supabase db advisors
+```
+
+Use this for an extra security or performance sanity check locally or with
+`--linked` against a linked remote project.
+
+### Generate database types
+
+```sh
+pnpm exec supabase gen types --local > types.ts
+```
+
+This repo does not currently commit generated DB types, but this command is the
+standard way to generate them when you need an integration check.
+
+### Compare migrations with a database
+
+```sh
+pnpm exec supabase db diff
+```
+
+Use this when you need to understand drift between the migration files and a live
+database. Prefer fixing drift through explicit migrations rather than manual edits.
+
+## Common SQL Queries
+
+These are the queries you will run most often while working on curriculum, delivery,
+or learner-state features.
+
+### Check the seeded content footprint
+
+```sql
+select
+  (select count(*) from curriculum.courses) as courses,
+  (select count(*) from curriculum.course_versions) as course_versions,
+  (select count(*) from curriculum.lessons) as lessons,
+  (select count(*) from curriculum.vocabulary_items) as vocabulary_items,
+  (select count(*) from delivery.course_publication_lessons) as publication_lessons;
+```
+
+### List courses, versions, and active publications
+
+```sql
+select
+  c.slug as course_slug,
+  cv.version_ordinal,
+  cv.display_version,
+  cp.id as publication_id,
+  cp.is_active,
+  cp.manifest_hash,
+  count(cpl.id) as lesson_bundle_count
+from curriculum.courses c
+join curriculum.course_versions cv
+  on cv.course_id = c.id
+left join delivery.course_publications cp
+  on cp.course_version_id = cv.id
+left join delivery.course_publication_lessons cpl
+  on cpl.publication_id = cp.id
+group by
+  c.slug,
+  cv.version_ordinal,
+  cv.display_version,
+  cp.id,
+  cp.is_active,
+  cp.manifest_hash
+order by c.slug, cv.version_ordinal;
+```
+
+### List lessons with anchor words, vocabulary counts, and drill counts
+
+```sql
+select
+  l.lesson_ordinal,
+  l.slug as lesson_slug,
+  l.title,
+  a.display_text as anchor_word,
+  (
+    select count(*)
+    from curriculum.lesson_vocabulary lv
+    where lv.lesson_id = l.id
+  ) as vocabulary_count,
+  (
+    select count(*)
+    from curriculum.lesson_rules lr
+    where lr.lesson_id = l.id
+  ) as rule_count,
+  (
+    select count(*)
+    from curriculum.lesson_drills ld
+    where ld.lesson_id = l.id
+  ) as drill_count
+from curriculum.lessons l
+left join curriculum.anchor_targets a
+  on a.lesson_id = l.id
+order by l.lesson_ordinal;
+```
+
+### Inspect the vocabulary taught in one lesson
+
+```sql
+select
+  l.lesson_ordinal,
+  l.slug as lesson_slug,
+  lv.role_key,
+  lv.ordinal_in_role,
+  lv.is_drill_target,
+  vi.display_text,
+  vi.meaning,
+  vi.pronunciation
+from curriculum.lessons l
+join curriculum.lesson_vocabulary lv
+  on lv.lesson_id = l.id
+join curriculum.vocabulary_items vi
+  on vi.id = lv.vocabulary_item_id
+where l.slug = 'maak'
+order by lv.role_key, lv.ordinal_in_role;
+```
+
+### Fetch one published lesson bundle by slug
+
+```sql
+select
+  c.slug as course_slug,
+  cpl.lesson_slug,
+  cpl.lesson_ordinal,
+  cpl.payload
+from curriculum.courses c
+join curriculum.course_versions cv
+  on cv.id = c.current_published_version_id
+join delivery.course_publications cp
+  on cp.course_version_id = cv.id
+  and cp.is_active = true
+join delivery.course_publication_lessons cpl
+  on cpl.publication_id = cp.id
+where c.slug = 'thai'
+  and cpl.lesson_slug = 'maak';
+```
+
+### Inspect new and review graphemes for one lesson
+
+```sql
+select
+  l.lesson_ordinal,
+  l.slug as lesson_slug,
+  lg.role,
+  lg.ordinal_in_role,
+  g.text,
+  cvg.romanization,
+  cvg.pronunciation_hint
+from curriculum.lessons l
+join curriculum.lesson_graphemes lg
+  on lg.lesson_id = l.id
+join curriculum.graphemes g
+  on g.id = lg.grapheme_id
+join curriculum.course_version_graphemes cvg
+  on cvg.course_version_id = l.course_version_id
+  and cvg.grapheme_id = g.id
+where l.slug = 'maak'
+order by lg.role, lg.ordinal_in_role;
+```
+
+### Inspect learner progress for one user
+
+```sql
+select
+  ce.id as enrollment_id,
+  c.slug as course_slug,
+  l.lesson_ordinal,
+  l.slug as lesson_slug,
+  lp.status,
+  lp.best_score,
+  lp.latest_score,
+  lp.attempt_count,
+  lp.last_attempt_at
+from learner.course_enrollments ce
+join curriculum.courses c
+  on c.id = ce.course_id
+join learner.lesson_progress lp
+  on lp.enrollment_id = ce.id
+join curriculum.lessons l
+  on l.id = lp.lesson_id
+where ce.user_id = '00000000-0000-0000-0000-000000000000'::uuid
+order by l.lesson_ordinal;
+```
+
+Replace the placeholder UUID before running this query.
 
 ## How To Inspect The Database Quickly
 
@@ -365,6 +668,101 @@ Questions to answer:
 - Does the bundle already contain what the UI needs?
 - If not, should the bundle change, rather than having the UI reach into `curriculum`?
 
+## Remote Supabase Deployment Workflow
+
+Use this workflow when the local database is ready to become a linked remote
+Supabase project.
+
+### 1. Authenticate the Supabase CLI
+
+```sh
+pnpm exec supabase login
+```
+
+For CI or non-interactive use, provide `SUPABASE_ACCESS_TOKEN` or use
+`pnpm exec supabase login --token ...`.
+
+### 2. List existing remote projects
+
+```sh
+pnpm exec supabase projects list
+```
+
+If the project does not exist yet, create it either in the Supabase dashboard or via
+CLI.
+
+### 3. Create a remote project from the CLI if needed
+
+```sh
+pnpm exec supabase projects create glyphbridge \
+  --org-id your-org-id \
+  --db-password "strong-db-password" \
+  --region us-east-1
+```
+
+You need an organization ID, a chosen region, and a database password. Treat the DB
+password like any other secret.
+
+### 4. Link the local repo to the remote project
+
+```sh
+pnpm exec supabase link --project-ref your-project-ref -p "your-db-password"
+```
+
+After linking, commands such as `db push`, `db lint --linked`, and `gen types
+--linked` know which remote project to target.
+
+### 5. Preview the remote migration rollout
+
+```sh
+pnpm exec supabase db push --dry-run
+```
+
+Run this before every remote schema deployment so you can inspect what will be
+applied.
+
+### 6. Push migrations to the linked remote project
+
+```sh
+pnpm exec supabase db push
+```
+
+This applies the local migration chain to the linked remote database.
+
+### 7. Include seed data only when you intentionally want bootstrap content
+
+```sh
+pnpm exec supabase db push --include-seed
+```
+
+Use `--include-seed` for a fresh remote environment when you explicitly want the
+repository seed content loaded. Do not treat seed replay as the default production
+content-update path once the remote environment is live.
+
+### 8. Validate the linked remote database after deployment
+
+```sh
+pnpm exec supabase db lint --linked
+pnpm exec supabase db advisors --linked
+pnpm exec supabase gen types --linked > types.ts
+```
+
+Then run a few of the SQL queries from this document against the remote database using
+Studio or a direct connection.
+
+### Remote deployment cautions
+
+- Never run `pnpm exec supabase db reset --linked` against a shared, staging, or
+  production environment unless you explicitly intend to destroy and rebuild it.
+- Do not make manual schema edits in the Supabase dashboard and then forget to capture
+  them as migrations. This repo treats migration files as the source of truth.
+- Treat `supabase/seed.sql` as bootstrap content for fresh environments, not as the
+  normal mechanism for ongoing production content changes.
+- Keep private schemas private. Client-facing features should still read from
+  `delivery.*` and route learner writes through server-owned code.
+- Push to staging before production whenever possible, especially once authenticated
+  learner data exists remotely.
+
 ## Common Footguns
 
 - Querying `curriculum.*` directly from learner-facing code.
@@ -378,8 +776,8 @@ Questions to answer:
 As of now:
 
 - The baseline SQL schema exists and resets cleanly locally.
-- The local seed file is intentionally empty.
-- The first real curriculum seed and publication generation are still future work.
+- The local seed file now contains the first real Thai curriculum seed.
+- The first published lesson bundles now exist in `delivery.course_publication_lessons`.
 - The app is not yet wired to read from the database.
 
 ## Fastest Files To Read First

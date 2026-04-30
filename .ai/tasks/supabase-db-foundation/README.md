@@ -86,7 +86,8 @@ This directory groups the active and recently completed `.ai` task documents for
 - DB hardening and input-bounds remediation are complete.
 - The approved Thai curriculum rewrite has landed in `src/lib/data/thai.ts` and is now the seed source of truth.
 - The first Thai curriculum seed is now in place in `curriculum.*` and `delivery.*`, and direct SQL verification confirms 1 course, 1 course version, 13 lessons, 39 vocabulary items, and 13 publication lesson rows.
-- Next content/runtime step: add the first server-owned SvelteKit read boundary over `delivery.course_publication_lessons`.
+- The learn index and lesson detail routes now read the active published lesson bundle through `src/lib/server/delivery-lessons.ts` and server-owned SvelteKit loads.
+- The app now uses a server-capable SvelteKit adapter for DB-backed lesson delivery instead of assuming static-only hosting.
 - Next runtime/auth gate: implement the request-scoped `@supabase/ssr` boundary and verified server-owned Supabase access described in `auth-sync-strategy.md` before the first authenticated route or sync path lands.
 - Add a small parity or smoke-test step that checks the seeded lesson bundles against the runtime lesson contract.
 - Add the first server-side SvelteKit boundary for learner attempt sync after the read boundary and auth gate exist.
