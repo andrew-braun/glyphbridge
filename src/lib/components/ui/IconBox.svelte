@@ -42,21 +42,21 @@
 
 <style lang="scss">
 	.icon-box {
-		display: flex;
-		flex-direction: column;
 		align-items: center;
-		gap: $space-md;
-		width: 100%;
-		min-height: 100%;
-		padding: $space-xl;
+		background: linear-gradient(180deg, rgba(white, 0.98), rgba($color-primary, 0.02));
 		border: 1px solid rgba($color-border, 0.8);
 		border-radius: $radius-xl;
-		background: linear-gradient(180deg, rgba(white, 0.98), rgba($color-primary, 0.02));
 		box-shadow: $shadow-sm;
+		display: flex;
+		flex-direction: column;
+		gap: $space-md;
+		min-height: 100%;
+		padding: $space-xl;
 		transition:
 			transform $transition-base,
 			box-shadow $transition-base,
 			border-color $transition-base;
+		width: 100%;
 
 		&--align-start {
 			align-items: flex-start;
@@ -68,8 +68,8 @@
 		}
 
 		&:hover {
-			transform: translateY(-4px);
 			box-shadow: $shadow-lg;
+			transform: translateY(-4px);
 		}
 
 		&__body {
@@ -79,17 +79,17 @@
 		}
 
 		&__icon {
-			width: 3.75rem;
-			height: 3.75rem;
-			border-radius: $radius-full;
-			background: linear-gradient(145deg, $color-primary, $color-primary-dark);
-			color: white;
-			font-weight: 700;
-			display: inline-flex;
 			align-items: center;
-			justify-content: center;
-			font-size: $font-size-xl;
+			background: linear-gradient(145deg, $color-primary, $color-primary-dark);
+			border-radius: $radius-full;
 			box-shadow: 0 14px 28px rgba($color-primary, 0.22);
+			color: white;
+			display: inline-flex;
+			font-size: $font-size-xl;
+			font-weight: 700;
+			height: 3.75rem;
+			justify-content: center;
+			width: 3.75rem;
 		}
 
 		&__title {
@@ -97,8 +97,8 @@
 		}
 
 		&__description {
-			font-size: $font-size-sm;
 			color: $color-text-light;
+			font-size: $font-size-sm;
 			line-height: 1.65;
 		}
 	}
@@ -129,8 +129,8 @@
 
 		.icon-box__icon {
 			background: linear-gradient(145deg, $color-accent-light, #f6b535);
-			color: $color-text;
 			box-shadow: 0 14px 28px rgba($color-accent-light, 0.28);
+			color: $color-text;
 		}
 	}
 

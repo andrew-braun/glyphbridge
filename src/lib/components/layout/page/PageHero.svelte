@@ -42,8 +42,8 @@
 
 <style lang="scss">
 	.page-hero {
-		text-align: center;
 		padding: $space-3xl 0 $space-xl;
+		text-align: center;
 
 		&--left {
 			text-align: left;
@@ -51,24 +51,24 @@
 
 		&__title {
 			font-size: $font-size-4xl;
-			margin-top: $space-md;
 			line-height: 1.1;
+			margin-top: $space-md;
 		}
 
 		&__highlight {
 			background: linear-gradient(135deg, $color-primary, $color-accent);
 			-webkit-background-clip: text;
-			-webkit-text-fill-color: transparent;
 			background-clip: text;
+			-webkit-text-fill-color: transparent;
 		}
 
 		&__subtitle {
-			margin-top: $space-lg;
-			font-size: $font-size-lg;
 			color: $color-text-light;
-			max-width: var(--text-max-width);
+			font-size: $font-size-lg;
 			margin-left: auto;
 			margin-right: auto;
+			margin-top: $space-lg;
+			max-width: var(--text-max-width);
 		}
 
 		&--left &__subtitle {
@@ -76,11 +76,11 @@
 		}
 
 		&__actions {
-			margin-top: $space-xl;
 			display: flex;
+			flex-wrap: wrap;
 			gap: $space-md;
 			justify-content: center;
-			flex-wrap: wrap;
+			margin-top: $space-xl;
 		}
 
 		&--left &__actions {

@@ -61,8 +61,8 @@
 		display: flex;
 		flex-direction: column;
 		gap: $space-xl;
-		max-width: var(--content-max-width);
 		margin: 0 auto;
+		max-width: var(--content-max-width);
 		@include fade-in-animation;
 
 		&__counter {

@@ -26,17 +26,17 @@
 
 <style lang="scss">
 	.stat-card {
-		text-align: center;
 		display: flex;
+		flex: 1;
 		flex-direction: column;
 		gap: $space-sm;
-		flex: 1;
 		min-width: 220px;
+		text-align: center;
 
 		&__number {
+			color: $color-primary;
 			font-size: $font-size-3xl;
 			font-weight: 800;
-			color: $color-primary;
 		}
 
 		&__label {

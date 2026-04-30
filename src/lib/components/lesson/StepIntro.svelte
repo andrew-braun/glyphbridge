@@ -42,8 +42,8 @@
 		display: flex;
 		flex-direction: column;
 		gap: $space-xl;
-		max-width: var(--content-max-width);
 		margin: 0 auto;
+		max-width: var(--content-max-width);
 		@include fade-in-animation;
 
 		&__title {
@@ -53,25 +53,25 @@
 
 	// Large reveal area with subtle gradient background
 	.word-reveal {
-		text-align: center;
-		padding: $space-2xl;
 		background: linear-gradient(135deg, rgba($color-primary, 0.04), rgba($color-accent, 0.04));
 		border-radius: $radius-xl;
+		padding: $space-2xl;
+		text-align: center;
 
 		&__thai {
 			color: $color-primary;
 		}
 
 		&__hint {
-			margin-top: $space-md;
 			color: $color-text-light;
 			font-style: italic;
+			margin-top: $space-md;
 		}
 	}
 
 	.context-note {
-		font-size: $font-size-sm;
 		color: $color-text-light;
+		font-size: $font-size-sm;
 		line-height: 1.6;
 	}
 </style>

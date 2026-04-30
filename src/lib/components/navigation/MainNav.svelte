@@ -39,10 +39,10 @@
 		z-index: 100;
 
 		&__inner {
-			display: flex;
 			align-items: center;
-			justify-content: space-between;
+			display: flex;
 			height: 60px;
+			justify-content: space-between;
 		}
 
 		&__logo {
@@ -65,38 +65,38 @@
 		}
 
 		&__link {
-			display: flex;
 			align-items: center;
-			gap: $space-xs;
-			padding: $space-sm $space-md;
+			border-radius: $radius-md;
+			color: $color-text-light;
+			display: flex;
 			font-size: $font-size-sm;
 			font-weight: 600;
-			color: $color-text-light;
+			gap: $space-xs;
+			padding: $space-sm $space-md;
 			text-decoration: none;
-			border-radius: $radius-md;
 			transition: all $transition-fast;
 
 			&:hover {
-				color: $color-primary;
 				background: rgba($color-primary, 0.05);
+				color: $color-primary;
 			}
 
 			&.active {
-				color: $color-primary;
 				background: rgba($color-primary, 0.1);
+				color: $color-primary;
 			}
 		}
 
 		&__count {
-			background: $color-primary;
-			color: white;
-			font-size: $font-size-xs;
-			min-width: 20px;
-			height: 20px;
-			border-radius: $radius-full;
-			display: flex;
 			align-items: center;
+			background: $color-primary;
+			border-radius: $radius-full;
+			color: white;
+			display: flex;
+			font-size: $font-size-xs;
+			height: 20px;
 			justify-content: center;
+			min-width: 20px;
 			padding: 0 5px;
 		}
 	}
@@ -107,8 +107,8 @@
 		}
 
 		.nav__link {
-			padding: $space-sm $space-sm;
 			font-size: $font-size-xs;
+			padding: $space-sm $space-sm;
 		}
 	}
 </style>

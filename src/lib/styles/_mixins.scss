@@ -13,36 +13,36 @@
 // Renders a selectable tile that highlights green/red based on correctness.
 // ---------------------------------------------------------------------------
 @mixin drill-option {
-	padding: $space-lg;
+	background: $color-bg-card;
 	border: 2px solid $color-border;
 	border-radius: $radius-lg;
-	background: $color-bg-card;
 	cursor: pointer;
-	transition: all $transition-fast;
 	font-family: $font-body;
 	font-size: $font-size-base;
+	padding: $space-lg;
+	transition: all $transition-fast;
 
 	&:hover:not(:disabled) {
-		border-color: $color-primary;
 		background: rgba($color-primary, 0.03);
+		border-color: $color-primary;
 	}
 }
 
 // Drill option state modifiers — apply after @include drill-option.
 @mixin drill-option-states {
 	&--selected {
-		border-color: $color-primary;
 		background: rgba($color-primary, 0.05);
+		border-color: $color-primary;
 	}
 
 	&--correct {
-		border-color: $color-success !important;
 		background: rgba($color-success, 0.08) !important;
+		border-color: $color-success !important;
 	}
 
 	&--wrong {
-		border-color: $color-error !important;
 		background: rgba($color-error, 0.08) !important;
+		border-color: $color-error !important;
 	}
 }
 
@@ -50,10 +50,10 @@
 // Drill feedback banner — shows "Correct!" or "Not quite." after answering.
 // ---------------------------------------------------------------------------
 @mixin drill-feedback {
-	text-align: center;
-	padding: $space-md $space-lg;
 	border-radius: $radius-md;
 	font-size: $font-size-lg;
+	padding: $space-md $space-lg;
+	text-align: center;
 
 	&--correct {
 		background: rgba($color-success, 0.1);
@@ -77,17 +77,17 @@
 	gap: $space-xs;
 
 	&-num {
+		color: $number-color;
 		font-size: $font-size-3xl;
 		font-weight: 800;
-		color: $number-color;
 	}
 
 	&-label {
-		font-size: $font-size-sm;
 		color: $color-text-light;
-		text-transform: uppercase;
+		font-size: $font-size-sm;
 		font-weight: 600;
 		letter-spacing: 0.05em;
+		text-transform: uppercase;
 	}
 }
 
@@ -96,14 +96,14 @@
 // Used when a page has no content yet (e.g. no words learned, no drills).
 // ---------------------------------------------------------------------------
 @mixin empty-state {
-	text-align: center;
-	padding: $space-3xl;
+	align-items: center;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
 	gap: $space-lg;
-	max-width: var(--content-max-width);
 	margin: 0 auto;
+	max-width: var(--content-max-width);
+	padding: $space-3xl;
+	text-align: center;
 
 	p {
 		color: $color-text-light;
@@ -119,11 +119,11 @@
 // Used in lesson steps and practice sessions.
 // ---------------------------------------------------------------------------
 @mixin step-counter {
-	font-size: $font-size-sm;
 	color: $color-text-muted;
+	font-size: $font-size-sm;
 	font-weight: 600;
-	text-transform: uppercase;
 	letter-spacing: 0.05em;
+	text-transform: uppercase;
 }
 
 // ---------------------------------------------------------------------------
@@ -131,8 +131,8 @@
 // ---------------------------------------------------------------------------
 @mixin page-subtitle {
 	color: $color-text-light;
-	margin-top: $space-sm;
 	margin-bottom: $space-xl;
+	margin-top: $space-sm;
 }
 
 // ---------------------------------------------------------------------------
@@ -140,17 +140,17 @@
 // Used in letter detail panels and letter intro cards.
 // ---------------------------------------------------------------------------
 @mixin detail-row {
+	align-items: center;
+	border-bottom: 1px solid $color-border;
 	display: flex;
 	justify-content: space-between;
-	align-items: center;
 	padding: $space-sm 0;
-	border-bottom: 1px solid $color-border;
 }
 
 @mixin detail-label {
-	font-weight: 600;
 	color: $color-text-light;
 	font-size: $font-size-sm;
+	font-weight: 600;
 }
 
 // ---------------------------------------------------------------------------

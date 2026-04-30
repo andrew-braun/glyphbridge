@@ -94,8 +94,8 @@
 		display: flex;
 		flex-direction: column;
 		gap: $space-xl;
-		max-width: var(--content-max-width);
 		margin: 0 auto;
+		max-width: var(--content-max-width);
 		@include fade-in-animation;
 
 		&__counter {
@@ -105,22 +105,22 @@
 
 	// Centered letter showcase with details below
 	.letter-intro {
+		align-items: center;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
 		gap: $space-xl;
 		text-align: center;
 
 		// Large character in a subtle colored box
 		&__char {
-			color: $color-primary;
-			background: rgba($color-primary, 0.06);
-			width: 140px;
-			height: 140px;
-			border-radius: $radius-xl;
-			display: flex;
 			align-items: center;
+			background: rgba($color-primary, 0.06);
+			border-radius: $radius-xl;
+			color: $color-primary;
+			display: flex;
+			height: 140px;
 			justify-content: center;
+			width: 140px;
 		}
 
 		// Stacked rows of letter properties
@@ -145,10 +145,10 @@
 
 		// Mnemonic box at the bottom
 		&__mnemonic {
-			width: 100%;
-			text-align: left;
 			font-size: $font-size-sm;
 			line-height: 1.6;
+			text-align: left;
+			width: 100%;
 		}
 	}
 </style>

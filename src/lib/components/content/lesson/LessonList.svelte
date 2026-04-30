@@ -75,12 +75,12 @@
 	}
 
 	.lesson-item {
-		display: flex;
 		align-items: center;
+		color: inherit;
+		display: flex;
 		gap: $space-lg;
 		padding: $space-lg $space-xl;
 		text-decoration: none;
-		color: inherit;
 		transition: all $transition-base;
 
 		&--completed {
@@ -93,8 +93,8 @@
 		}
 
 		&--locked {
-			opacity: 0.5;
 			cursor: not-allowed;
+			opacity: 0.5;
 
 			&:hover {
 				box-shadow: $shadow-md;
@@ -102,12 +102,12 @@
 		}
 
 		&__status {
-			flex-shrink: 0;
-			width: 40px;
-			height: 40px;
-			display: flex;
 			align-items: center;
+			display: flex;
+			flex-shrink: 0;
+			height: 40px;
 			justify-content: center;
+			width: 40px;
 		}
 
 		&__check {
@@ -117,11 +117,11 @@
 		}
 
 		&__dot {
-			width: 14px;
-			height: 14px;
-			border-radius: $radius-full;
-			background: $color-primary;
 			animation: pulse 2s ease-in-out infinite;
+			background: $color-primary;
+			border-radius: $radius-full;
+			height: 14px;
+			width: 14px;
 		}
 
 		&__lock {
@@ -129,8 +129,8 @@
 		}
 
 		&__content {
-			flex: 1;
 			display: flex;
+			flex: 1;
 			flex-direction: column;
 			gap: $space-xs;
 		}
@@ -154,15 +154,15 @@
 		}
 
 		&__letter {
-			width: 44px;
-			height: 44px;
-			display: flex;
 			align-items: center;
-			justify-content: center;
 			background: rgba($color-primary, 0.08);
 			border-radius: $radius-md;
 			color: $color-primary;
+			display: flex;
 			font-size: $font-size-xl;
+			height: 44px;
+			justify-content: center;
+			width: 44px;
 		}
 	}
 

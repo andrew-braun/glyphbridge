@@ -84,27 +84,27 @@
 	.learn {
 		&__subtitle {
 			color: $color-text-light;
-			margin-top: $space-sm;
 			margin-bottom: $space-xl;
+			margin-top: $space-sm;
 		}
 	}
 
 	// Two-column grid; collapses to single column on mobile
 	.lessons-grid {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
 		gap: $space-lg;
+		grid-template-columns: repeat(2, 1fr);
 	}
 
 	// Lesson card: three visual states via BEM modifiers (--current, --done, --locked)
 	.lesson-card {
-		position: relative;
+		color: inherit;
 		display: flex;
 		flex-direction: column;
 		gap: $space-sm;
-		text-decoration: none;
-		color: inherit;
 		overflow: hidden;
+		position: relative;
+		text-decoration: none;
 
 		&--current {
 			border: 2px solid $color-primary;
@@ -115,8 +115,8 @@
 		}
 
 		&--locked {
-			opacity: 0.5;
 			cursor: not-allowed;
+			opacity: 0.5;
 		}
 
 		&__header {
@@ -140,27 +140,27 @@
 		}
 
 		&__overlay {
-			position: absolute;
-			inset: 0;
-			display: flex;
 			align-items: center;
-			justify-content: center;
 			background: rgba(255, 255, 255, 0.7);
-			font-weight: 600;
 			color: $color-text-light;
+			display: flex;
+			font-weight: 600;
+			inset: 0;
+			justify-content: center;
+			position: absolute;
 		}
 	}
 
 	// Small square chip showing a single Thai character
 	.letter-chip {
-		width: 40px;
-		height: 40px;
-		display: flex;
 		align-items: center;
-		justify-content: center;
 		background: rgba($color-primary, 0.08);
 		border-radius: $radius-md;
 		color: $color-primary;
+		display: flex;
+		height: 40px;
+		justify-content: center;
+		width: 40px;
 	}
 
 	// Mobile: single-column layout for lesson cards

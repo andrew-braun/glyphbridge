@@ -72,8 +72,8 @@
 		display: flex;
 		flex-direction: column;
 		gap: $space-xl;
-		max-width: var(--content-max-width);
 		margin: 0 auto;
+		max-width: var(--content-max-width);
 		@include fade-in-animation;
 
 		&__counter {
@@ -88,8 +88,8 @@
 
 		// Short description — acts as a subtitle for the rule name
 		&__short {
-			font-size: $font-size-lg;
 			color: $color-primary;
+			font-size: $font-size-lg;
 			font-weight: 500;
 		}
 
@@ -110,13 +110,13 @@
 
 		// Individual example row
 		&__example {
-			display: flex;
 			align-items: center;
-			gap: $space-md;
-			padding: $space-sm $space-md;
 			background: rgba($color-primary, 0.04);
 			border-radius: $radius-md;
+			display: flex;
 			font-size: $font-size-sm;
+			gap: $space-md;
+			padding: $space-sm $space-md;
 		}
 	}
 </style>

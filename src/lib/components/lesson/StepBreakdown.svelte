@@ -50,32 +50,32 @@
 		display: flex;
 		flex-direction: column;
 		gap: $space-xl;
-		max-width: var(--content-max-width);
 		margin: 0 auto;
+		max-width: var(--content-max-width);
 		@include fade-in-animation;
 	}
 
 	// Vertical flow: word → arrow → syllable cards → pronunciation
 	.breakdown {
-		text-align: center;
+		align-items: center;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
 		gap: $space-lg;
+		text-align: center;
 
 		&__word {
 			color: $color-primary;
 		}
 
 		&__arrow {
-			font-size: $font-size-2xl;
 			color: $color-text-muted;
+			font-size: $font-size-2xl;
 		}
 
 		&__syllables {
 			display: flex;
-			gap: $space-md;
 			flex-wrap: wrap;
+			gap: $space-md;
 			justify-content: center;
 		}
 
@@ -86,9 +86,9 @@
 		}
 
 		&__pronunciation {
+			color: $color-primary;
 			font-size: $font-size-xl;
 			font-weight: 600;
-			color: $color-primary;
 		}
 
 		&__meaning {
@@ -99,9 +99,9 @@
 
 	// Individual syllable display cards
 	.syllable-card {
+		align-items: center;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
 		gap: $space-sm;
 		padding: $space-lg $space-xl;
 
@@ -110,8 +110,8 @@
 		}
 
 		&__sound {
-			font-size: $font-size-sm;
 			color: $color-text-light;
+			font-size: $font-size-sm;
 			font-weight: 500;
 		}
 	}

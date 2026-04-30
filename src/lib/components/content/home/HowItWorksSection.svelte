@@ -60,16 +60,16 @@
 
 <style lang="scss">
 	.method {
-		padding: clamp($space-xl, 4vw, $space-2xl);
-		border-radius: calc($radius-xl * 1.25);
 		background:
 			radial-gradient(circle at top left, rgba($color-accent, 0.14), transparent 34%),
 			linear-gradient(180deg, rgba($color-primary, 0.05), rgba(white, 0.88));
 		border: 1px solid rgba($color-primary, 0.08);
+		border-radius: calc($radius-xl * 1.25);
+		padding: clamp($space-xl, 4vw, $space-2xl);
 
 		&__header {
-			max-width: var(--text-max-width);
 			margin: 0 auto $space-2xl;
+			max-width: var(--text-max-width);
 		}
 
 		:global(.method__title) {
@@ -77,10 +77,10 @@
 		}
 
 		&__lead {
-			text-align: center;
 			color: $color-text-light;
 			font-size: $font-size-lg;
 			line-height: 1.65;
+			text-align: center;
 		}
 
 		:global(.method__steps) {
