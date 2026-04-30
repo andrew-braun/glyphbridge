@@ -24,6 +24,7 @@ Make Bits UI the default accessible primitive layer for site interactivity and s
 ## Decisions Applied
 
 - Bits UI is the preferred library for reusable interactive primitives and composite controls wherever possible.
+- Bits UI should be treated as the foundation layer for repeated interactive patterns, with app-owned wrappers in `src/lib/components/ui` becoming the preferred product-facing API once a pattern has clear reuse or styling needs.
 - Native HTML remains the right choice when a semantic element already covers the interaction without extra state or focus management.
 - Route files should keep orchestrating; reusable interaction behavior belongs in shared components and UI primitives.
 - Existing one-off interactive components should be evaluated for migration before new custom interaction patterns are introduced.
@@ -44,6 +45,8 @@ Make Bits UI the default accessible primitive layer for site interactivity and s
 - Migrated `src/lib/components/exercises/DrillExercise.svelte` to a Bits UI `RadioGroup`, keeping the existing correctness feedback and next-step flow.
 - Audited the locked lesson-card pattern and chose it as the next seam because both lesson list surfaces duplicated fake disabled-link behavior.
 - Migrated `src/routes/learn/+page.svelte` and `src/lib/components/content/lesson/LessonList.svelte` to Bits UI `Button.Root`, removing the duplicated `preventDefault` card handlers while keeping the existing card layouts and locked-state visuals.
+- Audited the alphabet page interaction and chose the letter-tile selection model as the next seam because the page still owned bespoke multi-grid selection state.
+- Migrated `src/routes/alphabet/+page.svelte` to Bits UI `ToggleGroup` for letter-tile selection while preserving the existing inline detail panel and deselect-on-second-click behavior.
 
 ## Progress
 
@@ -58,14 +61,22 @@ Make Bits UI the default accessible primitive layer for site interactivity and s
 - [x] Audit the locked lesson-card pattern as the next repeated interaction slice
 - [x] Implement the lesson-card migration with Bits UI `Button.Root`
 - [x] Validate the lesson-card migration slice with `pnpm check`
+- [x] Audit the alphabet letter-tile selection pattern as the next interaction slice
+- [x] Implement the alphabet selection migration with Bits UI `ToggleGroup`
+- [x] Validate the alphabet selection migration slice with `pnpm check`
 - [ ] Audit the next interactive component or repeated pattern for migration
 - [ ] Implement the next Bits UI wrapper or direct migration
 - [ ] Validate the next migration slice with focused accessibility and product checks
 
 ## Open Questions
 
-- Which current interactive components need thin shared wrappers versus direct Bits UI usage?
+- Which current interactive components should be extracted next into app-owned `ui/` wrappers versus kept as direct Bits UI composition for now?
 - Are there existing custom interaction patterns that should stay native because Bits UI would add unnecessary abstraction?
+
+## Next Extraction Candidates
+
+- Extract a shared radio or choice-group primitive from the `DrillExercise.svelte` migration so future answer lists and settings forms reuse the same Bits UI-backed styling and semantics.
+- Review whether the alphabet selection tiles should stay route-local or evolve into a reusable selectable-tile primitive once a second concrete use appears.
 
 ## Follow-Up
 

@@ -14,6 +14,7 @@
 - Keep `src/routes` responsible for routing, route data, and metadata.
 - Keep `src/lib/components` responsible for reusable rendering. Keep UI primitives domain-agnostic.
 - Prefer Bits UI for reusable interactive primitives and composite controls wherever possible instead of hand-rolling accessibility behavior.
+- For repeated interactive patterns, prefer app-owned wrappers in `src/lib/components/ui` that standardize the product API and styling on top of Bits UI.
 - Treat `src/lib/data` as the canonical lesson-content source of truth and `src/lib/stores` as client-state and persistence boundaries.
 - In Svelte 5, prefer `$derived` over `$effect` for computed state.
 - Prefer runes-mode APIs over legacy patterns in new code.

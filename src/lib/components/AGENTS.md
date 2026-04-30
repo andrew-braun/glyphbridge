@@ -23,6 +23,7 @@
 
 - Reuse existing primitives before introducing new wrappers.
 - Prefer Bits UI for reusable interactive primitives and composite controls wherever it fits the product behavior.
+- When a Bits UI-backed pattern has clear reuse or shared styling needs, extract an app-owned `ui/` primitive so feature components compose the wrapper instead of talking to Bits UI directly.
 - Wrap Bits UI primitives only when the wrapper adds a stable app-level API, consistent styling, or repeated composition value.
 - Do not wrap primitives just to rename props or move markup around once.
 

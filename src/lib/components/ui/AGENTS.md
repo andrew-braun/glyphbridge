@@ -3,6 +3,7 @@
 ## Purpose
 
 - Files in this directory are reusable design-system primitives for the whole app.
+- For repeated interactive patterns, this directory should be the default home for app-owned wrappers built on top of Bits UI.
 
 ## Boundaries
 
@@ -15,6 +16,7 @@
 - Expose only stable, reusable props.
 - Add variants only when they map to a deliberate design token or a repeated product need.
 - Prefer Bits UI for interactive primitives and composite controls wherever possible.
+- Prefer feature components consuming these wrappers over importing raw Bits UI directly once the product-level API is clear.
 - Keep plain native elements for cases where a headless primitive adds no value.
 - If using Bits UI, preserve its accessibility guarantees rather than fighting them with ad hoc markup.
 

@@ -18,7 +18,7 @@
 	} = $props();
 </script>
 
-<section class="page-hero" class:page-hero--left={align === "left"}>
+<section class={["page-hero", { "page-hero--left": align === "left" }]}>
 	{#if badge}
 		<span class="page-hero__badge badge badge--primary">{badge}</span>
 	{/if}

@@ -81,6 +81,7 @@ pnpm build
 - Claude compatibility lives in `CLAUDE.md`
 - Copilot guidance lives in `.github/copilot-instructions.md` and `.github/instructions/*.instructions.md`
 - Prefer Bits UI for reusable interactive primitives and composite controls wherever possible; keep plain native elements for simple semantic interactions.
+- For repeated interactive patterns, prefer app-owned wrappers in `src/lib/components/ui` so Bits UI stays the foundation while product styling and APIs stay consistent.
 - Instruction files must be updated whenever architecture, tooling, environment, or workflow assumptions change
 
 ## Security Posture

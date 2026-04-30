@@ -26,9 +26,9 @@
 	import { thaiPack } from "$lib/data/thai";
 	import { completeLesson } from "$lib/stores/progress";
 
-	import type { PageData } from "./$types";
+	import type { PageProps } from "./$types";
 
-	let { data }: { data: PageData } = $props();
+	let { data }: PageProps = $props();
 	const lesson = $derived(data.lesson);
 
 	// --- Step state machine ---

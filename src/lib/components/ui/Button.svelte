@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Button as BitsButton } from "bits-ui";
 	import type { Snippet } from "svelte";
 
 	type ButtonVariant = "primary" | "secondary" | "ghost" | "success";
@@ -33,32 +34,14 @@
 	const classes = $derived(
 		["btn", variantClass, sizeClass, fullWidthClass, className].filter(Boolean).join(" "),
 	);
-
-	function handleAnchorClick(event: MouseEvent) {
-		if (disabled) {
-			event.preventDefault();
-			return;
-		}
-		onclick?.(event);
-	}
-
-	function handleButtonClick(event: MouseEvent) {
-		onclick?.(event);
-	}
 </script>
 
 {#if href}
-	<a
-		href={disabled ? "#" : href}
-		class={classes}
-		aria-disabled={disabled}
-		tabindex={disabled ? -1 : undefined}
-		onclick={handleAnchorClick}
-	>
+	<BitsButton.Root {href} class={classes} {disabled} {onclick}>
 		{@render children?.()}
-	</a>
+	</BitsButton.Root>
 {:else}
-	<button class={classes} {type} {disabled} onclick={handleButtonClick}>
+	<BitsButton.Root class={classes} {type} {disabled} {onclick}>
 		{@render children?.()}
-	</button>
+	</BitsButton.Root>
 {/if}

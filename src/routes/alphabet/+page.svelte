@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Button from "$lib/components/ui/Button.svelte";
 	import Progress from "$lib/components/ui/Progress.svelte";
+	import ToggleTiles, { type ToggleTileOption } from "$lib/components/ui/ToggleTiles.svelte";
 	import { thaiPack } from "$lib/data/thai";
 	import type { Letter } from "$lib/data/types";
 	import { knownLetters } from "$lib/stores/progress";
@@ -18,8 +19,64 @@
 		return $knownLetters.includes(char);
 	}
 
-	// Tracks which letter tile is expanded in the detail panel; null means panel is closed
-	let selectedLetter = $state<Letter | null>(null);
+	// Tracks which letter tile is selected; empty means the detail panel is closed
+	let selectedCharacter = $state("");
+	const selectedLetter = $derived(
+		selectedCharacter === ""
+			? null
+			: (allLetters.find((letter) => letter.character === selectedCharacter) ?? null),
+	);
+
+	const letterSections = $derived([
+		{
+			headingId: "alphabet-consonants-heading",
+			title: "Consonants",
+			options: consonants.map<ToggleTileOption>((letter) => {
+				const known = isKnown(letter.character);
+				return {
+					value: letter.character,
+					primaryLabel: letter.character,
+					secondaryLabel: known ? letter.romanization : "?",
+					disabled: !known,
+					primaryIsThai: true,
+					variant: known ? "known" : "default",
+					secondaryTone: known ? "default" : "muted",
+				};
+			}),
+		},
+		{
+			headingId: "alphabet-vowels-heading",
+			title: "Vowels",
+			options: vowels.map<ToggleTileOption>((letter) => {
+				const known = isKnown(letter.character);
+				return {
+					value: letter.character,
+					primaryLabel: letter.character,
+					secondaryLabel: known ? letter.romanization : "?",
+					disabled: !known,
+					primaryIsThai: true,
+					variant: known ? "known" : "default",
+					secondaryTone: known ? "default" : "muted",
+				};
+			}),
+		},
+		{
+			headingId: "alphabet-tone-marks-heading",
+			title: "Tone Marks",
+			options: toneMarks.map<ToggleTileOption>((letter) => {
+				const known = isKnown(letter.character);
+				return {
+					value: letter.character,
+					primaryLabel: letter.character,
+					secondaryLabel: known ? letter.romanization : "?",
+					disabled: !known,
+					primaryIsThai: true,
+					variant: known ? "known" : "default",
+					secondaryTone: known ? "default" : "muted",
+				};
+			}),
+		},
+	]);
 </script>
 
 <svelte:head>
@@ -56,80 +113,16 @@
 		/>
 	</div>
 
-	<!-- Consonant grid -->
-	<section class="letter-section">
-		<h2>Consonants</h2>
-		<div class="letter-grid">
-			{#each consonants as letter}
-				<!-- Clicking a known tile toggles its selection; unknown tiles are disabled -->
-				<button
-					class="letter-tile"
-					class:letter-tile--known={isKnown(letter.character)}
-					class:letter-tile--selected={selectedLetter?.character === letter.character}
-					onclick={() =>
-						(selectedLetter =
-							selectedLetter?.character === letter.character ? null : letter)}
-					disabled={!isKnown(letter.character)}
-				>
-					<span class="letter-tile__char thai">{letter.character}</span>
-					{#if isKnown(letter.character)}
-						<span class="letter-tile__sound">{letter.romanization}</span>
-					{:else}
-						<span class="letter-tile__lock">?</span>
-					{/if}
-				</button>
-			{/each}
-		</div>
-	</section>
-
-	<!-- Vowel grid (same tile structure as consonants) -->
-	<section class="letter-section">
-		<h2>Vowels</h2>
-		<div class="letter-grid">
-			{#each vowels as letter}
-				<button
-					class="letter-tile"
-					class:letter-tile--known={isKnown(letter.character)}
-					class:letter-tile--selected={selectedLetter?.character === letter.character}
-					onclick={() =>
-						(selectedLetter =
-							selectedLetter?.character === letter.character ? null : letter)}
-					disabled={!isKnown(letter.character)}
-				>
-					<span class="letter-tile__char thai">{letter.character}</span>
-					{#if isKnown(letter.character)}
-						<span class="letter-tile__sound">{letter.romanization}</span>
-					{:else}
-						<span class="letter-tile__lock">?</span>
-					{/if}
-				</button>
-			{/each}
-		</div>
-	</section>
-
-	<section class="letter-section">
-		<h2>Tone Marks</h2>
-		<div class="letter-grid">
-			{#each toneMarks as letter}
-				<button
-					class="letter-tile"
-					class:letter-tile--known={isKnown(letter.character)}
-					class:letter-tile--selected={selectedLetter?.character === letter.character}
-					onclick={() =>
-						(selectedLetter =
-							selectedLetter?.character === letter.character ? null : letter)}
-					disabled={!isKnown(letter.character)}
-				>
-					<span class="letter-tile__char thai">{letter.character}</span>
-					{#if isKnown(letter.character)}
-						<span class="letter-tile__sound">{letter.romanization}</span>
-					{:else}
-						<span class="letter-tile__lock">?</span>
-					{/if}
-				</button>
-			{/each}
-		</div>
-	</section>
+	{#each letterSections as section}
+		<section class="letter-section">
+			<h2 id={section.headingId}>{section.title}</h2>
+			<ToggleTiles
+				labelledBy={section.headingId}
+				options={section.options}
+				bind:value={selectedCharacter}
+			/>
+		</section>
+	{/each}
 
 	<!-- Detail panel: shown when a known letter tile is selected -->
 	{#if selectedLetter}
@@ -137,7 +130,7 @@
 			<Button
 				variant="ghost"
 				class="detail-panel__close"
-				onclick={() => (selectedLetter = null)}
+				onclick={() => (selectedCharacter = "")}
 			>
 				&times;
 			</Button>
@@ -204,66 +197,6 @@
 		}
 	}
 
-	// Responsive grid: tiles auto-fill at a minimum of 80px wide
-	.letter-grid {
-		display: grid;
-		gap: $space-md;
-		grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-	}
-
-	// Individual letter tile with known/unknown/selected states
-	.letter-tile {
-		align-items: center;
-		background: $color-bg-card;
-		border: 2px solid $color-border;
-		border-radius: $radius-lg;
-		cursor: pointer;
-		display: flex;
-		flex-direction: column;
-		font-family: inherit;
-		gap: $space-xs;
-		padding: $space-md;
-		transition: all $transition-fast;
-
-		&:disabled {
-			cursor: default;
-			opacity: 0.4;
-		}
-
-		&--known {
-			background: rgba($color-primary, 0.04);
-			border-color: rgba($color-primary, 0.3);
-
-			&:hover {
-				border-color: $color-primary;
-				box-shadow: $shadow-md;
-				transform: translateY(-2px);
-			}
-		}
-
-		&--selected {
-			background: rgba($color-primary, 0.08);
-			border-color: $color-primary !important;
-			box-shadow: $shadow-lg;
-		}
-
-		&__char {
-			color: $color-primary;
-			font-size: $font-size-2xl;
-		}
-
-		&__sound {
-			color: $color-text-light;
-			font-size: $font-size-xs;
-			font-weight: 600;
-		}
-
-		&__lock {
-			color: $color-text-muted;
-			font-size: $font-size-xs;
-		}
-	}
-
 	// Expandable detail panel: appears below the grids when a known tile is selected
 	.detail-panel {
 		align-items: flex-start;
@@ -313,10 +246,6 @@
 
 	// Mobile: smaller tiles and stacked detail panel layout
 	@media (max-width: $bp-sm) {
-		.letter-grid {
-			grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
-		}
-
 		.detail-panel {
 			align-items: center;
 			flex-direction: column;

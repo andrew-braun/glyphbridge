@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { Button as BitsButton } from "bits-ui";
-
+	import CardLink from "$lib/components/ui/CardLink.svelte";
 	import Heading from "$lib/components/ui/Heading.svelte";
 	import { thaiPack } from "$lib/data/thai";
 	import type { Word } from "$lib/data/types";
@@ -32,7 +31,7 @@
 			{@const isCompleted = knownWords.some((w) => w.thai === lesson.anchorWord.thai)}
 			{@const isCurrent = lesson.id === currentLessonId}
 			{@const isLocked = lesson.id > currentLessonId}
-			<BitsButton.Root
+			<CardLink
 				href={`/learn/${lesson.id}`}
 				disabled={isLocked}
 				class={getLessonItemClasses(isCompleted, isCurrent, isLocked)}
@@ -60,7 +59,7 @@
 						<span class="lesson-item__letter thai thai--sm">{letter.character}</span>
 					{/each}
 				</div>
-			</BitsButton.Root>
+			</CardLink>
 		{/each}
 	</div>
 </section>

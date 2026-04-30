@@ -12,18 +12,23 @@
 		<div class="nav__links">
 			<a
 				href="/learn"
-				class="nav__link"
-				class:active={page.url.pathname.startsWith("/learn")}
+				class={["nav__link", { active: page.url.pathname.startsWith("/learn") }]}
 			>
 				Learn
 			</a>
-			<a href="/alphabet" class="nav__link" class:active={page.url.pathname === "/alphabet"}>
+			<a
+				href="/alphabet"
+				class={["nav__link", { active: page.url.pathname === "/alphabet" }]}
+			>
 				Letters <span class="nav__count">{$knownLetters.length}</span>
 			</a>
-			<a href="/words" class="nav__link" class:active={page.url.pathname === "/words"}>
+			<a href="/words" class={["nav__link", { active: page.url.pathname === "/words" }]}>
 				Words <span class="nav__count">{$knownWords.length}</span>
 			</a>
-			<a href="/practice" class="nav__link" class:active={page.url.pathname === "/practice"}>
+			<a
+				href="/practice"
+				class={["nav__link", { active: page.url.pathname === "/practice" }]}
+			>
 				Practice
 			</a>
 		</div>

@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { Button as BitsButton } from "bits-ui";
-
+	import CardLink from "$lib/components/ui/CardLink.svelte";
 	import { thaiPack } from "$lib/data/thai";
 	import { currentLessonId } from "$lib/stores/progress";
 
@@ -47,7 +46,7 @@
 			{@const isCurrent = lesson.id === $currentLessonId}
 			{@const isUnlocked = lesson.id <= $currentLessonId}
 			{@const isDone = lesson.id < $currentLessonId}
-			<BitsButton.Root
+			<CardLink
 				href={`/learn/${lesson.id}`}
 				disabled={!isUnlocked}
 				class={getLessonCardClasses(isCurrent, isUnlocked, isDone)}
@@ -74,7 +73,7 @@
 				{#if !isUnlocked}
 					<div class="lesson-card__overlay">&#128274; Complete previous lesson</div>
 				{/if}
-			</BitsButton.Root>
+			</CardLink>
 		{/each}
 	</div>
 </div>

@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { RadioGroup, useId } from "bits-ui";
-
 	import Button from "$lib/components/ui/Button.svelte";
+	import RadioButtons, { type RadioButtonOption } from "$lib/components/ui/RadioButtons.svelte";
 	import { isThai } from "$lib/utils/thai";
 
 	let {
@@ -20,7 +19,8 @@
 		nextLabel?: string;
 	} = $props();
 
-	const promptId = useId();
+	const uid = $props.id();
+	const promptId = `drill-prompt-${uid}`;
 
 	let selectedValue = $state("");
 	let answered = $state(false);
@@ -39,18 +39,21 @@
 		onAnswer(Number(nextValue) === correctIndex);
 	}
 
-	function getOptionClasses(index: number, checked: boolean) {
-		return [
-			"drill__option",
-			checked ? "drill__option--selected" : "",
-			answered && index === correctIndex ? "drill__option--correct" : "",
-			answered && selectedAnswer === index && index !== correctIndex
-				? "drill__option--wrong"
-				: "",
-		]
-			.filter(Boolean)
-			.join(" ");
-	}
+	const radioOptions = $derived(
+		options.map<RadioButtonOption>((option, index) => ({
+			value: index.toString(),
+			label: option,
+			disabled: answered,
+			isThai: isThai(option),
+			tone: answered
+				? index === correctIndex
+					? "correct"
+					: selectedAnswer === index
+						? "wrong"
+						: "default"
+				: "default",
+		})),
+	);
 
 	function handleNext() {
 		selectedValue = "";
@@ -62,29 +65,21 @@
 <div class="drill">
 	<h2 class="drill__prompt" id={promptId}>{prompt}</h2>
 
-	<RadioGroup.Root
-		class="drill__options"
-		aria-labelledby={promptId}
+	<RadioButtons
+		labelledBy={promptId}
+		options={radioOptions}
 		bind:value={getSelectedValue, setSelectedValue}
-	>
-		{#each options as option, i}
-			<RadioGroup.Item value={i.toString()} disabled={answered}>
-				{#snippet child({ props, checked })}
-					<button {...props} class={getOptionClasses(i, checked)}>
-						<span class="drill__option-text" class:thai={isThai(option)}>
-							{option}
-						</span>
-					</button>
-				{/snippet}
-			</RadioGroup.Item>
-		{/each}
-	</RadioGroup.Root>
+	/>
 
 	{#if answered}
 		<div
-			class="drill__feedback"
-			class:drill__feedback--correct={isCorrect}
-			class:drill__feedback--wrong={!isCorrect}
+			class={[
+				"drill__feedback",
+				{
+					"drill__feedback--correct": isCorrect,
+					"drill__feedback--wrong": !isCorrect,
+				},
+			]}
 		>
 			{#if isCorrect}
 				<strong>Correct!</strong>
@@ -111,29 +106,8 @@
 			text-align: center;
 		}
 
-		&__options {
-			display: grid;
-			gap: $space-md;
-			grid-template-columns: 1fr 1fr;
-		}
-
-		&__option {
-			@include drill-option;
-			@include drill-option-states;
-
-			&-text.thai {
-				font-size: $font-size-thai;
-			}
-		}
-
 		&__feedback {
 			@include drill-feedback;
-		}
-	}
-
-	@media (max-width: $bp-sm) {
-		.drill__options {
-			grid-template-columns: 1fr;
 		}
 	}
 </style>

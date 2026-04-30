@@ -11,6 +11,7 @@ applyTo: "src/lib/components/**/*.svelte"
 - Reuse existing primitives before creating new wrappers.
 - Use semantic HTML and accessible interactions by default.
 - Prefer Bits UI for interactive primitives and composite controls wherever possible; fall back to custom interaction code only when native HTML already covers the behavior or Bits UI is not a fit.
+- Once a Bits UI-backed interaction pattern shows real reuse or shared styling needs, extract it into an app-owned `src/lib/components/ui` primitive instead of repeating raw Bits UI composition in feature components.
 - Prefer `$derived` over `$effect` for computed state.
 - Prefer snippets and render tags over legacy slot patterns in new components.
 - Avoid legacy Svelte APIs when a runes-mode equivalent exists.
