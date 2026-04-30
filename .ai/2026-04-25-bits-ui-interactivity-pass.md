@@ -42,6 +42,8 @@ Make Bits UI the default accessible primitive layer for site interactivity and s
 - Removed the old global `.progress-bar` helper after the call sites moved to the new component.
 - Audited the next candidate set and chose drill answer selection as the next Bits UI seam because `DrillExercise` owned bespoke selection state and keyboard semantics.
 - Migrated `src/lib/components/exercises/DrillExercise.svelte` to a Bits UI `RadioGroup`, keeping the existing correctness feedback and next-step flow.
+- Audited the locked lesson-card pattern and chose it as the next seam because both lesson list surfaces duplicated fake disabled-link behavior.
+- Migrated `src/routes/learn/+page.svelte` and `src/lib/components/content/lesson/LessonList.svelte` to Bits UI `Button.Root`, removing the duplicated `preventDefault` card handlers while keeping the existing card layouts and locked-state visuals.
 
 ## Progress
 
@@ -53,6 +55,9 @@ Make Bits UI the default accessible primitive layer for site interactivity and s
 - [x] Audit the next interaction slice and choose drill answer selection for migration
 - [x] Implement the next Bits UI migration in `DrillExercise.svelte` with `RadioGroup`
 - [x] Validate the drill migration slice with `pnpm check`
+- [x] Audit the locked lesson-card pattern as the next repeated interaction slice
+- [x] Implement the lesson-card migration with Bits UI `Button.Root`
+- [x] Validate the lesson-card migration slice with `pnpm check`
 - [ ] Audit the next interactive component or repeated pattern for migration
 - [ ] Implement the next Bits UI wrapper or direct migration
 - [ ] Validate the next migration slice with focused accessibility and product checks

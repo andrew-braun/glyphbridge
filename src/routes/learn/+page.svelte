@@ -1,11 +1,19 @@
 <script lang="ts">
+	import { Button as BitsButton } from "bits-ui";
+
 	import { thaiPack } from "$lib/data/thai";
 	import { currentLessonId } from "$lib/stores/progress";
 
-	function handleLessonCardClick(event: MouseEvent, isUnlocked: boolean) {
-		if (!isUnlocked) {
-			event.preventDefault();
-		}
+	function getLessonCardClasses(isCurrent: boolean, isUnlocked: boolean, isDone: boolean) {
+		return [
+			"lesson-card",
+			"card",
+			isCurrent ? "lesson-card--current" : "",
+			!isUnlocked ? "lesson-card--locked" : "",
+			isDone ? "lesson-card--done" : "",
+		]
+			.filter(Boolean)
+			.join(" ");
 	}
 </script>
 
@@ -38,15 +46,11 @@
 			<!-- Derive state flags: isCurrent marks the next lesson to do, isUnlocked allows navigation -->
 			{@const isCurrent = lesson.id === $currentLessonId}
 			{@const isUnlocked = lesson.id <= $currentLessonId}
-			<a
-				href={isUnlocked ? `/learn/${lesson.id}` : "#"}
-				class="lesson-card card"
-				class:lesson-card--current={isCurrent}
-				class:lesson-card--locked={!isUnlocked}
-				class:lesson-card--done={lesson.id < $currentLessonId}
-				aria-disabled={!isUnlocked}
-				tabindex={!isUnlocked ? -1 : undefined}
-				onclick={(event) => handleLessonCardClick(event, isUnlocked)}
+			{@const isDone = lesson.id < $currentLessonId}
+			<BitsButton.Root
+				href={`/learn/${lesson.id}`}
+				disabled={!isUnlocked}
+				class={getLessonCardClasses(isCurrent, isUnlocked, isDone)}
 			>
 				<!-- Header badges: stage number + completion state (Complete / Current / none) -->
 				<div class="lesson-card__header">
@@ -70,7 +74,7 @@
 				{#if !isUnlocked}
 					<div class="lesson-card__overlay">&#128274; Complete previous lesson</div>
 				{/if}
-			</a>
+			</BitsButton.Root>
 		{/each}
 	</div>
 </div>
@@ -97,7 +101,7 @@
 	}
 
 	// Lesson card: three visual states via BEM modifiers (--current, --done, --locked)
-	.lesson-card {
+	:global(.lesson-card) {
 		color: inherit;
 		display: flex;
 		flex-direction: column;
@@ -105,50 +109,50 @@
 		overflow: hidden;
 		position: relative;
 		text-decoration: none;
+	}
 
-		&--current {
-			border: 2px solid $color-primary;
-		}
+	:global(.lesson-card--current) {
+		border: 2px solid $color-primary;
+	}
 
-		&--done {
-			border-left: 4px solid $color-success;
-		}
+	:global(.lesson-card--done) {
+		border-left: 4px solid $color-success;
+	}
 
-		&--locked {
-			cursor: not-allowed;
-			opacity: 0.5;
-		}
+	:global(.lesson-card--locked) {
+		cursor: not-allowed;
+		opacity: 0.5;
+	}
 
-		&__header {
-			display: flex;
-			gap: $space-sm;
-		}
+	:global(.lesson-card) .lesson-card__header {
+		display: flex;
+		gap: $space-sm;
+	}
 
-		&__word {
-			color: $color-primary;
-		}
+	:global(.lesson-card) .lesson-card__word {
+		color: $color-primary;
+	}
 
-		&__meaning {
-			color: $color-text-light;
-			font-size: $font-size-sm;
-		}
+	:global(.lesson-card) .lesson-card__meaning {
+		color: $color-text-light;
+		font-size: $font-size-sm;
+	}
 
-		&__new-letters {
-			display: flex;
-			gap: $space-sm;
-			margin-top: $space-sm;
-		}
+	:global(.lesson-card) .lesson-card__new-letters {
+		display: flex;
+		gap: $space-sm;
+		margin-top: $space-sm;
+	}
 
-		&__overlay {
-			align-items: center;
-			background: rgba(255, 255, 255, 0.7);
-			color: $color-text-light;
-			display: flex;
-			font-weight: 600;
-			inset: 0;
-			justify-content: center;
-			position: absolute;
-		}
+	:global(.lesson-card) .lesson-card__overlay {
+		align-items: center;
+		background: rgba(255, 255, 255, 0.7);
+		color: $color-text-light;
+		display: flex;
+		font-weight: 600;
+		inset: 0;
+		justify-content: center;
+		position: absolute;
 	}
 
 	// Small square chip showing a single Thai character
