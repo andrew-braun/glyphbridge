@@ -93,6 +93,20 @@ export interface Word {
 }
 
 /**
+ * A lesson-scoped vocabulary entry. The current runtime still keeps one featured
+ * anchor word, but lessons can now also carry supporting words for future review
+ * and drill expansion.
+ */
+export interface LessonVocabularyEntry {
+	/** Whether this word is the featured lesson anchor or a supporting word */
+	role: "anchor" | "support";
+	/** Whether this word should be eligible for vocabulary-focused drills */
+	drillTarget: boolean;
+	/** The reusable word payload itself */
+	word: Word;
+}
+
+/**
  * A single lesson in the curriculum. Each lesson is anchored around one real-world
  * Thai word, introduces new letters and reading rules, and concludes with
  * interactive drills.
@@ -106,6 +120,8 @@ export interface Lesson {
 	title: string;
 	/** The focal vocabulary word that the lesson is built around */
 	anchorWord: Word;
+	/** Ordered vocabulary unlocked or reinforced through this lesson */
+	vocabulary: LessonVocabularyEntry[];
 	/** New Thai letters introduced for the first time in this lesson */
 	newLetters: Letter[];
 	/** Phonetic or orthographic rules taught in this lesson */
@@ -138,7 +154,7 @@ export interface LessonProgress {
 export interface AppProgress {
 	/** All Thai characters the learner has encountered and practiced so far */
 	knownLetters: string[];
-	/** All anchor words the learner has completed lessons for */
+	/** All lesson vocabulary words the learner has unlocked through completed lessons */
 	knownWords: Word[];
 	/** Per-lesson completion records with scores and timestamps */
 	lessonProgress: LessonProgress[];

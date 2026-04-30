@@ -131,9 +131,9 @@ The development of a Thai reading track that identifies high-frequency letters a
 4. **Leverage Loanwords for Complexity**: Use words like "Bus," "Check," and "Bank" to teach complex final sounds and silent markers.21
 5. **Target Environmental Print**: The ultimate validation of the app is whether a user can walk down a Thai street and read the signs. Select vocabulary that appears on red prohibitory signs, blue mandatory signs, and yellow warning signs.36
 
-# ---
+---
 
-**Appendix: Extended Decodable Vocabulary Lists**
+## Appendix: Extended Decodable Vocabulary Lists
 
 The following lists provide additional word options for each curricular level. To minimize cognitive load, words in earlier levels strictly adhere to the introduced characters. Higher levels are cumulative.
 
@@ -287,7 +287,7 @@ The following lists provide additional word options for each curricular level. T
 | **ฟรีก**        | freek              | (Proper Name) | Personal address.23        |
 | **เน็ต**        | net                | Internet      | SIM card packaging.29      |
 
-#### **Works cited**
+### **Works cited**
 
 1. Alphabetic principle | Education | Research Starters \- EBSCO, accessed April 22, 2026, [https://www.ebsco.com/research-starters/education/alphabetic-principle](https://www.ebsco.com/research-starters/education/alphabetic-principle)
 2. The Role of Input Frequency and Different Proficiency Levels on the ..., accessed April 22, 2026, [https://www.researchgate.net/publication/388617427_The_Role_of_Input_Frequency_and_Different_Proficiency_Levels_on_the_Perception_of_English_Nominal_Suffixes_by_L1_Thai_Learners_A_Case_of_the_Usage-Based_Account](https://www.researchgate.net/publication/388617427_The_Role_of_Input_Frequency_and_Different_Proficiency_Levels_on_the_Perception_of_English_Nominal_Suffixes_by_L1_Thai_Learners_A_Case_of_the_Usage-Based_Account)

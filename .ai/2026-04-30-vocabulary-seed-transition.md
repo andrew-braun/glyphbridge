@@ -2,7 +2,7 @@
 
 - Start date: 2026-04-30
 - Owner: GitHub Copilot
-- Status: in-progress
+- Status: completed
 
 ## Goal
 
@@ -32,3 +32,16 @@ lesson-plus-vocabulary model without breaking the current runtime lesson flow.
 - Validate the new migration with `pnpm exec supabase db reset --yes`.
 - Validate runtime type and Svelte changes with `pnpm check`.
 - Validate touched markdown trackers with `markdownlint-cli2`.
+
+## Implemented
+
+- Added `supabase/migrations/20260430110000_lesson_vocabulary_tables.sql`.
+- Added the first runtime supporting-vocabulary slice to `src/lib/data/thai.ts`.
+- Extended `src/lib/data/types.ts` with structured lesson vocabulary.
+- Updated `src/lib/stores/progress.ts` so completed lessons unlock anchor and support words.
+- Updated the completion step UI to show supporting words unlocked by the lesson.
+
+## Validation
+
+- Passed: `pnpm exec supabase db reset --yes`
+- Passed: `pnpm check`

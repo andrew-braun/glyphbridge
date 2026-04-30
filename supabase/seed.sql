@@ -1,3 +1,5 @@
 -- Seed data is intentionally empty for now.
 -- The first curriculum seed should load the current Thai course after the
 -- baseline schema is verified locally.
+-- That first seed now needs to populate both the featured anchor projection and the
+-- reusable lesson vocabulary tables.

@@ -22,7 +22,8 @@
 		"knip": "knip",
 		"stylelint": "stylelint \"src/**/*.{css,scss,svelte}\" --cache --cache-location .stylelintcache",
 		"stylelint:fix": "stylelint \"src/**/*.{css,scss,svelte}\" --config ./stylelint.sort.config.mjs --fix --cache --cache-location .stylelintcache",
-		"quality:fix": "pnpm format:check && pnpm markdownlint && pnpm lint && pnpm stylelint && pnpm check",
+		"quality:check": "pnpm format:check && pnpm markdownlint && pnpm lint && pnpm stylelint && pnpm check",
+		"quality:fix": "pnpm format && pnpm markdownlint:fix && pnpm lint:fix && pnpm stylelint:fix && pnpm check",
 		"format": "prettier --write .",
 		"format:check": "prettier --check ."
 	},

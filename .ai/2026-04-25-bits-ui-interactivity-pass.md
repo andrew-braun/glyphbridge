@@ -40,6 +40,8 @@ Make Bits UI the default accessible primitive layer for site interactivity and s
 - Added `src/lib/components/ui/Progress.svelte` as a Bits UI-backed shared primitive.
 - Migrated the lesson flow header, alphabet page, practice session header, and home stats overview to the shared progress primitive.
 - Removed the old global `.progress-bar` helper after the call sites moved to the new component.
+- Audited the next candidate set and chose drill answer selection as the next Bits UI seam because `DrillExercise` owned bespoke selection state and keyboard semantics.
+- Migrated `src/lib/components/exercises/DrillExercise.svelte` to a Bits UI `RadioGroup`, keeping the existing correctness feedback and next-step flow.
 
 ## Progress
 
@@ -48,7 +50,10 @@ Make Bits UI the default accessible primitive layer for site interactivity and s
 - [x] Audit the first reusable interaction pattern and choose progress as the initial migration slice
 - [x] Implement a Bits UI-backed shared `Progress` primitive and migrate the current progress bar call sites
 - [x] Validate the first migration slice with `pnpm check`
-- [ ] Audit additional interactive components for migration candidates
+- [x] Audit the next interaction slice and choose drill answer selection for migration
+- [x] Implement the next Bits UI migration in `DrillExercise.svelte` with `RadioGroup`
+- [x] Validate the drill migration slice with `pnpm check`
+- [ ] Audit the next interactive component or repeated pattern for migration
 - [ ] Implement the next Bits UI wrapper or direct migration
 - [ ] Validate the next migration slice with focused accessibility and product checks
 

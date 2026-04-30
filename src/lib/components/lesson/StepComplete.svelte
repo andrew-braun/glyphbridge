@@ -24,6 +24,8 @@
 		onNextLesson: () => void;
 		hasNextLesson: boolean;
 	} = $props();
+
+	const supportingWords = $derived(lesson.vocabulary.filter((entry) => entry.role === "support"));
 </script>
 
 <div class="step">
@@ -56,6 +58,21 @@
 			</div>
 		</div>
 
+		{#if supportingWords.length > 0}
+			<div class="complete__vocabulary">
+				<h3>More words from this lesson:</h3>
+				<div class="complete__vocabulary-grid">
+					{#each supportingWords as entry}
+						<div class="complete__vocabulary-card">
+							<span class="thai thai--sm">{entry.word.thai}</span>
+							<span>{entry.word.pronunciation}</span>
+							<span>{entry.word.meaning}</span>
+						</div>
+					{/each}
+				</div>
+			</div>
+		{/if}
+
 		<!-- Navigation actions -->
 		<div class="complete__actions">
 			{#if hasNextLesson}
@@ -77,26 +94,26 @@
 		display: flex;
 		flex-direction: column;
 		gap: $space-xl;
-		max-width: var(--content-max-width);
 		margin: 0 auto;
+		max-width: var(--content-max-width);
 		@include fade-in-animation;
 	}
 
 	// Celebration card — centered layout with stacked elements
 	.complete {
-		text-align: center;
+		align-items: center;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
 		gap: $space-xl;
+		text-align: center;
 
 		&__emoji {
 			@include empty-state-icon;
 		}
 
 		&__word {
-			font-size: $font-size-lg;
 			color: $color-text-light;
+			font-size: $font-size-lg;
 		}
 
 		// Score display — big green number + label
@@ -113,29 +130,53 @@
 			}
 		}
 
+		&__vocabulary {
+			width: 100%;
+
+			h3 {
+				margin-bottom: $space-md;
+			}
+		}
+
 		&__letter-grid {
 			display: flex;
+			flex-wrap: wrap;
 			gap: $space-lg;
 			justify-content: center;
-			flex-wrap: wrap;
 		}
 
 		// Individual letter chip
 		&__letter {
-			display: flex;
-			flex-direction: column;
 			align-items: center;
-			gap: $space-xs;
-			padding: $space-md;
 			background: rgba($color-primary, 0.06);
 			border-radius: $radius-lg;
+			display: flex;
+			flex-direction: column;
+			gap: $space-xs;
 			min-width: 80px;
+			padding: $space-md;
+		}
+
+		&__vocabulary-grid {
+			display: grid;
+			gap: $space-md;
+			grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+		}
+
+		&__vocabulary-card {
+			background: rgba($color-accent, 0.06);
+			border: 1px solid $color-border;
+			border-radius: $radius-lg;
+			display: flex;
+			flex-direction: column;
+			gap: $space-xs;
+			padding: $space-md;
 		}
 
 		&__actions {
 			display: flex;
-			gap: $space-md;
 			flex-wrap: wrap;
+			gap: $space-md;
 			justify-content: center;
 		}
 	}

@@ -28,9 +28,10 @@ const lessonById = new Map(lessons.map((lesson) => [lesson.id, lesson]));
 const knownLetterCharacters = new Set(
 	lessons.flatMap((lesson) => lesson.newLetters.map((letter) => letter.character)),
 );
-const knownWordThaiMap = new Map(
-	lessons.map((lesson) => [lesson.anchorWord.thai, lesson.anchorWord]),
-);
+const lessonVocabularyWords = lessons.flatMap((lesson) => {
+	return lesson.vocabulary.map((entry) => entry.word);
+});
+const knownWordThaiMap = new Map(lessonVocabularyWords.map((word) => [word.thai, word]));
 
 /** Returns a blank AppProgress object representing a brand-new learner */
 function createInitialProgress(): AppProgress {
@@ -161,13 +162,24 @@ function collectKnownWords(storedKnownWords: Word[], lessonProgress: LessonProgr
 	);
 	const storedWordSet = new Set(storedKnownWords.map((word) => word.thai));
 	const normalized: Word[] = [];
+	const normalizedWordSet = new Set<string>();
 
 	for (const lesson of lessons) {
-		if (!completedLessonIds.has(lesson.id) && !storedWordSet.has(lesson.anchorWord.thai)) {
+		const lessonWords = lesson.vocabulary.map((entry) => entry.word);
+		const shouldIncludeLessonWords =
+			completedLessonIds.has(lesson.id) ||
+			lessonWords.some((word) => storedWordSet.has(word.thai));
+
+		if (!shouldIncludeLessonWords) {
 			continue;
 		}
 
-		normalized.push(lesson.anchorWord);
+		for (const word of lessonWords) {
+			if (normalizedWordSet.has(word.thai)) continue;
+
+			normalizedWordSet.add(word.thai);
+			normalized.push(word);
+		}
 	}
 
 	return normalized;
@@ -277,7 +289,7 @@ ensureProgressInitialized();
 
 /** Derived store: array of all Thai characters the learner has encountered */
 export const knownLetters = derived(progress, ($p) => $p.knownLetters);
-/** Derived store: array of all anchor words from completed lessons */
+/** Derived store: array of all lesson vocabulary unlocked from completed lessons */
 export const knownWords = derived(progress, ($p) => $p.knownWords);
 /** Derived store: the numeric ID of the learner's current (or next) lesson */
 export const currentLessonId = derived(progress, ($p) => $p.currentLessonId);
@@ -289,7 +301,7 @@ export const totalLessons = lessons.length;
  * Marks a lesson as completed and updates the learner's progress.
  * This function:
  *   1. Adds any newly introduced letters to the known letters list
- *   2. Adds the lesson's anchor word to the known words list
+ *   2. Adds the lesson's vocabulary words to the known words list
  *   3. Records (or updates) the lesson's completion status and drill score
  *   4. Advances the current lesson pointer to the next available lesson
  *
@@ -308,9 +320,15 @@ export function completeLesson(lessonId: number, drillScore: number) {
 			}
 		}
 
-		const knownWords = $p.knownWords.find((word) => word.thai === lesson.anchorWord.thai)
-			? $p.knownWords
-			: [...$p.knownWords, lesson.anchorWord];
+		const knownWords = [...$p.knownWords];
+		const knownWordSet = new Set(knownWords.map((word) => word.thai));
+
+		for (const entry of lesson.vocabulary) {
+			if (knownWordSet.has(entry.word.thai)) continue;
+
+			knownWordSet.add(entry.word.thai);
+			knownWords.push(entry.word);
+		}
 
 		const lessonProgressEntry: LessonProgress = {
 			lessonId,

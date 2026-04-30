@@ -13,9 +13,29 @@
  *   Stage 4 - Sibilants, short vowels, and price/menu language
  *   Stage 5 - High-class survival words, silent carriers, and food lexicon
  */
-import type { LanguagePack, Lesson } from "./types";
+import type { LanguagePack, Lesson, Word } from "./types";
 
-const lessons: Lesson[] = [
+type BaseLesson = Omit<Lesson, "vocabulary">;
+
+function createWord(
+	thai: string,
+	meaning: string,
+	pronunciation: string,
+	category: Word["category"],
+	syllables: Word["syllables"],
+	contextNote?: string,
+): Word {
+	return {
+		thai,
+		meaning,
+		pronunciation,
+		category,
+		syllables,
+		contextNote,
+	};
+}
+
+const baseLessons: BaseLesson[] = [
 	{
 		id: 1,
 		stage: 1,
@@ -1210,6 +1230,181 @@ const lessons: Lesson[] = [
 		reviewLetters: ["ด", "ต", "ข", "ห", "อ", "ม", "า"],
 	},
 ];
+
+// The first vocabulary slice stays tight: each lesson keeps its featured anchor word
+// and adds a small set of supporting words that reinforce the same grapheme patterns.
+const supportingVocabularyByLessonId: Record<number, Word[]> = {
+	1: [
+		createWord(
+			"มา",
+			"to come",
+			"maa",
+			"daily",
+			[{ thai: "มา", sound: "maa" }],
+			"A basic movement verb you will hear in invitations, directions, and casual conversation.",
+		),
+		createWord(
+			"กา",
+			"crow",
+			"gaa",
+			"daily",
+			[{ thai: "กา", sound: "gaa" }],
+			"A simple real word that reuses the กา frame with no extra letters added.",
+		),
+	],
+	2: [
+		createWord(
+			"มี",
+			"to have",
+			"mii",
+			"daily",
+			[{ thai: "มี", sound: "mii" }],
+			"A core possession verb that appears constantly in speech and signage.",
+		),
+		createWord(
+			"ดีมาก",
+			"very good",
+			"dii maak",
+			"daily",
+			[
+				{ thai: "ดี", sound: "dii" },
+				{ thai: "มาก", sound: "maak" },
+			],
+			"A common praise phrase that combines the first two lessons into one useful chunk.",
+		),
+	],
+	3: [
+		createWord("ดิน", "soil / earth", "din", "daily", [
+			{ thai: "ดิ", sound: "di" },
+			{ thai: "น", sound: "n" },
+		]),
+		createWord(
+			"มีด",
+			"knife",
+			"miit",
+			"food",
+			[
+				{ thai: "มี", sound: "mii" },
+				{ thai: "ด", sound: "t" },
+			],
+			"A practical kitchen word that reinforces the long ee vowel plus a clipped final stop.",
+		),
+	],
+	4: [
+		createWord("ตา", "eye", "taa", "daily", [{ thai: "ตา", sound: "taa" }]),
+		createWord("ลาน", "courtyard / open yard", "laan", "place", [
+			{ thai: "ลา", sound: "laa" },
+			{ thai: "น", sound: "n" },
+		]),
+	],
+	5: [
+		createWord("บาน", "to bloom / open out", "baan", "daily", [
+			{ thai: "บา", sound: "baa" },
+			{ thai: "น", sound: "n" },
+		]),
+		createWord("บีบ", "to squeeze", "biip", "daily", [
+			{ thai: "บี", sound: "bii" },
+			{ thai: "บ", sound: "p" },
+		]),
+	],
+	6: [
+		createWord("แก่", "old", "gae", "daily", [{ thai: "แก่", sound: "gae" }]),
+		createWord("แน่", "certain / sure", "nae", "daily", [{ thai: "แน่", sound: "nae" }]),
+	],
+	7: [
+		createWord("ล้าน", "million", "laan", "sign", [
+			{ thai: "ล้า", sound: "laa" },
+			{ thai: "น", sound: "n" },
+		]),
+		createWord("ด้าน", "side / aspect", "daan", "sign", [
+			{ thai: "ด้า", sound: "daa" },
+			{ thai: "น", sound: "n" },
+		]),
+	],
+	8: [
+		createWord("ชาม", "bowl", "chaam", "food", [{ thai: "ชาม", sound: "chaam" }]),
+		createWord("ดุ", "fierce / strict", "du", "daily", [{ thai: "ดุ", sound: "du" }]),
+	],
+	9: [
+		createWord("สิน", "goods / merchandise", "sin", "sign", [
+			{ thai: "สิ", sound: "si" },
+			{ thai: "น", sound: "n" },
+		]),
+		createWord("สาม", "three", "saam", "sign", [{ thai: "สาม", sound: "saam" }]),
+	],
+	10: [
+		createWord("ขาว", "white", "khaao", "daily", [{ thai: "ขาว", sound: "khaao" }]),
+		createWord("วาด", "to draw", "waat", "daily", [
+			{ thai: "วา", sound: "waa" },
+			{ thai: "ด", sound: "t" },
+		]),
+	],
+	11: [
+		createWord("หมา", "dog", "maa", "daily", [{ thai: "หมา", sound: "maa" }]),
+		createWord("หู", "ear", "huu", "daily", [{ thai: "หู", sound: "huu" }]),
+	],
+	12: [
+		createWord(
+			"อ่าน",
+			"to read",
+			"aan",
+			"sign",
+			[
+				{ thai: "อ่า", sound: "aa" },
+				{ thai: "น", sound: "n" },
+			],
+			"A high-payoff verb for menus, labels, and interface text once the silent carrier starts to click.",
+		),
+		createWord(
+			"ออก",
+			"to exit / go out",
+			"awk",
+			"sign",
+			[
+				{ thai: "ออ", sound: "aaw" },
+				{ thai: "ก", sound: "k" },
+			],
+			"A survival sign word that appears on doors, stations, and directional labels.",
+		),
+	],
+	13: [
+		createWord(
+			"ผัก",
+			"vegetables",
+			"phak",
+			"food",
+			[
+				{ thai: "ผั", sound: "pha" },
+				{ thai: "ก", sound: "k" },
+			],
+			"A very common menu word that reinforces the same ผั- opening as ผัด.",
+		),
+		createWord("กัน", "together / to prevent", "gan", "daily", [
+			{ thai: "กั", sound: "ga" },
+			{ thai: "น", sound: "n" },
+		]),
+	],
+};
+
+const lessons: Lesson[] = baseLessons.map((lesson) => {
+	const supportingVocabulary = supportingVocabularyByLessonId[lesson.id] ?? [];
+
+	return {
+		...lesson,
+		vocabulary: [
+			{
+				role: "anchor",
+				drillTarget: true,
+				word: lesson.anchorWord,
+			},
+			...supportingVocabulary.map((word) => ({
+				role: "support" as const,
+				drillTarget: true,
+				word,
+			})),
+		],
+	};
+});
 
 /** The complete Thai language pack exported for use by the app */
 export const thaiPack: LanguagePack = {

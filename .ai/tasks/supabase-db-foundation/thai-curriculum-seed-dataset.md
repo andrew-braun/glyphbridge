@@ -18,8 +18,8 @@ first content seed.
 - Seed code has not started yet. This document is the handoff between the runtime
   rewrite and normalized `curriculum.*` seed authoring.
 - `docs/database-dto-spec.md` now includes first-class reusable vocabulary tables.
-  The first seed pass therefore needs to create vocabulary rows for every lesson's
-  current anchor word and leave room for later supporting-word expansion.
+  The first seed pass now needs to create vocabulary rows for every lesson's anchor
+  word and the first authored supporting-vocabulary slice.
 
 ## Source Hierarchy
 
@@ -51,6 +51,11 @@ first content seed.
 - Rule examples: 55
 - Drills: 65
 - Drill options: 260
+- Vocabulary items: 39
+- Lesson-vocabulary joins: 39 total
+  - 13 `anchor`
+  - 26 `support`
+- Vocabulary segments: 67
 - Anchor segments: 27
 
 Integrity checks:
@@ -107,6 +112,24 @@ Notes:
 - Each current anchor word should also seed into `curriculum.vocabulary_items` and
   `curriculum.lesson_vocabulary` with `role_key = 'anchor'`.
 
+### Supporting Vocabulary Slice
+
+| Lesson | Anchor  | Supporting vocabulary |
+| ------ | ------- | --------------------- |
+| 1      | `มาก`   | `มา`, `กา`            |
+| 2      | `ดี`    | `มี`, `ดีมาก`         |
+| 3      | `กิน`   | `ดิน`, `มีด`          |
+| 4      | `ตลาด`  | `ตา`, `ลาน`           |
+| 5      | `บิน`   | `บาน`, `บีบ`          |
+| 6      | `แม่`   | `แก่`, `แน่`          |
+| 7      | `ร้าน`  | `ล้าน`, `ด้าน`        |
+| 8      | `ชุด`   | `ชาม`, `ดุ`           |
+| 9      | `สิบ`   | `สิน`, `สาม`          |
+| 10     | `ข้าว`  | `ขาว`, `วาด`          |
+| 11     | `หมู`   | `หมา`, `หู`           |
+| 12     | `อาหาร` | `อ่าน`, `ออก`         |
+| 13     | `ผัด`   | `ผัก`, `กัน`          |
+
 ### Vocabulary Modeling Notes
 
 - The current runtime contract still exposes only one `anchorWord` per lesson.
@@ -119,8 +142,16 @@ Notes:
   - `curriculum.vocabulary_items`
   - `curriculum.vocabulary_segments`
   - `curriculum.lesson_vocabulary` with `role_key = 'anchor'`
-- Additional supporting lesson vocabulary is not yet inventoried in `src/lib/data`
-  and remains a follow-on content-authoring task before full vocabulary-mode support.
+
+- The first authored supporting-vocabulary slice should populate:
+  - additional `curriculum.vocabulary_items` rows
+  - additional `curriculum.vocabulary_segments` rows
+  - `curriculum.lesson_vocabulary` rows with `role_key = 'support'` and
+    `is_drill_target = true`
+
+- The current runtime now carries this support vocabulary directly in
+  `lesson.vocabulary`, so the inventory above is implementation-backed rather than a
+  planning placeholder.
 
 ### Unique Grapheme Inventory
 
@@ -213,7 +244,6 @@ runtime data fields:
 - Whether the proposed lesson slug transliterations above are the final stable lesson
   keys or just the initial seed slugs
 - Stable drill key strategy
-- The first supporting-vocabulary inventory beyond the current lesson anchor words
 - Whether the first seed writes `pedagogical_group_key`,
   `pedagogical_group_label`, or `tags` derived from `approach-thai.md`, or leaves
   those fields empty for the first version
@@ -221,8 +251,6 @@ runtime data fields:
 ## Next Action
 
 - Convert the rewritten inventory above into normalized seed inputs for
-  `curriculum.*`, including anchor-backed `vocabulary_items` rows.
+  `curriculum.*`, including anchor-backed and support-backed vocabulary rows.
 - Confirm the remaining course-level seed literals and first publication naming.
-- Decide the first authored supporting-vocabulary slice after anchor-backed seed rows
-  exist.
 - Keep the level 6 expansion work in planning mode unless the first seed needs it.

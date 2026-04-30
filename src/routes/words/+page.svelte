@@ -23,7 +23,7 @@
 -->
 <div class="words container">
 	<h1>Known Words</h1>
-	<p class="words__subtitle">Your growing collection of Thai words you can read.</p>
+	<p class="words__subtitle">Your growing collection of anchor and supporting Thai words.</p>
 
 	<!-- Empty state: shown when the user has not completed any lessons yet -->
 	{#if $knownWords.length === 0}
@@ -70,19 +70,19 @@
 	.words {
 		&__subtitle {
 			color: $color-text-light;
-			margin-top: $space-sm;
 			margin-bottom: $space-xl;
+			margin-top: $space-sm;
 		}
 	}
 
 	// Empty state card: centered layout with icon, message, and CTA
 	.empty {
-		text-align: center;
-		padding: $space-3xl;
+		align-items: center;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
 		gap: $space-md;
+		padding: $space-3xl;
+		text-align: center;
 
 		&__icon {
 			font-size: 4rem;
@@ -97,8 +97,8 @@
 	// Responsive grid: cards fill at a minimum width of 320px
 	.word-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
 		gap: $space-lg;
+		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
 	}
 
 	// Individual word card: stacks Thai text, pronunciation, meaning, syllables
@@ -112,44 +112,44 @@
 		}
 
 		&__pronunciation {
+			color: $color-text;
 			font-size: $font-size-lg;
 			font-weight: 600;
-			color: $color-text;
 		}
 
 		&__meaning {
-			font-size: $font-size-base;
 			color: $color-text-light;
+			font-size: $font-size-base;
 		}
 
 		&__syllables {
 			display: flex;
-			gap: $space-sm;
 			flex-wrap: wrap;
+			gap: $space-sm;
 			margin-top: $space-sm;
 		}
 
 		&__syllable {
-			display: flex;
-			flex-direction: column;
 			align-items: center;
-			gap: 2px;
-			padding: $space-xs $space-sm;
 			background: rgba($color-primary, 0.06);
 			border-radius: $radius-sm;
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
+			padding: $space-xs $space-sm;
 		}
 
 		&__syllable-sound {
-			font-size: $font-size-xs;
 			color: $color-text-light;
+			font-size: $font-size-xs;
 		}
 
 		&__context {
-			margin-top: $space-sm;
-			font-size: $font-size-sm;
-			color: $color-text-light;
-			line-height: 1.6;
 			border-top: 1px solid $color-border;
+			color: $color-text-light;
+			font-size: $font-size-sm;
+			line-height: 1.6;
+			margin-top: $space-sm;
 			padding-top: $space-sm;
 		}
 	}

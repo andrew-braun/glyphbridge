@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { RadioGroup, useId } from "bits-ui";
+
 	import Button from "$lib/components/ui/Button.svelte";
 	import { isThai } from "$lib/utils/thai";
 
@@ -18,44 +20,65 @@
 		nextLabel?: string;
 	} = $props();
 
-	let selectedAnswer = $state<number | null>(null);
+	const promptId = useId();
+
+	let selectedValue = $state("");
 	let answered = $state(false);
 
+	const selectedAnswer = $derived(selectedValue === "" ? null : Number(selectedValue));
 	const isCorrect = $derived(selectedAnswer === correctIndex);
 
-	function selectAnswer(index: number) {
-		if (answered) return;
-		selectedAnswer = index;
+	function getSelectedValue() {
+		return selectedValue;
+	}
+
+	function setSelectedValue(nextValue: string) {
+		if (answered || nextValue === "") return;
+		selectedValue = nextValue;
 		answered = true;
-		onAnswer(index === correctIndex);
+		onAnswer(Number(nextValue) === correctIndex);
+	}
+
+	function getOptionClasses(index: number, checked: boolean) {
+		return [
+			"drill__option",
+			checked ? "drill__option--selected" : "",
+			answered && index === correctIndex ? "drill__option--correct" : "",
+			answered && selectedAnswer === index && index !== correctIndex
+				? "drill__option--wrong"
+				: "",
+		]
+			.filter(Boolean)
+			.join(" ");
 	}
 
 	function handleNext() {
-		selectedAnswer = null;
+		selectedValue = "";
 		answered = false;
 		onNext();
 	}
 </script>
 
 <div class="drill">
-	<h2 class="drill__prompt">{prompt}</h2>
+	<h2 class="drill__prompt" id={promptId}>{prompt}</h2>
 
-	<div class="drill__options">
+	<RadioGroup.Root
+		class="drill__options"
+		aria-labelledby={promptId}
+		bind:value={getSelectedValue, setSelectedValue}
+	>
 		{#each options as option, i}
-			<button
-				class="drill__option"
-				class:drill__option--selected={selectedAnswer === i}
-				class:drill__option--correct={answered && i === correctIndex}
-				class:drill__option--wrong={answered && selectedAnswer === i && i !== correctIndex}
-				onclick={() => selectAnswer(i)}
-				disabled={answered}
-			>
-				<span class="drill__option-text" class:thai={isThai(option)}>
-					{option}
-				</span>
-			</button>
+			<RadioGroup.Item value={i.toString()} disabled={answered}>
+				{#snippet child({ props, checked })}
+					<button {...props} class={getOptionClasses(i, checked)}>
+						<span class="drill__option-text" class:thai={isThai(option)}>
+							{option}
+						</span>
+					</button>
+				{/snippet}
+			</RadioGroup.Item>
 		{/each}
-	</div>
+	</RadioGroup.Root>
 
 	{#if answered}
 		<div
@@ -84,14 +107,14 @@
 		gap: $space-xl;
 
 		&__prompt {
-			text-align: center;
 			font-size: $font-size-xl;
+			text-align: center;
 		}
 
 		&__options {
 			display: grid;
-			grid-template-columns: 1fr 1fr;
 			gap: $space-md;
+			grid-template-columns: 1fr 1fr;
 		}
 
 		&__option {

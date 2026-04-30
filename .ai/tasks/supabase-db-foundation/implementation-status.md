@@ -34,9 +34,11 @@ Track the implemented foundation of the Supabase and database workstream, summar
 - The local Supabase foundation exists under `supabase/` with baseline schema, grants, RLS, and the initial sync function.
 - Database-aware instruction files now point future work at the correct docs and preserve the `curriculum` / `internal_api` versus `delivery` / `learner` boundary.
 - The shipped app runtime still uses static lesson data in `src/lib/data/*` and local client persistence, but that lesson data has now been rewritten into the approved 13-lesson frequency-first Thai curriculum.
+- The runtime lesson model now also carries a first supporting-vocabulary slice per lesson, while preserving the featured `anchorWord` for the current lesson flow.
 - `src/lib/stores/progress.ts` now uses snapshot version `2` so older local progress does not map onto the rewritten lesson IDs.
 - Thai content seeding planning now lives in `../../2026-04-26-thai-content-seeding-plan.md` and `thai-curriculum-seed-dataset.md`, which now treat the rewritten runtime curriculum as the next seed source.
 - `docs/database-dto-spec.md` now includes first-class reusable lesson vocabulary tables so the content model can grow into vocabulary drilling without another schema redesign.
+- `supabase/migrations/20260430110000_lesson_vocabulary_tables.sql` now creates the reusable vocabulary tables in the live migration chain and validates cleanly with a local DB reset.
 
 ## Security Review Outcome
 
@@ -63,6 +65,7 @@ Track the implemented foundation of the Supabase and database workstream, summar
 - `supabase/migrations/20260425143000_security_hardening_phase1.sql`
 - `supabase/migrations/20260426100000_security_hardening_phase2.sql`
 - `supabase/migrations/20260426113000_text_length_constraints.sql`
+- `supabase/migrations/20260430110000_lesson_vocabulary_tables.sql`
 - `docs/db.md`
 - `docs/database-dto-spec.md`
 - Updated DB-aware instruction files across the repo
@@ -78,11 +81,13 @@ Track the implemented foundation of the Supabase and database workstream, summar
 - Passed: `pnpm exec supabase db lint` after the second hardening wave.
 - Passed: `pnpm exec supabase db reset --yes` after adding `20260426113000_text_length_constraints.sql`
 - Passed: `pnpm exec supabase db lint` after the third hardening wave.
+- Passed: `pnpm exec supabase db reset --yes` after adding `20260430110000_lesson_vocabulary_tables.sql`.
 - Passed: `pnpm check` after rewriting `src/lib/data/thai.ts`, resetting the progress snapshot version, and adding tone-mark coverage to the alphabet route.
+- Passed: `pnpm check` after adding lesson vocabulary to the runtime model, progress store, and completion UI.
 
 ## Current Next Step
 
-- For the content/DB track, the current step is to turn the rewritten Thai grapheme, lesson, rule, drill, and anchor-backed vocabulary inventory in `src/lib/data/thai.ts` into normalized seed inputs using `thai-curriculum-seed-dataset.md`.
+- For the content/DB track, the current step is to turn the rewritten Thai grapheme, lesson, rule, drill, anchor, and supporting-vocabulary inventory in `src/lib/data/thai.ts` into normalized seed inputs using `thai-curriculum-seed-dataset.md`.
 - After that, seed the rewritten Thai course into `curriculum.*`, including the new lesson vocabulary tables, and validate parity against the rewritten runtime lesson contract.
 - For the runtime/auth track, the next gate remains request-scoped `@supabase/ssr` before any server route, server load function, action, or remote function imports Supabase.
 - Concretely for the runtime/auth gate: replace the module-scoped client in `src/lib/supabase.ts`, add `hooks.server.ts` session wiring, and expose only verified server-owned Supabase access to the first authenticated runtime path.
@@ -91,7 +96,7 @@ Track the implemented foundation of the Supabase and database workstream, summar
 
 - Finalize the remaining course-level seed literals for the rewritten Thai course, especially `script_systems.native_name` and first-version release metadata.
 - Seed the rewritten Thai course scope into `curriculum.*`, including anchor-backed lesson vocabulary rows, and validate parity against `src/lib/data/thai.ts`.
-- Author the first supporting-vocabulary slice beyond the current anchor words once the seed path for `lesson_vocabulary` is in place.
+- Seed the first authored supporting-vocabulary slice alongside the anchor words through `lesson_vocabulary`.
 - Keep `docs/concept/approach-thai.md` and `thai-curriculum-seed-dataset.md` aligned as the authoritative Thai source inventory for future grapheme and lesson expansion, especially the not-yet-encoded level 6 material.
 - Generate the first `delivery.course_publication_lessons` payloads so learner-facing reads can stay on `delivery.*`.
 - Replace the module-scoped Supabase client with request-scoped `@supabase/ssr` integration before any authenticated server route or load function imports Supabase.
