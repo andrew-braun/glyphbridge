@@ -88,7 +88,8 @@ This directory groups the active and recently completed `.ai` task documents for
 - The first Thai curriculum seed is now in place in `curriculum.*` and `delivery.*`, and direct SQL verification confirms 1 course, 1 course version, 13 lessons, 39 vocabulary items, and 13 publication lesson rows.
 - The learn index and lesson detail routes now read the active published lesson bundle through `src/lib/server/delivery-lessons.ts` and server-owned SvelteKit loads.
 - The app now uses a server-capable SvelteKit adapter for DB-backed lesson delivery instead of assuming static-only hosting.
+- Local `/learn` development now requires `PUBLIC_SUPABASE_URL` and `PUBLIC_SUPABASE_ANON_KEY`; `.env.example` documents the local `supabase status -o env` mapping.
+- `pnpm run db:smoke:delivery` now checks the active published lesson bundle against the canonical runtime Thai lesson contract.
 - Next runtime/auth gate: implement the request-scoped `@supabase/ssr` boundary and verified server-owned Supabase access described in `auth-sync-strategy.md` before the first authenticated route or sync path lands.
-- Add a small parity or smoke-test step that checks the seeded lesson bundles against the runtime lesson contract.
 - Add the first server-side SvelteKit boundary for learner attempt sync after the read boundary and auth gate exist.
 - Decide whether Drizzle lands before or after that first DB-backed runtime path.

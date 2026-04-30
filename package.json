@@ -11,6 +11,7 @@
 		"db:stop": "supabase stop",
 		"db:reset": "supabase db reset --yes",
 		"db:lint": "supabase db lint",
+		"db:smoke:delivery": "node scripts/smoke-delivery-payload.mjs",
 		"prepare": "husky && svelte-kit sync",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",

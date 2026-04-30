@@ -47,6 +47,8 @@ SvelteKit boundary.
   preserving the current lesson flow and local progress store.
 - Switched `svelte.config.js` to `@sveltejs/adapter-node` so the server-owned
   lesson read boundary has a real deployment runtime.
+- Documented the required local Supabase env bootstrap in `.env.example` and made
+  the missing-env 503 actionable for local development.
 - Updated the Supabase workstream trackers and repo instructions to reflect the
   new server-capable lesson-delivery posture.
 
@@ -55,3 +57,4 @@ SvelteKit boundary.
 - Passed: `pnpm check`
 - Passed: `pnpm build`
 - Passed: local smoke test against `node build` with the local Supabase publishable key, confirming `/learn` and `/learn/1` render published lesson data from `delivery.*`
+- Passed: fresh local dev-server smoke test after wiring `.env`, confirming `/learn` loads from the published lesson bundle without the earlier missing-env 503

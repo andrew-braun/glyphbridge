@@ -55,16 +55,16 @@ Plan a secure, low-cost path for adding user accounts and progress syncing to Gl
 
 ## Current Recommendation
 
-- Move to a server-capable SvelteKit deployment posture when auth work begins.
+- The app now has a server-capable SvelteKit runtime for DB-backed lesson delivery.
 - Add request-scoped Supabase clients via `@supabase/ssr`, validate sessions server-side, and expose only the minimum session data to the app shell.
 - Store per-user progress in a small relational model and merge anonymous local progress into that model on first authenticated session.
 
 ## Current Entry Point
 
 - The DB-side hardening prerequisites are complete.
-- The overall workstream's current next step is still the first server-owned published-lesson read path over `delivery.*`.
-- Auth-lane next step, once authenticated runtime work begins: replace the module-scoped Supabase client in `src/lib/supabase.ts` with request-scoped `@supabase/ssr` integration and wire verified session access in `hooks.server.ts`.
-- Do not start the first authenticated route or server-backed load path until that boundary exists.
+- The public published-lesson read path over `delivery.*` is now complete and working in local development when the documented public Supabase env vars are set.
+- Auth-lane next step: replace the module-scoped Supabase client in `src/lib/supabase.ts` with request-scoped `@supabase/ssr` integration and wire verified session access in `hooks.server.ts`.
+- Do not start the first authenticated route, action, or learner sync path until that boundary exists.
 
 ## Next-Phase Security Gates
 
@@ -80,10 +80,10 @@ These items are intentionally deferred until the authenticated SvelteKit boundar
 ## Open Questions
 
 - Whether the first authenticated persistence shape should be a JSON snapshot table or fully normalized lesson-progress rows.
-- Which deployment target should own the server-capable SvelteKit runtime when auth work starts.
+- Which hosted deployment target should own the server-capable SvelteKit runtime now that the app already depends on `@sveltejs/adapter-node` for DB-backed lesson delivery.
 
 ## Follow-Up
 
 - Draft the route, schema, and RLS plan before touching auth code.
 - Define the one-time local-to-account merge behavior and conflict rules in detail.
-- Land the DB hardening and input-bounds remediation phases before starting the authenticated route work tracked here.
+- Build on the shipped public delivery read path rather than adding another public data surface before the authenticated route work tracked here.

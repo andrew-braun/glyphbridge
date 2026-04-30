@@ -43,8 +43,11 @@ Track the implemented foundation of the Supabase and database workstream, summar
 - `supabase/seed.sql` now seeds the rewritten Thai course into `curriculum.*` and the first learner-facing lesson bundles into `delivery.*`, and validates cleanly with a local DB reset.
 - Direct SQL verification now confirms the local seeded database contains 1 course, 1 course version, 13 lessons, 39 vocabulary items, and 13 `delivery.course_publication_lessons` rows.
 - `src/lib/server/delivery-lessons.ts` now maps the active published lesson bundle back into the current runtime lesson contract for the learn routes.
+- `src/lib/server/delivery-payload.ts` now holds the shared published-payload normalization logic used by both the learn routes and the delivery smoke script.
 - `src/routes/learn/+page.server.ts` and `src/routes/learn/[id]/+page.server.ts` now serve the learn index and lesson detail pages from published `delivery.*` content instead of static lesson imports.
 - `svelte.config.js` now uses `@sveltejs/adapter-node` so the server-owned lesson read boundary has a real runtime in production.
+- Local development for the published learn routes now depends on `PUBLIC_SUPABASE_URL` and `PUBLIC_SUPABASE_ANON_KEY`, and `.env.example` documents how to derive them from `pnpm exec supabase status -o env`.
+- `scripts/smoke-delivery-payload.mjs` and `pnpm run db:smoke:delivery` now provide a focused parity check for the active published lesson bundle.
 
 ## Security Review Outcome
 
@@ -73,8 +76,14 @@ Track the implemented foundation of the Supabase and database workstream, summar
 - `supabase/migrations/20260426113000_text_length_constraints.sql`
 - `supabase/migrations/20260430110000_lesson_vocabulary_tables.sql`
 - `scripts/generate-thai-seed.mjs`
+- `scripts/smoke-delivery-payload.mjs`
 - `docs/db.md`
 - `docs/database-dto-spec.md`
+- `src/lib/server/delivery-lessons.ts`
+- `src/lib/server/delivery-payload.ts`
+- `src/routes/learn/+page.server.ts`
+- `src/routes/learn/[id]/+page.server.ts`
+- `.env.example`
 - Updated DB-aware instruction files across the repo
 
 ## Validation
@@ -96,18 +105,19 @@ Track the implemented foundation of the Supabase and database workstream, summar
 - Passed: `pnpm check` after wiring the learn routes to the published lesson bundle through `src/lib/server/delivery-lessons.ts`.
 - Passed: `pnpm build` after switching to `@sveltejs/adapter-node` and adding the server-owned published-lesson read boundary.
 - Passed: local smoke test against the built Node server, confirming `/learn` and `/learn/1` render published lesson data from the seeded `delivery.course_publication_lessons` bundle when `PUBLIC_SUPABASE_URL` and `PUBLIC_SUPABASE_ANON_KEY` are set.
+- Passed: fresh local dev-server smoke test after wiring `.env`, confirming `/learn` loads from the published lesson bundle without the earlier missing-env 503.
+- Passed: `pnpm run db:smoke:delivery`, confirming the active published lesson bundle matches the runtime Thai lesson contract.
 
 ## Current Next Step
 
 - The next implementation step is to land the request-scoped `@supabase/ssr` boundary and `hooks.server.ts` session wiring before the first authenticated route, action, or learner sync path imports Supabase.
-- The public published-lesson read path now exists, so the next runtime/auth gate is verified request-scoped Supabase access rather than another client-owned runtime read.
-- Concretely for the authenticated gate: replace the module-scoped client in `src/lib/supabase.ts`, add `hooks.server.ts` session wiring, and expose only verified server-owned Supabase access to the first authenticated runtime path.
+- The public published-lesson read path is now operational, so the critical next gate is authenticated server ownership rather than more public delivery work.
+- Concretely for the authenticated gate: add `@supabase/ssr`, replace the module-scoped client in `src/lib/supabase.ts`, add `hooks.server.ts` session wiring, and expose only verified server-owned Supabase access to the first authenticated runtime path.
 
 ## Near-Term Next Steps
 
 - Keep `docs/concept/approach-thai.md` and `thai-curriculum-seed-dataset.md` aligned as the authoritative Thai source inventory for future grapheme and lesson expansion, especially the not-yet-encoded level 6 material.
 - Keep `scripts/generate-thai-seed.mjs` and `supabase/seed.sql` aligned with `src/lib/data/thai.ts` whenever the Thai curriculum changes.
-- Add a small parity or smoke-test step that checks the seeded `delivery.course_publication_lessons` bundles against the runtime lesson contract.
 - Replace the module-scoped Supabase client with request-scoped `@supabase/ssr` integration before any authenticated server route or load function imports Supabase.
 - After the request-scoped auth boundary exists, add the first authenticated server-side SvelteKit boundary for learner attempt sync.
 - Add `supabase db lint` and targeted SQL smoke tests to the DB workflow as follow-on guardrails.
