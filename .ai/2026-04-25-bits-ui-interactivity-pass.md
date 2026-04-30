@@ -2,7 +2,7 @@
 
 - Start date: 2026-04-25
 - Owner: GitHub Copilot
-- Status: planned
+- Status: in progress
 
 ## Goal
 
@@ -34,13 +34,23 @@ Make Bits UI the default accessible primitive layer for site interactivity and s
 - Identify shared wrappers that belong in `src/lib/components/ui` versus direct Bits UI usage in feature components.
 - Capture any current components whose behavior depends on custom keyboard, focus, or open-state management.
 
+## Implementation Notes 2026-04-30
+
+- Audited current interactive surfaces and found the cleanest first migration seam in the repeated bespoke progress bars rather than in plain native buttons.
+- Added `src/lib/components/ui/Progress.svelte` as a Bits UI-backed shared primitive.
+- Migrated the lesson flow header, alphabet page, practice session header, and home stats overview to the shared progress primitive.
+- Removed the old global `.progress-bar` helper after the call sites moved to the new component.
+
 ## Progress
 
 - [x] Document the Bits UI convention in repo instructions and durable docs
 - [x] Keep `bits-ui` present as an intentional runtime dependency
-- [ ] Audit existing interactive components for migration candidates
-- [ ] Implement Bits UI wrappers or direct migrations where appropriate
-- [ ] Validate migrated interactions with focused accessibility and product checks
+- [x] Audit the first reusable interaction pattern and choose progress as the initial migration slice
+- [x] Implement a Bits UI-backed shared `Progress` primitive and migrate the current progress bar call sites
+- [x] Validate the first migration slice with `pnpm check`
+- [ ] Audit additional interactive components for migration candidates
+- [ ] Implement the next Bits UI wrapper or direct migration
+- [ ] Validate the next migration slice with focused accessibility and product checks
 
 ## Open Questions
 

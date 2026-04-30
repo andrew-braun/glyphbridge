@@ -16,6 +16,7 @@
 <script lang="ts">
 	import DrillExercise from "$lib/components/exercises/DrillExercise.svelte";
 	import Button from "$lib/components/ui/Button.svelte";
+	import Progress from "$lib/components/ui/Progress.svelte";
 	import { thaiPack } from "$lib/data/thai";
 	import type { DrillQuestion } from "$lib/data/types";
 	import { knownLetters, knownWords, progress } from "$lib/stores/progress";
@@ -156,11 +157,13 @@
 		<div class="session">
 			<!-- Progress bar for the session -->
 			<div class="session__header">
-				<div class="progress-bar" style="flex:1">
-					<div
-						class="progress-bar__fill"
-						style="width: {(totalAnswered / SESSION_SIZE) * 100}%"
-					></div>
+				<div class="session__progress">
+					<Progress
+						label="Practice session progress"
+						value={totalAnswered}
+						max={SESSION_SIZE}
+						valueLabel={`${totalAnswered} of ${SESSION_SIZE} questions answered`}
+					/>
 				</div>
 				<span class="session__count"
 					>{totalAnswered + 1} / {Math.min(SESSION_SIZE, drillPool.length)}</span
@@ -201,14 +204,14 @@
 	}
 
 	.results {
-		text-align: center;
-		padding: $space-3xl;
+		align-items: center;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
 		gap: $space-lg;
-		max-width: var(--content-max-width);
 		margin: 0 auto;
+		max-width: var(--content-max-width);
+		padding: $space-3xl;
+		text-align: center;
 	}
 
 	.empty__icon,
@@ -223,14 +226,14 @@
 	}
 
 	.stat {
+		align-items: center;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
 
 		&__num {
+			color: $color-primary;
 			font-size: $font-size-3xl;
 			font-weight: 800;
-			color: $color-primary;
 		}
 
 		&__label {
@@ -245,9 +248,9 @@
 		}
 
 		&__pct {
+			color: $color-primary;
 			font-size: $font-size-xl;
 			font-weight: 700;
-			color: $color-primary;
 		}
 
 		&__actions {
@@ -258,16 +261,20 @@
 
 	// Active session layout
 	.session {
-		max-width: var(--content-max-width);
-		margin: 0 auto;
 		display: flex;
 		flex-direction: column;
 		gap: $space-xl;
+		margin: 0 auto;
+		max-width: var(--content-max-width);
 
 		&__header {
-			display: flex;
 			align-items: center;
+			display: flex;
 			gap: $space-md;
+		}
+
+		&__progress {
+			flex: 1;
 		}
 
 		&__count {

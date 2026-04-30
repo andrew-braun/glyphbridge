@@ -22,6 +22,7 @@
 	import StepLetters from "$lib/components/lesson/StepLetters.svelte";
 	import StepRules from "$lib/components/lesson/StepRules.svelte";
 	import Button from "$lib/components/ui/Button.svelte";
+	import Progress from "$lib/components/ui/Progress.svelte";
 	import { thaiPack } from "$lib/data/thai";
 	import { completeLesson } from "$lib/stores/progress";
 
@@ -88,8 +89,12 @@
 	<!-- Top bar: back button + progress bar + step indicator -->
 	<div class="lesson__progress">
 		<Button href="/learn" variant="ghost">&larr; Lessons</Button>
-		<div class="progress-bar" style="flex:1">
-			<div class="progress-bar__fill" style="width: {progressPercent}%"></div>
+		<div class="lesson__progress-bar">
+			<Progress
+				label="Lesson progress"
+				value={progressPercent}
+				valueLabel={`${currentStepIndex + 1} of ${stepOrder.length} steps complete`}
+			/>
 		</div>
 		<span class="lesson__step-label">{currentStepIndex + 1} / {stepOrder.length}</span>
 	</div>
@@ -119,10 +124,14 @@
 <style lang="scss">
 	.lesson {
 		&__progress {
-			display: flex;
 			align-items: center;
+			display: flex;
 			gap: $space-md;
 			margin-bottom: $space-xl;
+		}
+
+		&__progress-bar {
+			flex: 1;
 		}
 
 		&__step-label {

@@ -41,6 +41,14 @@
 		"/^cd /home/andri/code/projects/glyphbridge && pnpm knip$/": {
 			"approve": true,
 			"matchCommandLine": true
+		},
+		"/^cd /home/andri/code/projects/glyphbridge && pnpm exec supabase db reset --yes$/": {
+			"approve": true,
+			"matchCommandLine": true
+		},
+		"/^cd /home/andri/code/projects/glyphbridge && pnpm check$/": {
+			"approve": true,
+			"matchCommandLine": true
 		}
 	}
 }

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Button from "$lib/components/ui/Button.svelte";
+	import Progress from "$lib/components/ui/Progress.svelte";
 	import { thaiPack } from "$lib/data/thai";
 	import type { Letter } from "$lib/data/types";
 	import { knownLetters } from "$lib/stores/progress";
@@ -46,11 +47,13 @@
 	</p>
 
 	<!-- Visual progress bar: fill width is the percentage of letters learned -->
-	<div class="progress-bar" style="margin-bottom: 2rem">
-		<div
-			class="progress-bar__fill"
-			style="width: {($knownLetters.length / allLetters.length) * 100}%"
-		></div>
+	<div class="alphabet__progress">
+		<Progress
+			label="Letters learned progress"
+			value={$knownLetters.length}
+			max={allLetters.length}
+			valueLabel={`${$knownLetters.length} of ${allLetters.length} letters learned`}
+		/>
 	</div>
 
 	<!-- Consonant grid -->
@@ -185,6 +188,10 @@
 			color: $color-text-light;
 			margin-bottom: $space-lg;
 			margin-top: $space-sm;
+		}
+
+		&__progress {
+			margin-bottom: $space-xl;
 		}
 	}
 

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Row from "$lib/components/layout/Row.svelte";
+	import Progress from "$lib/components/ui/Progress.svelte";
 	import StatCard from "$lib/components/ui/StatCard.svelte";
 	import type { Word } from "$lib/data/types";
 
@@ -35,12 +36,12 @@
 			</StatCard>
 			<StatCard value={`${completedLessonCount}/${totalLessons}`} label="Lessons Complete">
 				{#snippet children()}
-					<div class="progress-bar">
-						<div
-							class="progress-bar__fill"
-							style="width: {lessonProgressPercent}%"
-						></div>
-					</div>
+					<Progress
+						label="Home lesson progress"
+						value={completedLessonCount}
+						max={totalLessons}
+						valueLabel={`${completedLessonCount} of ${totalLessons} lessons completed`}
+					/>
 				{/snippet}
 			</StatCard>
 		</Row>
