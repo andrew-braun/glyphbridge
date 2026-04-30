@@ -62,7 +62,8 @@ Plan a secure, low-cost path for adding user accounts and progress syncing to Gl
 ## Current Entry Point
 
 - The DB-side hardening prerequisites are complete.
-- Immediate next step: replace the module-scoped Supabase client in `src/lib/supabase.ts` with request-scoped `@supabase/ssr` integration and wire verified session access in `hooks.server.ts`.
+- The overall workstream's current next step is still the first server-owned published-lesson read path over `delivery.*`.
+- Auth-lane next step, once authenticated runtime work begins: replace the module-scoped Supabase client in `src/lib/supabase.ts` with request-scoped `@supabase/ssr` integration and wire verified session access in `hooks.server.ts`.
 - Do not start the first authenticated route or server-backed load path until that boundary exists.
 
 ## Next-Phase Security Gates

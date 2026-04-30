@@ -9,7 +9,7 @@ This directory groups the active and recently completed `.ai` task documents for
 - `implementation-status.md` is the authoritative next-steps and resume-point document for this workstream.
 - `foundation-plan.md` is the authoritative architecture and schema-rationale document.
 - `auth-sync-strategy.md` is the authoritative plan for the authenticated rollout lane only.
-- `../../2026-04-26-thai-content-seeding-plan.md` is the authoritative planning document for the current Thai content-seeding lane.
+- `../../2026-04-26-thai-content-seeding-plan.md` is the authoritative planning record for the completed Thai content-seeding lane.
 - `thai-curriculum-seed-dataset.md` is the authoritative DB-ready source inventory for Thai curriculum seed inputs.
 - `../../../docs/concept/approach-thai.md` is the authoritative durable Thai concept source for grapheme sequencing, lesson expansion, and coverage targets.
 
@@ -85,8 +85,9 @@ This directory groups the active and recently completed `.ai` task documents for
 
 - DB hardening and input-bounds remediation are complete.
 - The approved Thai curriculum rewrite has landed in `src/lib/data/thai.ts` and is now the seed source of truth.
-- Next content step: turn the rewritten curriculum inventory in `thai-curriculum-seed-dataset.md` into seed inputs, then seed `curriculum.*` and validate parity.
+- The first Thai curriculum seed is now in place in `curriculum.*` and `delivery.*`, and direct SQL verification confirms 1 course, 1 course version, 13 lessons, 39 vocabulary items, and 13 publication lesson rows.
+- Next content/runtime step: add the first server-owned SvelteKit read boundary over `delivery.course_publication_lessons`.
 - Next runtime/auth gate: implement the request-scoped `@supabase/ssr` boundary and verified server-owned Supabase access described in `auth-sync-strategy.md` before the first authenticated route or sync path lands.
-- Publish the first learner-facing bundles into `delivery.*`.
-- Add the first server-side SvelteKit boundary for published lesson reads and learner attempt sync.
+- Add a small parity or smoke-test step that checks the seeded lesson bundles against the runtime lesson contract.
+- Add the first server-side SvelteKit boundary for learner attempt sync after the read boundary and auth gate exist.
 - Decide whether Drizzle lands before or after that first DB-backed runtime path.

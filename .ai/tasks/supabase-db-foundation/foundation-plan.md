@@ -23,7 +23,7 @@
 - Planning outputs implemented: the repo now has validated Supabase migrations, a DB operations reference, and updated instruction files that point future work at the schema docs.
 - Deferred rollout gates captured: request-scoped `@supabase/ssr`, hosted-auth hardening, deployment SSL/network requirements, anonymous-auth gating, and DB lint workflow belong to the authenticated implementation phase rather than the baseline schema pass.
 - Resolved vocabulary direction: add first-class reusable lesson vocabulary via `vocabulary_items`, `vocabulary_segments`, and `lesson_vocabulary`, while keeping `anchor_targets` as the featured lesson-word projection during the runtime transition.
-- Immediate implementation split: populate the approved rewritten Thai curriculum into `curriculum.*` and generate first delivery bundles as the next content step, while treating request-scoped `@supabase/ssr` as the separate runtime/auth gate that must land before the first authenticated route or sync path.
+- Immediate follow-on split after the first seed: consume the seeded `delivery.*` lesson bundles through a server-owned SvelteKit read boundary as the next content/runtime step, while treating request-scoped `@supabase/ssr` as the separate auth gate that must land before the first authenticated route or sync path.
 - Source reconciliation rule for the content seed: the approved frequency-first rewrite has now landed in `src/lib/data/thai.ts`, and that runtime course is the seed source of truth for the first Thai course version.
 
 ## Goal
@@ -408,7 +408,7 @@ If the schema requires dumping the core teaching entities into opaque JSON to ge
 ## Current State
 
 - The planning phase is complete enough to have produced `docs/database-dto-spec.md`, the baseline Supabase migrations, `docs/db.md`, and the repo instruction updates.
-- The project now has a concrete database foundation, but the runtime app still serves static curriculum data and client-side progress only.
+- The project now has a concrete database foundation and the first Thai curriculum seed in `curriculum.*` and `delivery.*`, but the runtime app still serves static curriculum data and client-side progress only.
 
 ## Open Follow-On Questions
 
@@ -432,8 +432,9 @@ These were flagged during the audit as worth committing to before migrations are
 
 ## Next Steps
 
-- Seed the current Thai course into `curriculum.*` and validate parity against `src/lib/data/thai.ts`.
-- Publish the first learner-facing lesson bundles into `delivery.*` so runtime reads can move off raw static content.
-- Add the first server-side SvelteKit read/write boundary for published lesson delivery and `internal_api.sync_lesson_attempt_batch(...)`.
+- Add the first server-owned SvelteKit read boundary for published lesson delivery from `delivery.course_publication_lessons`.
+- Add a parity or smoke-test step that checks the seeded lesson bundles against the current runtime lesson contract.
+- Keep authenticated reads and writes gated on request-scoped `@supabase/ssr` before the first authenticated route or sync path.
+- Add the first server-side SvelteKit write boundary for `internal_api.sync_lesson_attempt_batch(...)` after the read boundary and auth gate exist.
 - Decide whether Drizzle should land before or after the first DB-backed route and sync path.
 - Keep this file aligned with the implementation docs if future backend work changes the foundation assumptions.

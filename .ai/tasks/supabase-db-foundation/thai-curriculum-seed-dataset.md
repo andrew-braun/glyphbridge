@@ -2,7 +2,7 @@
 
 - Start date: 2026-04-26
 - Owner: GitHub Copilot
-- Status: in-progress
+- Status: completed
 
 ## Purpose
 
@@ -15,11 +15,13 @@ first content seed.
   has landed in `src/lib/data/thai.ts`.
 - This file now tracks the rewritten runtime course, not the superseded 4-lesson
   runtime-parity snapshot.
-- Seed code has not started yet. This document is the handoff between the runtime
-  rewrite and normalized `curriculum.*` seed authoring.
+- `scripts/generate-thai-seed.mjs` now derives the first Thai curriculum seed from
+  the rewritten runtime source.
+- `supabase/seed.sql` now contains the first normalized `curriculum.*` and
+  `delivery.*` seed for the rewritten Thai course.
 - `docs/database-dto-spec.md` now includes first-class reusable vocabulary tables.
-  The first seed pass now needs to create vocabulary rows for every lesson's anchor
-  word and the first authored supporting-vocabulary slice.
+  The first seed pass now creates vocabulary rows for every lesson's anchor word
+  and the first authored supporting-vocabulary slice.
 
 ## Source Hierarchy
 
@@ -76,14 +78,14 @@ Integrity checks:
 | `curriculum.courses.hero_subtitle`           | `Don't memorize an alphabet chart. Learn real words you'll see on streets, menus, and signs - and pick up the letters naturally.`       | confirmed                | `HomeHero.svelte`                               |
 | `curriculum.courses.seo_title`               | `GlyphBridge — Learn Thai Through Real Words`                                                                                           | confirmed                | `src/routes/+page.svelte`                       |
 | `curriculum.courses.seo_description`         | `Learn to read Thai through real words, guided lesson steps, and short drills built around signs, menus, roads, and everyday language.` | confirmed                | `src/routes/+page.svelte`                       |
-| `curriculum.languages.code`                  | `th`                                                                                                                                    | proposed derived literal | Required by DB spec; not stored in runtime data |
-| `curriculum.script_systems.slug`             | `thai`                                                                                                                                  | proposed derived literal | Required by DB spec                             |
-| `curriculum.script_systems.name`             | `Thai script`                                                                                                                           | proposed derived literal | Required by DB spec                             |
-| `curriculum.script_systems.native_name`      | unresolved                                                                                                                              | approval needed          | No durable source yet                           |
-| `curriculum.course_versions.version_ordinal` | `1`                                                                                                                                     | proposed derived literal | First seed version                              |
-| `curriculum.course_versions.display_version` | `1.0.0`                                                                                                                                 | proposed derived literal | First rewritten runtime release                 |
-| `curriculum.course_versions.release_title`   | `Thai frequency-first foundation`                                                                                                       | proposed derived literal | First rewritten runtime release                 |
-| `curriculum.course_versions.release_summary` | `First 13-lesson Thai curriculum rewrite aligned to the frequency-first sequence in approach-thai.md.`                                  | proposed derived literal | First rewritten runtime release                 |
+| `curriculum.languages.code`                  | `th`                                                                                                                                    | confirmed seeded literal | Required by DB spec; not stored in runtime data |
+| `curriculum.script_systems.slug`             | `thai`                                                                                                                                  | confirmed seeded literal | Required by DB spec                             |
+| `curriculum.script_systems.name`             | `Thai script`                                                                                                                           | confirmed seeded literal | Required by DB spec                             |
+| `curriculum.script_systems.native_name`      | `อักษรไทย`                                                                                                                              | confirmed seeded literal | Derived for v1 seed                             |
+| `curriculum.course_versions.version_ordinal` | `1`                                                                                                                                     | confirmed seeded literal | First seed version                              |
+| `curriculum.course_versions.display_version` | `1.0.0`                                                                                                                                 | confirmed seeded literal | First rewritten runtime release                 |
+| `curriculum.course_versions.release_title`   | `Thai frequency-first foundation`                                                                                                       | confirmed seeded literal | First rewritten runtime release                 |
+| `curriculum.course_versions.release_summary` | `First 13-lesson Thai curriculum rewrite aligned to the frequency-first sequence in approach-thai.md.`                                  | confirmed seeded literal | First rewritten runtime release                 |
 
 ### Lesson Inventory
 
@@ -107,8 +109,7 @@ Notes:
 
 - `curriculum.lessons.slug` and `curriculum.anchor_targets.slug` can initially mirror
   the proposed lesson slug unless we decide to split lesson and anchor keys.
-- The proposed slugs above are stable enough for seed authoring, but the exact
-  transliteration style remains an explicit unresolved input below.
+- The proposed slugs above are now the stable v1 seed keys.
 - Each current anchor word should also seed into `curriculum.vocabulary_items` and
   `curriculum.lesson_vocabulary` with `role_key = 'anchor'`.
 
@@ -235,22 +236,21 @@ runtime data fields:
 - The runtime and concept documents no longer conflict on the approved direction.
 - `src/lib/data/thai.ts` is now the canonical seed source for the first Thai course
   version.
+- `scripts/generate-thai-seed.mjs` and `supabase/seed.sql` now encode that source
+  into the normalized database and delivery publication shape.
 - `docs/concept/approach-thai.md` remains authoritative for the next content wave,
   especially the level 6 loanword and complex-vowel track.
 
-## Unresolved Inputs
+## Deferred Inputs For Later Versions
 
-- Final `curriculum.script_systems.native_name`
-- Whether the proposed lesson slug transliterations above are the final stable lesson
-  keys or just the initial seed slugs
-- Stable drill key strategy
 - Whether the first seed writes `pedagogical_group_key`,
   `pedagogical_group_label`, or `tags` derived from `approach-thai.md`, or leaves
   those fields empty for the first version
 
 ## Next Action
 
-- Convert the rewritten inventory above into normalized seed inputs for
-  `curriculum.*`, including anchor-backed and support-backed vocabulary rows.
-- Confirm the remaining course-level seed literals and first publication naming.
-- Keep the level 6 expansion work in planning mode unless the first seed needs it.
+- Treat this document as the v1 seed inventory reference and regenerate
+  `supabase/seed.sql` via `scripts/generate-thai-seed.mjs` whenever the Thai runtime
+  curriculum changes.
+- Keep the level 6 expansion work in planning mode until the next curriculum wave is
+  ready to encode.

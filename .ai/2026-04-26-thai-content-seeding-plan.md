@@ -2,23 +2,23 @@
 
 - Start date: 2026-04-26
 - Owner: GitHub Copilot
-- Status: in-progress
+- Status: completed
 
 ## Goal
 
-Define and track the approved content/DB execution plan for rewriting the Thai runtime
-curriculum, then seeding that rewritten course into `curriculum.*` and generating the
-first `delivery.*` lesson bundles.
+Define, execute, and record the approved content/DB plan for rewriting the Thai
+runtime curriculum, seeding that rewritten course into `curriculum.*`, and generating
+the first `delivery.*` lesson bundles.
 
 ## Authority
 
 - This is the authoritative planning and sequencing document for the Thai
-  content-seeding lane.
+  content-seeding lane that produced the first Thai DB seed.
 - `tasks/supabase-db-foundation/implementation-status.md` remains the authoritative
-  resume-point document for the broader DB workstream.
-- The curriculum rewrite decision is resolved. The next gate is converting the
-  rewritten runtime inventory into seed inputs without drifting from the approved
-  lesson contract.
+  resume-point and next-steps document for the broader DB workstream.
+- The curriculum rewrite and first seed are now complete. The next gate is consuming
+  the seeded `delivery.*` publication bundle through a server-owned runtime boundary
+  without drifting from the approved lesson contract.
 
 ## Source Hierarchy
 
@@ -49,9 +49,15 @@ first `delivery.*` lesson bundles.
 - `docs/database-dto-spec.md` now introduces `curriculum.vocabulary_items`,
   `curriculum.vocabulary_segments`, and `curriculum.lesson_vocabulary` so lessons can
   eventually teach and drill multiple reusable words instead of only one anchor word.
-- The current runtime data still models a single `anchorWord` per lesson, so the
-  first seed pass will materialize anchor words into both the anchor projection and
-  the new vocabulary model while the supporting-word inventory is authored.
+- The current runtime data still models a single `anchorWord` for the featured lesson
+  concept, but now also carries the first authored supporting-vocabulary slice via
+  `lesson.vocabulary`.
+- `scripts/generate-thai-seed.mjs` now derives deterministic SQL seed output from the
+  rewritten runtime source of truth.
+- `supabase/seed.sql` now seeds the rewritten Thai course into `curriculum.*` and the
+  first published lesson bundles into `delivery.*`.
+- The first seeded local database has been verified directly with 1 course, 1 course
+  version, 13 lessons, 39 vocabulary items, and 13 publication lesson payloads.
 
 ## Approved Direction
 
@@ -65,26 +71,25 @@ first `delivery.*` lesson bundles.
   `tasks/supabase-db-foundation/thai-curriculum-seed-dataset.md` as the DB-ready
   inventory for the rewritten course.
 
-## Planned Work
+## Plan Outcome
 
-1. Finalize the rewritten seed scope and release metadata.
-2. Compile the rewritten DB-ready source inventory from `thai.ts`, `types.ts`, route
-   metadata, and `approach-thai.md`.
-3. Materialize the rewritten lesson set into normalized seed inputs for
-   `curriculum.languages`, `curriculum.script_systems`, `curriculum.courses`,
-   `curriculum.course_versions`, `curriculum.graphemes`,
-   `curriculum.course_version_graphemes`, `curriculum.lessons`,
-   `curriculum.vocabulary_items`, `curriculum.vocabulary_segments`,
-   `curriculum.lesson_vocabulary`, `curriculum.anchor_targets`,
-   `curriculum.anchor_segments`, `curriculum.orthography_rules`,
-   `curriculum.orthography_rule_examples`, `curriculum.lesson_graphemes`,
-   `curriculum.lesson_rules`, `curriculum.drills`, `curriculum.drill_options`,
-   and `curriculum.lesson_drills`.
-
-4. Generate the first `delivery.course_publication_lessons` payloads and validate
-   parity against the rewritten SvelteKit lesson contract.
-5. Use the remaining level 6 material in `approach-thai.md` to scope the next Thai
-   content version after the first seed lands.
+- [x] Finalize the rewritten seed scope and release metadata.
+- [x] Compile the rewritten DB-ready source inventory from `thai.ts`, `types.ts`,
+      route metadata, and `approach-thai.md`.
+- [x] Materialize the rewritten lesson set into normalized seed inputs for
+      `curriculum.languages`, `curriculum.script_systems`, `curriculum.courses`,
+      `curriculum.course_versions`, `curriculum.graphemes`,
+      `curriculum.course_version_graphemes`, `curriculum.lessons`,
+      `curriculum.vocabulary_items`, `curriculum.vocabulary_segments`,
+      `curriculum.lesson_vocabulary`, `curriculum.anchor_targets`,
+      `curriculum.anchor_segments`, `curriculum.orthography_rules`,
+      `curriculum.orthography_rule_examples`, `curriculum.lesson_graphemes`,
+      `curriculum.lesson_rules`, `curriculum.drills`, `curriculum.drill_options`,
+      and `curriculum.lesson_drills`.
+- [x] Generate the first `delivery.course_publication_lessons` payloads.
+- [x] Validate the first seed against the local Supabase schema.
+- [ ] Use the remaining level 6 material in `approach-thai.md` to scope the next Thai
+      content version after the first seed.
 
 ## Approved Decision
 
@@ -95,7 +100,7 @@ The approved path is:
 3. Keep the remaining level 6 expansion as follow-on curriculum work rather than
    blocking the first seed.
 
-## Validation Plan
+## Validation Outcome
 
 - Confirm the rewritten inventory counts before writing SQL:
   - 13 lessons
@@ -106,10 +111,20 @@ The approved path is:
   - 65 drills
   - 260 drill options
   - 27 anchor segments
-- Confirm every `reviewLetters` entry references a grapheme introduced in an earlier
-  lesson. Passed.
-- Confirm the first publication payload can round-trip into the rewritten lesson UI
-  contract while carrying a richer lesson vocabulary list that the current UI can
-  ignore until the runtime model grows into it.
+- Passed: every `reviewLetters` entry references a grapheme introduced in an earlier
+  lesson.
 - Passed: `pnpm check` after rewriting `src/lib/data/thai.ts`, resetting the local
   progress snapshot version, and adding tone-mark support to the alphabet page.
+- Passed: `pnpm exec supabase db reset --yes` after generating the first real Thai
+  curriculum seed.
+- Passed: direct SQL verification against the local database confirming 1 course, 1
+  course version, 13 lessons, 39 vocabulary items, and 13 publication lesson rows.
+
+## Handoff
+
+- The Thai content-seeding lane is complete for v1.
+- The next implementation step is to add the first server-owned SvelteKit read path
+  over `delivery.course_publication_lessons` so runtime lesson reads can move off the
+  static TypeScript pack and onto the seeded publication bundle.
+- Keep `scripts/generate-thai-seed.mjs` and `supabase/seed.sql` aligned with
+  `src/lib/data/thai.ts` whenever the Thai runtime curriculum changes.

@@ -40,8 +40,11 @@ lesson-plus-vocabulary model without breaking the current runtime lesson flow.
 - Extended `src/lib/data/types.ts` with structured lesson vocabulary.
 - Updated `src/lib/stores/progress.ts` so completed lessons unlock anchor and support words.
 - Updated the completion step UI to show supporting words unlocked by the lesson.
+- Added `scripts/generate-thai-seed.mjs` so the Thai curriculum seed stays derived from `src/lib/data/thai.ts`.
+- Generated the first real `supabase/seed.sql`, including normalized lesson vocabulary rows and the first `delivery.course_publication_lessons` payloads.
 
 ## Validation
 
 - Passed: `pnpm exec supabase db reset --yes`
 - Passed: `pnpm check`
+- Passed: `pnpm exec supabase db reset --yes` after generating the real Thai curriculum seed.
