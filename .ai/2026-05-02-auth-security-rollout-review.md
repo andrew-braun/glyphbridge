@@ -2,7 +2,7 @@
 
 - Start date: 2026-05-02
 - Owner: GitHub Copilot
-- Status: in-progress
+- Status: completed
 
 ## Goal
 
@@ -48,3 +48,19 @@ first authenticated release.
 - Update `.ai/tasks/supabase-db-foundation/auth-sync-strategy.md`.
 - Add a durable auth security reference under `docs/`.
 - Validate the touched markdown and repo checks relevant to the change.
+
+## Implemented
+
+- Refreshed `.ai/tasks/supabase-db-foundation/auth-sync-strategy.md` so it now
+  reflects the current adapter-node runtime, completed DB hardening, the root
+  route rendering decision that auth must resolve, and the remaining open
+  questions for secure rollout.
+- Added `docs/auth.md` as the durable auth architecture and security guide.
+- Updated `docs/README.md` so the new auth guide is discoverable with the rest of
+  the durable project documentation.
+
+## Validation
+
+- Passed: `pnpm exec markdownlint-cli2 .ai/2026-05-02-auth-security-rollout-review.md`
+- Passed: `pnpm exec markdownlint-cli2 .ai/tasks/supabase-db-foundation/auth-sync-strategy.md docs/auth.md docs/README.md`
+- Planned: `pnpm check`

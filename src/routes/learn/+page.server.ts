@@ -1,11 +1,17 @@
-import { getPublishedLessonCards } from "$lib/server/delivery-lessons";
+import { getPublishedLessonCards, getPublishedLessonVersion } from "$lib/server/published-lessons";
 
 import type { PageServerLoad } from "./$types";
 
-export const prerender = false;
+export const prerender = true;
 
 export const load: PageServerLoad = async () => {
+	const [publication, lessons] = await Promise.all([
+		getPublishedLessonVersion(),
+		getPublishedLessonCards(),
+	]);
+
 	return {
-		lessons: await getPublishedLessonCards(),
+		publication,
+		lessons,
 	};
 };

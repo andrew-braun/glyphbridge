@@ -14,6 +14,7 @@ Do not use `docs/` for task-by-task implementation tracking. Task specs, in-prog
 
 ## Current Documents
 
+- `auth.md` — durable auth architecture and security guide for request-scoped Supabase auth, learner sync boundaries, and rollout pitfalls.
 - `app-philosophy.md` — authoritative product guide covering the app model, lesson contract, progress path, and technical guardrails.
 - `db.md` — README-style database guide covering schema roles, table responsibilities, common SQL queries, local and linked Supabase CLI workflow, and remote deployment guidance.
 - `database-dto-spec.md` — build-ready PostgreSQL, Supabase, and runtime DTO specification for curriculum delivery and learner progress.

@@ -28,6 +28,7 @@
 	import type { PageProps } from "./$types";
 
 	let { data }: PageProps = $props();
+	const publication = $derived(data.publication);
 	const lesson = $derived(data.lesson);
 	const nextLessonId = $derived(data.nextLessonId);
 
@@ -82,6 +83,8 @@
 		name="description"
 		content={`Learn to read ${lesson.anchorWord.thai}, meaning ${lesson.anchorWord.meaning}, through letters, reading rules, and short Thai practice drills.`}
 	/>
+	<meta name="glyphbridge-publication-id" content={publication.publicationId} />
+	<meta name="glyphbridge-publication-cache-key" content={publication.publicationCacheKey} />
 </svelte:head>
 
 <div class="lesson container">

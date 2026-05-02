@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onMount } from "svelte";
+
 	import CardLink from "$lib/components/ui/CardLink.svelte";
 	import { currentLessonId } from "$lib/stores/progress";
 	import { cn } from "$lib/utils/cn";
@@ -6,15 +8,39 @@
 	import type { PageProps } from "./$types";
 
 	let { data }: PageProps = $props();
+	const publication = $derived(data.publication);
 	const lessons = $derived(data.lessons);
 
-	function getLessonCardClasses(isCurrent: boolean, isUnlocked: boolean, isDone: boolean) {
+	type HydratedLessonState = {
+		isCurrent: boolean;
+		isUnlocked: boolean;
+		isDone: boolean;
+	};
+
+	let hasHydratedProgress = $state(false);
+
+	onMount(() => {
+		hasHydratedProgress = true;
+	});
+
+	function getHydratedLessonState(
+		lessonId: number,
+		currentProgressLessonId: number,
+	): HydratedLessonState {
+		return {
+			isCurrent: lessonId === currentProgressLessonId,
+			isUnlocked: lessonId <= currentProgressLessonId,
+			isDone: lessonId < currentProgressLessonId,
+		};
+	}
+
+	function getLessonCardClasses(state: HydratedLessonState | null) {
 		return cn(
 			"lesson-card",
 			"card",
-			isCurrent && "lesson-card--current",
-			!isUnlocked && "lesson-card--locked",
-			isDone && "lesson-card--done",
+			state?.isCurrent && "lesson-card--current",
+			state !== null && !state.isUnlocked && "lesson-card--locked",
+			state?.isDone && "lesson-card--done",
 		);
 	}
 </script>
@@ -25,6 +51,8 @@
 		name="description"
 		content="Work through step-by-step Thai reading lessons built around real words, new letters, pronunciation rules, and quick drills."
 	/>
+	<meta name="glyphbridge-publication-id" content={publication.publicationId} />
+	<meta name="glyphbridge-publication-cache-key" content={publication.publicationCacheKey} />
 </svelte:head>
 
 <!--
@@ -45,21 +73,21 @@
 
 	<div class="lessons-grid">
 		{#each lessons as lesson}
-			<!-- Derive state flags: isCurrent marks the next lesson to do, isUnlocked allows navigation -->
-			{@const isCurrent = lesson.id === $currentLessonId}
-			{@const isUnlocked = lesson.id <= $currentLessonId}
-			{@const isDone = lesson.id < $currentLessonId}
+			<!-- Personal progress state is applied after hydration so the prerendered HTML stays publication-only. -->
+			{@const hydratedLessonState = hasHydratedProgress
+				? getHydratedLessonState(lesson.id, $currentLessonId)
+				: null}
 			<CardLink
 				href={`/learn/${lesson.id}`}
-				disabled={!isUnlocked}
-				class={getLessonCardClasses(isCurrent, isUnlocked, isDone)}
+				disabled={hydratedLessonState !== null && !hydratedLessonState.isUnlocked}
+				class={getLessonCardClasses(hydratedLessonState)}
 			>
-				<!-- Header badges: stage number + completion state (Complete / Current / none) -->
+				<!-- Header badges: stage number is static, progress badges appear after hydration. -->
 				<div class="lesson-card__header">
 					<span class="badge badge--primary">Stage {lesson.stage}</span>
-					{#if lesson.id < $currentLessonId}
+					{#if hydratedLessonState?.isDone}
 						<span class="badge badge--success">Complete</span>
-					{:else if isCurrent}
+					{:else if hydratedLessonState?.isCurrent}
 						<span class="badge badge--accent">Current</span>
 					{/if}
 				</div>
@@ -72,8 +100,8 @@
 						<span class="letter-chip thai thai--sm">{letter.character}</span>
 					{/each}
 				</div>
-				<!-- Overlay blocks interaction on locked lessons -->
-				{#if !isUnlocked}
+				<!-- Locked-state overlay is learner-specific and appears after hydration. -->
+				{#if hydratedLessonState !== null && !hydratedLessonState.isUnlocked}
 					<div class="lesson-card__overlay">&#128274; Complete previous lesson</div>
 				{/if}
 			</CardLink>

@@ -1,10 +1,18 @@
 import { error } from "@sveltejs/kit";
 
-import { getPublishedLesson } from "$lib/server/delivery-lessons";
+import {
+	getPublishedLesson,
+	getPublishedLessonEntries,
+	getPublishedLessonVersion,
+} from "$lib/server/published-lessons";
 
-import type { PageServerLoad } from "./$types";
+import type { EntryGenerator, PageServerLoad } from "./$types";
 
-export const prerender = false;
+export const prerender = true;
+
+export const entries: EntryGenerator = async () => {
+	return getPublishedLessonEntries();
+};
 
 export const load: PageServerLoad = async ({ params }) => {
 	if (!/^\d+$/.test(params.id)) {
@@ -16,7 +24,11 @@ export const load: PageServerLoad = async ({ params }) => {
 		throw error(404, "Lesson not found");
 	}
 
-	const { lesson, nextLessonId } = await getPublishedLesson(lessonId);
+	const [publication, lessonData] = await Promise.all([
+		getPublishedLessonVersion(),
+		getPublishedLesson(lessonId),
+	]);
+	const { lesson, nextLessonId } = lessonData;
 
-	return { lesson, nextLessonId };
+	return { publication, lesson, nextLessonId };
 };

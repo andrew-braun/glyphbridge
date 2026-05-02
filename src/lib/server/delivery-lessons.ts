@@ -75,7 +75,7 @@ function mapCard(payload: unknown): PublishedLessonCard {
 	}
 }
 
-async function getActivePublicationId(): Promise<string> {
+export async function getPublishedLessonPublicationId(): Promise<string> {
 	const now = Date.now();
 	if (cachedPublicationId && now - publicationIdCachedAt < PUBLICATION_CACHE_TTL_MS) {
 		return cachedPublicationId;
@@ -125,7 +125,7 @@ async function listPublicationLessons(publicationId: string): Promise<Publicatio
 }
 
 export async function getPublishedLessonCards(): Promise<PublishedLessonCard[]> {
-	const publicationId = await getActivePublicationId();
+	const publicationId = await getPublishedLessonPublicationId();
 	const rows = await listPublicationLessons(publicationId);
 
 	return rows.map((row) => mapCard(row.payload));
@@ -134,7 +134,7 @@ export async function getPublishedLessonCards(): Promise<PublishedLessonCard[]> 
 export async function getPublishedLesson(
 	lessonId: number,
 ): Promise<{ lesson: Lesson; nextLessonId: number | null }> {
-	const publicationId = await getActivePublicationId();
+	const publicationId = await getPublishedLessonPublicationId();
 	const delivery = getDeliveryClient().schema("delivery");
 
 	const { data, error: selectError } = await delivery
