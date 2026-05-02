@@ -1391,18 +1391,11 @@ const lessons: Lesson[] = baseLessons.map((lesson) => {
 
 	return {
 		...lesson,
-		vocabulary: [
-			{
-				role: "anchor",
-				drillTarget: true,
-				word: lesson.anchorWord,
-			},
-			...supportingVocabulary.map((word) => ({
-				role: "support" as const,
-				drillTarget: true,
-				word,
-			})),
-		],
+		vocabulary: supportingVocabulary.map((word) => ({
+			role: "support" as const,
+			drillTarget: true,
+			word,
+		})),
 	};
 });
 

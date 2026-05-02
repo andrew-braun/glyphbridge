@@ -67,9 +67,8 @@ the first `delivery.*` lesson bundles.
   source for the remaining level 6 content and future version increments.
 - Treat the new vocabulary tables as part of the first-class content model now so the
   app can grow into vocabulary drilling without another schema reshape.
-- Use the companion dataset file
-  `tasks/supabase-db-foundation/thai-curriculum-seed-dataset.md` as the DB-ready
-  inventory for the rewritten course.
+- Use `.ai/curriculum/thai.md` as the central Thai curriculum status and source
+  inventory tracker for the rewritten course.
 
 ## Plan Outcome
 

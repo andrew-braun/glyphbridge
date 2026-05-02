@@ -10,7 +10,7 @@
 - `implementation-status.md` for what actually landed and what still needs to happen next
 - `auth-sync-strategy.md` for the future authenticated rollout work
 - `../../2026-04-26-thai-content-seeding-plan.md` for the current Thai content-seeding plan and approval gate
-- `thai-curriculum-seed-dataset.md` for the DB-ready Thai source inventory
+- `../../curriculum/thai.md` for Thai curriculum status, coverage, and source inventory
 - `../../../docs/concept/approach-thai.md` for the durable Thai grapheme and lesson sequencing concept source
 
 ## Latest Decision Snapshot

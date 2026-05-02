@@ -5,7 +5,7 @@
  * Provides writable and derived stores for tracking known letters, known words,
  * lesson completion, and the current lesson. All mutations auto-persist to localStorage.
  */
-import { derived, get, type Unsubscriber, writable } from "svelte/store";
+import { derived, type Unsubscriber, writable } from "svelte/store";
 
 import { thaiPack } from "$lib/data/thai";
 import type {
@@ -323,6 +323,11 @@ export function completeLesson(lessonId: number, drillScore: number) {
 		const knownWords = [...$p.knownWords];
 		const knownWordSet = new Set(knownWords.map((word) => word.thai));
 
+		if (!knownWordSet.has(lesson.anchorWord.thai)) {
+			knownWordSet.add(lesson.anchorWord.thai);
+			knownWords.push(lesson.anchorWord);
+		}
+
 		for (const entry of lesson.vocabulary) {
 			if (knownWordSet.has(entry.word.thai)) continue;
 
@@ -342,26 +347,14 @@ export function completeLesson(lessonId: number, drillScore: number) {
 			lessonProgressEntry,
 		].sort((left, right) => left.lessonId - right.lessonId);
 
-		const nextLesson = lessons.find((candidate) => candidate.id > lessonId);
-		const nextLessonId = nextLesson?.id ?? lesson.id;
-
 		return {
 			knownLetters,
 			knownWords,
 			lessonProgress,
-			currentLessonId: Math.max($p.currentLessonId, nextLessonId),
+			currentLessonId: Math.max(
+				$p.currentLessonId,
+				getCurrentLessonIdFromProgress(lessonProgress),
+			),
 		};
 	});
-}
-
-/**
- * Checks whether a specific lesson has been completed by the learner.
- * Reads the current store value synchronously via `get()`.
- *
- * @param lessonId - The ID of the lesson to check
- * @returns true if the lesson is marked as completed
- */
-function isLessonCompleted(lessonId: number): boolean {
-	const $p = get(progress);
-	return $p.lessonProgress.some((entry) => entry.lessonId === lessonId && entry.completed);
 }

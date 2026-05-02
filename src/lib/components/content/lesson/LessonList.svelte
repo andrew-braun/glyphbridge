@@ -3,6 +3,7 @@
 	import Heading from "$lib/components/ui/Heading.svelte";
 	import { thaiPack } from "$lib/data/thai";
 	import type { Word } from "$lib/data/types";
+	import { cn } from "$lib/utils/cn";
 
 	interface Props {
 		currentLessonId: number;
@@ -12,15 +13,13 @@
 	let { currentLessonId, knownWords }: Props = $props();
 
 	function getLessonItemClasses(isCompleted: boolean, isCurrent: boolean, isLocked: boolean) {
-		return [
+		return cn(
 			"lesson-item",
 			"card",
-			isCompleted ? "lesson-item--completed" : "",
-			isCurrent ? "lesson-item--current" : "",
-			isLocked ? "lesson-item--locked" : "",
-		]
-			.filter(Boolean)
-			.join(" ");
+			isCompleted && "lesson-item--completed",
+			isCurrent && "lesson-item--current",
+			isLocked && "lesson-item--locked",
+		);
 	}
 </script>
 

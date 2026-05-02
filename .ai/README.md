@@ -28,6 +28,7 @@ If a document should live beyond a single task, put it in `docs/` instead.
 - Create the file before or at the start of implementation.
 - Update it as the work evolves.
 - Keep it accurate enough that someone can resume the task later without reconstructing the context from chat history.
+- Use `.ai/curriculum/<language>.md` for central per-language glyph-system progress and to-do tracking.
 - For larger workstreams that naturally split into multiple related task files, group them under `.ai/tasks/<task-slug>/` and add a local `README.md` that explains the document roles and reading order.
 - Inside `.ai/tasks/<task-slug>/`, prefer semantic filenames and use the bundle `README.md` to record overlap, completion, and consolidation decisions.
 

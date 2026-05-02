@@ -1,10 +1,17 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { error } from "@sveltejs/kit";
 
-import { env } from "$env/dynamic/public";
+import { env } from "$env/dynamic/private";
 import type { Lesson } from "$lib/data/types";
 
-import { DeliveryPayloadError, mapPublishedLessonPayload } from "./delivery-payload";
+import {
+	DeliveryPayloadError,
+	mapPublishedLessonCard,
+	mapPublishedLessonPayload,
+	type PublishedLessonCard,
+} from "./delivery-payload";
+
+export type { PublishedLessonCard };
 
 type ActivePublicationRow = {
 	id: string;
@@ -15,29 +22,34 @@ type PublicationLessonRow = {
 	payload: unknown;
 };
 
-export type PublishedLessonCard = Pick<
-	Lesson,
-	"id" | "stage" | "title" | "anchorWord" | "newLetters"
->;
+let deliveryClient: SupabaseClient | null = null;
 
-function createDeliveryClient() {
-	const supabaseUrl = env.PUBLIC_SUPABASE_URL;
-	const supabaseAnonKey = env.PUBLIC_SUPABASE_ANON_KEY;
+function getDeliveryClient(): SupabaseClient {
+	if (deliveryClient) return deliveryClient;
+
+	const supabaseUrl = env.SUPABASE_DELIVERY_URL;
+	const supabaseAnonKey = env.SUPABASE_DELIVERY_ANON_KEY;
 
 	if (!supabaseUrl || !supabaseAnonKey) {
 		throw error(
 			503,
-			"Supabase delivery reads are not configured. Set PUBLIC_SUPABASE_URL and PUBLIC_SUPABASE_ANON_KEY. For local Supabase, run `pnpm exec supabase status -o env` and map API_URL/PUBLISHABLE_KEY into those variables.",
+			"Supabase delivery reads are not configured. Set SUPABASE_DELIVERY_URL and SUPABASE_DELIVERY_ANON_KEY. For local Supabase, run `pnpm exec supabase status -o env` and map API_URL -> SUPABASE_DELIVERY_URL and PUBLISHABLE_KEY -> SUPABASE_DELIVERY_ANON_KEY.",
 		);
 	}
 
-	return createClient(supabaseUrl, supabaseAnonKey, {
+	deliveryClient = createClient(supabaseUrl, supabaseAnonKey, {
 		auth: {
 			autoRefreshToken: false,
 			persistSession: false,
 		},
 	});
+
+	return deliveryClient;
 }
+
+let cachedPublicationId: string | null = null;
+let publicationIdCachedAt = 0;
+const PUBLICATION_CACHE_TTL_MS = 60_000;
 
 function mapLesson(payload: unknown): Lesson {
 	try {
@@ -51,8 +63,25 @@ function mapLesson(payload: unknown): Lesson {
 	}
 }
 
+function mapCard(payload: unknown): PublishedLessonCard {
+	try {
+		return mapPublishedLessonCard(payload);
+	} catch (mappingError) {
+		if (mappingError instanceof DeliveryPayloadError) {
+			throw error(500, mappingError.message);
+		}
+
+		throw mappingError;
+	}
+}
+
 async function getActivePublicationId(): Promise<string> {
-	const delivery = createDeliveryClient().schema("delivery");
+	const now = Date.now();
+	if (cachedPublicationId && now - publicationIdCachedAt < PUBLICATION_CACHE_TTL_MS) {
+		return cachedPublicationId;
+	}
+
+	const delivery = getDeliveryClient().schema("delivery");
 	const { data, error: selectError } = await delivery
 		.from("course_publications")
 		.select("id")
@@ -73,11 +102,14 @@ async function getActivePublicationId(): Promise<string> {
 		throw error(500, "The current learn routes require exactly one active lesson publication");
 	}
 
-	return data[0].id;
+	cachedPublicationId = data[0].id;
+	publicationIdCachedAt = now;
+
+	return cachedPublicationId;
 }
 
 async function listPublicationLessons(publicationId: string): Promise<PublicationLessonRow[]> {
-	const delivery = createDeliveryClient().schema("delivery");
+	const delivery = getDeliveryClient().schema("delivery");
 	const { data, error: selectError } = await delivery
 		.from("course_publication_lessons")
 		.select("lesson_ordinal, payload")
@@ -96,60 +128,38 @@ export async function getPublishedLessonCards(): Promise<PublishedLessonCard[]> 
 	const publicationId = await getActivePublicationId();
 	const rows = await listPublicationLessons(publicationId);
 
-	return rows.map((row) => {
-		const lesson = mapLesson(row.payload);
-
-		return {
-			id: lesson.id,
-			stage: lesson.stage,
-			title: lesson.title,
-			anchorWord: lesson.anchorWord,
-			newLetters: lesson.newLetters,
-		};
-	});
+	return rows.map((row) => mapCard(row.payload));
 }
 
-export async function getPublishedLessonById(lessonId: number): Promise<Lesson> {
+export async function getPublishedLesson(
+	lessonId: number,
+): Promise<{ lesson: Lesson; nextLessonId: number | null }> {
 	const publicationId = await getActivePublicationId();
-	const delivery = createDeliveryClient().schema("delivery");
+	const delivery = getDeliveryClient().schema("delivery");
+
 	const { data, error: selectError } = await delivery
 		.from("course_publication_lessons")
-		.select("payload")
+		.select("lesson_ordinal, payload")
 		.eq("publication_id", publicationId)
-		.eq("lesson_ordinal", lessonId)
+		.gte("lesson_ordinal", lessonId)
+		.order("lesson_ordinal", { ascending: true })
 		.limit(2)
-		.returns<Array<Pick<PublicationLessonRow, "payload">>>();
+		.returns<PublicationLessonRow[]>();
 
 	if (selectError) {
 		throw error(500, "Unable to load the requested lesson");
 	}
 
-	if (!data || data.length === 0) {
+	const current = data?.[0];
+
+	if (!current || current.lesson_ordinal !== lessonId) {
 		throw error(404, "Lesson not found");
 	}
 
-	if (data.length > 1) {
-		throw error(500, "Multiple published lessons matched the requested lesson ordinal");
-	}
+	const next = data[1];
 
-	return mapLesson(data[0].payload);
-}
-
-export async function getNextPublishedLessonId(lessonId: number): Promise<number | null> {
-	const publicationId = await getActivePublicationId();
-	const delivery = createDeliveryClient().schema("delivery");
-	const { data, error: selectError } = await delivery
-		.from("course_publication_lessons")
-		.select("lesson_ordinal")
-		.eq("publication_id", publicationId)
-		.gt("lesson_ordinal", lessonId)
-		.order("lesson_ordinal", { ascending: true })
-		.limit(1)
-		.returns<Array<Pick<PublicationLessonRow, "lesson_ordinal">>>();
-
-	if (selectError) {
-		throw error(500, "Unable to load lesson navigation");
-	}
-
-	return data?.[0]?.lesson_ordinal ?? null;
+	return {
+		lesson: mapLesson(current.payload),
+		nextLessonId: next?.lesson_ordinal ?? null,
+	};
 }

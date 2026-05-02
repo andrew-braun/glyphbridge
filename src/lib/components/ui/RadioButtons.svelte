@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { RadioGroup } from "bits-ui";
 
+	import { cn } from "$lib/utils/cn";
+
 	export type RadioButtonTone = "default" | "correct" | "wrong";
 
 	export type RadioButtonOption = {
@@ -25,17 +27,15 @@
 		class?: string;
 	} = $props();
 
-	const classes = $derived(["radio-buttons", className].filter(Boolean).join(" "));
+	const classes = $derived(cn("radio-buttons", className));
 
 	function getOptionClasses(option: RadioButtonOption, checked: boolean) {
-		return [
+		return cn(
 			"radio-buttons__option",
-			checked ? "radio-buttons__option--selected" : "",
-			option.tone === "correct" ? "radio-buttons__option--correct" : "",
-			option.tone === "wrong" ? "radio-buttons__option--wrong" : "",
-		]
-			.filter(Boolean)
-			.join(" ");
+			checked && "radio-buttons__option--selected",
+			option.tone === "correct" && "radio-buttons__option--correct",
+			option.tone === "wrong" && "radio-buttons__option--wrong",
+		);
 	}
 </script>
 

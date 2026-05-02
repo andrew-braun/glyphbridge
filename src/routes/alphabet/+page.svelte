@@ -27,55 +27,33 @@
 			: (allLetters.find((letter) => letter.character === selectedCharacter) ?? null),
 	);
 
+	function buildSection(
+		letters: Letter[],
+		headingId: string,
+		title: string,
+	): { headingId: string; title: string; options: ToggleTileOption[] } {
+		return {
+			headingId,
+			title,
+			options: letters.map<ToggleTileOption>((letter) => {
+				const known = isKnown(letter.character);
+				return {
+					value: letter.character,
+					primaryLabel: letter.character,
+					secondaryLabel: known ? letter.romanization : "?",
+					disabled: !known,
+					primaryIsThai: true,
+					variant: known ? "known" : "default",
+					secondaryTone: known ? "default" : "muted",
+				};
+			}),
+		};
+	}
+
 	const letterSections = $derived([
-		{
-			headingId: "alphabet-consonants-heading",
-			title: "Consonants",
-			options: consonants.map<ToggleTileOption>((letter) => {
-				const known = isKnown(letter.character);
-				return {
-					value: letter.character,
-					primaryLabel: letter.character,
-					secondaryLabel: known ? letter.romanization : "?",
-					disabled: !known,
-					primaryIsThai: true,
-					variant: known ? "known" : "default",
-					secondaryTone: known ? "default" : "muted",
-				};
-			}),
-		},
-		{
-			headingId: "alphabet-vowels-heading",
-			title: "Vowels",
-			options: vowels.map<ToggleTileOption>((letter) => {
-				const known = isKnown(letter.character);
-				return {
-					value: letter.character,
-					primaryLabel: letter.character,
-					secondaryLabel: known ? letter.romanization : "?",
-					disabled: !known,
-					primaryIsThai: true,
-					variant: known ? "known" : "default",
-					secondaryTone: known ? "default" : "muted",
-				};
-			}),
-		},
-		{
-			headingId: "alphabet-tone-marks-heading",
-			title: "Tone Marks",
-			options: toneMarks.map<ToggleTileOption>((letter) => {
-				const known = isKnown(letter.character);
-				return {
-					value: letter.character,
-					primaryLabel: letter.character,
-					secondaryLabel: known ? letter.romanization : "?",
-					disabled: !known,
-					primaryIsThai: true,
-					variant: known ? "known" : "default",
-					secondaryTone: known ? "default" : "muted",
-				};
-			}),
-		},
+		buildSection(consonants, "alphabet-consonants-heading", "Consonants"),
+		buildSection(vowels, "alphabet-vowels-heading", "Vowels"),
+		buildSection(toneMarks, "alphabet-tone-marks-heading", "Tone Marks"),
 	]);
 </script>
 

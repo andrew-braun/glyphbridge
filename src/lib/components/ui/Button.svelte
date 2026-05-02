@@ -2,6 +2,8 @@
 	import { Button as BitsButton } from "bits-ui";
 	import type { Snippet } from "svelte";
 
+	import { cn } from "$lib/utils/cn";
+
 	type ButtonVariant = "primary" | "secondary" | "ghost" | "success";
 	type ButtonSize = "md" | "large";
 	type NativeButtonType = "button" | "submit" | "reset";
@@ -28,11 +30,8 @@
 		children?: Snippet;
 	} = $props();
 
-	const variantClass = $derived(`btn--${variant}`);
-	const sizeClass = $derived(size === "large" ? "btn--large" : "");
-	const fullWidthClass = $derived(fullWidth ? "btn--full" : "");
 	const classes = $derived(
-		["btn", variantClass, sizeClass, fullWidthClass, className].filter(Boolean).join(" "),
+		cn("btn", `btn--${variant}`, `btn--${size}`, fullWidth && "btn--full", className),
 	);
 </script>
 

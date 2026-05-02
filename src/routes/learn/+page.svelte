@@ -1,6 +1,7 @@
 <script lang="ts">
 	import CardLink from "$lib/components/ui/CardLink.svelte";
 	import { currentLessonId } from "$lib/stores/progress";
+	import { cn } from "$lib/utils/cn";
 
 	import type { PageProps } from "./$types";
 
@@ -8,15 +9,13 @@
 	const lessons = $derived(data.lessons);
 
 	function getLessonCardClasses(isCurrent: boolean, isUnlocked: boolean, isDone: boolean) {
-		return [
+		return cn(
 			"lesson-card",
 			"card",
-			isCurrent ? "lesson-card--current" : "",
-			!isUnlocked ? "lesson-card--locked" : "",
-			isDone ? "lesson-card--done" : "",
-		]
-			.filter(Boolean)
-			.join(" ");
+			isCurrent && "lesson-card--current",
+			!isUnlocked && "lesson-card--locked",
+			isDone && "lesson-card--done",
+		);
 	}
 </script>
 

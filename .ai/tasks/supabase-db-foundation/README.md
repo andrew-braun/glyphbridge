@@ -10,7 +10,7 @@ This directory groups the active and recently completed `.ai` task documents for
 - `foundation-plan.md` is the authoritative architecture and schema-rationale document.
 - `auth-sync-strategy.md` is the authoritative plan for the authenticated rollout lane only.
 - `../../2026-04-26-thai-content-seeding-plan.md` is the authoritative planning record for the completed Thai content-seeding lane.
-- `thai-curriculum-seed-dataset.md` is the authoritative DB-ready source inventory for Thai curriculum seed inputs.
+- `../../curriculum/thai.md` is the authoritative Thai curriculum progress, coverage, and source-inventory tracker.
 - `../../../docs/concept/approach-thai.md` is the authoritative durable Thai concept source for grapheme sequencing, lesson expansion, and coverage targets.
 
 ## Recommended Reading Order
@@ -26,8 +26,8 @@ This directory groups the active and recently completed `.ai` task documents for
 - `../../2026-04-26-thai-content-seeding-plan.md`
   - Current Thai content-seeding plan, rewrite status, and implementation sequence.
 
-- `thai-curriculum-seed-dataset.md`
-  - DB-ready source inventory for the first Thai curriculum seed.
+- `../../curriculum/thai.md`
+  - Central Thai curriculum progress, coverage, and next-to-do tracker.
 
 - `database-security-audit.md`
   - Security findings, severity, and recommended remediation for the current DB foundation.
@@ -86,6 +86,7 @@ This directory groups the active and recently completed `.ai` task documents for
 - DB hardening and input-bounds remediation are complete.
 - The approved Thai curriculum rewrite has landed in `src/lib/data/thai.ts` and is now the seed source of truth.
 - The first Thai curriculum seed is now in place in `curriculum.*` and `delivery.*`, and direct SQL verification confirms 1 course, 1 course version, 13 lessons, 39 vocabulary items, and 13 publication lesson rows.
+- Thai curriculum status and future authoring work now live in `.ai/curriculum/thai.md` instead of inside this Supabase task bundle.
 - The learn index and lesson detail routes now read the active published lesson bundle through `src/lib/server/delivery-lessons.ts` and server-owned SvelteKit loads.
 - The app now uses a server-capable SvelteKit adapter for DB-backed lesson delivery instead of assuming static-only hosting.
 - Local `/learn` development now requires `PUBLIC_SUPABASE_URL` and `PUBLIC_SUPABASE_ANON_KEY`; `.env.example` documents the local `supabase status -o env` mapping.

@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { Progress as BitsProgress } from "bits-ui";
 
+	import { cn } from "$lib/utils/cn";
+
 	let {
 		value,
 		max = 100,
@@ -20,17 +22,17 @@
 	const boundedValue = $derived(Math.min(Math.max(value, min), max));
 	const percent = $derived(max === min ? 0 : ((boundedValue - min) / (max - min)) * 100);
 	const resolvedValueLabel = $derived(valueLabel ?? `${Math.round(percent)}%`);
-	const classes = $derived(["progress", className].filter(Boolean).join(" "));
+	const classes = $derived(cn("progress", className));
 </script>
 
 <div class={classes}>
 	<BitsProgress.Root
+		class="progress__track"
 		value={boundedValue}
 		{min}
 		{max}
 		aria-label={label}
 		aria-valuetext={resolvedValueLabel}
-		style=" border-radius: inherit;display: block; height: 100%; overflow: hidden; width: 100%;"
 	>
 		<div class="progress__fill" style:width={`${percent}%`}></div>
 	</BitsProgress.Root>
@@ -43,6 +45,14 @@
 		height: 8px;
 		overflow: hidden;
 		width: 100%;
+
+		&__track {
+			border-radius: inherit;
+			display: block;
+			height: 100%;
+			overflow: hidden;
+			width: 100%;
+		}
 
 		&__fill {
 			background: linear-gradient(90deg, $color-primary, $color-primary-light);

@@ -36,7 +36,7 @@ Track the implemented foundation of the Supabase and database workstream, summar
 - The learn index and lesson detail routes now read published lesson bundles from `delivery.course_publication_lessons` through a server-owned SvelteKit boundary, while local client persistence still remains in `src/lib/stores/progress.ts` and other curriculum views still retain static Thai source data.
 - The runtime lesson model now also carries a first supporting-vocabulary slice per lesson, while preserving the featured `anchorWord` for the current lesson flow.
 - `src/lib/stores/progress.ts` now uses snapshot version `2` so older local progress does not map onto the rewritten lesson IDs.
-- Thai content seeding planning now lives in `../../2026-04-26-thai-content-seeding-plan.md` and `thai-curriculum-seed-dataset.md`, which now treat the rewritten runtime curriculum as the next seed source.
+- Thai content seeding planning now lives in `../../2026-04-26-thai-content-seeding-plan.md`, and Thai curriculum progress plus follow-on authoring work now live in `../../curriculum/thai.md`.
 - `docs/database-dto-spec.md` now includes first-class reusable lesson vocabulary tables so the content model can grow into vocabulary drilling without another schema redesign.
 - `supabase/migrations/20260430110000_lesson_vocabulary_tables.sql` now creates the reusable vocabulary tables in the live migration chain and validates cleanly with a local DB reset.
 - `scripts/generate-thai-seed.mjs` now derives the first Thai curriculum seed directly from `src/lib/data/thai.ts`.
@@ -116,7 +116,7 @@ Track the implemented foundation of the Supabase and database workstream, summar
 
 ## Near-Term Next Steps
 
-- Keep `docs/concept/approach-thai.md` and `thai-curriculum-seed-dataset.md` aligned as the authoritative Thai source inventory for future grapheme and lesson expansion, especially the not-yet-encoded level 6 material.
+- Keep `docs/concept/approach-thai.md` and `../../curriculum/thai.md` aligned as the authoritative Thai source inventory for future grapheme and lesson expansion, especially the not-yet-encoded level 6 material.
 - Keep `scripts/generate-thai-seed.mjs` and `supabase/seed.sql` aligned with `src/lib/data/thai.ts` whenever the Thai curriculum changes.
 - Replace the module-scoped Supabase client with request-scoped `@supabase/ssr` integration before any authenticated server route or load function imports Supabase.
 - After the request-scoped auth boundary exists, add the first authenticated server-side SvelteKit boundary for learner attempt sync.

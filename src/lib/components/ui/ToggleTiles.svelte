@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { ToggleGroup } from "bits-ui";
 
+	import { cn } from "$lib/utils/cn";
+
 	export type ToggleTileVariant = "default" | "known";
 	export type ToggleTileSecondaryTone = "default" | "muted";
 
@@ -28,16 +30,14 @@
 		class?: string;
 	} = $props();
 
-	const classes = $derived(["toggle-tiles", className].filter(Boolean).join(" "));
+	const classes = $derived(cn("toggle-tiles", className));
 
 	function getTileClasses(option: ToggleTileOption, pressed: boolean) {
-		return [
+		return cn(
 			"toggle-tiles__item",
-			option.variant === "known" ? "toggle-tiles__item--known" : "",
-			pressed ? "toggle-tiles__item--selected" : "",
-		]
-			.filter(Boolean)
-			.join(" ");
+			option.variant === "known" && "toggle-tiles__item--known",
+			pressed && "toggle-tiles__item--selected",
+		);
 	}
 </script>
 

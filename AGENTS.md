@@ -39,6 +39,7 @@
 - Name task files as `YYYY-MM-DD-short-description.md` using the date the task starts.
 - Create the task file before or at the start of implementation, then keep it updated with scope, decisions, progress, blockers, and follow-up work.
 - Treat the `.ai` file as the durable handoff artifact for resuming work later.
+- Track per-language curriculum progress and future authoring work in `.ai/curriculum/<language>.md`.
 
 ## Durable Documentation
 

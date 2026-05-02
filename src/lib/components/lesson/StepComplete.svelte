@@ -25,7 +25,7 @@
 		hasNextLesson: boolean;
 	} = $props();
 
-	const supportingWords = $derived(lesson.vocabulary.filter((entry) => entry.role === "support"));
+	const supportingWords = $derived(lesson.vocabulary);
 </script>
 
 <div class="step">
