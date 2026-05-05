@@ -11,6 +11,14 @@
 		typeof form?.requestError === "string" ? form.requestError : null,
 	);
 	const verifyError = $derived(typeof form?.verifyError === "string" ? form.verifyError : null);
+
+	function normalizeCodeInput(event: Event) {
+		const input = event.currentTarget;
+
+		if (!(input instanceof HTMLInputElement)) return;
+
+		input.value = input.value.replace(/\D/g, "").slice(0, 6);
+	}
 </script>
 
 <svelte:head>
@@ -66,13 +74,15 @@
 
 					<label class="auth__field">
 						<span>Code</span>
+						<span class="auth__hint">Paste the 6-digit code from your email.</span>
 						<input
 							name="token"
 							type="text"
 							inputmode="numeric"
 							autocomplete="one-time-code"
-							pattern="[0-9]{6}"
-							maxlength="6"
+							oninput={normalizeCodeInput}
+							placeholder="123456"
+							spellcheck="false"
 							required
 						/>
 					</label>
@@ -128,6 +138,12 @@
 		flex-direction: column;
 		font-weight: 700;
 		gap: $space-xs;
+	}
+
+	.auth__hint {
+		color: $color-text-light;
+		font-size: $font-size-sm;
+		font-weight: 500;
 	}
 
 	.auth__field input {

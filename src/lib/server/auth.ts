@@ -56,7 +56,7 @@ export function normalizeEmail(value: string | null): string | null {
 export function normalizeEmailOtp(value: string | null): string | null {
 	if (!value) return null;
 
-	const normalized = value.trim();
+	const normalized = value.replace(/\D/g, "");
 
 	return /^\d{6}$/.test(normalized) ? normalized : null;
 }

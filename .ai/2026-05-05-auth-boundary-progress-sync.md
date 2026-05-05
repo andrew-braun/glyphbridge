@@ -60,6 +60,8 @@ Implement the first secure GlyphBridge account flow with server-owned Supabase a
 ## Follow-Up Fixes
 
 - Fixed Supabase lint ambiguity in `20260505120000_auth_projection_wrappers.sql` by targeting the enrollment unique constraint directly in the enrollment upsert.
+- Updated local `supabase/config.toml` auth URLs so local OTP emails target the Vite dev app on `localhost:5173` instead of the old `127.0.0.1:3000` default.
+- Relaxed OTP entry normalization so pasted local email codes with spaces or other formatting are cleaned to a 6-digit token before verification.
 
 ## Notes
 
