@@ -36,8 +36,8 @@ At the time of writing:
   rows
 - `src/lib/data/thai.ts` remains the curriculum source of truth, and
   `scripts/generate-thai-seed.mjs` regenerates `supabase/seed.sql`
-- the runtime app is not yet wired to read from `delivery.*`; the next implementation
-  step is still the first server-owned SvelteKit read boundary
+- the runtime app reads published lesson bundles from `delivery.*` through
+  server-owned SvelteKit boundaries and generated publication artifacts
 
 ## Schema Map
 
@@ -778,7 +778,10 @@ As of now:
 - The baseline SQL schema exists and resets cleanly locally.
 - The local seed file now contains the first real Thai curriculum seed.
 - The first published lesson bundles now exist in `delivery.course_publication_lessons`.
-- The app is not yet wired to read from the database.
+- The app reads published lesson content through server-owned delivery helpers and
+  generated publication artifacts.
+- The first auth implementation now uses server-owned learner RPC wrappers rather
+  than direct browser Supabase access.
 
 ## Fastest Files To Read First
 

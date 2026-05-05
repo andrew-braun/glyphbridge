@@ -10,9 +10,16 @@
 	// Global SCSS — must be imported here so it applies to all routes
 	import "$lib/styles/global.scss";
 
+	import { onMount } from "svelte";
+
 	import MainNav from "$lib/components/navigation/MainNav.svelte";
+	import { refreshLearnerProjection } from "$lib/stores/learner";
 
 	let { children } = $props();
+
+	onMount(() => {
+		void refreshLearnerProjection();
+	});
 </script>
 
 <div class="app">

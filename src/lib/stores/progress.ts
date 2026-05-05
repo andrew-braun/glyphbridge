@@ -7,6 +7,7 @@
  */
 import { derived, type Unsubscriber, writable } from "svelte/store";
 
+import type { LearnerProjection } from "$lib/data/learner";
 import { thaiPack } from "$lib/data/thai";
 import type {
 	AppProgress,
@@ -308,7 +309,49 @@ export const totalLessons = lessons.length;
  * @param lessonId - The ID of the lesson being completed
  * @param drillScore - The learner's score on the drill section
  */
-export function completeLesson(lessonId: number, drillScore: number) {
+
+export function applyLearnerProjection(projection: LearnerProjection) {
+	progress.update(($p) => {
+		const byLessonId = new Map($p.lessonProgress.map((entry) => [entry.lessonId, entry]));
+
+		for (const serverLesson of projection.lessons) {
+			if (serverLesson.status !== "completed") continue;
+
+			const existing = byLessonId.get(serverLesson.lessonId);
+			const serverScore = serverLesson.bestScore ?? serverLesson.latestScore ?? undefined;
+			const completedAt =
+				serverLesson.firstCompletedAt ??
+				serverLesson.lastAttemptAt ??
+				existing?.completedAt;
+
+			byLessonId.set(serverLesson.lessonId, {
+				lessonId: serverLesson.lessonId,
+				completed: true,
+				...(serverScore !== undefined || existing?.drillScore !== undefined
+					? { drillScore: Math.max(serverScore ?? 0, existing?.drillScore ?? 0) }
+					: {}),
+				...(completedAt ? { completedAt } : {}),
+			});
+		}
+
+		const merged = normalizeProgress({
+			...$p,
+			lessonProgress: Array.from(byLessonId.values()),
+		});
+
+		return {
+			...merged,
+			currentLessonId: Math.max(
+				merged.currentLessonId,
+				projection.resumeLessonId ?? merged.currentLessonId,
+			),
+		};
+	});
+}
+
+export function completeLesson(lessonId: number, drillScore: number): LessonProgress | null {
+	let completedEntry: LessonProgress | null = null;
+
 	progress.update(($p) => {
 		const lesson = lessonById.get(lessonId);
 		if (!lesson) return $p;
@@ -341,6 +384,7 @@ export function completeLesson(lessonId: number, drillScore: number) {
 			drillScore: Math.max(0, Math.min(100, Math.round(drillScore))),
 			completedAt: new Date().toISOString(),
 		};
+		completedEntry = lessonProgressEntry;
 
 		const lessonProgress = [
 			...$p.lessonProgress.filter((entry) => entry.lessonId !== lessonId),
@@ -357,4 +401,6 @@ export function completeLesson(lessonId: number, drillScore: number) {
 			),
 		};
 	});
+
+	return completedEntry;
 }

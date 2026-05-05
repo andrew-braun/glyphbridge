@@ -88,7 +88,8 @@
 		]
 	},
 	"dependencies": {
-		"@supabase/supabase-js": "^2.101.0",
+		"@supabase/ssr": "^0.10.2",
+		"@supabase/supabase-js": "^2.105.3",
 		"@sveltejs/adapter-static": "^3.0.10",
 		"bits-ui": "^2.16.5",
 		"sass": "^1.98.0"

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/state";
+	import { authSession } from "$lib/stores/learner";
 	import { knownLetters, knownWords } from "$lib/stores/progress";
 </script>
 
@@ -31,6 +32,15 @@
 			>
 				Practice
 			</a>
+			{#if $authSession.authenticated}
+				<form method="POST" action="/auth/sign-out" class="nav__form">
+					<button class="nav__link nav__link--button" type="submit">Sign out</button>
+				</form>
+			{:else}
+				<a href="/auth" class={["nav__link", { active: page.url.pathname === "/auth" }]}
+					>Sign in</a
+				>
+			{/if}
 		</div>
 	</div>
 </nav>
@@ -71,9 +81,14 @@
 
 		&__link {
 			align-items: center;
+			appearance: none;
+			background: transparent;
+			border: 0;
 			border-radius: $radius-md;
 			color: $color-text-light;
+			cursor: pointer;
 			display: flex;
+			font: inherit;
 			font-size: $font-size-sm;
 			font-weight: 600;
 			gap: $space-xs;
@@ -90,6 +105,10 @@
 				background: rgba($color-primary, 0.1);
 				color: $color-primary;
 			}
+		}
+
+		&__form {
+			display: contents;
 		}
 
 		&__count {

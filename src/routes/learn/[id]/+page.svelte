@@ -24,6 +24,10 @@
 	import Button from "$lib/components/ui/Button.svelte";
 	import Progress from "$lib/components/ui/Progress.svelte";
 	import { completeLesson } from "$lib/stores/progress";
+	import {
+		createLessonCompletionSyncInput,
+		queueAndFlushLessonCompletionAttempt,
+	} from "$lib/stores/progress-sync";
 
 	import type { PageProps } from "./$types";
 
@@ -63,7 +67,19 @@
 	function handleDrillsComplete(correctCount: number) {
 		drillCorrectCount = correctCount;
 		const score = Math.round((correctCount / lesson.drills.length) * 100);
-		completeLesson(lesson.id, score);
+		const completion = completeLesson(lesson.id, score);
+
+		if (completion?.completedAt) {
+			void queueAndFlushLessonCompletionAttempt(
+				createLessonCompletionSyncInput({
+					completedAt: completion.completedAt,
+					lessonId: lesson.id,
+					publicationId: publication.publicationId,
+					score,
+				}),
+			);
+		}
+
 		nextStep();
 	}
 

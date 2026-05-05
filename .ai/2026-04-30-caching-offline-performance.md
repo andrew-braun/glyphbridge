@@ -29,6 +29,13 @@ That means a static-first lesson experience is realistic. The published lesson s
 lesson payloads can become build-time artifacts, while learner-specific state can hydrate
 after page load and progressively update badges, locks, scores, and resume positions.
 
+The same split should guide the main screen:
+
+- The learner-aware home shell should render from the last-known local snapshot immediately.
+- Signed-in learner data should revalidate in the background instead of blocking first paint.
+- Service workers can cache the shell and publication content, but they are not the storage
+  model for learner state.
+
 ## Decision Points to Analyse
 
 ### 1. HTTP cache headers on lesson routes
@@ -116,24 +123,35 @@ A pragmatic host-agnostic path:
    redeploys are acceptable, this is simpler and more portable than trying to recreate
    Next.js-style ISR semantics across different hosts.
 
-2. **Keep learner state as a dynamic overlay.**
+2. **Keep the learner shell local-first.**
+   The main screen should not wait on SSR to feel personalized. Render last-known learner
+   progress, current lesson, and next-lesson cues from the local snapshot first, then
+   reconcile against a server-backed learner projection when session and network are
+   available.
+
+3. **Keep learner state as a dynamic overlay.**
    Anything auth- or learner-specific should load separately from the published lesson
    content. Today that is localStorage-backed progress; later it can become an auth-backed
    learner projection fetched after hydration. This keeps roughly 80% to 90% of the page
-   static while still allowing real-time progress, streak, drill history, or resume-state
-   updates.
+   static while still allowing real-time progress, streak, drill history, resume-state
+   updates, and a learner-aware home shell.
 
-3. **Use HTTP caching as a transitional or secondary optimization.**
+4. **Use SSR only where trust boundaries require it.**
+   Auth, account management, protected writes, and reviewed server-owned sync surfaces need
+   request-scoped server auth. But that does not imply whole-app SSR-first rendering, and it
+   should not force the learner shell or public lesson pages into per-user HTML.
+
+5. **Use HTTP caching as a transitional or secondary optimization.**
    If lesson reads remain server-rendered for a while, add `Cache-Control` with
    `stale-while-revalidate` on those responses. But that should be treated as an interim
    performance improvement, not the long-term core architecture.
 
-4. **Use publication ID as the version boundary everywhere.**
+6. **Use publication ID as the version boundary everywhere.**
    The active `delivery.course_publications.id` should become the cache-bust key for
    generated lesson artifacts, service-worker cache names, ETags, and any future CDN
    invalidation workflow.
 
-5. **Do not pursue realtime curriculum invalidation.**
+7. **Do not pursue realtime curriculum invalidation.**
    A new publication can land on the next deploy or cache refresh window. Supabase
    Realtime is unnecessary for this problem.
 
@@ -195,6 +213,10 @@ and warm the new set.
 - **Read-only offline lessons:** medium complexity, addable later
 - **Offline learner progress with eventual server sync:** materially higher complexity
 
+One practical consequence follows from that second point: once offline learner sync or
+worker-coordinated reads are introduced, the learner snapshot should move beyond localStorage
+to IndexedDB or another worker-friendly local store.
+
 So this is not a feature that requires the whole app to be architected around it today.
 It becomes architecture-shaping only when offline writes, sync queues, merge rules, and
 conflict resolution become product requirements. For the current product shape, a service
@@ -220,6 +242,8 @@ worker is an additive enhancement after the static/dynamic split is in place.
   names can all share the same publication version boundary.
 - Planned the current lesson-locking overlay to move from localStorage-backed progress to a
   server-backed learner projection once the authenticated route boundary lands.
+- Clarified that the main learner shell should stay local-first rather than become SSR-first
+  when auth arrives.
 
 ---
 
@@ -236,3 +260,5 @@ worker is an additive enhancement after the static/dynamic split is in place.
       remains server-rendered during the transition
 - [ ] Replace the localStorage-backed learn-card overlay with a server-backed learner
       projection once auth-backed learner state is available in the app shell
+- [ ] Define when the learner-state store should move from localStorage to IndexedDB for
+      offline sync queues or service-worker coordination

@@ -899,12 +899,13 @@ This spec is not a full policy document, but these rules are fixed:
 - `curriculum.*` also has deny-by-default RLS enabled as a defense-in-depth guard.
 - `delivery.*` is read-only for runtime access.
 - `learner.*` is user-owned and policy-scoped on `user_id = auth.uid()`.
-- Client-direct updates on `learner.profiles` are column-limited to `display_name`.
-- Client-direct updates on `learner.preferences` are column-limited to the learner preference flags.
-- Clients may `select` from `learner.lesson_attempts` for their own rows, but attempt insertion is server-owned.
-- Clients may only `select` from `learner.lesson_progress` and `learner.course_enrollments` for their own rows.
-- Clients may not directly `insert`, `update`, or `delete` `learner.lesson_progress`.
-- Server-side code calls `internal_api.sync_lesson_attempt_batch(...)` and the function re-validates the authenticated user against the enrollment.
+- The app does not ship a browser Supabase client in v1.
+- Authenticated clients do not receive direct table grants on `learner.*`.
+- Server-side app code uses narrowly scoped `learner` RPC wrappers for enrollment,
+  projection, and sync.
+- Server-side code calls `learner.sync_lesson_attempt_batch_for_current_user(...)`,
+  which delegates to `internal_api.sync_lesson_attempt_batch(...)`; the internal
+  function re-validates the authenticated user against the enrollment.
 
 ## Migration Order
 
