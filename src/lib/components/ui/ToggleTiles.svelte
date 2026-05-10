@@ -85,8 +85,8 @@
 
 		&__item {
 			align-items: center;
-			background: $color-bg-card;
-			border: 2px solid $color-border;
+			background: var(--color-surface-card);
+			border: 2px solid var(--color-border);
 			border-radius: $radius-lg;
 			cursor: pointer;
 			display: flex;
@@ -102,35 +102,35 @@
 			}
 
 			&--known {
-				background: rgba($color-primary, 0.04);
-				border-color: rgba($color-primary, 0.3);
+				background: var(--surface-interactive);
+				border-color: var(--color-border-strong);
 
 				&:hover {
-					border-color: $color-primary;
-					box-shadow: $shadow-md;
+					border-color: var(--color-primary);
+					box-shadow: var(--shadow-card);
 					transform: translateY(-2px);
 				}
 			}
 
 			&--selected {
-				background: rgba($color-primary, 0.08);
-				border-color: $color-primary !important;
-				box-shadow: $shadow-lg;
+				background: var(--surface-interactive-strong);
+				border-color: var(--color-primary) !important;
+				box-shadow: var(--shadow-card-hover);
 			}
 		}
 
 		&__primary {
-			color: $color-primary;
+			color: var(--color-primary-strong);
 			font-size: $font-size-2xl;
 		}
 
 		&__secondary {
-			color: $color-text-light;
+			color: var(--color-text-muted);
 			font-size: $font-size-xs;
 			font-weight: 600;
 
 			&--muted {
-				color: $color-text-muted;
+				color: var(--color-text-soft);
 			}
 		}
 	}

@@ -80,7 +80,32 @@
 	/>
 </svelte:head>
 
-<div class="auth container">
+<div class="auth container page-shell page-shell--narrow">
+	<section class="page-intro auth__intro">
+		<span class="page-intro__eyebrow">Account and sync</span>
+		<h1 class="page-intro__title">
+			{#if data.userEmail}
+				Your progress, with a server-backed checkpoint.
+			{:else}
+				Sign in with a code. No password ritual required.
+			{/if}
+		</h1>
+		<p class="page-intro__body">
+			{#if data.userEmail}
+				This account keeps your local-first learning flow intact while adding a verified
+				progress projection you can refresh and reuse on another device.
+			{:else}
+				GlyphBridge starts locally and stays fast. Signing in simply gives that progress a
+				place to land beyond this browser.
+			{/if}
+		</p>
+		<div class="page-intro__meta">
+			<span class="badge badge--primary">one-time email code</span>
+			<span class="badge badge--accent">local-first shell</span>
+			<span class="badge badge--success">optional account</span>
+		</div>
+	</section>
+
 	<section class="auth__panel card card--flat" aria-labelledby="auth-heading">
 		{#if data.userEmail}
 			<div class="auth__header">
@@ -213,9 +238,15 @@
 	.auth {
 		display: grid;
 		place-items: start center;
+
+		&__intro {
+			margin-bottom: $space-sm;
+		}
 	}
 
 	.auth__panel {
+		background: var(--surface-panel);
+		border: 1px solid var(--color-border);
 		display: flex;
 		flex-direction: column;
 		gap: $space-xl;
@@ -230,7 +261,7 @@
 	}
 
 	.auth__header p {
-		color: $color-text-light;
+		color: var(--color-text-muted);
 	}
 
 	.auth__form {
@@ -240,7 +271,7 @@
 	}
 
 	.auth__form--verify {
-		border-top: 1px solid $color-border;
+		border-top: 1px solid var(--color-border);
 		padding-top: $space-lg;
 	}
 
@@ -250,8 +281,8 @@
 	}
 
 	.auth__summary-card {
-		background: rgba($color-primary, 0.04);
-		border: 1px solid rgba($color-primary, 0.12);
+		background: var(--surface-interactive);
+		border: 1px solid var(--color-border-strong);
 		border-radius: $radius-lg;
 		display: flex;
 		flex-direction: column;
@@ -265,7 +296,7 @@
 
 	.auth__summary-card p,
 	.auth__meta p {
-		color: $color-text-light;
+		color: var(--color-text-muted);
 	}
 
 	.auth__summary-label {
@@ -289,7 +320,7 @@
 	}
 
 	.auth__meta {
-		border-top: 1px solid $color-border;
+		border-top: 1px solid var(--color-border);
 		display: flex;
 		flex-direction: column;
 		gap: $space-md;
@@ -304,25 +335,32 @@
 	}
 
 	.auth__hint {
-		color: $color-text-light;
+		color: var(--color-text-muted);
 		font-size: $font-size-sm;
 		font-weight: 500;
 	}
 
 	.auth__field input {
-		border: 1px solid $color-border;
+		background: var(--color-surface-card);
+		border: 1px solid var(--color-border);
 		border-radius: $radius-md;
+		color: var(--color-text);
 		font: inherit;
 		padding: $space-sm $space-md;
 	}
 
+	.auth__field input::placeholder {
+		color: var(--color-text-soft);
+	}
+
 	.auth__field input:focus {
-		border-color: $color-primary;
-		outline: 3px solid rgba($color-primary, 0.14);
+		border-color: var(--color-primary);
+		box-shadow: var(--focus-ring);
+		outline: none;
 	}
 
 	.auth__error {
-		color: $color-error;
+		color: var(--color-danger);
 		font-size: $font-size-sm;
 	}
 </style>

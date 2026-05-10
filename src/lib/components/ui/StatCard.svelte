@@ -26,6 +26,10 @@
 
 <style lang="scss">
 	.stat-card {
+		background:
+			linear-gradient(180deg, rgb(var(--rgb-primary) / 0.06), transparent 42%),
+			var(--color-surface-card);
+		border: 1px solid var(--color-border);
 		display: flex;
 		flex: 1;
 		flex-direction: column;
@@ -34,7 +38,7 @@
 		text-align: center;
 
 		&__number {
-			color: $color-primary;
+			color: var(--color-primary-strong);
 			font-size: $font-size-3xl;
 			font-weight: 800;
 		}
@@ -44,7 +48,7 @@
 		}
 
 		&__preview {
-			color: $color-text-muted;
+			color: var(--color-text-soft);
 			margin-top: $space-xs;
 		}
 	}

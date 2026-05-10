@@ -14,15 +14,17 @@
 
 	import MainNav from "$lib/components/navigation/MainNav.svelte";
 	import { refreshLearnerProjection } from "$lib/stores/learner";
+	import { theme } from "$lib/stores/theme.svelte";
 
 	let { children } = $props();
 
 	onMount(() => {
+		theme.initialize();
 		void refreshLearnerProjection();
 	});
 </script>
 
-<div class="app">
+<div class="app-shell">
 	<MainNav />
 	<main class="main">
 		{@render children()}
@@ -30,7 +32,7 @@
 </div>
 
 <style lang="scss">
-	.app {
+	.app-shell {
 		display: flex;
 		flex-direction: column;
 		min-height: 100vh;

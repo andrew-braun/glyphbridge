@@ -63,7 +63,7 @@
 	</div>
 
 	<Button variant="primary" size="large" fullWidth={true} onclick={next}>
-		{currentIndex < rules.length - 1 ? "Next Rule ->" : "Start Drills ->"}
+		{currentIndex < rules.length - 1 ? "Next rule ->" : "Bring on the drills ->"}
 	</Button>
 </div>
 
@@ -88,7 +88,7 @@
 
 		// Short description — acts as a subtitle for the rule name
 		&__short {
-			color: $color-primary;
+			color: var(--color-primary-strong);
 			font-size: $font-size-lg;
 			font-weight: 500;
 		}
@@ -111,7 +111,8 @@
 		// Individual example row
 		&__example {
 			align-items: center;
-			background: rgba($color-primary, 0.04);
+			background: var(--surface-interactive);
+			border: 1px solid var(--color-border);
 			border-radius: $radius-md;
 			display: flex;
 			font-size: $font-size-sm;

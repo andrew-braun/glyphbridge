@@ -43,10 +43,12 @@
 <style lang="scss">
 	.icon-box {
 		align-items: center;
-		background: linear-gradient(180deg, rgba(white, 0.98), rgba($color-primary, 0.02));
-		border: 1px solid rgba($color-border, 0.8);
+		background:
+			linear-gradient(180deg, rgb(var(--rgb-primary) / 0.08), transparent 38%),
+			var(--color-surface-card);
+		border: 1px solid var(--color-border);
 		border-radius: $radius-xl;
-		box-shadow: $shadow-sm;
+		box-shadow: var(--shadow-soft);
 		display: flex;
 		flex-direction: column;
 		gap: $space-md;
@@ -68,7 +70,7 @@
 		}
 
 		&:hover {
-			box-shadow: $shadow-lg;
+			box-shadow: var(--shadow-card-hover);
 			transform: translateY(-4px);
 		}
 
@@ -80,9 +82,9 @@
 
 		&__icon {
 			align-items: center;
-			background: linear-gradient(145deg, $color-primary, $color-primary-dark);
+			background: linear-gradient(145deg, var(--color-primary), var(--color-accent));
 			border-radius: $radius-full;
-			box-shadow: 0 14px 28px rgba($color-primary, 0.22);
+			box-shadow: var(--shadow-primary);
 			color: white;
 			display: inline-flex;
 			font-size: $font-size-xl;
@@ -97,40 +99,46 @@
 		}
 
 		&__description {
-			color: $color-text-light;
+			color: var(--color-text-muted);
 			font-size: $font-size-sm;
 			line-height: 1.65;
 		}
 	}
 
 	.icon-box--tone-accent {
-		background: linear-gradient(180deg, rgba(white, 0.98), rgba($color-accent, 0.06));
-		border-color: rgba($color-accent, 0.18);
+		background:
+			linear-gradient(180deg, rgb(var(--rgb-accent) / 0.12), transparent 42%),
+			var(--color-surface-card);
+		border-color: rgb(var(--rgb-accent) / 0.26);
 
 		.icon-box__icon {
-			background: linear-gradient(145deg, $color-accent, #f05d91);
-			box-shadow: 0 14px 28px rgba($color-accent, 0.25);
+			background: linear-gradient(145deg, var(--color-accent), #f05d91);
+			box-shadow: 0 14px 28px rgb(var(--rgb-accent) / 0.28);
 		}
 	}
 
 	.icon-box--tone-success {
-		background: linear-gradient(180deg, rgba(white, 0.98), rgba($color-success, 0.06));
-		border-color: rgba($color-success, 0.2);
+		background:
+			linear-gradient(180deg, rgb(var(--rgb-success) / 0.12), transparent 42%),
+			var(--color-surface-card);
+		border-color: rgb(var(--rgb-success) / 0.24);
 
 		.icon-box__icon {
-			background: linear-gradient(145deg, $color-success, #00a282);
-			box-shadow: 0 14px 28px rgba($color-success, 0.24);
+			background: linear-gradient(145deg, var(--color-success), #00a282);
+			box-shadow: 0 14px 28px rgb(var(--rgb-success) / 0.26);
 		}
 	}
 
 	.icon-box--tone-warning {
-		background: linear-gradient(180deg, rgba(white, 0.98), rgba($color-accent-light, 0.12));
-		border-color: rgba($color-accent-light, 0.28);
+		background:
+			linear-gradient(180deg, rgb(var(--rgb-warning) / 0.14), transparent 42%),
+			var(--color-surface-card);
+		border-color: rgb(var(--rgb-warning) / 0.26);
 
 		.icon-box__icon {
-			background: linear-gradient(145deg, $color-accent-light, #f6b535);
-			box-shadow: 0 14px 28px rgba($color-accent-light, 0.28);
-			color: $color-text;
+			background: linear-gradient(145deg, var(--color-warning), #f6b535);
+			box-shadow: 0 14px 28px rgb(var(--rgb-warning) / 0.3);
+			color: #23192b;
 		}
 	}
 

@@ -86,12 +86,12 @@
 	}
 
 	:global(.lesson-item--completed) {
-		border-left: 4px solid $color-success;
+		border-left: 4px solid var(--color-success);
 	}
 
 	:global(.lesson-item--current) {
-		border-left: 4px solid $color-primary;
-		box-shadow: $shadow-lg;
+		border-left: 4px solid var(--color-primary);
+		box-shadow: var(--shadow-card-hover);
 	}
 
 	:global(.lesson-item--locked) {
@@ -113,14 +113,14 @@
 	}
 
 	:global(.lesson-item) .lesson-item__check {
-		color: $color-success;
+		color: var(--color-success);
 		font-size: $font-size-xl;
 		font-weight: 700;
 	}
 
 	:global(.lesson-item) .lesson-item__dot {
 		animation: pulse 2s ease-in-out infinite;
-		background: $color-primary;
+		background: var(--color-primary);
 		border-radius: $radius-full;
 		height: 14px;
 		width: 14px;
@@ -142,11 +142,11 @@
 	}
 
 	:global(.lesson-item) .lesson-item__word {
-		color: $color-primary;
+		color: var(--color-primary-strong);
 	}
 
 	:global(.lesson-item) .lesson-item__meaning {
-		color: $color-text-light;
+		color: var(--color-text-muted);
 		font-size: $font-size-sm;
 	}
 
@@ -157,9 +157,9 @@
 
 	:global(.lesson-item) .lesson-item__letter {
 		align-items: center;
-		background: rgba($color-primary, 0.08);
+		background: rgb(var(--rgb-primary) / 0.12);
 		border-radius: $radius-md;
-		color: $color-primary;
+		color: var(--color-primary-strong);
 		display: flex;
 		font-size: $font-size-xl;
 		height: 44px;

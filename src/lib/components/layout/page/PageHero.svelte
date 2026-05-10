@@ -56,14 +56,14 @@
 		}
 
 		&__highlight {
-			background: linear-gradient(135deg, $color-primary, $color-accent);
+			background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
 			-webkit-background-clip: text;
 			background-clip: text;
 			-webkit-text-fill-color: transparent;
 		}
 
 		&__subtitle {
-			color: $color-text-light;
+			color: var(--color-text-muted);
 			font-size: $font-size-lg;
 			margin-left: auto;
 			margin-right: auto;

@@ -103,9 +103,9 @@
 	<meta name="glyphbridge-publication-cache-key" content={publication.publicationCacheKey} />
 </svelte:head>
 
-<div class="lesson container">
+<div class="lesson container page-shell page-shell--narrow">
 	<!-- Top bar: back button + progress bar + step indicator -->
-	<div class="lesson__progress">
+	<div class="lesson__progress surface-panel card card--flat">
 		<Button href="/learn" variant="ghost">&larr; Lessons</Button>
 		<div class="lesson__progress-bar">
 			<Progress
@@ -143,9 +143,10 @@
 	.lesson {
 		&__progress {
 			align-items: center;
+			background: var(--surface-panel);
 			display: flex;
 			gap: $space-md;
-			margin-bottom: $space-xl;
+			margin-bottom: $space-sm;
 		}
 
 		&__progress-bar {
@@ -155,6 +156,13 @@
 		&__step-label {
 			@include step-counter;
 			white-space: nowrap;
+		}
+	}
+
+	@media (max-width: $bp-sm) {
+		.lesson__progress {
+			align-items: stretch;
+			flex-direction: column;
 		}
 	}
 </style>

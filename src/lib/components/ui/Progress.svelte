@@ -40,7 +40,7 @@
 
 <style lang="scss">
 	.progress {
-		background: $color-border;
+		background: var(--color-border);
 		border-radius: $radius-full;
 		height: 8px;
 		overflow: hidden;
@@ -55,7 +55,7 @@
 		}
 
 		&__fill {
-			background: linear-gradient(90deg, $color-primary, $color-primary-light);
+			background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
 			border-radius: $radius-full;
 			height: 100%;
 			transition: width $transition-slow;

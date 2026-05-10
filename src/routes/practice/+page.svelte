@@ -88,34 +88,55 @@
 	/>
 </svelte:head>
 
-<div class="practice container">
-	<h1>Practice</h1>
-	<p class="practice__subtitle">Review what you've learned with randomized drills.</p>
+<div class="practice container page-shell page-shell--narrow">
+	<section class="page-intro practice__intro">
+		<span class="page-intro__eyebrow">Practice sprint</span>
+		<h1 class="page-intro__title">Run a quick reading lap.</h1>
+		<p class="page-intro__body">
+			Practice pulls from the words and letters you have already unlocked, so every session
+			feels like review instead of a surprise exam.
+		</p>
+		<div class="page-intro__meta">
+			<span class="badge badge--primary">randomized drills</span>
+			<span class="badge badge--accent">10-question sprint</span>
+			<span class="badge badge--success">built from completed lessons</span>
+		</div>
+	</section>
 
 	<!-- STATE: No drills available (user hasn't completed any lessons) -->
 	{#if availableDrills.length === 0}
-		<div class="empty card">
-			<div class="empty__icon">&#127947;</div>
-			<h2>Nothing to practice yet!</h2>
-			<p>Complete at least one lesson to unlock practice drills.</p>
-			<Button href="/learn" variant="primary" size="large">Start Learning</Button>
+		<div class="empty-state">
+			<div class="empty-state__art" aria-hidden="true">
+				<span class="empty-state__token thai thai--sm">ท</span>
+				<span class="empty-state__token thai thai--sm">ฝ</span>
+				<span class="empty-state__token thai thai--sm">ก</span>
+			</div>
+			<h2>Your practice deck opens after the first lesson.</h2>
+			<p>
+				Finish one lesson and GlyphBridge will turn its drills into a short review sprint
+				here.
+			</p>
+			<div class="empty-state__actions">
+				<Button href="/learn" variant="primary" size="large">Start lesson 1</Button>
+			</div>
 		</div>
 
 		<!-- STATE: Session not started — show stats and start button -->
 	{:else if !sessionActive}
-		<div class="start card">
-			<h2>Ready to practice?</h2>
+		<div class="start surface-panel surface-panel--accent card">
+			<h2>Practice what already feels familiar.</h2>
 			<p>
-				You have <strong>{availableDrills.length}</strong> drill questions from completed lessons.
+				You have <strong>{availableDrills.length}</strong> review prompts ready from completed
+				lessons.
 			</p>
-			<div class="start__stats">
-				<div class="stat">
-					<span class="stat__num">{$knownLetters.length}</span>
-					<span class="stat__label">Letters</span>
+			<div class="metric-row start__stats">
+				<div class="metric-pill">
+					<span class="metric-pill__value">{$knownLetters.length}</span>
+					<span class="metric-pill__label">letters ready</span>
 				</div>
-				<div class="stat">
-					<span class="stat__num">{$knownWords.length}</span>
-					<span class="stat__label">Words</span>
+				<div class="metric-pill">
+					<span class="metric-pill__value">{$knownWords.length}</span>
+					<span class="metric-pill__label">words in memory</span>
 				</div>
 			</div>
 			<Button variant="primary" size="large" onclick={startSession}>
@@ -126,19 +147,27 @@
 
 		<!-- STATE: Session complete — show results -->
 	{:else if sessionComplete}
-		<div class="results card">
-			<!-- Emoji adapts to score: trophy for perfect, muscle for good, chat for needs work -->
-			<div class="results__emoji">
-				{#if correctCount === totalAnswered}
-					&#127942;
-				{:else if correctCount >= totalAnswered * 0.7}
-					&#128170;
-				{:else}
-					&#128172;
-				{/if}
+		<div class="results surface-panel surface-panel--success card">
+			<div class="empty-state__art results__art" aria-hidden="true">
+				<span class="empty-state__token thai thai--sm">ไ</span>
+				<span class="empty-state__token thai thai--sm">ท</span>
+				<span class="empty-state__token thai thai--sm">ย</span>
 			</div>
-			<h2>Session Complete!</h2>
-			<div class="results__score">
+			<p class="results__eyebrow">
+				{#if correctCount === totalAnswered}
+					Perfect run
+				{:else if correctCount >= totalAnswered * 0.7}
+					Strong pass
+				{:else}
+					Solid reset
+				{/if}
+			</p>
+			<h2>Session complete.</h2>
+			<p class="results__summary">
+				You just reviewed {totalAnswered} prompts pulled from words you already unlocked.
+			</p>
+
+			<div class="results__score surface-panel card card--flat">
 				<span class="results__score-num">{correctCount}/{totalAnswered}</span>
 				<span class="results__score-label">Correct</span>
 			</div>
@@ -192,15 +221,26 @@
 
 <style lang="scss">
 	.practice {
-		&__subtitle {
-			@include page-subtitle;
+		&__intro {
+			margin-bottom: $space-sm;
 		}
 	}
 
 	// Shared layout for empty, start, and results states
-	.empty,
 	.start {
-		@include empty-state;
+		align-items: center;
+		display: flex;
+		flex-direction: column;
+		gap: $space-lg;
+		margin: 0 auto;
+		max-width: var(--content-max-width);
+		padding: clamp($space-xl, 5vw, $space-3xl);
+		text-align: center;
+
+		p {
+			color: var(--color-text-muted);
+			max-width: 34rem;
+		}
 	}
 
 	.results {
@@ -212,43 +252,31 @@
 		max-width: var(--content-max-width);
 		padding: $space-3xl;
 		text-align: center;
+
+		&__eyebrow {
+			color: var(--color-success);
+			font-size: $font-size-xs;
+			font-weight: 700;
+			letter-spacing: 0.12em;
+			text-transform: uppercase;
+		}
+
+		&__summary {
+			color: var(--color-text-muted);
+		}
 	}
 
-	.empty__icon,
-	.results__emoji {
-		@include empty-state-icon;
-	}
-
-	// Stat chips on the start screen
 	.start__stats {
-		display: flex;
-		gap: $space-xl;
+		width: 100%;
 	}
 
-	.stat {
-		align-items: center;
-		display: flex;
-		flex-direction: column;
-
-		&__num {
-			color: $color-primary;
-			font-size: $font-size-3xl;
-			font-weight: 800;
-		}
-
-		&__label {
-			@include step-counter;
-		}
+	.results__score {
+		min-width: 12rem;
 	}
 
-	// Results screen
 	.results {
-		&__score {
-			@include score-display($color-success);
-		}
-
 		&__pct {
-			color: $color-primary;
+			color: var(--color-primary-strong);
 			font-size: $font-size-xl;
 			font-weight: 700;
 		}

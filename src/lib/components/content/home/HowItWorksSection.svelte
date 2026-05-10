@@ -61,10 +61,12 @@
 <style lang="scss">
 	.method {
 		background:
-			radial-gradient(circle at top left, rgba($color-accent, 0.14), transparent 34%),
-			linear-gradient(180deg, rgba($color-primary, 0.05), rgba(white, 0.88));
-		border: 1px solid rgba($color-primary, 0.08);
+			radial-gradient(circle at top left, rgb(var(--rgb-accent) / 0.16), transparent 34%),
+			linear-gradient(180deg, rgb(var(--rgb-primary) / 0.08), transparent 45%),
+			var(--color-surface-card);
+		border: 1px solid var(--color-border);
 		border-radius: calc($radius-xl * 1.25);
+		box-shadow: var(--shadow-card);
 		padding: clamp($space-xl, 4vw, $space-2xl);
 
 		&__header {
@@ -77,7 +79,7 @@
 		}
 
 		&__lead {
-			color: $color-text-light;
+			color: var(--color-text-muted);
 			font-size: $font-size-lg;
 			line-height: 1.65;
 			text-align: center;

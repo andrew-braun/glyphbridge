@@ -85,7 +85,9 @@
 	</div>
 
 	<Button variant="primary" size="large" fullWidth={true} onclick={next}>
-		{currentIndex < letters.length - 1 ? "Next Letter ->" : "Learn the Rules ->"}
+		{currentIndex < letters.length - 1
+			? "Take the next letter ->"
+			: "Learn the rule behind it ->"}
 	</Button>
 </div>
 
@@ -114,9 +116,11 @@
 		// Large character in a subtle colored box
 		&__char {
 			align-items: center;
-			background: rgba($color-primary, 0.06);
+			background: var(--surface-hero);
+			border: 1px solid var(--color-border);
 			border-radius: $radius-xl;
-			color: $color-primary;
+			box-shadow: var(--shadow-card);
+			color: var(--color-primary-strong);
 			display: flex;
 			height: 140px;
 			justify-content: center;

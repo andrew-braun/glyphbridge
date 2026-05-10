@@ -22,7 +22,7 @@
 	<!-- Large word reveal — the learner's first look at the anchor word -->
 	<div class="word-reveal">
 		<div class="word-reveal__thai thai thai--lg">{lesson.anchorWord.thai}</div>
-		<p class="word-reveal__hint">Can you guess what this says?</p>
+		<p class="word-reveal__hint">Try reading it once before we pull it apart.</p>
 	</div>
 
 	<!-- Context note explaining where this word appears in the real world -->
@@ -33,7 +33,7 @@
 	{/if}
 
 	<Button variant="primary" size="large" fullWidth={true} onclick={onNext}>
-		Show Me the Breakdown ->
+		Open this word ->
 	</Button>
 </div>
 
@@ -53,24 +53,25 @@
 
 	// Large reveal area with subtle gradient background
 	.word-reveal {
-		background: linear-gradient(135deg, rgba($color-primary, 0.04), rgba($color-accent, 0.04));
+		background: var(--surface-hero);
+		border: 1px solid var(--color-border);
 		border-radius: $radius-xl;
+		box-shadow: var(--shadow-card);
 		padding: $space-2xl;
 		text-align: center;
 
 		&__thai {
-			color: $color-primary;
+			color: var(--color-primary-strong);
 		}
 
 		&__hint {
-			color: $color-text-light;
-			font-style: italic;
+			color: var(--color-text-muted);
 			margin-top: $space-md;
 		}
 	}
 
 	.context-note {
-		color: $color-text-light;
+		color: var(--color-text-muted);
 		font-size: $font-size-sm;
 		line-height: 1.6;
 	}

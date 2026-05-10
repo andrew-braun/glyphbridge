@@ -13,8 +13,8 @@
 // Renders a selectable tile that highlights green/red based on correctness.
 // ---------------------------------------------------------------------------
 @mixin drill-option {
-	background: $color-bg-card;
-	border: 2px solid $color-border;
+	background: var(--color-surface-card);
+	border: 2px solid var(--color-border);
 	border-radius: $radius-lg;
 	cursor: pointer;
 	font-family: $font-body;
@@ -23,26 +23,26 @@
 	transition: all $transition-fast;
 
 	&:hover:not(:disabled) {
-		background: rgba($color-primary, 0.03);
-		border-color: $color-primary;
+		background: var(--surface-interactive);
+		border-color: var(--color-primary);
 	}
 }
 
 // Drill option state modifiers — apply after @include drill-option.
 @mixin drill-option-states {
 	&--selected {
-		background: rgba($color-primary, 0.05);
-		border-color: $color-primary;
+		background: var(--surface-interactive);
+		border-color: var(--color-primary);
 	}
 
 	&--correct {
-		background: rgba($color-success, 0.08) !important;
-		border-color: $color-success !important;
+		background: rgb(var(--rgb-success) / 0.16) !important;
+		border-color: var(--color-success) !important;
 	}
 
 	&--wrong {
-		background: rgba($color-error, 0.08) !important;
-		border-color: $color-error !important;
+		background: rgb(var(--rgb-danger) / 0.16) !important;
+		border-color: var(--color-danger) !important;
 	}
 }
 
@@ -56,22 +56,22 @@
 	text-align: center;
 
 	&--correct {
-		background: rgba($color-success, 0.1);
-		color: #008c6e;
+		background: rgb(var(--rgb-success) / 0.16);
+		color: var(--color-success);
 	}
 
 	&--wrong {
-		background: rgba($color-error, 0.1);
-		color: #e55655;
+		background: rgb(var(--rgb-danger) / 0.16);
+		color: var(--color-danger);
 	}
 }
 
 // ---------------------------------------------------------------------------
 // Score display — large number + small label stacked vertically.
 // Used for drill results and practice session summaries.
-// $number-color: the color for the big number (default: $color-success).
+// $number-color: the color for the big number (default: var(--color-success)).
 // ---------------------------------------------------------------------------
-@mixin score-display($number-color: $color-success) {
+@mixin score-display($number-color: var(--color-success)) {
 	display: flex;
 	flex-direction: column;
 	gap: $space-xs;
@@ -83,7 +83,7 @@
 	}
 
 	&-label {
-		color: $color-text-light;
+		color: var(--color-text-muted);
 		font-size: $font-size-sm;
 		font-weight: 600;
 		letter-spacing: 0.05em;
@@ -106,7 +106,7 @@
 	text-align: center;
 
 	p {
-		color: $color-text-light;
+		color: var(--color-text-muted);
 	}
 }
 
@@ -119,7 +119,7 @@
 // Used in lesson steps and practice sessions.
 // ---------------------------------------------------------------------------
 @mixin step-counter {
-	color: $color-text-muted;
+	color: var(--color-text-soft);
 	font-size: $font-size-sm;
 	font-weight: 600;
 	letter-spacing: 0.05em;
@@ -130,7 +130,7 @@
 // Page subtitle — muted text below a page h1 heading.
 // ---------------------------------------------------------------------------
 @mixin page-subtitle {
-	color: $color-text-light;
+	color: var(--color-text-muted);
 	margin-bottom: $space-xl;
 	margin-top: $space-sm;
 }
@@ -141,14 +141,14 @@
 // ---------------------------------------------------------------------------
 @mixin detail-row {
 	align-items: center;
-	border-bottom: 1px solid $color-border;
+	border-bottom: 1px solid var(--color-border);
 	display: flex;
 	justify-content: space-between;
 	padding: $space-sm 0;
 }
 
 @mixin detail-label {
-	color: $color-text-light;
+	color: var(--color-text-muted);
 	font-size: $font-size-sm;
 	font-weight: 600;
 }

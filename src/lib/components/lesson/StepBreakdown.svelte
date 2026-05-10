@@ -16,7 +16,7 @@
 </script>
 
 <div class="step">
-	<h2>Breaking down: <span class="thai">{lesson.anchorWord.thai}</span></h2>
+	<h2>Let&apos;s take <span class="thai">{lesson.anchorWord.thai}</span> apart.</h2>
 
 	<div class="breakdown">
 		<!-- Full word displayed at the top -->
@@ -64,11 +64,11 @@
 		text-align: center;
 
 		&__word {
-			color: $color-primary;
+			color: var(--color-primary-strong);
 		}
 
 		&__arrow {
-			color: $color-text-muted;
+			color: var(--color-text-soft);
 			font-size: $font-size-2xl;
 		}
 
@@ -86,13 +86,13 @@
 		}
 
 		&__pronunciation {
-			color: $color-primary;
+			color: var(--color-primary-strong);
 			font-size: $font-size-xl;
 			font-weight: 600;
 		}
 
 		&__meaning {
-			color: $color-text-light;
+			color: var(--color-text-muted);
 			font-size: $font-size-lg;
 		}
 	}
@@ -100,17 +100,19 @@
 	// Individual syllable display cards
 	.syllable-card {
 		align-items: center;
+		background: var(--surface-panel);
+		border: 1px solid var(--color-border);
 		display: flex;
 		flex-direction: column;
 		gap: $space-sm;
 		padding: $space-lg $space-xl;
 
 		&__thai {
-			color: $color-primary;
+			color: var(--color-primary-strong);
 		}
 
 		&__sound {
-			color: $color-text-light;
+			color: var(--color-text-muted);
 			font-size: $font-size-sm;
 			font-weight: 500;
 		}

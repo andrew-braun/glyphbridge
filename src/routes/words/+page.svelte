@@ -21,17 +21,31 @@
     pronunciation, English meaning, category badge, syllable breakdown, and
     optional context note.
 -->
-<div class="words container">
-	<h1>Known Words</h1>
-	<p class="words__subtitle">Your growing collection of anchor and supporting Thai words.</p>
+<div class="words container page-shell">
+	<section class="page-intro words__intro">
+		<span class="page-intro__eyebrow">Word collection</span>
+		<h1 class="page-intro__title">Build a shelf of words you can actually spot outside.</h1>
+		<p class="page-intro__body">
+			This is your running archive of Thai words unlocked through lessons, complete with
+			pronunciation, meaning, and syllable breakdowns.
+		</p>
+	</section>
 
 	<!-- Empty state: shown when the user has not completed any lessons yet -->
 	{#if $knownWords.length === 0}
-		<div class="empty card">
-			<div class="empty__icon">&#128218;</div>
-			<h2>No words yet!</h2>
-			<p>Complete your first lesson to start building your word collection.</p>
-			<Button href="/learn" variant="primary" size="large">Start Learning</Button>
+		<div class="empty-state">
+			<div class="empty-state__art" aria-hidden="true">
+				<span class="empty-state__token thai thai--sm">คำ</span>
+				<span class="empty-state__token thai thai--sm">แรก</span>
+			</div>
+			<h2>Your word shelf is empty for now.</h2>
+			<p>
+				Finish the first lesson and your earliest real Thai words will start collecting
+				here.
+			</p>
+			<div class="empty-state__actions">
+				<Button href="/learn" variant="primary" size="large">Start lesson 1</Button>
+			</div>
 		</div>
 		<!-- Word cards grid: each card shows full word details and syllable breakdown -->
 	{:else}
@@ -68,29 +82,8 @@
 
 	// Page wrapper and subtitle
 	.words {
-		&__subtitle {
-			color: $color-text-light;
-			margin-bottom: $space-xl;
-			margin-top: $space-sm;
-		}
-	}
-
-	// Empty state card: centered layout with icon, message, and CTA
-	.empty {
-		align-items: center;
-		display: flex;
-		flex-direction: column;
-		gap: $space-md;
-		padding: $space-3xl;
-		text-align: center;
-
-		&__icon {
-			font-size: 4rem;
-		}
-
-		p {
-			color: $color-text-light;
-			max-width: var(--text-max-width);
+		&__intro {
+			margin-bottom: $space-sm;
 		}
 	}
 
@@ -103,22 +96,24 @@
 
 	// Individual word card: stacks Thai text, pronunciation, meaning, syllables
 	.word-card {
+		background: var(--surface-panel);
+		border: 1px solid var(--color-border);
 		display: flex;
 		flex-direction: column;
 		gap: $space-sm;
 
 		&__thai {
-			color: $color-primary;
+			color: var(--color-primary-strong);
 		}
 
 		&__pronunciation {
-			color: $color-text;
+			color: var(--color-text);
 			font-size: $font-size-lg;
 			font-weight: 600;
 		}
 
 		&__meaning {
-			color: $color-text-light;
+			color: var(--color-text-muted);
 			font-size: $font-size-base;
 		}
 
@@ -131,7 +126,7 @@
 
 		&__syllable {
 			align-items: center;
-			background: rgba($color-primary, 0.06);
+			background: var(--surface-interactive);
 			border-radius: $radius-sm;
 			display: flex;
 			flex-direction: column;
@@ -140,13 +135,13 @@
 		}
 
 		&__syllable-sound {
-			color: $color-text-light;
+			color: var(--color-text-muted);
 			font-size: $font-size-xs;
 		}
 
 		&__context {
-			border-top: 1px solid $color-border;
-			color: $color-text-light;
+			border-top: 1px solid var(--color-border);
+			color: var(--color-text-muted);
 			font-size: $font-size-sm;
 			line-height: 1.6;
 			margin-top: $space-sm;

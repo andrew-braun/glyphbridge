@@ -65,11 +65,20 @@
   Lessons are locked until the previous lesson is completed; locked cards
   show a semi-transparent overlay preventing navigation.
 -->
-<div class="learn container">
-	<h1>Lessons</h1>
-	<p class="learn__subtitle">
-		Each lesson teaches you a real Thai word and the letters inside it.
-	</p>
+<div class="learn container page-shell">
+	<section class="page-intro learn__intro">
+		<span class="page-intro__eyebrow">Thai reading path</span>
+		<h1 class="page-intro__title">Start with a whole word, then peel it open.</h1>
+		<p class="page-intro__body">
+			Each lesson starts with a real Thai word you could meet on a sign, menu, or appliance,
+			then walks you inward through syllables, letters, rules, and a quick drill loop.
+		</p>
+		<div class="page-intro__meta">
+			<span class="badge badge--primary">{lessons.length} short lessons</span>
+			<span class="badge badge--accent">real words first</span>
+			<span class="badge badge--success">local progress</span>
+		</div>
+	</section>
 
 	<div class="lessons-grid">
 		{#each lessons as lesson}
@@ -116,10 +125,8 @@
 
 	// Page wrapper and subtitle
 	.learn {
-		&__subtitle {
-			color: $color-text-light;
-			margin-bottom: $space-xl;
-			margin-top: $space-sm;
+		&__intro {
+			margin-bottom: $space-sm;
 		}
 	}
 
@@ -132,6 +139,8 @@
 
 	// Lesson card: three visual states via BEM modifiers (--current, --done, --locked)
 	:global(.lesson-card) {
+		background: var(--surface-panel);
+		border: 1px solid var(--color-border);
 		color: inherit;
 		display: flex;
 		flex-direction: column;
@@ -142,11 +151,12 @@
 	}
 
 	:global(.lesson-card--current) {
-		border: 2px solid $color-primary;
+		border-color: var(--color-primary);
+		box-shadow: var(--shadow-card-hover);
 	}
 
 	:global(.lesson-card--done) {
-		border-left: 4px solid $color-success;
+		border-left: 4px solid var(--color-success);
 	}
 
 	:global(.lesson-card--locked) {
@@ -160,11 +170,11 @@
 	}
 
 	:global(.lesson-card) .lesson-card__word {
-		color: $color-primary;
+		color: var(--color-primary-strong);
 	}
 
 	:global(.lesson-card) .lesson-card__meaning {
-		color: $color-text-light;
+		color: var(--color-text-muted);
 		font-size: $font-size-sm;
 	}
 
@@ -176,8 +186,9 @@
 
 	:global(.lesson-card) .lesson-card__overlay {
 		align-items: center;
-		background: rgba(255, 255, 255, 0.7);
-		color: $color-text-light;
+		backdrop-filter: blur(8px);
+		background: var(--surface-overlay);
+		color: var(--color-text);
 		display: flex;
 		font-weight: 600;
 		inset: 0;
@@ -188,9 +199,9 @@
 	// Small square chip showing a single Thai character
 	.letter-chip {
 		align-items: center;
-		background: rgba($color-primary, 0.08);
+		background: var(--surface-interactive-strong);
 		border-radius: $radius-md;
-		color: $color-primary;
+		color: var(--color-primary-strong);
 		display: flex;
 		height: 40px;
 		justify-content: center;

@@ -29,25 +29,30 @@
 </script>
 
 <div class="step">
-	<div class="complete">
-		<div class="complete__emoji">&#127881;</div>
-		<h1>Lesson Complete!</h1>
+	<div class="complete surface-panel surface-panel--success card">
+		<div class="complete__flare empty-state__art" aria-hidden="true">
+			<span class="empty-state__token thai thai--sm">ไ</span>
+			<span class="empty-state__token thai thai--sm">ท</span>
+			<span class="empty-state__token thai thai--sm">ย</span>
+		</div>
+		<p class="complete__eyebrow">Lesson checkpoint saved</p>
+		<h1>Lesson complete.</h1>
 
 		<!-- The word the learner just mastered -->
 		<p class="complete__word">
-			You learned: <span class="thai">{lesson.anchorWord.thai}</span>
+			You can now read: <span class="thai">{lesson.anchorWord.thai}</span>
 			({lesson.anchorWord.meaning})
 		</p>
 
 		<!-- Drill score summary -->
-		<div class="complete__score">
+		<div class="complete__score surface-panel card card--flat">
 			<span class="complete__score-num">{correctCount}/{totalDrills}</span>
 			<span class="complete__score-label">Drills Correct</span>
 		</div>
 
 		<!-- New letters unlocked in this lesson -->
 		<div class="complete__letters">
-			<h3>New letters learned:</h3>
+			<h3>What this lesson added</h3>
 			<div class="complete__letter-grid">
 				{#each lesson.newLetters as letter}
 					<div class="complete__letter">
@@ -60,7 +65,7 @@
 
 		{#if supportingWords.length > 0}
 			<div class="complete__vocabulary">
-				<h3>More words from this lesson:</h3>
+				<h3>More words built from the same pattern</h3>
 				<div class="complete__vocabulary-grid">
 					{#each supportingWords as entry}
 						<div class="complete__vocabulary-card">
@@ -77,11 +82,11 @@
 		<div class="complete__actions">
 			{#if hasNextLesson}
 				<Button variant="primary" size="large" onclick={onNextLesson}>
-					Next Lesson ->
+					Go to the next word ->
 				</Button>
 			{:else}
 				<Button href="/practice" variant="primary" size="large">
-					Practice What You've Learned
+					Practice what you know
 				</Button>
 			{/if}
 			<Button href="/learn" variant="secondary" size="large">All Lessons</Button>
@@ -107,18 +112,22 @@
 		gap: $space-xl;
 		text-align: center;
 
-		&__emoji {
-			@include empty-state-icon;
+		&__eyebrow {
+			color: var(--color-success);
+			font-size: $font-size-xs;
+			font-weight: 700;
+			letter-spacing: 0.12em;
+			text-transform: uppercase;
 		}
 
 		&__word {
-			color: $color-text-light;
+			color: var(--color-text-muted);
 			font-size: $font-size-lg;
 		}
 
-		// Score display — big green number + label
 		&__score {
-			@include score-display($color-success);
+			@include score-display(var(--color-success));
+			min-width: 13rem;
 		}
 
 		// Letter grid section
@@ -148,7 +157,8 @@
 		// Individual letter chip
 		&__letter {
 			align-items: center;
-			background: rgba($color-primary, 0.06);
+			background: var(--surface-interactive);
+			border: 1px solid var(--color-border);
 			border-radius: $radius-lg;
 			display: flex;
 			flex-direction: column;
@@ -164,8 +174,8 @@
 		}
 
 		&__vocabulary-card {
-			background: rgba($color-accent, 0.06);
-			border: 1px solid $color-border;
+			background: var(--surface-panel-accent);
+			border: 1px solid var(--color-border);
 			border-radius: $radius-lg;
 			display: flex;
 			flex-direction: column;

@@ -62,7 +62,7 @@
 	}
 </script>
 
-<div class="drill">
+<div class="drill surface-panel card">
 	<h2 class="drill__prompt" id={promptId}>{prompt}</h2>
 
 	<RadioButtons
@@ -81,8 +81,9 @@
 				},
 			]}
 		>
+			<span class="drill__feedback-mark" aria-hidden="true">{isCorrect ? "✓" : "×"}</span>
 			{#if isCorrect}
-				<strong>Correct!</strong>
+				<strong>Correct.</strong> You matched the sound to the right Thai form.
 			{:else}
 				<strong>Not quite.</strong> The answer is:
 				<span class="thai thai--sm">{options[correctIndex]}</span>
@@ -107,7 +108,23 @@
 		}
 
 		&__feedback {
+			align-items: center;
+			display: flex;
+			gap: $space-sm;
+			justify-content: center;
 			@include drill-feedback;
+		}
+
+		&__feedback-mark {
+			align-items: center;
+			background: rgb(var(--rgb-primary) / 0.14);
+			border-radius: $radius-full;
+			display: inline-flex;
+			font-size: $font-size-base;
+			font-weight: 800;
+			height: 1.8rem;
+			justify-content: center;
+			width: 1.8rem;
 		}
 	}
 </style>

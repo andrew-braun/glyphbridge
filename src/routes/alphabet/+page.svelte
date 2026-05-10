@@ -74,12 +74,19 @@
     romanization, consonant class, writing position, and a mnemonic.
   - A progress bar at the top shows how many letters the user has learned out of the total.
 -->
-<div class="alphabet container">
-	<h1>Your Thai Alphabet</h1>
-	<p class="alphabet__subtitle">
-		Letters unlock as you complete lessons. You know <strong>{$knownLetters.length}</strong>
-		of {allLetters.length} letters taught so far.
-	</p>
+<div class="alphabet container page-shell">
+	<section class="page-intro alphabet__intro">
+		<span class="page-intro__eyebrow">Letter map</span>
+		<h1 class="page-intro__title">Watch the script fill in as lessons unlock it.</h1>
+		<p class="page-intro__body">
+			GlyphBridge reveals Thai letters in the order you actually meet them, so the alphabet
+			grows with your reading instead of arriving as a giant wall of symbols.
+		</p>
+		<div class="page-intro__meta">
+			<span class="badge badge--primary">{$knownLetters.length} unlocked</span>
+			<span class="badge badge--accent">{allLetters.length} taught so far</span>
+		</div>
+	</section>
 
 	<!-- Visual progress bar: fill width is the percentage of letters learned -->
 	<div class="alphabet__progress">
@@ -112,10 +119,8 @@
 
 	// Page-level wrapper and subtitle
 	.alphabet {
-		&__subtitle {
-			color: $color-text-light;
-			margin-bottom: $space-lg;
-			margin-top: $space-sm;
+		&__intro {
+			margin-bottom: $space-sm;
 		}
 
 		&__progress {
@@ -125,7 +130,12 @@
 
 	// Section wrapper for each letter category (Consonants / Vowels)
 	.letter-section {
+		background: var(--surface-panel);
+		border: 1px solid var(--color-border);
+		border-radius: $radius-xl;
+		box-shadow: var(--shadow-card);
 		margin-top: $space-xl;
+		padding: $space-xl;
 
 		h2 {
 			margin-bottom: $space-md;

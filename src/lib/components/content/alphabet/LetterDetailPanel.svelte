@@ -60,7 +60,7 @@
 		position: relative;
 
 		&__char {
-			color: $color-primary;
+			color: var(--color-primary-strong);
 			font-size: 4rem;
 		}
 
@@ -72,20 +72,20 @@
 		}
 
 		&__row {
-			border-bottom: 1px solid $color-border;
+			border-bottom: 1px solid var(--color-border);
 			display: flex;
 			justify-content: space-between;
 			padding: $space-xs 0;
 		}
 
 		&__label {
-			color: $color-text-light;
+			color: var(--color-text-muted);
 			font-size: $font-size-sm;
 			font-weight: 600;
 		}
 
 		&__mnemonic {
-			background: rgba($color-primary, 0.04);
+			background: var(--surface-interactive);
 			border-radius: $radius-md;
 			font-size: $font-size-sm;
 			line-height: 1.6;
