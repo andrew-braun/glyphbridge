@@ -16,7 +16,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 
 	return {
 		authConfigured: locals.authConfigured,
-		next: getSafeRedirectPath(url.searchParams.get("next")),
+		next: getSafeRedirectPath(url.searchParams.get("next") ?? "/auth"),
 		userEmail: user?.email ?? null,
 	};
 };

@@ -49,6 +49,22 @@ learner-owned data are being changed.
   module. Never import it into universal or browser code.
 - Use SSR for trust boundaries and protected operations, not as the primary way
   to personalize every learner-facing page.
+- Server-only Supabase auth works with local-first public UX.
+
+## Current Auth Surface
+
+- `/auth` now acts as both the email-code sign-in screen and the first account
+  management panel for signed-in learners.
+- When sign-in starts from `/auth` without an explicit safe `next` override, OTP
+  verification returns the learner to `/auth` so the account panel can render
+  immediately.
+- Local Supabase development uses a committed OTP-first mail template at
+  `supabase/templates/magic-link.html` and wires it through
+  `supabase/config.toml`.
+- The local email template intentionally emphasizes `{{ .Token }}` and a link
+  back to `/auth` instead of relying on one-click magic-link sign-in, which
+  avoids email-link scanner issues and matches GlyphBridge's current product
+  flow.
 
 ## Required App Boundary
 

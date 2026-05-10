@@ -14,9 +14,6 @@
 	let { knownLetters, knownWords, currentLessonId, totalLessons }: Props = $props();
 
 	const completedLessonCount = $derived(Math.max(0, currentLessonId - 1));
-	const lessonProgressPercent = $derived(
-		totalLessons === 0 ? 0 : (completedLessonCount / totalLessons) * 100,
-	);
 </script>
 
 {#if knownLetters.length > 0}

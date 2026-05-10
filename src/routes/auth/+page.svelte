@@ -1,9 +1,16 @@
 <script lang="ts">
 	import Button from "$lib/components/ui/Button.svelte";
+	import {
+		authSession,
+		learnerProjection,
+		learnerProjectionStatus,
+		refreshLearnerProjection,
+	} from "$lib/stores/learner";
 
 	import type { PageProps } from "./$types";
 
 	let { data, form }: PageProps = $props();
+	let refreshingProjection = $state(false);
 
 	const email = $derived(typeof form?.email === "string" ? form.email : "");
 	const codeRequested = $derived(form?.codeRequested === true);
@@ -11,6 +18,40 @@
 		typeof form?.requestError === "string" ? form.requestError : null,
 	);
 	const verifyError = $derived(typeof form?.verifyError === "string" ? form.verifyError : null);
+	const accountEmail = $derived(data.userEmail ?? $authSession.email ?? null);
+	const completedLessonCount = $derived($learnerProjection?.completedLessonIds.length ?? 0);
+	const resumeLessonId = $derived($learnerProjection?.resumeLessonId ?? null);
+	const resumeHref = $derived(resumeLessonId ? `/learn/${resumeLessonId}` : "/learn");
+	const syncBadgeClass = $derived.by(() => {
+		switch ($learnerProjectionStatus) {
+			case "loaded":
+				return "badge badge--success";
+			case "error":
+				return "badge badge--warning";
+			default:
+				return "badge badge--primary";
+		}
+	});
+	const syncLabel = $derived.by(() => {
+		switch ($learnerProjectionStatus) {
+			case "loaded":
+				return "Synced";
+			case "error":
+				return "Retry needed";
+			case "loading":
+				return "Refreshing";
+			default:
+				return "Checking sync";
+		}
+	});
+	const syncedAtLabel = $derived.by(() => {
+		const syncedAt = $learnerProjection?.syncedAt;
+
+		if (!syncedAt) return null;
+
+		const date = new Date(syncedAt);
+		return Number.isNaN(date.getTime()) ? null : date.toLocaleString();
+	});
 
 	function normalizeCodeInput(event: Event) {
 		const input = event.currentTarget;
@@ -18,6 +59,16 @@
 		if (!(input instanceof HTMLInputElement)) return;
 
 		input.value = input.value.replace(/\D/g, "").slice(0, 6);
+	}
+
+	async function handleRefreshProjection() {
+		refreshingProjection = true;
+
+		try {
+			await refreshLearnerProjection();
+		} finally {
+			refreshingProjection = false;
+		}
 	}
 </script>
 
@@ -35,12 +86,72 @@
 			<div class="auth__header">
 				<span class="badge badge--success">Signed in</span>
 				<h1 id="auth-heading">Account</h1>
-				<p>{data.userEmail}</p>
+				<p>{accountEmail}</p>
 			</div>
 
-			<form method="POST" action="/auth/sign-out" class="auth__form">
-				<Button type="submit" variant="secondary">Sign out</Button>
-			</form>
+			<div class="auth__summary" aria-label="Account summary">
+				<div class="auth__summary-card">
+					<span class="auth__summary-label">Sign-in email</span>
+					<strong>{accountEmail}</strong>
+					<p>You are using GlyphBridge's email code sign-in flow.</p>
+				</div>
+
+				<div class="auth__summary-card">
+					<div class="auth__summary-row">
+						<span class="auth__summary-label">Sync status</span>
+						<span class={syncBadgeClass}>{syncLabel}</span>
+					</div>
+					<p>
+						{#if syncedAtLabel}
+							Last server refresh: {syncedAtLabel}
+						{:else}
+							We refresh your learner projection after sign-in and when progress sync
+							runs.
+						{/if}
+					</p>
+				</div>
+
+				<div class="auth__summary-card">
+					<span class="auth__summary-label">Synced lessons</span>
+					<strong>{completedLessonCount}</strong>
+					<p>
+						{#if resumeLessonId}
+							Resume lesson {resumeLessonId} on this or another device.
+						{:else}
+							Your learner projection will set a resume lesson once synced progress
+							exists.
+						{/if}
+					</p>
+				</div>
+			</div>
+
+			<div class="auth__actions">
+				<Button href={resumeHref} variant="primary">
+					{#if resumeLessonId}Continue from lesson {resumeLessonId}{:else}Go to lessons{/if}
+				</Button>
+				<Button
+					type="button"
+					variant="secondary"
+					disabled={refreshingProjection || $learnerProjectionStatus === "loading"}
+					onclick={handleRefreshProjection}
+				>
+					{#if refreshingProjection || $learnerProjectionStatus === "loading"}
+						Refreshing...
+					{:else}
+						Refresh synced progress
+					{/if}
+				</Button>
+			</div>
+
+			<div class="auth__meta">
+				<p>
+					Local progress stays instant on this device. Account progress becomes canonical
+					only after the server validates and projects it.
+				</p>
+				<form method="POST" action="/auth/sign-out" class="auth__form">
+					<Button type="submit" variant="ghost">Sign out</Button>
+				</form>
+			</div>
 		{:else if !data.authConfigured}
 			<div class="auth__header">
 				<span class="badge badge--warning">Setup needed</span>
@@ -130,6 +241,58 @@
 
 	.auth__form--verify {
 		border-top: 1px solid $color-border;
+		padding-top: $space-lg;
+	}
+
+	.auth__summary {
+		display: grid;
+		gap: $space-md;
+	}
+
+	.auth__summary-card {
+		background: rgba($color-primary, 0.04);
+		border: 1px solid rgba($color-primary, 0.12);
+		border-radius: $radius-lg;
+		display: flex;
+		flex-direction: column;
+		gap: $space-xs;
+		padding: $space-md;
+	}
+
+	.auth__summary-card strong {
+		font-size: $font-size-xl;
+	}
+
+	.auth__summary-card p,
+	.auth__meta p {
+		color: $color-text-light;
+	}
+
+	.auth__summary-label {
+		font-size: $font-size-sm;
+		font-weight: 700;
+		letter-spacing: 0.02em;
+		text-transform: uppercase;
+	}
+
+	.auth__summary-row {
+		align-items: center;
+		display: flex;
+		gap: $space-md;
+		justify-content: space-between;
+	}
+
+	.auth__actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: $space-sm;
+	}
+
+	.auth__meta {
+		border-top: 1px solid $color-border;
+		display: flex;
+		flex-direction: column;
+		gap: $space-md;
 		padding-top: $space-lg;
 	}
 

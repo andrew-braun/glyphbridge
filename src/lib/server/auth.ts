@@ -1,7 +1,7 @@
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 import { error } from "@sveltejs/kit";
 
-const allowedRedirectPaths = new Set(["/", "/learn", "/alphabet", "/words", "/practice"]);
+const allowedRedirectPaths = new Set(["/", "/auth", "/learn", "/alphabet", "/words", "/practice"]);
 
 export function getSupabaseClient(locals: App.Locals): SupabaseClient {
 	if (!locals.authConfigured || !locals.supabase) {
