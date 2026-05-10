@@ -2,6 +2,7 @@
 	import GlyphOrbit from "$lib/components/illustrations/GlyphOrbit.svelte";
 	import Button from "$lib/components/ui/Button.svelte";
 	import Heading from "$lib/components/ui/Heading.svelte";
+	import Reveal from "$lib/components/ui/Reveal.svelte";
 
 	interface Props {
 		authenticated: boolean;
@@ -30,7 +31,7 @@
 </script>
 
 <section class="learner-home card">
-	<div class="learner-home__copy">
+	<Reveal class="learner-home__copy" delay={40}>
 		<span class={["badge", authenticated ? "badge--success" : "badge--primary"]}>
 			{authenticated ? "Welcome back" : "Saved on this device"}
 		</span>
@@ -70,9 +71,9 @@
 				<span class="learner-home__stat-label">current language</span>
 			</div>
 		</div>
-	</div>
+	</Reveal>
 
-	<div class="learner-home__panel">
+	<Reveal class="learner-home__panel" delay={180} distance={22}>
 		<div class="learner-home__orbit">
 			<GlyphOrbit />
 		</div>
@@ -85,7 +86,7 @@
 			</p>
 			<Button href="/learn" variant="ghost">Browse lesson map</Button>
 		</div>
-	</div>
+	</Reveal>
 </section>
 
 <style lang="scss">
@@ -100,7 +101,7 @@
 		grid-template-columns: minmax(0, 1.1fr) minmax(16rem, 0.9fr);
 		padding: clamp($space-xl, 4vw, $space-3xl);
 
-		&__copy {
+		:global(.learner-home__copy) {
 			display: flex;
 			flex-direction: column;
 			gap: $space-lg;
@@ -154,7 +155,7 @@
 			text-transform: uppercase;
 		}
 
-		&__panel {
+		:global(.learner-home__panel) {
 			display: flex;
 			flex-direction: column;
 			gap: $space-lg;

@@ -2,6 +2,7 @@
 	import Row from "$lib/components/layout/Row.svelte";
 	import Heading from "$lib/components/ui/Heading.svelte";
 	import IconBox from "$lib/components/ui/IconBox.svelte";
+	import Reveal from "$lib/components/ui/Reveal.svelte";
 
 	type StepTone = "primary" | "accent" | "success" | "warning";
 
@@ -37,23 +38,24 @@
 </script>
 
 <section class="method">
-	<div class="method__header">
+	<Reveal class="method__header" delay={60}>
 		<Heading class="method__title" align="center">How it works</Heading>
 		<p class="method__lead">
 			GlyphBridge teaches reading the way you actually use it: spot the word, understand the
 			pieces, then read it back yourself.
 		</p>
-	</div>
+	</Reveal>
 	<Row class="method__steps" gap="1.25rem" stackAt="md" align="stretch">
-		{#each steps as step}
-			<IconBox
-				number={step.number}
-				tone={step.tone}
-				align="start"
-				title={step.title}
-				description={step.description}
-				class="method__step"
-			/>
+		{#each steps as step, index}
+			<Reveal class="method__step" delay={120 + index * 90} distance={20}>
+				<IconBox
+					number={step.number}
+					tone={step.tone}
+					align="start"
+					title={step.title}
+					description={step.description}
+				/>
+			</Reveal>
 		{/each}
 	</Row>
 </section>
@@ -69,7 +71,7 @@
 		box-shadow: var(--shadow-card);
 		padding: clamp($space-xl, 4vw, $space-2xl);
 
-		&__header {
+		:global(.method__header) {
 			margin: 0 auto $space-2xl;
 			max-width: var(--text-max-width);
 		}
@@ -98,7 +100,7 @@
 		.method {
 			padding: $space-lg;
 
-			&__header {
+			:global(.method__header) {
 				margin-bottom: $space-xl;
 			}
 

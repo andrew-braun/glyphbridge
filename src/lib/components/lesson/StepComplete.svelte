@@ -8,6 +8,7 @@
     - Navigation to the next lesson or back to the lesson list
 -->
 <script lang="ts">
+	import GlyphRibbon from "$lib/components/illustrations/GlyphRibbon.svelte";
 	import Button from "$lib/components/ui/Button.svelte";
 	import type { Lesson } from "$lib/data/types";
 
@@ -30,11 +31,7 @@
 
 <div class="step">
 	<div class="complete surface-panel surface-panel--success card">
-		<div class="complete__flare empty-state__art" aria-hidden="true">
-			<span class="empty-state__token thai thai--sm">ไ</span>
-			<span class="empty-state__token thai thai--sm">ท</span>
-			<span class="empty-state__token thai thai--sm">ย</span>
-		</div>
+		<GlyphRibbon tokens={["ไ", "ท", "ย"]} tone="success" class="complete__flare" />
 		<p class="complete__eyebrow">Lesson checkpoint saved</p>
 		<h1>Lesson complete.</h1>
 

@@ -15,6 +15,7 @@
 -->
 <script lang="ts">
 	import DrillExercise from "$lib/components/exercises/DrillExercise.svelte";
+	import GlyphRibbon from "$lib/components/illustrations/GlyphRibbon.svelte";
 	import Button from "$lib/components/ui/Button.svelte";
 	import Progress from "$lib/components/ui/Progress.svelte";
 	import { thaiPack } from "$lib/data/thai";
@@ -106,11 +107,7 @@
 	<!-- STATE: No drills available (user hasn't completed any lessons) -->
 	{#if availableDrills.length === 0}
 		<div class="empty-state">
-			<div class="empty-state__art" aria-hidden="true">
-				<span class="empty-state__token thai thai--sm">ท</span>
-				<span class="empty-state__token thai thai--sm">ฝ</span>
-				<span class="empty-state__token thai thai--sm">ก</span>
-			</div>
+			<GlyphRibbon tokens={["ท", "ฝ", "ก"]} />
 			<h2>Your practice deck opens after the first lesson.</h2>
 			<p>
 				Finish one lesson and GlyphBridge will turn its drills into a short review sprint
@@ -148,11 +145,7 @@
 		<!-- STATE: Session complete — show results -->
 	{:else if sessionComplete}
 		<div class="results surface-panel surface-panel--success card">
-			<div class="empty-state__art results__art" aria-hidden="true">
-				<span class="empty-state__token thai thai--sm">ไ</span>
-				<span class="empty-state__token thai thai--sm">ท</span>
-				<span class="empty-state__token thai thai--sm">ย</span>
-			</div>
+			<GlyphRibbon tokens={["ไ", "ท", "ย"]} tone="success" class="results__art" />
 			<p class="results__eyebrow">
 				{#if correctCount === totalAnswered}
 					Perfect run

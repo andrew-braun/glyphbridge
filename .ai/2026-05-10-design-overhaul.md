@@ -49,12 +49,14 @@
 - Restyled the shared app shell through `src/lib/styles/global.scss`, `src/routes/+layout.svelte`, `src/lib/components/navigation/MainNav.svelte`, and `src/lib/components/ui/ThemeToggle.svelte`.
 - Replaced the generic root hero with separate guest and learner home surfaces in `src/routes/+page.svelte`.
 - Added a reusable animated SVG illustration in `src/lib/components/illustrations/GlyphOrbit.svelte`.
+- Added shared motion and decorative primitives in `src/lib/components/ui/Reveal.svelte` and `src/lib/components/illustrations/GlyphRibbon.svelte`.
 - Added `GuestHomeShell.svelte` and `LearnerHomeHub.svelte` for the new home composition.
 - Updated home-adjacent supporting components (`StatCard`, `HowItWorksSection`, `LessonList`, `IconBox`) to use the new theme tokens and card treatment.
 - Carried the shared design vocabulary across `/learn`, `/learn/[id]`, `/practice`, `/auth`, `/words`, and `/alphabet`.
-- Updated the shared route and lesson primitives (`Progress`, `ToggleTiles`, `LetterDetailPanel`, `DrillExercise`, lesson-step components, and `PageHero`) to use semantic theme values instead of fixed light-mode palette assumptions.
+- Updated the shared route and lesson primitives (`Progress`, `ToggleTiles`, `LetterDetailPanel`, `DrillExercise`, and lesson-step components) to use semantic theme values instead of fixed light-mode palette assumptions.
 - Replaced emoji-forward empty or success states with product-specific Thai glyph treatments and more specific product copy.
 - Added durable guidance in UI instructions to avoid generic AI-design defaults such as gradient-text gimmicks, emoji-only empty states, and interchangeable SaaS card styling.
+- Retired the unused legacy hero wrappers and upgraded the global typography stack to a more distinctive display/body pairing.
 
 ## Anti-AI Design Rules
 
@@ -66,13 +68,11 @@
 
 ## Next Slice
 
-1. Retire or repurpose the legacy `HomeHero.svelte` and related one-off hero abstractions now that the route pass no longer depends on them.
-2. Add motion helpers and reusable decorative primitives so future illustrations do not stay one-off.
-3. Evaluate typography upgrades that add personality without reducing Thai readability.
-4. Clean up remaining legacy Sass palette exports once no active components depend on them.
+1. Clean up remaining legacy Sass palette exports once no active components depend on them.
+2. Extend `Reveal` and `GlyphRibbon` to a few more secondary routes if future screens need staged entrances or branded decorative states.
+3. Revisit font weights after another round of mobile QA and visual tuning.
 
 ## Follow-up
 
-- Evaluate a stronger typography pairing for Latin and Thai.
-- Define a compact animated SVG illustration system for hero and empty-state surfaces.
+- Sweep for old one-off animation snippets that can move to the new shared motion layer.
 - Add future named themes once the semantic token model is stable.

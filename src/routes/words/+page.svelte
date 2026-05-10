@@ -1,5 +1,6 @@
 <script lang="ts">
 	// Reactive store of words the user has learned by completing lessons
+	import GlyphRibbon from "$lib/components/illustrations/GlyphRibbon.svelte";
 	import Button from "$lib/components/ui/Button.svelte";
 	import { knownWords } from "$lib/stores/progress";
 </script>
@@ -34,10 +35,7 @@
 	<!-- Empty state: shown when the user has not completed any lessons yet -->
 	{#if $knownWords.length === 0}
 		<div class="empty-state">
-			<div class="empty-state__art" aria-hidden="true">
-				<span class="empty-state__token thai thai--sm">คำ</span>
-				<span class="empty-state__token thai thai--sm">แรก</span>
-			</div>
+			<GlyphRibbon tokens={["คำ", "แรก"]} tone="accent" />
 			<h2>Your word shelf is empty for now.</h2>
 			<p>
 				Finish the first lesson and your earliest real Thai words will start collecting

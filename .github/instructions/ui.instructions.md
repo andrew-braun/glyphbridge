@@ -14,3 +14,4 @@ applyTo: "src/lib/components/ui/**/*.svelte"
 - Keep APIs easy to compose and hard to misuse.
 - Avoid generic AI-design defaults in shared primitives: no decorative gradient text gimmicks, emoji-only empty states, or interchangeable SaaS card treatments unless the pattern has a product-specific reason.
 - Prefer specific, intentional states over perfectly smoothed sameness: copy should be concrete, motion restrained, and visual accents tied to the learning experience rather than trend-driven polish.
+- When a shared section only needs staged entrance motion, prefer `Reveal.svelte` over introducing new one-off keyframe wrappers.

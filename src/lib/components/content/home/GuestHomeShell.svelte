@@ -2,6 +2,7 @@
 	import GlyphOrbit from "$lib/components/illustrations/GlyphOrbit.svelte";
 	import Button from "$lib/components/ui/Button.svelte";
 	import Heading from "$lib/components/ui/Heading.svelte";
+	import Reveal from "$lib/components/ui/Reveal.svelte";
 
 	const languages = [
 		{
@@ -39,7 +40,7 @@
 
 <section class="guest-home">
 	<div class="guest-home__hero card">
-		<div class="guest-home__copy">
+		<Reveal class="guest-home__copy" delay={40}>
 			<span class="badge badge--accent">Learn a language by reading it</span>
 			<Heading as="h1" class="guest-home__title"
 				>Pick a language. Start in under a minute.</Heading
@@ -59,14 +60,14 @@
 				<Button href="/learn/1" variant="primary" size="large">Start Thai free</Button>
 				<Button href="/auth" variant="secondary" size="large">Save progress later</Button>
 			</div>
-		</div>
+		</Reveal>
 
-		<div class="guest-home__art">
+		<Reveal class="guest-home__art" delay={180} distance={24}>
 			<GlyphOrbit />
-		</div>
+		</Reveal>
 	</div>
 
-	<div class="guest-home__languages">
+	<Reveal class="guest-home__languages" delay={120}>
 		<div class="guest-home__section-head">
 			<Heading>Choose your path</Heading>
 			<p>
@@ -102,7 +103,7 @@
 				</article>
 			{/each}
 		</div>
-	</div>
+	</Reveal>
 </section>
 
 <style lang="scss">
@@ -128,7 +129,7 @@
 			padding: clamp($space-xl, 5vw, $space-3xl);
 		}
 
-		&__copy {
+		:global(.guest-home__copy) {
 			display: flex;
 			flex-direction: column;
 			gap: $space-lg;
@@ -178,12 +179,12 @@
 			gap: $space-md;
 		}
 
-		&__art {
+		:global(.guest-home__art) {
 			display: flex;
 			justify-content: center;
 		}
 
-		&__languages {
+		:global(.guest-home__languages) {
 			display: flex;
 			flex-direction: column;
 			gap: $space-lg;
@@ -251,7 +252,7 @@
 			grid-template-columns: 1fr;
 		}
 
-		.guest-home__art {
+		:global(.guest-home__art) {
 			order: -1;
 		}
 
