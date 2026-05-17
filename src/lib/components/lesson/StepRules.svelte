@@ -11,6 +11,7 @@
     - Concrete examples the learner can already (mostly) read
 -->
 <script lang="ts">
+	import StepLayout from "$lib/components/lesson/StepLayout.svelte";
 	import Button from "$lib/components/ui/Button.svelte";
 	import type { Rule } from "$lib/data/types";
 
@@ -36,11 +37,7 @@
 	}
 </script>
 
-<div class="step">
-	<div class="step__counter">
-		Rule {currentIndex + 1} of {rules.length}
-	</div>
-
+<StepLayout counter={`Rule ${currentIndex + 1} of ${rules.length}`}>
 	<div class="rule-card">
 		<h2>{currentRule.name}</h2>
 		<p class="rule-card__short">{currentRule.shortDescription}</p>
@@ -65,22 +62,9 @@
 	<Button variant="primary" size="large" fullWidth={true} onclick={next}>
 		{currentIndex < rules.length - 1 ? "Next rule ->" : "Bring on the drills ->"}
 	</Button>
-</div>
+</StepLayout>
 
 <style lang="scss">
-	.step {
-		display: flex;
-		flex-direction: column;
-		gap: $space-xl;
-		margin: 0 auto;
-		max-width: var(--content-max-width);
-		@include fade-in-animation;
-
-		&__counter {
-			@include step-counter;
-		}
-	}
-
 	.rule-card {
 		display: flex;
 		flex-direction: column;

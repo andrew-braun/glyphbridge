@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Badge from "$lib/components/ui/Badge.svelte";
 	import CardLink from "$lib/components/ui/CardLink.svelte";
 	import Heading from "$lib/components/ui/Heading.svelte";
 	import { thaiPack } from "$lib/data/thai";
@@ -46,8 +47,7 @@
 				</div>
 
 				<div class="lesson-item__content">
-					<span class="lesson-item__stage badge badge--primary">Stage {lesson.stage}</span
-					>
+					<Badge class="lesson-item__stage">Stage {lesson.stage}</Badge>
 					<h3 class="lesson-item__title">{lesson.title}</h3>
 					<span class="lesson-item__word thai thai--sm">{lesson.anchorWord.thai}</span>
 					<span class="lesson-item__meaning">{lesson.anchorWord.meaning}</span>

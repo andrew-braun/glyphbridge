@@ -14,7 +14,7 @@
 -->
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	// Step components
+	import PageShell from "$lib/components/layout/PageShell.svelte";
 	import StepBreakdown from "$lib/components/lesson/StepBreakdown.svelte";
 	import StepComplete from "$lib/components/lesson/StepComplete.svelte";
 	import StepDrills from "$lib/components/lesson/StepDrills.svelte";
@@ -103,7 +103,7 @@
 	<meta name="glyphbridge-publication-cache-key" content={publication.publicationCacheKey} />
 </svelte:head>
 
-<div class="lesson container page-shell page-shell--narrow">
+<PageShell narrow class="lesson">
 	<!-- Top bar: back button + progress bar + step indicator -->
 	<div class="lesson__progress surface-panel card card--flat">
 		<Button href="/learn" variant="ghost">&larr; Lessons</Button>
@@ -137,7 +137,7 @@
 			{hasNextLesson}
 		/>
 	{/if}
-</div>
+</PageShell>
 
 <style lang="scss">
 	.lesson {

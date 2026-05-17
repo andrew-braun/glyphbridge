@@ -1,5 +1,5 @@
 <script lang="ts">
-	import GuestHomeShell from "$lib/components/content/home/GuestHomeShell.svelte";
+	import HomeHero from "$lib/components/content/home/HomeHero.svelte";
 	import HomeStatsOverview from "$lib/components/content/home/HomeStatsOverview.svelte";
 	import LessonList from "$lib/components/content/lesson/LessonList.svelte";
 	import { authSession } from "$lib/stores/learner";
@@ -12,7 +12,7 @@
 </script>
 
 <div class="home container">
-	<GuestHomeShell authenticated={$authSession.authenticated} currentLessonId={$currentLessonId} />
+	<HomeHero authenticated={$authSession.authenticated} currentLessonId={$currentLessonId} />
 	{#if showLearnerDetails}
 		<HomeStatsOverview
 			knownLetters={$knownLetters}

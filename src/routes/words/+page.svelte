@@ -1,7 +1,10 @@
 <script lang="ts">
 	// Reactive store of words the user has learned by completing lessons
 	import GlyphRibbon from "$lib/components/illustrations/GlyphRibbon.svelte";
+	import PageShell from "$lib/components/layout/PageShell.svelte";
+	import Badge from "$lib/components/ui/Badge.svelte";
 	import Button from "$lib/components/ui/Button.svelte";
+	import EmptyState from "$lib/components/ui/EmptyState.svelte";
 	import { knownWords } from "$lib/stores/progress";
 </script>
 
@@ -22,7 +25,7 @@
     pronunciation, English meaning, category badge, syllable breakdown, and
     optional context note.
 -->
-<div class="words container page-shell">
+<PageShell class="words">
 	{#if $knownWords.length > 0}
 		<header class="words__header">
 			<p class="words__count">{$knownWords.length} words collected</p>
@@ -31,17 +34,17 @@
 
 	<!-- Empty state: shown when the user has not completed any lessons yet -->
 	{#if $knownWords.length === 0}
-		<div class="empty-state">
-			<GlyphRibbon tokens={["คำ", "แรก"]} tone="accent" />
-			<h2>Your word shelf is empty for now.</h2>
-			<p>
-				Finish the first lesson and your earliest real Thai words will start collecting
-				here.
-			</p>
-			<div class="empty-state__actions">
+		<EmptyState
+			title="Your word shelf is empty for now."
+			description="Finish the first lesson and your earliest real Thai words will start collecting here."
+		>
+			{#snippet art()}
+				<GlyphRibbon tokens={["คำ", "แรก"]} tone="accent" />
+			{/snippet}
+			{#snippet actions()}
 				<Button href="/learn" variant="primary" size="large">Start lesson 1</Button>
-			</div>
-		</div>
+			{/snippet}
+		</EmptyState>
 		<!-- Word cards grid: each card shows full word details and syllable breakdown -->
 	{:else}
 		<div class="word-grid">
@@ -50,7 +53,7 @@
 					<div class="word-card__thai thai">{word.thai}</div>
 					<div class="word-card__pronunciation">{word.pronunciation}</div>
 					<div class="word-card__meaning">{word.meaning}</div>
-					<span class="badge badge--primary">{word.category}</span>
+					<Badge>{word.category}</Badge>
 					<!-- Syllable chips: break the word into its component sounds -->
 					<div class="word-card__syllables">
 						{#each word.syllables as syllable}
@@ -68,7 +71,7 @@
 			{/each}
 		</div>
 	{/if}
-</div>
+</PageShell>
 
 <style lang="scss">
 	/* ========================================

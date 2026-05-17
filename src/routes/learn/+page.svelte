@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 
+	import PageShell from "$lib/components/layout/PageShell.svelte";
+	import Badge from "$lib/components/ui/Badge.svelte";
 	import CardLink from "$lib/components/ui/CardLink.svelte";
 	import { currentLessonId } from "$lib/stores/progress";
 	import { cn } from "$lib/utils/cn";
@@ -65,7 +67,7 @@
   Lessons are locked until the previous lesson is completed; locked cards
   show a semi-transparent overlay preventing navigation.
 -->
-<div class="learn container page-shell">
+<PageShell class="learn">
 	<div class="lessons-grid">
 		{#each lessons as lesson}
 			<!-- Personal progress state is applied after hydration so the prerendered HTML stays publication-only. -->
@@ -79,11 +81,11 @@
 			>
 				<!-- Header badges: stage number is static, progress badges appear after hydration. -->
 				<div class="lesson-card__header">
-					<span class="badge badge--primary">Stage {lesson.stage}</span>
+					<Badge>Stage {lesson.stage}</Badge>
 					{#if hydratedLessonState?.isDone}
-						<span class="badge badge--success">Complete</span>
+						<Badge tone="success">Complete</Badge>
 					{:else if hydratedLessonState?.isCurrent}
-						<span class="badge badge--accent">Current</span>
+						<Badge tone="accent">Current</Badge>
 					{/if}
 				</div>
 				<div class="lesson-card__word thai">{lesson.anchorWord.thai}</div>
@@ -102,7 +104,7 @@
 			</CardLink>
 		{/each}
 	</div>
-</div>
+</PageShell>
 
 <style lang="scss">
 	/* ========================================

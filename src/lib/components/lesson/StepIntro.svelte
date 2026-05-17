@@ -9,14 +9,17 @@
   before any breakdown or instruction happens.
 -->
 <script lang="ts">
+	import StepLayout from "$lib/components/lesson/StepLayout.svelte";
+	import Badge from "$lib/components/ui/Badge.svelte";
 	import Button from "$lib/components/ui/Button.svelte";
+	import NoticeBox from "$lib/components/ui/NoticeBox.svelte";
 	import type { Lesson } from "$lib/data/types";
 
 	let { lesson, onNext }: { lesson: Lesson; onNext: () => void } = $props();
 </script>
 
-<div class="step step--intro">
-	<span class="badge badge--primary">Stage {lesson.stage}</span>
+<StepLayout class="step--intro">
+	<Badge>Stage {lesson.stage}</Badge>
 	<h1 class="step__title">{lesson.title}</h1>
 
 	<!-- Large word reveal — the learner's first look at the anchor word -->
@@ -27,28 +30,19 @@
 
 	<!-- Context note explaining where this word appears in the real world -->
 	{#if lesson.anchorWord.contextNote}
-		<div class="context-note card card--flat">
+		<NoticeBox>
 			<p>{lesson.anchorWord.contextNote}</p>
-		</div>
+		</NoticeBox>
 	{/if}
 
 	<Button variant="primary" size="large" fullWidth={true} onclick={onNext}>
 		Open this word ->
 	</Button>
-</div>
+</StepLayout>
 
 <style lang="scss">
-	.step {
-		display: flex;
-		flex-direction: column;
-		gap: $space-xl;
-		margin: 0 auto;
-		max-width: var(--content-max-width);
-		@include fade-in-animation;
-
-		&__title {
-			font-size: $font-size-2xl;
-		}
+	.step__title {
+		font-size: $font-size-2xl;
 	}
 
 	// Large reveal area with subtle gradient background
@@ -68,11 +62,5 @@
 			color: var(--color-text-muted);
 			margin-top: $space-md;
 		}
-	}
-
-	.context-note {
-		color: var(--color-text-muted);
-		font-size: $font-size-sm;
-		line-height: 1.6;
 	}
 </style>

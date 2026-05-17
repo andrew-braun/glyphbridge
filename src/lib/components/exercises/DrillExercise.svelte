@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Button from "$lib/components/ui/Button.svelte";
+	import FeedbackBanner from "$lib/components/ui/FeedbackBanner.svelte";
 	import RadioButtons, { type RadioButtonOption } from "$lib/components/ui/RadioButtons.svelte";
 	import { isThai } from "$lib/utils/thai";
 
@@ -72,23 +73,14 @@
 	/>
 
 	{#if answered}
-		<div
-			class={[
-				"drill__feedback",
-				{
-					"drill__feedback--correct": isCorrect,
-					"drill__feedback--wrong": !isCorrect,
-				},
-			]}
-		>
-			<span class="drill__feedback-mark" aria-hidden="true">{isCorrect ? "✓" : "×"}</span>
+		<FeedbackBanner tone={isCorrect ? "correct" : "wrong"}>
 			{#if isCorrect}
 				<strong>Correct.</strong> You matched the sound to the right Thai form.
 			{:else}
 				<strong>Not quite.</strong> The answer is:
 				<span class="thai thai--sm">{options[correctIndex]}</span>
 			{/if}
-		</div>
+		</FeedbackBanner>
 
 		<Button variant="primary" size="large" fullWidth={true} onclick={handleNext}>
 			{nextLabel}
@@ -105,26 +97,6 @@
 		&__prompt {
 			font-size: $font-size-xl;
 			text-align: center;
-		}
-
-		&__feedback {
-			align-items: center;
-			display: flex;
-			gap: $space-sm;
-			justify-content: center;
-			@include drill-feedback;
-		}
-
-		&__feedback-mark {
-			align-items: center;
-			background: rgb(var(--rgb-primary) / 0.14);
-			border-radius: $radius-full;
-			display: inline-flex;
-			font-size: $font-size-base;
-			font-weight: 800;
-			height: 1.8rem;
-			justify-content: center;
-			width: 1.8rem;
 		}
 	}
 </style>

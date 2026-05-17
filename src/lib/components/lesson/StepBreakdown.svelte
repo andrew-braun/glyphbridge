@@ -9,13 +9,14 @@
   of the word — the bridge between "whole word" and "letter-level".
 -->
 <script lang="ts">
+	import StepLayout from "$lib/components/lesson/StepLayout.svelte";
 	import Button from "$lib/components/ui/Button.svelte";
 	import type { Lesson } from "$lib/data/types";
 
 	let { lesson, onNext }: { lesson: Lesson; onNext: () => void } = $props();
 </script>
 
-<div class="step">
+<StepLayout>
 	<h2>Let&apos;s take <span class="thai">{lesson.anchorWord.thai}</span> apart.</h2>
 
 	<div class="breakdown">
@@ -43,18 +44,9 @@
 	<Button variant="primary" size="large" fullWidth={true} onclick={onNext}>
 		Learn the New Letters ->
 	</Button>
-</div>
+</StepLayout>
 
 <style lang="scss">
-	.step {
-		display: flex;
-		flex-direction: column;
-		gap: $space-xl;
-		margin: 0 auto;
-		max-width: var(--content-max-width);
-		@include fade-in-animation;
-	}
-
 	// Vertical flow: word → arrow → syllable cards → pronunciation
 	.breakdown {
 		align-items: center;

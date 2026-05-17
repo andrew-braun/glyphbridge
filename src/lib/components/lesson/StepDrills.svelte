@@ -7,6 +7,7 @@
 -->
 <script lang="ts">
 	import DrillExercise from "$lib/components/exercises/DrillExercise.svelte";
+	import StepLayout from "$lib/components/lesson/StepLayout.svelte";
 	import type { DrillQuestion } from "$lib/data/types";
 
 	let {
@@ -39,11 +40,7 @@
 	}
 </script>
 
-<div class="step">
-	<div class="step__counter">
-		Drill {currentIndex + 1} of {drills.length}
-	</div>
-
+<StepLayout counter={`Drill ${currentIndex + 1} of ${drills.length}`}>
 	{#if currentDrill}
 		<DrillExercise
 			prompt={currentDrill.prompt}
@@ -54,19 +51,4 @@
 			nextLabel={currentIndex < drills.length - 1 ? "Next Question →" : "See Results →"}
 		/>
 	{/if}
-</div>
-
-<style lang="scss">
-	.step {
-		display: flex;
-		flex-direction: column;
-		gap: $space-xl;
-		margin: 0 auto;
-		max-width: var(--content-max-width);
-		@include fade-in-animation;
-
-		&__counter {
-			@include step-counter;
-		}
-	}
-</style>
+</StepLayout>

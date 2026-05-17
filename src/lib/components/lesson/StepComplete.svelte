@@ -9,7 +9,10 @@
 -->
 <script lang="ts">
 	import GlyphRibbon from "$lib/components/illustrations/GlyphRibbon.svelte";
+	import ActionGroup from "$lib/components/layout/ActionGroup.svelte";
+	import StepLayout from "$lib/components/lesson/StepLayout.svelte";
 	import Button from "$lib/components/ui/Button.svelte";
+	import MetricDisplay from "$lib/components/ui/MetricDisplay.svelte";
 	import type { Lesson } from "$lib/data/types";
 
 	let {
@@ -29,7 +32,7 @@
 	const supportingWords = $derived(lesson.vocabulary);
 </script>
 
-<div class="step">
+<StepLayout>
 	<div class="complete surface-panel surface-panel--success card">
 		<GlyphRibbon tokens={["ไ", "ท", "ย"]} tone="success" class="complete__flare" />
 		<p class="complete__eyebrow">Lesson checkpoint saved</p>
@@ -43,8 +46,11 @@
 
 		<!-- Drill score summary -->
 		<div class="complete__score surface-panel card card--flat">
-			<span class="complete__score-num">{correctCount}/{totalDrills}</span>
-			<span class="complete__score-label">Drills Correct</span>
+			<MetricDisplay
+				value={`${correctCount}/${totalDrills}`}
+				label="Drills Correct"
+				tone="success"
+			/>
 		</div>
 
 		<!-- New letters unlocked in this lesson -->
@@ -53,7 +59,7 @@
 			<div class="complete__letter-grid">
 				{#each lesson.newLetters as letter}
 					<div class="complete__letter">
-						<span class="thai" style="font-size:2.5rem">{letter.character}</span>
+						<span class="complete__letter-character thai">{letter.character}</span>
 						<span>{letter.romanization}</span>
 					</div>
 				{/each}
@@ -76,7 +82,7 @@
 		{/if}
 
 		<!-- Navigation actions -->
-		<div class="complete__actions">
+		<ActionGroup justify="center">
 			{#if hasNextLesson}
 				<Button variant="primary" size="large" onclick={onNextLesson}>
 					Go to the next word ->
@@ -87,20 +93,11 @@
 				</Button>
 			{/if}
 			<Button href="/learn" variant="secondary" size="large">All Lessons</Button>
-		</div>
+		</ActionGroup>
 	</div>
-</div>
+</StepLayout>
 
 <style lang="scss">
-	.step {
-		display: flex;
-		flex-direction: column;
-		gap: $space-xl;
-		margin: 0 auto;
-		max-width: var(--content-max-width);
-		@include fade-in-animation;
-	}
-
 	// Celebration card — centered layout with stacked elements
 	.complete {
 		align-items: center;
@@ -123,7 +120,6 @@
 		}
 
 		&__score {
-			@include score-display(var(--color-success));
 			min-width: 13rem;
 		}
 
@@ -164,6 +160,11 @@
 			padding: $space-md;
 		}
 
+		&__letter-character {
+			font-size: 2.5rem;
+			line-height: 1.2;
+		}
+
 		&__vocabulary-grid {
 			display: grid;
 			gap: $space-md;
@@ -178,13 +179,6 @@
 			flex-direction: column;
 			gap: $space-xs;
 			padding: $space-md;
-		}
-
-		&__actions {
-			display: flex;
-			flex-wrap: wrap;
-			gap: $space-md;
-			justify-content: center;
 		}
 	}
 </style>

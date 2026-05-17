@@ -1,5 +1,7 @@
 <script lang="ts">
 	import GlyphOrbit from "$lib/components/illustrations/GlyphOrbit.svelte";
+	import ActionGroup from "$lib/components/layout/ActionGroup.svelte";
+	import Badge from "$lib/components/ui/Badge.svelte";
 	import Button from "$lib/components/ui/Button.svelte";
 	import Heading from "$lib/components/ui/Heading.svelte";
 	import Reveal from "$lib/components/ui/Reveal.svelte";
@@ -32,9 +34,9 @@
 
 <section class="learner-home card">
 	<Reveal class="learner-home__copy" delay={40}>
-		<span class={["badge", authenticated ? "badge--success" : "badge--primary"]}>
+		<Badge tone={authenticated ? "success" : "primary"}>
 			{authenticated ? "Welcome back" : "Saved on this device"}
-		</span>
+		</Badge>
 		<Heading as="h1" class="learner-home__title">Pick up exactly where you left off.</Heading>
 		<p class="learner-home__lead">
 			{completionCopy}
@@ -46,7 +48,7 @@
 			{/if}
 		</p>
 
-		<div class="learner-home__actions">
+		<ActionGroup stackAt="sm">
 			<Button href={`/learn/${currentLessonId}`} variant="primary" size="large">
 				Continue lesson {currentLessonId}
 			</Button>
@@ -55,7 +57,7 @@
 					>Practice known words</Button
 				>
 			{/if}
-		</div>
+		</ActionGroup>
 
 		<div class="learner-home__stats">
 			<div>
@@ -78,7 +80,7 @@
 			<GlyphOrbit />
 		</div>
 		<div class="learner-home__aside card card--flat">
-			<span class="badge badge--accent">Next step</span>
+			<Badge tone="accent">Next step</Badge>
 			<h2>Lesson {currentLessonId}</h2>
 			<p>
 				Jump straight back into the next reading loop, or browse the lesson map if you want
@@ -114,12 +116,6 @@
 			color: var(--color-text-muted);
 			font-size: $font-size-lg;
 			max-width: 42rem;
-		}
-
-		&__actions {
-			display: flex;
-			flex-wrap: wrap;
-			gap: $space-md;
 		}
 
 		&__stats {
@@ -183,10 +179,6 @@
 	}
 
 	@media (max-width: $bp-sm) {
-		.learner-home__actions {
-			flex-direction: column;
-		}
-
 		.learner-home__stats {
 			grid-template-columns: 1fr;
 		}

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import ActionGroup from "$lib/components/layout/ActionGroup.svelte";
+	import Badge, { type BadgeTone } from "$lib/components/ui/Badge.svelte";
 	import Button from "$lib/components/ui/Button.svelte";
 	import {
 		authSession,
@@ -22,14 +24,14 @@
 	const completedLessonCount = $derived($learnerProjection?.completedLessonIds.length ?? 0);
 	const resumeLessonId = $derived($learnerProjection?.resumeLessonId ?? null);
 	const resumeHref = $derived(resumeLessonId ? `/learn/${resumeLessonId}` : "/learn");
-	const syncBadgeClass = $derived.by(() => {
+	const syncBadgeTone = $derived.by<BadgeTone>(() => {
 		switch ($learnerProjectionStatus) {
 			case "loaded":
-				return "badge badge--success";
+				return "success";
 			case "error":
-				return "badge badge--warning";
+				return "warning";
 			default:
-				return "badge badge--primary";
+				return "primary";
 		}
 	});
 	const syncLabel = $derived.by(() => {
@@ -84,7 +86,7 @@
 	<section class="auth__panel card card--flat" aria-labelledby="auth-heading">
 		{#if data.userEmail}
 			<div class="auth__header">
-				<span class="badge badge--success">Signed in</span>
+				<Badge tone="success">Signed in</Badge>
 				<h1 id="auth-heading">Account</h1>
 				<p>{accountEmail}</p>
 			</div>
@@ -99,7 +101,7 @@
 				<div class="auth__summary-card">
 					<div class="auth__summary-row">
 						<span class="auth__summary-label">Sync status</span>
-						<span class={syncBadgeClass}>{syncLabel}</span>
+						<Badge tone={syncBadgeTone}>{syncLabel}</Badge>
 					</div>
 					<p>
 						{#if syncedAtLabel}
@@ -125,7 +127,7 @@
 				</div>
 			</div>
 
-			<div class="auth__actions">
+			<ActionGroup gap="0.5rem">
 				<Button href={resumeHref} variant="primary">
 					{#if resumeLessonId}Continue from lesson {resumeLessonId}{:else}Go to lessons{/if}
 				</Button>
@@ -141,7 +143,7 @@
 						Refresh synced progress
 					{/if}
 				</Button>
-			</div>
+			</ActionGroup>
 
 			<div class="auth__meta">
 				<p>
@@ -154,13 +156,13 @@
 			</div>
 		{:else if !data.authConfigured}
 			<div class="auth__header">
-				<span class="badge badge--warning">Setup needed</span>
+				<Badge tone="warning">Setup needed</Badge>
 				<h1 id="auth-heading">Sign in</h1>
 				<p>Authentication is not configured for this environment yet.</p>
 			</div>
 		{:else}
 			<div class="auth__header">
-				<span class="badge badge--primary">Email code</span>
+				<Badge>Email code</Badge>
 				<h1 id="auth-heading">Sign in</h1>
 				<p>Use a one-time code to keep your progress synced.</p>
 			</div>
@@ -282,12 +284,6 @@
 		display: flex;
 		gap: $space-md;
 		justify-content: space-between;
-	}
-
-	.auth__actions {
-		display: flex;
-		flex-wrap: wrap;
-		gap: $space-sm;
 	}
 
 	.auth__meta {

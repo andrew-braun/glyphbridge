@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Button from "$lib/components/ui/Button.svelte";
 	import CollapsiblePanel from "$lib/components/ui/CollapsiblePanel.svelte";
+	import DetailRow from "$lib/components/ui/DetailRow.svelte";
 	import type { Letter } from "$lib/data/types";
 
 	const panelHeadingId = "letter-detail-panel-heading";
@@ -24,23 +25,14 @@
 			</Button>
 			<div class="detail-panel__char thai">{letter.character}</div>
 			<div class="detail-panel__info">
-				<div class="detail-panel__row">
-					<span class="detail-panel__label">Sound</span>
-					<span>{letter.romanization}</span>
-				</div>
-				<div class="detail-panel__row">
-					<span class="detail-panel__label">Pronunciation</span>
-					<span>{letter.pronunciation}</span>
-				</div>
-				<div class="detail-panel__row">
-					<span class="detail-panel__label">Type</span>
-					<span>{letter.type}{letter.class ? ` (${letter.class} class)` : ""}</span>
-				</div>
+				<DetailRow label="Sound" value={letter.romanization} />
+				<DetailRow label="Pronunciation" value={letter.pronunciation} />
+				<DetailRow
+					label="Type"
+					value={`${letter.type}${letter.class ? ` (${letter.class} class)` : ""}`}
+				/>
 				{#if letter.position && letter.position !== "standalone"}
-					<div class="detail-panel__row">
-						<span class="detail-panel__label">Position</span>
-						<span>Written {letter.position}</span>
-					</div>
+					<DetailRow label="Position" value={`Written ${letter.position}`} />
 				{/if}
 				<div class="detail-panel__mnemonic">
 					<strong>Memory trick:</strong>
@@ -71,19 +63,6 @@
 			gap: $space-sm;
 		}
 
-		&__row {
-			border-bottom: 1px solid var(--color-border);
-			display: flex;
-			justify-content: space-between;
-			padding: $space-xs 0;
-		}
-
-		&__label {
-			color: var(--color-text-muted);
-			font-size: $font-size-sm;
-			font-weight: 600;
-		}
-
 		&__mnemonic {
 			background: var(--surface-interactive);
 			border-radius: $radius-md;
@@ -106,11 +85,6 @@
 			align-items: center;
 			flex-direction: column;
 			text-align: center;
-
-			&__row {
-				flex-direction: column;
-				gap: $space-xs;
-			}
 		}
 	}
 </style>

@@ -12,7 +12,11 @@
   to the rules step.
 -->
 <script lang="ts">
+	import StepLayout from "$lib/components/lesson/StepLayout.svelte";
+	import Badge from "$lib/components/ui/Badge.svelte";
 	import Button from "$lib/components/ui/Button.svelte";
+	import DetailRow from "$lib/components/ui/DetailRow.svelte";
+	import NoticeBox from "$lib/components/ui/NoticeBox.svelte";
 	import type { Letter } from "$lib/data/types";
 
 	let {
@@ -37,51 +41,38 @@
 	}
 </script>
 
-<div class="step">
-	<div class="step__counter">
-		Letter {currentIndex + 1} of {letters.length}
-	</div>
-
+<StepLayout counter={`Letter ${currentIndex + 1} of ${letters.length}`}>
 	<div class="letter-intro">
 		<!-- Large character display -->
-		<div class="letter-intro__char thai" style="font-size: 5rem; line-height: 1;">
+		<div class="letter-intro__char thai">
 			{currentLetter.character}
 		</div>
 
 		<!-- Letter details table -->
 		<div class="letter-intro__details">
-			<div class="letter-intro__row">
-				<span class="letter-intro__label">Sound</span>
-				<span class="letter-intro__value">{currentLetter.romanization}</span>
-			</div>
-			<div class="letter-intro__row">
-				<span class="letter-intro__label">Pronunciation</span>
-				<span class="letter-intro__value">{currentLetter.pronunciation}</span>
-			</div>
-			<div class="letter-intro__row">
-				<span class="letter-intro__label">Type</span>
-				<span class="letter-intro__value badge badge--primary">
+			<DetailRow label="Sound" value={currentLetter.romanization} />
+			<DetailRow label="Pronunciation" value={currentLetter.pronunciation} />
+			<DetailRow label="Type">
+				<Badge>
 					{currentLetter.type}{currentLetter.class
 						? ` (${currentLetter.class} class)`
 						: ""}
-				</span>
-			</div>
+				</Badge>
+			</DetailRow>
 			<!-- Position only shown for non-standalone characters (vowels that sit above/below/around) -->
 			{#if currentLetter.position && currentLetter.position !== "standalone"}
-				<div class="letter-intro__row">
-					<span class="letter-intro__label">Position</span>
-					<span class="letter-intro__value"
-						>Written {currentLetter.position} the consonant</span
-					>
-				</div>
+				<DetailRow
+					label="Position"
+					value={`Written ${currentLetter.position} the consonant`}
+				/>
 			{/if}
 		</div>
 
 		<!-- Mnemonic memory trick -->
-		<div class="letter-intro__mnemonic card card--flat">
+		<NoticeBox class="letter-intro__mnemonic">
 			<strong>Remember:</strong>
 			{currentLetter.mnemonic}
-		</div>
+		</NoticeBox>
 	</div>
 
 	<Button variant="primary" size="large" fullWidth={true} onclick={next}>
@@ -89,22 +80,9 @@
 			? "Take the next letter ->"
 			: "Learn the rule behind it ->"}
 	</Button>
-</div>
+</StepLayout>
 
 <style lang="scss">
-	.step {
-		display: flex;
-		flex-direction: column;
-		gap: $space-xl;
-		margin: 0 auto;
-		max-width: var(--content-max-width);
-		@include fade-in-animation;
-
-		&__counter {
-			@include step-counter;
-		}
-	}
-
 	// Centered letter showcase with details below
 	.letter-intro {
 		align-items: center;
@@ -122,8 +100,10 @@
 			box-shadow: var(--shadow-card);
 			color: var(--color-primary-strong);
 			display: flex;
+			font-size: 5rem;
 			height: 140px;
 			justify-content: center;
+			line-height: 1;
 			width: 140px;
 		}
 
@@ -135,22 +115,8 @@
 			width: 100%;
 		}
 
-		&__row {
-			@include detail-row;
-		}
-
-		&__label {
-			@include detail-label;
-		}
-
-		&__value {
-			font-weight: 500;
-		}
-
 		// Mnemonic box at the bottom
-		&__mnemonic {
-			font-size: $font-size-sm;
-			line-height: 1.6;
+		:global(.letter-intro__mnemonic) {
 			text-align: left;
 			width: 100%;
 		}

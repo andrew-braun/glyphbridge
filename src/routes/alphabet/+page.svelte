@@ -1,5 +1,6 @@
 <script lang="ts">
 	import LetterDetailPanel from "$lib/components/content/alphabet/LetterDetailPanel.svelte";
+	import PageShell from "$lib/components/layout/PageShell.svelte";
 	import Progress from "$lib/components/ui/Progress.svelte";
 	import ToggleTiles, { type ToggleTileOption } from "$lib/components/ui/ToggleTiles.svelte";
 	import { thaiPack } from "$lib/data/thai";
@@ -74,7 +75,7 @@
     romanization, consonant class, writing position, and a mnemonic.
   - A progress bar at the top shows how many letters the user has learned out of the total.
 -->
-<div class="alphabet container page-shell">
+<PageShell class="alphabet">
 	<!-- Visual progress bar: fill width is the percentage of letters learned -->
 	<div class="alphabet__progress">
 		<Progress
@@ -97,7 +98,7 @@
 	{/each}
 
 	<LetterDetailPanel letter={selectedLetter} onClose={() => (selectedCharacter = "")} />
-</div>
+</PageShell>
 
 <style lang="scss">
 	/* ========================================

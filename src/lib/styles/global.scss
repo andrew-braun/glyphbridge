@@ -537,4 +537,9 @@ a {
 		background: rgb(var(--rgb-accent) / 0.14);
 		color: var(--color-accent);
 	}
+
+	&--muted {
+		background: var(--color-surface-muted);
+		color: var(--color-text-muted);
+	}
 }

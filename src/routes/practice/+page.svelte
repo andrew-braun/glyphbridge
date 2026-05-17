@@ -16,7 +16,12 @@
 <script lang="ts">
 	import DrillExercise from "$lib/components/exercises/DrillExercise.svelte";
 	import GlyphRibbon from "$lib/components/illustrations/GlyphRibbon.svelte";
+	import ActionGroup from "$lib/components/layout/ActionGroup.svelte";
+	import PageShell from "$lib/components/layout/PageShell.svelte";
 	import Button from "$lib/components/ui/Button.svelte";
+	import EmptyState from "$lib/components/ui/EmptyState.svelte";
+	import MetricDisplay from "$lib/components/ui/MetricDisplay.svelte";
+	import MetricPill from "$lib/components/ui/MetricPill.svelte";
 	import Progress from "$lib/components/ui/Progress.svelte";
 	import { thaiPack } from "$lib/data/thai";
 	import type { DrillQuestion } from "$lib/data/types";
@@ -89,20 +94,20 @@
 	/>
 </svelte:head>
 
-<div class="practice container page-shell page-shell--narrow">
+<PageShell narrow class="practice">
 	<!-- STATE: No drills available (user hasn't completed any lessons) -->
 	{#if availableDrills.length === 0}
-		<div class="empty-state">
-			<GlyphRibbon tokens={["ท", "ฝ", "ก"]} />
-			<h2>Your practice deck opens after the first lesson.</h2>
-			<p>
-				Finish one lesson and GlyphBridge will turn its drills into a short review sprint
-				here.
-			</p>
-			<div class="empty-state__actions">
+		<EmptyState
+			title="Your practice deck opens after the first lesson."
+			description="Finish one lesson and GlyphBridge will turn its drills into a short review sprint here."
+		>
+			{#snippet art()}
+				<GlyphRibbon tokens={["ท", "ฝ", "ก"]} />
+			{/snippet}
+			{#snippet actions()}
 				<Button href="/learn" variant="primary" size="large">Start lesson 1</Button>
-			</div>
-		</div>
+			{/snippet}
+		</EmptyState>
 
 		<!-- STATE: Session not started — show stats and start button -->
 	{:else if !sessionActive}
@@ -113,14 +118,8 @@
 				lessons.
 			</p>
 			<div class="metric-row start__stats">
-				<div class="metric-pill">
-					<span class="metric-pill__value">{$knownLetters.length}</span>
-					<span class="metric-pill__label">letters ready</span>
-				</div>
-				<div class="metric-pill">
-					<span class="metric-pill__value">{$knownWords.length}</span>
-					<span class="metric-pill__label">words in memory</span>
-				</div>
+				<MetricPill value={$knownLetters.length} label="letters ready" />
+				<MetricPill value={$knownWords.length} label="words in memory" />
 			</div>
 			<Button variant="primary" size="large" onclick={startSession}>
 				Start Practice Session ({Math.min(SESSION_SIZE, availableDrills.length)}
@@ -147,17 +146,20 @@
 			</p>
 
 			<div class="results__score surface-panel card card--flat">
-				<span class="results__score-num">{correctCount}/{totalAnswered}</span>
-				<span class="results__score-label">Correct</span>
+				<MetricDisplay
+					value={`${correctCount}/${totalAnswered}`}
+					label="Correct"
+					tone="success"
+				/>
 			</div>
 			<div class="results__pct">
 				{Math.round((correctCount / totalAnswered) * 100)}%
 			</div>
-			<div class="results__actions">
+			<ActionGroup justify="center">
 				<Button variant="primary" size="large" onclick={startSession}>Practice Again</Button
 				>
 				<Button href="/learn" variant="secondary" size="large">Back to Lessons</Button>
-			</div>
+			</ActionGroup>
 		</div>
 
 		<!-- STATE: Active session — show current drill -->
@@ -196,7 +198,7 @@
 			</div>
 		</div>
 	{/if}
-</div>
+</PageShell>
 
 <style lang="scss">
 	// Shared layout for empty, start, and results states
@@ -252,11 +254,6 @@
 			color: var(--color-primary-strong);
 			font-size: $font-size-xl;
 			font-weight: 700;
-		}
-
-		&__actions {
-			display: flex;
-			gap: $space-md;
 		}
 	}
 
