@@ -1,22 +1,22 @@
 // === GlyphBridge Design System ===
 
-// Color palette — warm, friendly, modern
-$color-primary: #6c5ce7;
-$color-primary-light: #a29bfe;
-$color-primary-dark: #5a4bd1;
-$color-accent: #fd79a8;
-$color-accent-light: #fdcb6e;
-$color-success: #00b894;
-$color-success-light: #55efc4;
-$color-warning: #fdcb6e;
-$color-error: #ff7675;
-$color-bg: #fafafa;
-$color-bg-card: #ffffff;
-$color-bg-dark: #2d3436;
-$color-text: #2d3436;
-$color-text-light: #636e72;
-$color-text-muted: #b2bec3;
-$color-border: #dfe6e9;
+// Color palette — soft classroom blue with warm coral accents
+$color-primary: #5f88b2;
+$color-primary-light: #93bddf;
+$color-primary-dark: #3f678f;
+$color-accent: #a9554a;
+$color-accent-light: #f0c276;
+$color-success: #31685a;
+$color-success-light: #8fd1be;
+$color-warning: #865922;
+$color-error: #bf6678;
+$color-bg: #f6f2ea;
+$color-bg-card: #fffdf8;
+$color-bg-dark: #101b2b;
+$color-text: #243246;
+$color-text-light: #5d6c81;
+$color-text-muted: #8f9aad;
+$color-border: #d8dfeb;
 
 // Typography
 $font-display: "Chakra Petch", "Manrope", "Sarabun", sans-serif;
@@ -84,59 +84,59 @@ $space-heading-section: $space-xl;
 
 :root {
 	color-scheme: dark;
-	--rgb-primary: 110 104 255;
-	--rgb-primary-strong: 150 144 255;
-	--rgb-accent: 255 74 177;
-	--rgb-success: 35 214 169;
-	--rgb-warning: 255 195 84;
-	--rgb-danger: 255 119 146;
-	--rgb-surface-nav-strong: 11 17 36;
-	--color-bg: #060914;
-	--color-bg-elevated: #0b1123;
-	--color-surface-card: rgb(11 17 36 / 0.84);
-	--color-surface-muted: rgb(18 27 52 / 0.88);
-	--color-surface-nav: rgb(8 13 29 / 0.92);
-	--color-text: #f4f7ff;
-	--color-text-muted: #aeb7d6;
-	--color-text-soft: #7b86aa;
-	--color-border: rgb(142 163 255 / 0.18);
-	--color-border-strong: rgb(142 163 255 / 0.3);
-	--color-primary: #8a7cff;
-	--color-primary-strong: #c3b9ff;
-	--color-accent: #ff4ab1;
-	--color-success: #23d6a9;
-	--color-warning: #ffc354;
-	--color-danger: #ff7792;
-	--color-link: #9dd5ff;
-	--color-link-hover: #cde8ff;
+	--rgb-primary: 126 174 216;
+	--rgb-primary-strong: 199 229 255;
+	--rgb-accent: 242 156 135;
+	--rgb-success: 111 196 176;
+	--rgb-warning: 230 188 103;
+	--rgb-danger: 224 141 161;
+	--rgb-surface-nav-strong: 18 29 46;
+	--color-bg: #101b2b;
+	--color-bg-elevated: #172437;
+	--color-surface-card: rgb(23 36 55 / 0.88);
+	--color-surface-muted: rgb(29 44 65 / 0.9);
+	--color-surface-nav: rgb(16 28 44 / 0.94);
+	--color-text: #f6f5f0;
+	--color-text-muted: #c1cbdc;
+	--color-text-soft: #95a4bb;
+	--color-border: rgb(151 179 215 / 0.16);
+	--color-border-strong: rgb(151 179 215 / 0.28);
+	--color-primary: #7eaed8;
+	--color-primary-strong: #c7e5ff;
+	--color-accent: #f29c87;
+	--color-success: #6fc4b0;
+	--color-warning: #e6bc67;
+	--color-danger: #e08da1;
+	--color-link: #a8d8f6;
+	--color-link-hover: #d4edf8;
 	--shadow-soft: 0 10px 24px rgb(3 7 18 / 0.18);
-	--shadow-card: 0 18px 40px rgb(3 7 18 / 0.34);
-	--shadow-card-hover: 0 24px 60px rgb(3 7 18 / 0.42);
-	--shadow-primary: 0 14px 34px rgb(var(--rgb-primary) / 0.35);
+	--shadow-card: 0 18px 40px rgb(3 7 18 / 0.28);
+	--shadow-card-hover: 0 24px 60px rgb(3 7 18 / 0.36);
+	--shadow-primary: 0 14px 34px rgb(var(--rgb-primary) / 0.24);
 	--surface-hero:
-		linear-gradient(145deg, rgb(var(--rgb-primary) / 0.12), transparent 38%),
-		radial-gradient(circle at top right, rgb(var(--rgb-accent) / 0.15), transparent 32%),
+		linear-gradient(145deg, rgb(var(--rgb-primary) / 0.08), transparent 40%),
+		radial-gradient(circle at top right, rgb(var(--rgb-accent) / 0.1), transparent 34%),
 		var(--color-surface-card);
 	--surface-panel:
-		linear-gradient(180deg, rgb(var(--rgb-primary) / 0.08), transparent 42%),
+		linear-gradient(180deg, rgb(var(--rgb-primary) / 0.06), transparent 42%),
 		var(--color-surface-card);
 	--surface-panel-accent:
-		linear-gradient(180deg, rgb(var(--rgb-accent) / 0.12), transparent 42%),
+		linear-gradient(180deg, rgb(var(--rgb-accent) / 0.08), transparent 42%),
 		var(--color-surface-card);
 	--surface-panel-success:
-		linear-gradient(180deg, rgb(var(--rgb-success) / 0.12), transparent 42%),
+		linear-gradient(180deg, rgb(var(--rgb-success) / 0.08), transparent 42%),
 		var(--color-surface-card);
 	--surface-panel-warning:
-		linear-gradient(180deg, rgb(var(--rgb-warning) / 0.14), transparent 42%),
+		linear-gradient(180deg, rgb(var(--rgb-warning) / 0.1), transparent 42%),
 		var(--color-surface-card);
-	--surface-interactive: rgb(var(--rgb-primary) / 0.08);
-	--surface-interactive-strong: rgb(var(--rgb-primary) / 0.12);
+	--surface-interactive: rgb(var(--rgb-primary) / 0.06);
+	--surface-interactive-strong: rgb(var(--rgb-primary) / 0.1);
 	--surface-overlay: rgb(7 11 23 / 0.68);
-	--focus-ring: 0 0 0 3px rgb(var(--rgb-primary) / 0.18);
+	--focus-ring: 0 0 0 3px rgb(var(--rgb-primary) / 0.22);
 	--bg-hero-glow:
-		radial-gradient(circle at top left, rgb(var(--rgb-accent) / 0.2), transparent 35%),
-		radial-gradient(circle at top right, rgb(var(--rgb-primary) / 0.18), transparent 32%),
-		linear-gradient(180deg, #081020, #060914 55%, #04070f);
+		radial-gradient(circle at top left, rgb(var(--rgb-accent) / 0.12), transparent 36%),
+		radial-gradient(circle at top right, rgb(var(--rgb-primary) / 0.14), transparent 34%),
+		linear-gradient(180deg, #172338, #101b2b 55%, #0c1521);
 	--layout-max-width: #{$max-width-layout};
 	--content-max-width: #{$max-width-content};
 	--text-max-width: #{$max-width-text};
@@ -145,59 +145,59 @@ $space-heading-section: $space-xl;
 
 :root[data-theme="light"] {
 	color-scheme: light;
-	--rgb-primary: 109 91 231;
-	--rgb-primary-strong: 90 75 209;
-	--rgb-accent: 255 92 174;
-	--rgb-success: 0 184 148;
-	--rgb-warning: 255 196 67;
-	--rgb-danger: 255 118 117;
-	--rgb-surface-nav-strong: 249 248 255;
-	--color-bg: #f7f4ff;
-	--color-bg-elevated: #ffffff;
-	--color-surface-card: rgb(255 255 255 / 0.88);
-	--color-surface-muted: rgb(255 255 255 / 0.78);
-	--color-surface-nav: rgb(255 255 255 / 0.92);
-	--color-text: #241f3e;
-	--color-text-muted: #665f8a;
-	--color-text-soft: #8c86ab;
-	--color-border: rgb(108 92 231 / 0.12);
-	--color-border-strong: rgb(108 92 231 / 0.22);
-	--color-primary: #6d5be7;
-	--color-primary-strong: #5846d0;
-	--color-accent: #ff5cae;
-	--color-success: #00b894;
-	--color-warning: #f5ad2d;
-	--color-danger: #ff7675;
-	--color-link: #4c58d4;
-	--color-link-hover: #3b46b3;
-	--shadow-soft: 0 10px 24px rgb(89 67 158 / 0.08);
-	--shadow-card: 0 18px 40px rgb(89 67 158 / 0.12);
-	--shadow-card-hover: 0 24px 60px rgb(89 67 158 / 0.16);
-	--shadow-primary: 0 14px 34px rgb(var(--rgb-primary) / 0.2);
+	--rgb-primary: 95 136 178;
+	--rgb-primary-strong: 63 103 143;
+	--rgb-accent: 169 85 74;
+	--rgb-success: 49 104 90;
+	--rgb-warning: 134 89 34;
+	--rgb-danger: 191 102 120;
+	--rgb-surface-nav-strong: 255 251 244;
+	--color-bg: #f6f2ea;
+	--color-bg-elevated: #fffdf8;
+	--color-surface-card: rgb(255 253 248 / 0.94);
+	--color-surface-muted: rgb(250 245 236 / 0.88);
+	--color-surface-nav: rgb(255 252 246 / 0.94);
+	--color-text: #243246;
+	--color-text-muted: #5d6c81;
+	--color-text-soft: #8f9aad;
+	--color-border: rgb(95 136 178 / 0.12);
+	--color-border-strong: rgb(95 136 178 / 0.22);
+	--color-primary: #5f88b2;
+	--color-primary-strong: #3f678f;
+	--color-accent: #a9554a;
+	--color-success: #31685a;
+	--color-warning: #865922;
+	--color-danger: #bf6678;
+	--color-link: #315f8e;
+	--color-link-hover: #274d74;
+	--shadow-soft: 0 10px 24px rgb(76 92 136 / 0.08);
+	--shadow-card: 0 18px 40px rgb(76 92 136 / 0.1);
+	--shadow-card-hover: 0 24px 60px rgb(76 92 136 / 0.14);
+	--shadow-primary: 0 14px 34px rgb(var(--rgb-primary) / 0.16);
 	--surface-hero:
-		linear-gradient(145deg, rgb(var(--rgb-primary) / 0.1), transparent 38%),
-		radial-gradient(circle at top right, rgb(var(--rgb-accent) / 0.13), transparent 32%),
+		linear-gradient(145deg, rgb(var(--rgb-primary) / 0.08), transparent 40%),
+		radial-gradient(circle at top right, rgb(var(--rgb-accent) / 0.08), transparent 34%),
 		var(--color-surface-card);
 	--surface-panel:
-		linear-gradient(180deg, rgb(var(--rgb-primary) / 0.08), transparent 42%),
+		linear-gradient(180deg, rgb(var(--rgb-primary) / 0.06), transparent 42%),
 		var(--color-surface-card);
 	--surface-panel-accent:
-		linear-gradient(180deg, rgb(var(--rgb-accent) / 0.12), transparent 42%),
+		linear-gradient(180deg, rgb(var(--rgb-accent) / 0.08), transparent 42%),
 		var(--color-surface-card);
 	--surface-panel-success:
-		linear-gradient(180deg, rgb(var(--rgb-success) / 0.12), transparent 42%),
+		linear-gradient(180deg, rgb(var(--rgb-success) / 0.08), transparent 42%),
 		var(--color-surface-card);
 	--surface-panel-warning:
-		linear-gradient(180deg, rgb(var(--rgb-warning) / 0.14), transparent 42%),
+		linear-gradient(180deg, rgb(var(--rgb-warning) / 0.08), transparent 42%),
 		var(--color-surface-card);
-	--surface-interactive: rgb(var(--rgb-primary) / 0.06);
-	--surface-interactive-strong: rgb(var(--rgb-primary) / 0.1);
-	--surface-overlay: rgb(249 247 255 / 0.72);
-	--focus-ring: 0 0 0 3px rgb(var(--rgb-primary) / 0.14);
+	--surface-interactive: rgb(var(--rgb-primary) / 0.05);
+	--surface-interactive-strong: rgb(var(--rgb-primary) / 0.08);
+	--surface-overlay: rgb(246 242 234 / 0.76);
+	--focus-ring: 0 0 0 3px rgb(var(--rgb-primary) / 0.18);
 	--bg-hero-glow:
-		radial-gradient(circle at top left, rgb(var(--rgb-accent) / 0.16), transparent 35%),
-		radial-gradient(circle at top right, rgb(var(--rgb-primary) / 0.12), transparent 32%),
-		linear-gradient(180deg, #fff9ff, #f7f4ff 55%, #f0edff);
+		radial-gradient(circle at top left, rgb(var(--rgb-accent) / 0.08), transparent 36%),
+		radial-gradient(circle at top right, rgb(var(--rgb-primary) / 0.1), transparent 34%),
+		linear-gradient(180deg, #fffdf8, #f6f2ea 55%, #efe8dd);
 }
 
 *,
@@ -516,7 +516,7 @@ a {
 	}
 
 	&--success {
-		background: linear-gradient(135deg, var(--color-success), #12bd95);
+		background: linear-gradient(135deg, var(--color-success), #0e9f7d);
 		color: white;
 
 		&:hover:not(:disabled) {

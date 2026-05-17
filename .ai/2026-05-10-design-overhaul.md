@@ -66,13 +66,23 @@
 4. Avoid infinite card sameness. Shared surfaces should come from the same system, but emphasis should shift by context through accent panels, specific badges, and purposeful layout changes.
 5. Avoid trend-driven decoration without teaching value. Motion, glow, and synthwave accents should guide attention or reinforce progress, not exist as generic polish.
 
+## Palette Research
+
+- Accessibility baseline: readable body text and interactive states matter more than brand hue preference. Contrast has to hold across text, focus states, and tinted surfaces, not just on flat backgrounds.
+- Product signal: for an education app, dominant cool hues and warm neutrals feel more reliable and approachable than high-chroma magenta-purple pairings. Blue carries the trust and clarity role better than neon violet when the product needs to feel easy to use.
+- Emotional balance: the most promising direction is a softened split-complementary system with one calm dominant color and smaller warm accents. That keeps the UI playful without making every surface feel promotional.
+- Practical conclusion for GlyphBridge: use muted sky/ink blue as the main structural color, warm paper neutrals for the resting surfaces, coral as the encouragement accent, and mint/marigold only for success and warning semantics.
+- Synthwave should survive only as a hint in glow, illustration, and celebratory accents. It should not own the base surfaces or primary reading experience.
+
 ## Next Slice
 
 1. Clean up remaining legacy Sass palette exports once no active components depend on them.
-2. Extend `Reveal` and `GlyphRibbon` to a few more secondary routes if future screens need staged entrances or branded decorative states.
-3. Revisit font weights after another round of mobile QA and visual tuning.
+2. Run a visual QA sweep for the softer classroom palette across home, auth, and lesson routes and tune any surfaces that still feel too dark-default or too promotional.
+3. Extend `Reveal` and `GlyphRibbon` to a few more secondary routes if future screens need staged entrances or branded decorative states.
+4. Revisit font weights after another round of mobile QA and visual tuning.
 
 ## Follow-up
 
 - Sweep for old one-off animation snippets that can move to the new shared motion layer.
+- Capture future optional named themes around the calmer token model instead of returning to full-screen neon as the default.
 - Add future named themes once the semantic token model is stable.

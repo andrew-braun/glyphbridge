@@ -1,23 +1,25 @@
 // Re-export variables for use in component <style lang="scss"> blocks
-$color-primary: #6c5ce7;
-$color-primary-light: #a29bfe;
-$color-primary-dark: #5a4bd1;
-$color-accent: #fd79a8;
-$color-accent-light: #fdcb6e;
-$color-success: #00b894;
-$color-success-light: #55efc4;
-$color-warning: #fdcb6e;
-$color-error: #ff7675;
-$color-bg: #fafafa;
-$color-bg-card: #ffffff;
-$color-bg-dark: #2d3436;
-$color-text: #2d3436;
-$color-text-light: #636e72;
-$color-text-muted: #b2bec3;
-$color-border: #dfe6e9;
+$color-primary: #5f88b2;
+$color-primary-light: #93bddf;
+$color-primary-dark: #3f678f;
+$color-accent: #a9554a;
+$color-accent-light: #f0c276;
+$color-success: #31685a;
+$color-success-light: #8fd1be;
+$color-warning: #865922;
+$color-error: #bf6678;
+$color-bg: #f6f2ea;
+$color-bg-card: #fffdf8;
+$color-bg-dark: #101b2b;
+$color-text: #243246;
+$color-text-light: #5d6c81;
+$color-text-muted: #8f9aad;
+$color-border: #d8dfeb;
 
+$font-display: "Chakra Petch", "Manrope", "Sarabun", sans-serif;
 $font-body:
-	"Inter",
+	"Manrope",
+	"Sarabun",
 	-apple-system,
 	BlinkMacSystemFont,
 	"Segoe UI",

@@ -31,7 +31,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 				getAll() {
 					return event.cookies.getAll();
 				},
-				setAll(cookiesToSet) {
+				setAll(cookiesToSet, headers) {
 					cookiesToSet.forEach(({ name, value, options }) => {
 						event.cookies.set(name, value, {
 							...options,
@@ -41,27 +41,42 @@ export const handle: Handle = async ({ event, resolve }) => {
 							secure: options.secure ?? useSecureCookies,
 						});
 					});
+
+					Object.entries(headers).forEach(([name, value]) => {
+						event.setHeaders(name === "set-cookie" ? {} : { [name]: value });
+					});
 				},
 			},
 		});
 
+		let safeSessionPromise: Promise<{
+			session: Awaited<ReturnType<typeof supabase.auth.getSession>>["data"]["session"] | null;
+			user: Awaited<ReturnType<typeof supabase.auth.getUser>>["data"]["user"] | null;
+		}> | null = null;
+
 		event.locals.supabase = supabase;
 		event.locals.safeGetSession = async () => {
-			const {
-				data: { session },
-			} = await supabase.auth.getSession();
+			safeSessionPromise ??= (async () => {
+				const {
+					data: { session },
+				} = await supabase.auth.getSession();
 
-			if (!session) return { session: null, user: null };
+				if (!session) return { session: null, user: null };
 
-			const {
-				data: { user },
-				error,
-			} = await supabase.auth.getUser();
+				const {
+					data: { user },
+					error,
+				} = await supabase.auth.getUser();
 
-			if (error || !user) return { session: null, user: null };
+				if (error || !user) return { session: null, user: null };
 
-			return { session, user };
+				return { session, user };
+			})();
+
+			return safeSessionPromise;
 		};
+
+		await event.locals.safeGetSession();
 	}
 
 	return resolve(event, {

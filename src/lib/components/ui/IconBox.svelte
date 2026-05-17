@@ -112,7 +112,7 @@
 		border-color: rgb(var(--rgb-accent) / 0.26);
 
 		.icon-box__icon {
-			background: linear-gradient(145deg, var(--color-accent), #f05d91);
+			background: linear-gradient(145deg, var(--color-accent), #ffab84);
 			box-shadow: 0 14px 28px rgb(var(--rgb-accent) / 0.28);
 		}
 	}
@@ -124,7 +124,7 @@
 		border-color: rgb(var(--rgb-success) / 0.24);
 
 		.icon-box__icon {
-			background: linear-gradient(145deg, var(--color-success), #00a282);
+			background: linear-gradient(145deg, var(--color-success), #0e9f7d);
 			box-shadow: 0 14px 28px rgb(var(--rgb-success) / 0.26);
 		}
 	}
@@ -136,7 +136,7 @@
 		border-color: rgb(var(--rgb-warning) / 0.26);
 
 		.icon-box__icon {
-			background: linear-gradient(145deg, var(--color-warning), #f6b535);
+			background: linear-gradient(145deg, var(--color-warning), #d99528);
 			box-shadow: 0 14px 28px rgb(var(--rgb-warning) / 0.3);
 			color: #23192b;
 		}
