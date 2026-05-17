@@ -57,33 +57,35 @@
 			width: 100%;
 		}
 
-		&__ring {
+		.glyph-orbit__ring {
 			fill: none;
 			stroke-width: 1.5;
 
-			&--outer {
+			&.glyph-orbit__ring--outer {
 				animation: orbitSpin 24s linear infinite;
 				stroke: rgb(var(--rgb-primary) / 0.28);
 				stroke-dasharray: 10 14;
 			}
 
-			&--inner {
+			&.glyph-orbit__ring--inner {
 				animation: orbitSpinReverse 18s linear infinite;
 				stroke: rgb(var(--rgb-accent) / 0.22);
 				stroke-dasharray: 6 10;
 			}
 		}
 
-		&__word {
-			fill: white;
-			font-family: $font-thai;
-			font-size: 2.35rem;
-			font-weight: 700;
-			letter-spacing: 0.04em;
-			text-anchor: middle;
+		.glyph-orbit__core {
+			.glyph-orbit__word {
+				fill: white;
+				font-family: $font-thai;
+				font-size: 2.35rem;
+				font-weight: 700;
+				letter-spacing: 0.04em;
+				text-anchor: middle;
+			}
 		}
 
-		&__token {
+		.glyph-orbit__token {
 			animation: orbitBob 5s ease-in-out infinite;
 			animation-delay: var(--token-delay);
 			transform-origin: center;
@@ -101,30 +103,30 @@
 				font-weight: 700;
 				text-anchor: middle;
 			}
-		}
 
-		&__token--primary {
-			--token-fill: rgb(var(--rgb-primary) / 0.18);
-			--token-stroke: rgb(var(--rgb-primary) / 0.42);
-			--token-text: var(--color-primary-strong);
-		}
+			&.glyph-orbit__token--primary {
+				--token-fill: rgb(var(--rgb-primary) / 0.18);
+				--token-stroke: rgb(var(--rgb-primary) / 0.42);
+				--token-text: var(--color-primary-strong);
+			}
 
-		&__token--accent {
-			--token-fill: rgb(var(--rgb-accent) / 0.16);
-			--token-stroke: rgb(var(--rgb-accent) / 0.32);
-			--token-text: var(--color-accent);
-		}
+			&.glyph-orbit__token--accent {
+				--token-fill: rgb(var(--rgb-accent) / 0.16);
+				--token-stroke: rgb(var(--rgb-accent) / 0.32);
+				--token-text: var(--color-accent);
+			}
 
-		&__token--success {
-			--token-fill: rgb(var(--rgb-success) / 0.16);
-			--token-stroke: rgb(var(--rgb-success) / 0.32);
-			--token-text: var(--color-success);
-		}
+			&.glyph-orbit__token--success {
+				--token-fill: rgb(var(--rgb-success) / 0.16);
+				--token-stroke: rgb(var(--rgb-success) / 0.32);
+				--token-text: var(--color-success);
+			}
 
-		&__token--warning {
-			--token-fill: rgb(var(--rgb-warning) / 0.18);
-			--token-stroke: rgb(var(--rgb-warning) / 0.34);
-			--token-text: var(--color-warning);
+			&.glyph-orbit__token--warning {
+				--token-fill: rgb(var(--rgb-warning) / 0.18);
+				--token-stroke: rgb(var(--rgb-warning) / 0.34);
+				--token-text: var(--color-warning);
+			}
 		}
 	}
 
@@ -164,9 +166,11 @@
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.glyph-orbit__ring,
-		.glyph-orbit__token {
-			animation: none;
+		.glyph-orbit {
+			.glyph-orbit__ring,
+			.glyph-orbit__token {
+				animation: none;
+			}
 		}
 	}
 </style>

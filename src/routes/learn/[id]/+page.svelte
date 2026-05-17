@@ -140,20 +140,18 @@
 </PageShell>
 
 <style lang="scss">
-	.lesson {
-		&__progress {
-			align-items: center;
-			background: var(--surface-panel);
-			display: flex;
-			gap: $space-md;
-			margin-bottom: $space-sm;
-		}
+	.lesson__progress {
+		align-items: center;
+		background: var(--surface-panel);
+		display: flex;
+		gap: $space-md;
+		margin-bottom: $space-sm;
 
-		&__progress-bar {
+		.lesson__progress-bar {
 			flex: 1;
 		}
 
-		&__step-label {
+		.lesson__step-label {
 			@include step-counter;
 			white-space: nowrap;
 		}

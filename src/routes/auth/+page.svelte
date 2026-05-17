@@ -215,119 +215,122 @@
 	.auth {
 		display: grid;
 		place-items: start center;
-	}
 
-	.auth__panel {
-		background: var(--surface-panel);
-		border: 1px solid var(--color-border);
-		display: flex;
-		flex-direction: column;
-		gap: $space-xl;
-		max-width: 30rem;
-		width: 100%;
-	}
+		.auth__panel {
+			background: var(--surface-panel);
+			border: 1px solid var(--color-border);
+			display: flex;
+			flex-direction: column;
+			gap: $space-xl;
+			max-width: 30rem;
+			width: 100%;
 
-	.auth__header {
-		display: flex;
-		flex-direction: column;
-		gap: $space-sm;
-	}
+			.auth__header {
+				display: flex;
+				flex-direction: column;
+				gap: $space-sm;
 
-	.auth__header p {
-		color: var(--color-text-muted);
-	}
+				p {
+					color: var(--color-text-muted);
+				}
+			}
 
-	.auth__form {
-		display: flex;
-		flex-direction: column;
-		gap: $space-md;
-	}
+			.auth__form {
+				display: flex;
+				flex-direction: column;
+				gap: $space-md;
 
-	.auth__form--verify {
-		border-top: 1px solid var(--color-border);
-		padding-top: $space-lg;
-	}
+				&.auth__form--verify {
+					border-top: 1px solid var(--color-border);
+					padding-top: $space-lg;
+				}
+			}
 
-	.auth__summary {
-		display: grid;
-		gap: $space-md;
-	}
+			.auth__summary {
+				display: grid;
+				gap: $space-md;
 
-	.auth__summary-card {
-		background: var(--surface-interactive);
-		border: 1px solid var(--color-border-strong);
-		border-radius: $radius-lg;
-		display: flex;
-		flex-direction: column;
-		gap: $space-xs;
-		padding: $space-md;
-	}
+				.auth__summary-card {
+					background: var(--surface-interactive);
+					border: 1px solid var(--color-border-strong);
+					border-radius: $radius-lg;
+					display: flex;
+					flex-direction: column;
+					gap: $space-xs;
+					padding: $space-md;
 
-	.auth__summary-card strong {
-		font-size: $font-size-xl;
-	}
+					strong {
+						font-size: $font-size-xl;
+					}
 
-	.auth__summary-card p,
-	.auth__meta p {
-		color: var(--color-text-muted);
-	}
+					p {
+						color: var(--color-text-muted);
+					}
 
-	.auth__summary-label {
-		font-size: $font-size-sm;
-		font-weight: 700;
-		letter-spacing: 0.02em;
-		text-transform: uppercase;
-	}
+					.auth__summary-row {
+						align-items: center;
+						display: flex;
+						gap: $space-md;
+						justify-content: space-between;
+					}
+				}
 
-	.auth__summary-row {
-		align-items: center;
-		display: flex;
-		gap: $space-md;
-		justify-content: space-between;
-	}
+				.auth__summary-label {
+					font-size: $font-size-sm;
+					font-weight: 700;
+					letter-spacing: 0.02em;
+					text-transform: uppercase;
+				}
+			}
 
-	.auth__meta {
-		border-top: 1px solid var(--color-border);
-		display: flex;
-		flex-direction: column;
-		gap: $space-md;
-		padding-top: $space-lg;
-	}
+			.auth__meta {
+				border-top: 1px solid var(--color-border);
+				display: flex;
+				flex-direction: column;
+				gap: $space-md;
+				padding-top: $space-lg;
 
-	.auth__field {
-		display: flex;
-		flex-direction: column;
-		font-weight: 700;
-		gap: $space-xs;
-	}
+				p {
+					color: var(--color-text-muted);
+				}
+			}
 
-	.auth__hint {
-		color: var(--color-text-muted);
-		font-size: $font-size-sm;
-		font-weight: 500;
-	}
+			.auth__field {
+				display: flex;
+				flex-direction: column;
+				font-weight: 700;
+				gap: $space-xs;
 
-	.auth__field input {
-		background: var(--color-surface-card);
-		border: 1px solid var(--color-border);
-		border-radius: $radius-md;
-		color: var(--color-text);
-		font: inherit;
-		padding: $space-sm $space-md;
-	}
+				.auth__hint {
+					color: var(--color-text-muted);
+					font-size: $font-size-sm;
+					font-weight: 500;
+				}
 
-	.auth__field input::placeholder {
-		color: var(--color-text-soft);
-	}
+				input {
+					background: var(--color-surface-card);
+					border: 1px solid var(--color-border);
+					border-radius: $radius-md;
+					color: var(--color-text);
+					font: inherit;
+					padding: $space-sm $space-md;
 
-	.auth__field input:focus {
-		border-color: var(--color-primary);
-		box-shadow: var(--focus-ring);
-		outline: none;
-	}
+					&::placeholder {
+						color: var(--color-text-soft);
+					}
 
-	.auth__error {
-		color: var(--color-danger);
-		font-size: $font-size-sm;
+					&:focus {
+						border-color: var(--color-primary);
+						box-shadow: var(--focus-ring);
+						outline: none;
+					}
+				}
+			}
+
+			.auth__error {
+				color: var(--color-danger);
+				font-size: $font-size-sm;
+			}
+		}
 	}
 </style>

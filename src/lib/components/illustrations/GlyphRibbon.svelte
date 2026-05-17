@@ -50,7 +50,7 @@
 		gap: $space-sm;
 		justify-content: center;
 
-		&__token {
+		.glyph-ribbon__token {
 			align-items: center;
 			animation: glyphRibbonFloat 4.8s ease-in-out infinite;
 			animation-delay: var(--glyph-delay);
@@ -62,36 +62,40 @@
 			justify-content: center;
 			min-width: 3rem;
 			padding: 0.2rem 0.95rem;
+
+			&.glyph-ribbon__token--primary {
+				background: rgb(var(--rgb-primary) / 0.12);
+				color: var(--color-primary-strong);
+			}
+
+			&.glyph-ribbon__token--accent {
+				background: rgb(var(--rgb-accent) / 0.12);
+				color: var(--color-accent);
+			}
+
+			&.glyph-ribbon__token--success {
+				background: rgb(var(--rgb-success) / 0.12);
+				color: var(--color-success);
+			}
+
+			&.glyph-ribbon__token--warning {
+				background: rgb(var(--rgb-warning) / 0.16);
+				color: var(--color-warning);
+			}
 		}
 
-		&__token--primary {
-			background: rgb(var(--rgb-primary) / 0.12);
-			color: var(--color-primary-strong);
+		&.glyph-ribbon--sm {
+			.glyph-ribbon__token {
+				font-size: $font-size-lg;
+				min-width: 2.6rem;
+				padding: 0.15rem 0.75rem;
+			}
 		}
 
-		&__token--accent {
-			background: rgb(var(--rgb-accent) / 0.12);
-			color: var(--color-accent);
-		}
-
-		&__token--success {
-			background: rgb(var(--rgb-success) / 0.12);
-			color: var(--color-success);
-		}
-
-		&__token--warning {
-			background: rgb(var(--rgb-warning) / 0.16);
-			color: var(--color-warning);
-		}
-
-		&--sm .glyph-ribbon__token {
-			font-size: $font-size-lg;
-			min-width: 2.6rem;
-			padding: 0.15rem 0.75rem;
-		}
-
-		&--static .glyph-ribbon__token {
-			animation: none;
+		&.glyph-ribbon--static {
+			.glyph-ribbon__token {
+				animation: none;
+			}
 		}
 	}
 
@@ -107,8 +111,10 @@
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.glyph-ribbon__token {
-			animation: none;
+		.glyph-ribbon {
+			.glyph-ribbon__token {
+				animation: none;
+			}
 		}
 	}
 </style>

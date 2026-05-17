@@ -40,28 +40,28 @@
 		display: flex;
 		flex-direction: column;
 		gap: $space-md;
-	}
 
-	.section-header--center {
-		align-items: center;
-		margin: 0 auto;
-		max-width: 44rem;
-		text-align: center;
-	}
+		&.section-header--center {
+			align-items: center;
+			margin: 0 auto;
+			max-width: 44rem;
+			text-align: center;
+		}
 
-	.section-header--start {
-		align-items: flex-start;
-	}
+		&.section-header--start {
+			align-items: flex-start;
+		}
 
-	.section-header__title {
-		font-size: clamp($font-size-2xl, 3.5vw, $font-size-3xl);
-		margin: 0;
-	}
+		.section-header__title {
+			font-size: clamp($font-size-2xl, 3.5vw, $font-size-3xl);
+			margin: 0;
+		}
 
-	.section-header__description {
-		color: var(--color-text-muted);
-		font-size: $font-size-lg;
-		line-height: 1.65;
-		margin: 0;
+		.section-header__description {
+			color: var(--color-text-muted);
+			font-size: $font-size-lg;
+			line-height: 1.65;
+			margin: 0;
+		}
 	}
 </style>

@@ -54,11 +54,11 @@
 		padding: $space-2xl;
 		text-align: center;
 
-		&__thai {
+		.word-reveal__thai {
 			color: var(--color-primary-strong);
 		}
 
-		&__hint {
+		.word-reveal__hint {
 			color: var(--color-text-muted);
 			margin-top: $space-md;
 		}

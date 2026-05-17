@@ -298,13 +298,13 @@ body {
 	gap: 0.15rem;
 	padding: 0.9rem 1rem;
 
-	&__value {
+	.metric-pill__value {
 		color: var(--color-text);
 		font-size: $font-size-xl;
 		font-weight: 800;
 	}
 
-	&__label {
+	.metric-pill__label {
 		color: var(--color-text-soft);
 		font-family: $font-display;
 		font-size: $font-size-xs;
@@ -337,29 +337,29 @@ body {
 		color: var(--color-text-muted);
 	}
 
-	&__art {
+	.empty-state__art {
 		align-items: center;
 		display: inline-flex;
 		gap: $space-sm;
 		justify-content: center;
+
+		.empty-state__token {
+			align-items: center;
+			background: var(--surface-interactive-strong);
+			border: 1px solid var(--color-border-strong);
+			border-radius: $radius-full;
+			color: var(--color-primary-strong);
+			display: inline-flex;
+			font-family: $font-display;
+			font-size: $font-size-xl;
+			height: 3rem;
+			justify-content: center;
+			min-width: 3rem;
+			padding: 0 $space-md;
+		}
 	}
 
-	&__token {
-		align-items: center;
-		background: var(--surface-interactive-strong);
-		border: 1px solid var(--color-border-strong);
-		border-radius: $radius-full;
-		color: var(--color-primary-strong);
-		display: inline-flex;
-		font-family: $font-display;
-		font-size: $font-size-xl;
-		height: 3rem;
-		justify-content: center;
-		min-width: 3rem;
-		padding: 0 $space-md;
-	}
-
-	&__actions {
+	.empty-state__actions {
 		display: flex;
 		flex-wrap: wrap;
 		gap: $space-md;

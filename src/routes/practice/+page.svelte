@@ -217,6 +217,10 @@
 			color: var(--color-text-muted);
 			max-width: 34rem;
 		}
+
+		.start__stats {
+			width: 100%;
+		}
 	}
 
 	.results {
@@ -232,17 +236,11 @@
 		&__summary {
 			color: var(--color-text-muted);
 		}
-	}
 
-	.start__stats {
-		width: 100%;
-	}
+		.results__score {
+			min-width: 12rem;
+		}
 
-	.results__score {
-		min-width: 12rem;
-	}
-
-	.results {
 		&__pct {
 			color: var(--color-primary-strong);
 			font-size: $font-size-xl;
@@ -262,15 +260,15 @@
 			align-items: center;
 			display: flex;
 			gap: $space-md;
-		}
 
-		&__progress {
-			flex: 1;
-		}
+			.session__progress {
+				flex: 1;
+			}
 
-		&__count {
-			@include step-counter;
-			white-space: nowrap;
+			.session__count {
+				@include step-counter;
+				white-space: nowrap;
+			}
 		}
 
 		&__score {
