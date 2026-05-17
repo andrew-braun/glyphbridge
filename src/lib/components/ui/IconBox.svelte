@@ -43,9 +43,7 @@
 <style lang="scss">
 	.icon-box {
 		align-items: center;
-		background:
-			linear-gradient(180deg, rgb(var(--rgb-primary) / 0.08), transparent 38%),
-			var(--color-surface-card);
+		background: var(--color-surface-card);
 		border: 1px solid var(--color-border);
 		border-radius: $radius-xl;
 		box-shadow: var(--shadow-soft);
@@ -70,8 +68,9 @@
 		}
 
 		&:hover {
+			border-color: var(--color-border-strong);
 			box-shadow: var(--shadow-card-hover);
-			transform: translateY(-4px);
+			transform: translateY(-2px);
 		}
 
 		&__body {
@@ -82,9 +81,8 @@
 
 		&__icon {
 			align-items: center;
-			background: linear-gradient(145deg, var(--color-primary), var(--color-accent));
+			background: var(--color-primary);
 			border-radius: $radius-full;
-			box-shadow: var(--shadow-primary);
 			color: white;
 			display: inline-flex;
 			font-size: $font-size-xl;
@@ -106,38 +104,29 @@
 	}
 
 	.icon-box--tone-accent {
-		background:
-			linear-gradient(180deg, rgb(var(--rgb-accent) / 0.12), transparent 42%),
-			var(--color-surface-card);
+		background: var(--surface-panel-accent);
 		border-color: rgb(var(--rgb-accent) / 0.26);
 
 		.icon-box__icon {
-			background: linear-gradient(145deg, var(--color-accent), #ffab84);
-			box-shadow: 0 14px 28px rgb(var(--rgb-accent) / 0.28);
+			background: var(--color-accent);
 		}
 	}
 
 	.icon-box--tone-success {
-		background:
-			linear-gradient(180deg, rgb(var(--rgb-success) / 0.12), transparent 42%),
-			var(--color-surface-card);
+		background: var(--surface-panel-success);
 		border-color: rgb(var(--rgb-success) / 0.24);
 
 		.icon-box__icon {
-			background: linear-gradient(145deg, var(--color-success), #0e9f7d);
-			box-shadow: 0 14px 28px rgb(var(--rgb-success) / 0.26);
+			background: var(--color-success);
 		}
 	}
 
 	.icon-box--tone-warning {
-		background:
-			linear-gradient(180deg, rgb(var(--rgb-warning) / 0.14), transparent 42%),
-			var(--color-surface-card);
+		background: var(--surface-panel-warning);
 		border-color: rgb(var(--rgb-warning) / 0.26);
 
 		.icon-box__icon {
-			background: linear-gradient(145deg, var(--color-warning), #d99528);
-			box-shadow: 0 14px 28px rgb(var(--rgb-warning) / 0.3);
+			background: var(--color-warning);
 			color: #23192b;
 		}
 	}

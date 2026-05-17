@@ -90,20 +90,6 @@
 </svelte:head>
 
 <div class="practice container page-shell page-shell--narrow">
-	<section class="page-intro practice__intro">
-		<span class="page-intro__eyebrow">Practice sprint</span>
-		<h1 class="page-intro__title">Run a quick reading lap.</h1>
-		<p class="page-intro__body">
-			Practice pulls from the words and letters you have already unlocked, so every session
-			feels like review instead of a surprise exam.
-		</p>
-		<div class="page-intro__meta">
-			<span class="badge badge--primary">randomized drills</span>
-			<span class="badge badge--accent">10-question sprint</span>
-			<span class="badge badge--success">built from completed lessons</span>
-		</div>
-	</section>
-
 	<!-- STATE: No drills available (user hasn't completed any lessons) -->
 	{#if availableDrills.length === 0}
 		<div class="empty-state">
@@ -213,12 +199,6 @@
 </div>
 
 <style lang="scss">
-	.practice {
-		&__intro {
-			margin-bottom: $space-sm;
-		}
-	}
-
 	// Shared layout for empty, start, and results states
 	.start {
 		align-items: center;

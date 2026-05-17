@@ -114,14 +114,7 @@
 
 		&__hero {
 			align-items: center;
-			background:
-				linear-gradient(145deg, rgb(var(--rgb-primary) / 0.12), transparent 35%),
-				radial-gradient(
-					circle at top right,
-					rgb(var(--rgb-accent) / 0.14),
-					transparent 34%
-				),
-				var(--color-surface-card);
+			background: var(--color-surface-card);
 			display: grid;
 			gap: $space-xl;
 			grid-template-columns: minmax(0, 1.05fr) minmax(15rem, 0.95fr);
@@ -164,7 +157,7 @@
 				padding: 0.9rem 1rem;
 
 				&::before {
-					background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+					background: var(--color-primary);
 					border-radius: $radius-full;
 					content: "";
 					flex: 0 0 0.6rem;

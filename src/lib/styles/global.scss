@@ -1,22 +1,22 @@
 // === GlyphBridge Design System ===
 
-// Color palette — soft classroom blue with warm coral accents
-$color-primary: #5f88b2;
-$color-primary-light: #93bddf;
-$color-primary-dark: #3f678f;
-$color-accent: #a9554a;
-$color-accent-light: #f0c276;
-$color-success: #31685a;
-$color-success-light: #8fd1be;
-$color-warning: #865922;
-$color-error: #bf6678;
-$color-bg: #f6f2ea;
-$color-bg-card: #fffdf8;
-$color-bg-dark: #101b2b;
-$color-text: #243246;
-$color-text-light: #5d6c81;
-$color-text-muted: #8f9aad;
-$color-border: #d8dfeb;
+// Color palette — black, light blue, teal, and pink
+$color-primary: #1fa89a;
+$color-primary-light: #67cbbf;
+$color-primary-dark: #167e74;
+$color-accent: #e86aa6;
+$color-accent-light: #f2a7c9;
+$color-success: #2a8f85;
+$color-success-light: #8ad7cf;
+$color-warning: #d6a14f;
+$color-error: #cf5b77;
+$color-bg: #eef7ff;
+$color-bg-card: #ffffff;
+$color-bg-dark: #0b0d0f;
+$color-text: #1c2430;
+$color-text-light: #536172;
+$color-text-muted: #7c8a9a;
+$color-border: #d7e6f2;
 
 // Typography
 $font-display: "Chakra Petch", "Manrope", "Sarabun", sans-serif;
@@ -84,59 +84,45 @@ $space-heading-section: $space-xl;
 
 :root {
 	color-scheme: dark;
-	--rgb-primary: 126 174 216;
-	--rgb-primary-strong: 199 229 255;
-	--rgb-accent: 242 156 135;
-	--rgb-success: 111 196 176;
-	--rgb-warning: 230 188 103;
-	--rgb-danger: 224 141 161;
-	--rgb-surface-nav-strong: 18 29 46;
-	--color-bg: #101b2b;
-	--color-bg-elevated: #172437;
-	--color-surface-card: rgb(23 36 55 / 0.88);
-	--color-surface-muted: rgb(29 44 65 / 0.9);
-	--color-surface-nav: rgb(16 28 44 / 0.94);
-	--color-text: #f6f5f0;
-	--color-text-muted: #c1cbdc;
-	--color-text-soft: #95a4bb;
-	--color-border: rgb(151 179 215 / 0.16);
-	--color-border-strong: rgb(151 179 215 / 0.28);
-	--color-primary: #7eaed8;
-	--color-primary-strong: #c7e5ff;
-	--color-accent: #f29c87;
-	--color-success: #6fc4b0;
-	--color-warning: #e6bc67;
-	--color-danger: #e08da1;
-	--color-link: #a8d8f6;
-	--color-link-hover: #d4edf8;
-	--shadow-soft: 0 10px 24px rgb(3 7 18 / 0.18);
-	--shadow-card: 0 18px 40px rgb(3 7 18 / 0.28);
-	--shadow-card-hover: 0 24px 60px rgb(3 7 18 / 0.36);
-	--shadow-primary: 0 14px 34px rgb(var(--rgb-primary) / 0.24);
-	--surface-hero:
-		linear-gradient(145deg, rgb(var(--rgb-primary) / 0.08), transparent 40%),
-		radial-gradient(circle at top right, rgb(var(--rgb-accent) / 0.1), transparent 34%),
-		var(--color-surface-card);
-	--surface-panel:
-		linear-gradient(180deg, rgb(var(--rgb-primary) / 0.06), transparent 42%),
-		var(--color-surface-card);
-	--surface-panel-accent:
-		linear-gradient(180deg, rgb(var(--rgb-accent) / 0.08), transparent 42%),
-		var(--color-surface-card);
-	--surface-panel-success:
-		linear-gradient(180deg, rgb(var(--rgb-success) / 0.08), transparent 42%),
-		var(--color-surface-card);
-	--surface-panel-warning:
-		linear-gradient(180deg, rgb(var(--rgb-warning) / 0.1), transparent 42%),
-		var(--color-surface-card);
+	--rgb-primary: 31 168 154;
+	--rgb-primary-strong: 164 236 227;
+	--rgb-accent: 232 106 166;
+	--rgb-success: 42 143 133;
+	--rgb-warning: 214 161 79;
+	--rgb-danger: 207 91 119;
+	--rgb-surface-nav-strong: 15 18 22;
+	--color-bg: #0b0d0f;
+	--color-bg-elevated: #12171b;
+	--color-surface-card: #171d22;
+	--color-surface-muted: #1d252c;
+	--color-surface-nav: #101418;
+	--color-text: #f5f7fa;
+	--color-text-muted: #c7d2de;
+	--color-text-soft: #8f9dac;
+	--color-border: rgb(131 151 171 / 0.2);
+	--color-border-strong: rgb(131 151 171 / 0.34);
+	--color-primary: #1fa89a;
+	--color-primary-strong: #a4ece3;
+	--color-accent: #e86aa6;
+	--color-success: #2a8f85;
+	--color-warning: #d6a14f;
+	--color-danger: #cf5b77;
+	--color-link: #82ddd1;
+	--color-link-hover: #b3f1e8;
+	--shadow-soft: 0 2px 6px rgb(0 0 0 / 0.14);
+	--shadow-card: 0 6px 16px rgb(0 0 0 / 0.16);
+	--shadow-card-hover: 0 8px 20px rgb(0 0 0 / 0.18);
+	--shadow-primary: none;
+	--surface-hero: var(--color-surface-card);
+	--surface-panel: var(--color-surface-card);
+	--surface-panel-accent: #3a2330;
+	--surface-panel-success: #18302d;
+	--surface-panel-warning: #352a1c;
 	--surface-interactive: rgb(var(--rgb-primary) / 0.06);
 	--surface-interactive-strong: rgb(var(--rgb-primary) / 0.1);
 	--surface-overlay: rgb(7 11 23 / 0.68);
 	--focus-ring: 0 0 0 3px rgb(var(--rgb-primary) / 0.22);
-	--bg-hero-glow:
-		radial-gradient(circle at top left, rgb(var(--rgb-accent) / 0.12), transparent 36%),
-		radial-gradient(circle at top right, rgb(var(--rgb-primary) / 0.14), transparent 34%),
-		linear-gradient(180deg, #172338, #101b2b 55%, #0c1521);
+	--bg-hero-glow: none;
 	--layout-max-width: #{$max-width-layout};
 	--content-max-width: #{$max-width-content};
 	--text-max-width: #{$max-width-text};
@@ -145,59 +131,45 @@ $space-heading-section: $space-xl;
 
 :root[data-theme="light"] {
 	color-scheme: light;
-	--rgb-primary: 95 136 178;
-	--rgb-primary-strong: 63 103 143;
-	--rgb-accent: 169 85 74;
-	--rgb-success: 49 104 90;
-	--rgb-warning: 134 89 34;
-	--rgb-danger: 191 102 120;
-	--rgb-surface-nav-strong: 255 251 244;
-	--color-bg: #f6f2ea;
-	--color-bg-elevated: #fffdf8;
-	--color-surface-card: rgb(255 253 248 / 0.94);
-	--color-surface-muted: rgb(250 245 236 / 0.88);
-	--color-surface-nav: rgb(255 252 246 / 0.94);
-	--color-text: #243246;
-	--color-text-muted: #5d6c81;
-	--color-text-soft: #8f9aad;
-	--color-border: rgb(95 136 178 / 0.12);
-	--color-border-strong: rgb(95 136 178 / 0.22);
-	--color-primary: #5f88b2;
-	--color-primary-strong: #3f678f;
-	--color-accent: #a9554a;
-	--color-success: #31685a;
-	--color-warning: #865922;
-	--color-danger: #bf6678;
-	--color-link: #315f8e;
-	--color-link-hover: #274d74;
-	--shadow-soft: 0 10px 24px rgb(76 92 136 / 0.08);
-	--shadow-card: 0 18px 40px rgb(76 92 136 / 0.1);
-	--shadow-card-hover: 0 24px 60px rgb(76 92 136 / 0.14);
-	--shadow-primary: 0 14px 34px rgb(var(--rgb-primary) / 0.16);
-	--surface-hero:
-		linear-gradient(145deg, rgb(var(--rgb-primary) / 0.08), transparent 40%),
-		radial-gradient(circle at top right, rgb(var(--rgb-accent) / 0.08), transparent 34%),
-		var(--color-surface-card);
-	--surface-panel:
-		linear-gradient(180deg, rgb(var(--rgb-primary) / 0.06), transparent 42%),
-		var(--color-surface-card);
-	--surface-panel-accent:
-		linear-gradient(180deg, rgb(var(--rgb-accent) / 0.08), transparent 42%),
-		var(--color-surface-card);
-	--surface-panel-success:
-		linear-gradient(180deg, rgb(var(--rgb-success) / 0.08), transparent 42%),
-		var(--color-surface-card);
-	--surface-panel-warning:
-		linear-gradient(180deg, rgb(var(--rgb-warning) / 0.08), transparent 42%),
-		var(--color-surface-card);
+	--rgb-primary: 31 168 154;
+	--rgb-primary-strong: 22 126 116;
+	--rgb-accent: 232 106 166;
+	--rgb-success: 42 143 133;
+	--rgb-warning: 214 161 79;
+	--rgb-danger: 207 91 119;
+	--rgb-surface-nav-strong: 248 252 255;
+	--color-bg: #eef7ff;
+	--color-bg-elevated: #ffffff;
+	--color-surface-card: #fffdf7;
+	--color-surface-muted: #e6f2fb;
+	--color-surface-nav: #f8fcff;
+	--color-text: #1c2430;
+	--color-text-muted: #536172;
+	--color-text-soft: #7c8a9a;
+	--color-border: rgb(104 137 170 / 0.18);
+	--color-border-strong: rgb(104 137 170 / 0.28);
+	--color-primary: #1fa89a;
+	--color-primary-strong: #167e74;
+	--color-accent: #e86aa6;
+	--color-success: #2a8f85;
+	--color-warning: #d6a14f;
+	--color-danger: #cf5b77;
+	--color-link: #168579;
+	--color-link-hover: #0f655c;
+	--shadow-soft: 0 2px 6px rgb(46 72 104 / 0.06);
+	--shadow-card: 0 4px 12px rgb(46 72 104 / 0.08);
+	--shadow-card-hover: 0 6px 16px rgb(46 72 104 / 0.1);
+	--shadow-primary: none;
+	--surface-hero: var(--color-surface-card);
+	--surface-panel: var(--color-surface-card);
+	--surface-panel-accent: #fceaf2;
+	--surface-panel-success: #e8f7f4;
+	--surface-panel-warning: #fbf2df;
 	--surface-interactive: rgb(var(--rgb-primary) / 0.05);
 	--surface-interactive-strong: rgb(var(--rgb-primary) / 0.08);
-	--surface-overlay: rgb(246 242 234 / 0.76);
+	--surface-overlay: rgb(238 247 255 / 0.76);
 	--focus-ring: 0 0 0 3px rgb(var(--rgb-primary) / 0.18);
-	--bg-hero-glow:
-		radial-gradient(circle at top left, rgb(var(--rgb-accent) / 0.08), transparent 36%),
-		radial-gradient(circle at top right, rgb(var(--rgb-primary) / 0.1), transparent 34%),
-		linear-gradient(180deg, #fffdf8, #f6f2ea 55%, #efe8dd);
+	--bg-hero-glow: none;
 }
 
 *,
@@ -215,9 +187,7 @@ html {
 }
 
 body {
-	background-attachment: fixed;
 	background-color: var(--color-bg);
-	background-image: var(--bg-hero-glow);
 	color: var(--color-text);
 	// Latin UI text uses Manrope while Thai characters fall back to Sarabun.
 	font-family: $font-body;
@@ -273,48 +243,6 @@ body {
 
 	&--narrow {
 		max-width: var(--content-max-width);
-	}
-}
-
-.page-intro {
-	background: var(--surface-hero);
-	border: 1px solid var(--color-border);
-	border-radius: calc($radius-xl * 1.15);
-	box-shadow: var(--shadow-card);
-	display: grid;
-	gap: $space-lg;
-	padding: clamp($space-xl, 4vw, $space-2xl);
-
-	&__eyebrow {
-		color: var(--color-text-soft);
-		font-family: $font-display;
-		font-size: $font-size-xs;
-		font-weight: 700;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-	}
-
-	&__title {
-		font-size: clamp(2.25rem, 4vw, 4rem);
-		line-height: 1.02;
-	}
-
-	&__body {
-		color: var(--color-text-muted);
-		font-size: $font-size-lg;
-		max-width: 42rem;
-	}
-
-	&__meta {
-		display: flex;
-		flex-wrap: wrap;
-		gap: $space-sm;
-	}
-
-	&__actions {
-		display: flex;
-		flex-wrap: wrap;
-		gap: $space-md;
 	}
 }
 
@@ -485,12 +413,13 @@ a {
 	}
 
 	&--primary {
-		background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-		box-shadow: var(--shadow-primary);
+		background: var(--color-primary);
+		box-shadow: none;
 		color: white;
 
 		&:hover:not(:disabled) {
-			box-shadow: 0 18px 38px rgb(var(--rgb-accent) / 0.28);
+			box-shadow: none;
+			filter: brightness(1.05);
 			transform: translateY(-1px);
 		}
 	}
@@ -516,11 +445,12 @@ a {
 	}
 
 	&--success {
-		background: linear-gradient(135deg, var(--color-success), #0e9f7d);
+		background: var(--color-success);
 		color: white;
 
 		&:hover:not(:disabled) {
-			box-shadow: 0 18px 38px rgb(var(--rgb-success) / 0.24);
+			box-shadow: none;
+			filter: brightness(1.03);
 		}
 	}
 

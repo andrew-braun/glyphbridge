@@ -2,10 +2,10 @@
 	let { class: className = "" }: { class?: string } = $props();
 
 	const glyphs = [
-		{ label: "ก", x: 78, y: 74, tone: "accent" },
-		{ label: "ไ", x: 250, y: 96, tone: "primary" },
-		{ label: "ม", x: 96, y: 238, tone: "success" },
-		{ label: "ย", x: 234, y: 230, tone: "warning" },
+		{ label: "ก", x: 52, y: 48, tone: "accent" },
+		{ label: "ไ", x: 270, y: 68, tone: "primary" },
+		{ label: "ม", x: 64, y: 256, tone: "success" },
+		{ label: "ย", x: 264, y: 264, tone: "warning" },
 	];
 </script>
 
@@ -13,12 +13,11 @@
 	<svg viewBox="0 0 320 320" role="presentation">
 		<defs>
 			<linearGradient id="glyph-orbit-core" x1="0%" x2="100%" y1="0%" y2="100%">
-				<stop offset="0%" stop-color="var(--color-primary)" />
-				<stop offset="100%" stop-color="var(--color-accent)" />
+				<stop offset="0%" stop-color="var(--color-primary)"></stop>
+				<stop offset="100%" stop-color="var(--color-accent)"></stop>
 			</linearGradient>
 		</defs>
 
-		<circle class="glyph-orbit__halo" cx="160" cy="160" r="124"></circle>
 		<circle class="glyph-orbit__ring glyph-orbit__ring--outer" cx="160" cy="160" r="118"
 		></circle>
 		<circle class="glyph-orbit__ring glyph-orbit__ring--inner" cx="160" cy="160" r="84"
@@ -26,18 +25,19 @@
 
 		<g class="glyph-orbit__core">
 			<circle cx="160" cy="160" r="62" fill="url(#glyph-orbit-core)"></circle>
-			<circle cx="160" cy="160" r="42" fill="rgb(255 255 255 / 0.12)"></circle>
+			<circle cx="160" cy="160" r="42" fill="var(--color-surface-card)"></circle>
 			<text class="glyph-orbit__word" x="160" y="177">ไทย</text>
 		</g>
 
 		{#each glyphs as glyph, index}
-			<g
-				class={`glyph-orbit__token glyph-orbit__token--${glyph.tone}`}
-				style={`--token-delay:${index * 160}ms`}
-				transform={`translate(${glyph.x} ${glyph.y})`}
-			>
-				<circle r="26"></circle>
-				<text x="0" y="11">{glyph.label}</text>
+			<g transform={`translate(${glyph.x}, ${glyph.y})`}>
+				<g
+					class={`glyph-orbit__token glyph-orbit__token--${glyph.tone}`}
+					style={`--token-delay:${index * 160}ms`}
+				>
+					<circle r="26"></circle>
+					<text x="0" y="11">{glyph.label}</text>
+				</g>
 			</g>
 		{/each}
 	</svg>
@@ -57,30 +57,21 @@
 			width: 100%;
 		}
 
-		&__halo {
-			fill: rgb(var(--rgb-primary) / 0.16);
-			filter: blur(12px);
-		}
-
 		&__ring {
 			fill: none;
 			stroke-width: 1.5;
 
 			&--outer {
 				animation: orbitSpin 24s linear infinite;
-				stroke: rgb(var(--rgb-primary) / 0.34);
+				stroke: rgb(var(--rgb-primary) / 0.28);
 				stroke-dasharray: 10 14;
 			}
 
 			&--inner {
 				animation: orbitSpinReverse 18s linear infinite;
-				stroke: rgb(var(--rgb-accent) / 0.26);
+				stroke: rgb(var(--rgb-accent) / 0.22);
 				stroke-dasharray: 6 10;
 			}
-		}
-
-		&__core {
-			filter: drop-shadow(0 20px 40px rgb(var(--rgb-primary) / 0.32));
 		}
 
 		&__word {

@@ -92,10 +92,7 @@
 <style lang="scss">
 	.learner-home {
 		align-items: center;
-		background:
-			linear-gradient(145deg, rgb(var(--rgb-primary) / 0.12), transparent 38%),
-			radial-gradient(circle at top right, rgb(var(--rgb-accent) / 0.15), transparent 32%),
-			var(--color-surface-card);
+		background: var(--color-surface-card);
 		display: grid;
 		gap: $space-xl;
 		grid-template-columns: minmax(0, 1.1fr) minmax(16rem, 0.9fr);

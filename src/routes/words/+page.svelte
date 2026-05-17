@@ -23,14 +23,11 @@
     optional context note.
 -->
 <div class="words container page-shell">
-	<section class="page-intro words__intro">
-		<span class="page-intro__eyebrow">Word collection</span>
-		<h1 class="page-intro__title">Build a shelf of words you can actually spot outside.</h1>
-		<p class="page-intro__body">
-			This is your running archive of Thai words unlocked through lessons, complete with
-			pronunciation, meaning, and syllable breakdowns.
-		</p>
-	</section>
+	{#if $knownWords.length > 0}
+		<header class="words__header">
+			<p class="words__count">{$knownWords.length} words collected</p>
+		</header>
+	{/if}
 
 	<!-- Empty state: shown when the user has not completed any lessons yet -->
 	{#if $knownWords.length === 0}
@@ -80,8 +77,16 @@
 
 	// Page wrapper and subtitle
 	.words {
-		&__intro {
-			margin-bottom: $space-sm;
+		&__header {
+			margin-bottom: $space-lg;
+		}
+
+		&__count {
+			color: var(--color-text-muted);
+			font-size: $font-size-sm;
+			font-weight: 500;
+			letter-spacing: 0.02em;
+			text-transform: uppercase;
 		}
 	}
 

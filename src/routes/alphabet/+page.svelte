@@ -75,19 +75,6 @@
   - A progress bar at the top shows how many letters the user has learned out of the total.
 -->
 <div class="alphabet container page-shell">
-	<section class="page-intro alphabet__intro">
-		<span class="page-intro__eyebrow">Letter map</span>
-		<h1 class="page-intro__title">Watch the script fill in as lessons unlock it.</h1>
-		<p class="page-intro__body">
-			GlyphBridge reveals Thai letters in the order you actually meet them, so the alphabet
-			grows with your reading instead of arriving as a giant wall of symbols.
-		</p>
-		<div class="page-intro__meta">
-			<span class="badge badge--primary">{$knownLetters.length} unlocked</span>
-			<span class="badge badge--accent">{allLetters.length} taught so far</span>
-		</div>
-	</section>
-
 	<!-- Visual progress bar: fill width is the percentage of letters learned -->
 	<div class="alphabet__progress">
 		<Progress
@@ -119,10 +106,6 @@
 
 	// Page-level wrapper and subtitle
 	.alphabet {
-		&__intro {
-			margin-bottom: $space-sm;
-		}
-
 		&__progress {
 			margin-bottom: $space-xl;
 		}

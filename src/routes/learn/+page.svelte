@@ -66,20 +66,6 @@
   show a semi-transparent overlay preventing navigation.
 -->
 <div class="learn container page-shell">
-	<section class="page-intro learn__intro">
-		<span class="page-intro__eyebrow">Thai reading path</span>
-		<h1 class="page-intro__title">Start with a whole word, then peel it open.</h1>
-		<p class="page-intro__body">
-			Each lesson starts with a real Thai word you could meet on a sign, menu, or appliance,
-			then walks you inward through syllables, letters, rules, and a quick drill loop.
-		</p>
-		<div class="page-intro__meta">
-			<span class="badge badge--primary">{lessons.length} short lessons</span>
-			<span class="badge badge--accent">real words first</span>
-			<span class="badge badge--success">local progress</span>
-		</div>
-	</section>
-
 	<div class="lessons-grid">
 		{#each lessons as lesson}
 			<!-- Personal progress state is applied after hydration so the prerendered HTML stays publication-only. -->
@@ -122,13 +108,6 @@
 	/* ========================================
 	   Learn page (lesson index) styles
 	   ======================================== */
-
-	// Page wrapper and subtitle
-	.learn {
-		&__intro {
-			margin-bottom: $space-sm;
-		}
-	}
 
 	// Two-column grid; collapses to single column on mobile
 	.lessons-grid {

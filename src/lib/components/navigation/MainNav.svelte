@@ -58,16 +58,9 @@
 
 <style lang="scss">
 	.nav {
-		backdrop-filter: blur(18px);
-		background:
-			linear-gradient(
-				180deg,
-				var(--color-surface-nav),
-				rgb(var(--rgb-surface-nav-strong) / 0.92)
-			),
-			radial-gradient(circle at top left, rgb(var(--rgb-accent) / 0.16), transparent 45%);
+		background: var(--color-surface-nav);
 		border-bottom: 1px solid var(--color-border);
-		box-shadow: 0 10px 30px rgb(3 7 18 / 0.18);
+		box-shadow: var(--shadow-soft);
 		position: sticky;
 		top: 0;
 		z-index: 100;
@@ -88,9 +81,8 @@
 
 			&-mark {
 				align-items: center;
-				background: linear-gradient(145deg, var(--color-primary), var(--color-accent));
+				background: var(--color-primary);
 				border-radius: 1rem;
-				box-shadow: var(--shadow-primary);
 				color: white;
 				display: inline-flex;
 				font-size: 0.75rem;
@@ -161,11 +153,7 @@
 			}
 
 			&.active {
-				background: linear-gradient(
-					135deg,
-					rgb(var(--rgb-primary) / 0.2),
-					rgb(var(--rgb-accent) / 0.14)
-				);
+				background: var(--surface-interactive-strong);
 				color: var(--color-primary-strong);
 			}
 		}
@@ -176,7 +164,7 @@
 
 		&__count {
 			align-items: center;
-			background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+			background: var(--color-primary);
 			border-radius: $radius-full;
 			color: white;
 			display: flex;

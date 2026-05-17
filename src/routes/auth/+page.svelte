@@ -81,31 +81,6 @@
 </svelte:head>
 
 <div class="auth container page-shell page-shell--narrow">
-	<section class="page-intro auth__intro">
-		<span class="page-intro__eyebrow">Account and sync</span>
-		<h1 class="page-intro__title">
-			{#if data.userEmail}
-				Your progress, with a server-backed checkpoint.
-			{:else}
-				Sign in with a code. No password ritual required.
-			{/if}
-		</h1>
-		<p class="page-intro__body">
-			{#if data.userEmail}
-				This account keeps your local-first learning flow intact while adding a verified
-				progress projection you can refresh and reuse on another device.
-			{:else}
-				GlyphBridge starts locally and stays fast. Signing in simply gives that progress a
-				place to land beyond this browser.
-			{/if}
-		</p>
-		<div class="page-intro__meta">
-			<span class="badge badge--primary">one-time email code</span>
-			<span class="badge badge--accent">local-first shell</span>
-			<span class="badge badge--success">optional account</span>
-		</div>
-	</section>
-
 	<section class="auth__panel card card--flat" aria-labelledby="auth-heading">
 		{#if data.userEmail}
 			<div class="auth__header">
@@ -238,10 +213,6 @@
 	.auth {
 		display: grid;
 		place-items: start center;
-
-		&__intro {
-			margin-bottom: $space-sm;
-		}
 	}
 
 	.auth__panel {

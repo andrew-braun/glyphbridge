@@ -62,10 +62,7 @@
 
 <style lang="scss">
 	.method {
-		background:
-			radial-gradient(circle at top left, rgb(var(--rgb-accent) / 0.16), transparent 34%),
-			linear-gradient(180deg, rgb(var(--rgb-primary) / 0.08), transparent 45%),
-			var(--color-surface-card);
+		background: var(--color-surface-card);
 		border: 1px solid var(--color-border);
 		border-radius: calc($radius-xl * 1.25);
 		box-shadow: var(--shadow-card);

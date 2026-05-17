@@ -71,9 +71,8 @@
 
 		&__thumb {
 			align-items: center;
-			background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+			background: var(--color-primary);
 			border-radius: $radius-full;
-			box-shadow: var(--shadow-primary);
 			display: inline-flex;
 			height: 1.9rem;
 			justify-content: center;
@@ -127,7 +126,7 @@
 			}
 
 			&::after {
-				background: var(--color-accent);
+				background: var(--color-surface-muted);
 				border-radius: $radius-full;
 				height: 0.85rem;
 				right: -0.08rem;

@@ -73,6 +73,8 @@
 - Emotional balance: the most promising direction is a softened split-complementary system with one calm dominant color and smaller warm accents. That keeps the UI playful without making every surface feel promotional.
 - Practical conclusion for GlyphBridge: use muted sky/ink blue as the main structural color, warm paper neutrals for the resting surfaces, coral as the encouragement accent, and mint/marigold only for success and warning semantics.
 - Synthwave should survive only as a hint in glow, illustration, and celebratory accents. It should not own the base surfaces or primary reading experience.
+- As of 2026-05-17, the next simplification step is flatter still: fewer gradients, calmer dark neutrals, cleaner light surfaces, and solid-color buttons/surfaces so the product reads as approachable teaching software instead of a stylized startup or game UI.
+- Updated on 2026-05-17: the active palette direction shifted again to a black-and-sky scheme with near-black dark surfaces, very light blue light surfaces, teal as the structural accent, and pink reserved for emphasis. The goal is to feel crisp, modern, and expressive without drifting back into gradient-heavy or spacey styling.
 
 ## Next Slice
 

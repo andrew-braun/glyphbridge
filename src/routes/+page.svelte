@@ -1,11 +1,3 @@
-<!--
-  Home Page — /
-  ==============
-  Landing page and dashboard. New users see the hero + method explainer.
-  Returning users also see their progress stats and lesson list.
-
-  Composed of four sub-components, each handling its own section.
--->
 <script lang="ts">
 	import GuestHomeShell from "$lib/components/content/home/GuestHomeShell.svelte";
 	import HomeStatsOverview from "$lib/components/content/home/HomeStatsOverview.svelte";
@@ -20,14 +12,6 @@
 	);
 	const showLearnerHub = $derived($authSession.authenticated || hasStartedLearning);
 </script>
-
-<svelte:head>
-	<title>GlyphBridge — Learn Thai Through Real Words</title>
-	<meta
-		name="description"
-		content="Learn to read Thai through real words, guided lesson steps, and short drills built around signs, menus, roads, and everyday language."
-	/>
-</svelte:head>
 
 <div class="home container">
 	{#if showLearnerHub}
