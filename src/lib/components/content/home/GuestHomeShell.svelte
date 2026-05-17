@@ -1,41 +1,108 @@
 <script lang="ts">
-	import GlyphOrbit from "$lib/components/illustrations/GlyphOrbit.svelte";
 	import Button from "$lib/components/ui/Button.svelte";
 	import Heading from "$lib/components/ui/Heading.svelte";
 	import Reveal from "$lib/components/ui/Reveal.svelte";
+
+	interface Props {
+		authenticated: boolean;
+		currentLessonId: number;
+	}
+
+	let { authenticated, currentLessonId }: Props = $props();
 
 	const languages = [
 		{
 			name: "Thai",
 			sample: "ไทย",
-			status: "Live now",
-			description:
-				"Script-first lessons built around real words from signs, menus, and everyday life.",
+			status: "Active",
 			href: "/learn/1",
 			available: true,
 		},
 		{
-			name: "Japanese",
-			sample: "日本語",
-			status: "Coming soon",
-			description: "Kana-first reading paths with the same real-word approach.",
+			name: "Korean",
+			sample: "한국어",
+			status: "Inactive",
+			available: false,
+		},
+		{
+			name: "Cyrillic",
+			sample: "Кириллица",
+			status: "Inactive",
+			available: false,
+		},
+		{
+			name: "Greek",
+			sample: "Ελληνικά",
+			status: "Inactive",
 			available: false,
 		},
 		{
 			name: "Arabic",
 			sample: "العربية",
-			status: "Coming soon",
-			description:
-				"Short, pattern-based lessons focused on readable vocabulary from day one.",
+			status: "Inactive",
+			available: false,
+		},
+		{
+			name: "Georgian",
+			sample: "ქართული",
+			status: "Inactive",
+			available: false,
+		},
+		{
+			name: "Japanese (Kana)",
+			sample: "かな",
+			status: "Inactive",
+			available: false,
+		},
+		{
+			name: "Devanagari",
+			sample: "देवनागरी",
+			status: "Inactive",
+			available: false,
+		},
+		{
+			name: "Hebrew",
+			sample: "עברית",
+			status: "Inactive",
+			available: false,
+		},
+		{
+			name: "Armenian",
+			sample: "Հայերեն",
+			status: "Inactive",
+			available: false,
+		},
+		{
+			name: "Amharic",
+			sample: "አማርኛ",
+			status: "Inactive",
+			available: false,
+		},
+		{
+			name: "Vietnamese",
+			sample: "Tiếng Việt",
+			status: "Inactive",
+			available: false,
+		},
+		{
+			name: "Turkish",
+			sample: "Türkçe",
+			status: "Inactive",
+			available: false,
+		},
+		{
+			name: "Icelandic",
+			sample: "Íslenska",
+			status: "Inactive",
+			available: false,
+		},
+		{
+			name: "Burmese",
+			sample: "မြန်မာ",
+			status: "Inactive",
 			available: false,
 		},
 	] as const;
-
-	const valueProps = [
-		"Start free with zero login and keep your progress on this device.",
-		"Learn through real words instead of memorizing a giant script chart first.",
-		"Short lesson loops keep momentum high and make it easy to come back tomorrow.",
-	];
 </script>
 
 <section class="guest-home">
@@ -50,60 +117,41 @@
 				feels like reading the real thing.
 			</p>
 
-			<ul class="guest-home__points">
-				{#each valueProps as point}
-					<li>{point}</li>
-				{/each}
-			</ul>
-
 			<div class="guest-home__actions">
-				<Button href="/learn/1" variant="primary" size="large">Start Thai free</Button>
-				<Button href="/auth" variant="secondary" size="large">Save progress later</Button>
+				{#if authenticated}
+					<Button href={`/learn/${currentLessonId}`} variant="primary" size="large"
+						>Continue</Button
+					>
+				{:else}
+					<Button href="/auth" variant="primary" size="large">Sign Up</Button>
+				{/if}
 			</div>
 		</Reveal>
 
 		<Reveal class="guest-home__art" delay={180} distance={24}>
-			<GlyphOrbit />
+			<div class="guest-home__language-list">
+				{#each languages as language}
+					<div
+						class={["language-row", { "language-row--inactive": !language.available }]}
+					>
+						<div class="language-row__info">
+							<span class="language-row__sample">{language.sample}</span>
+							<span class="language-row__name">{language.name}</span>
+						</div>
+						<div class="language-row__action">
+							{#if language.available}
+								<Button href={language.href} variant="primary" size="sm"
+									>Learn Thai</Button
+								>
+							{:else}
+								<span class="badge badge--muted">{language.status}</span>
+							{/if}
+						</div>
+					</div>
+				{/each}
+			</div>
 		</Reveal>
 	</div>
-
-	<Reveal class="guest-home__languages" delay={120}>
-		<div class="guest-home__section-head">
-			<Heading>Choose your path</Heading>
-			<p>
-				Thai is ready now. The home flow already supports more languages as they come
-				online.
-			</p>
-		</div>
-
-		<div class="guest-home__language-grid">
-			{#each languages as language}
-				<article
-					class={["language-card card", { "language-card--live": language.available }]}
-				>
-					<div class="language-card__topline">
-						<span
-							class={[
-								"badge",
-								language.available ? "badge--success" : "badge--primary",
-							]}
-						>
-							{language.status}
-						</span>
-						<span class="language-card__sample thai thai--sm">{language.sample}</span>
-					</div>
-					<h3>{language.name}</h3>
-					<p>{language.description}</p>
-
-					{#if language.available}
-						<Button href={language.href} variant="primary">Start lesson 1</Button>
-					{:else}
-						<span class="language-card__coming-soon">More soon</span>
-					{/if}
-				</article>
-			{/each}
-		</div>
-	</Reveal>
 </section>
 
 <style lang="scss">
@@ -129,7 +177,7 @@
 		}
 
 		:global(.guest-home__title) {
-			font-size: clamp(2.5rem, 5vw, 4.75rem);
+			font-size: clamp(2.2rem, 4.5vw, 4.75rem);
 			line-height: 0.98;
 			margin-bottom: 0;
 		}
@@ -138,32 +186,6 @@
 			color: var(--color-text-muted);
 			font-size: $font-size-lg;
 			max-width: 34rem;
-		}
-
-		&__points {
-			display: grid;
-			gap: $space-sm;
-			list-style: none;
-			padding: 0;
-
-			li {
-				align-items: center;
-				background: rgb(var(--rgb-primary) / 0.08);
-				border: 1px solid rgb(var(--rgb-primary) / 0.14);
-				border-radius: $radius-lg;
-				color: var(--color-text);
-				display: flex;
-				gap: $space-sm;
-				padding: 0.9rem 1rem;
-
-				&::before {
-					background: var(--color-primary);
-					border-radius: $radius-full;
-					content: "";
-					flex: 0 0 0.6rem;
-					height: 0.6rem;
-				}
-			}
 		}
 
 		&__actions {
@@ -177,66 +199,61 @@
 			justify-content: center;
 		}
 
-		:global(.guest-home__languages) {
-			display: flex;
-			flex-direction: column;
-			gap: $space-lg;
-		}
-
-		&__section-head {
+		&__language-list {
 			display: flex;
 			flex-direction: column;
 			gap: $space-sm;
+			max-height: clamp(25rem, 60vh, 35rem);
+			overflow-y: auto;
+			padding-right: $space-sm;
 
-			p {
-				color: var(--color-text-muted);
-				max-width: 38rem;
+			&::-webkit-scrollbar {
+				width: 4px;
+			}
+			&::-webkit-scrollbar-thumb {
+				background: var(--color-border);
+				border-radius: $radius-full;
 			}
 		}
 
-		&__language-grid {
-			display: grid;
-			gap: $space-lg;
-			grid-template-columns: repeat(3, minmax(0, 1fr));
-		}
-	}
-
-	.language-card {
-		display: flex;
-		flex-direction: column;
-		gap: $space-md;
-		justify-content: space-between;
-		min-height: 100%;
-
-		&--live {
-			border-color: rgb(var(--rgb-success) / 0.28);
-		}
-
-		&__topline {
-			align-items: center;
+		.language-row {
 			display: flex;
+			align-items: center;
 			justify-content: space-between;
-		}
+			gap: $space-md;
+			padding: $space-sm $space-md;
+			border-radius: $radius-md;
+			transition: background 0.2s;
+			background: transparent;
 
-		&__sample {
-			color: var(--color-primary-strong);
-		}
+			&--inactive {
+				opacity: 0.6;
+				pointer-events: none;
+				filter: grayscale(1);
+			}
 
-		h3 {
-			margin: 0;
-		}
+			&__info {
+				display: flex;
+				align-items: center;
+				gap: $space-md;
+			}
 
-		p {
-			color: var(--color-text-muted);
-			flex: 1;
-		}
+			&__sample {
+				font-size: $font-size-lg;
+				font-weight: 600;
+				color: var(--color-primary-strong);
+				min-width: 3rem;
+				text-align: center;
+			}
 
-		&__coming-soon {
-			color: var(--color-text-soft);
-			font-size: $font-size-sm;
-			font-weight: 600;
-			letter-spacing: 0.04em;
-			text-transform: uppercase;
+			&__name {
+				font-weight: 500;
+				color: var(--color-text);
+			}
+
+			&__action {
+				flex-shrink: 0;
+			}
 		}
 	}
 
@@ -248,21 +265,11 @@
 		:global(.guest-home__art) {
 			order: -1;
 		}
-
-		.guest-home__language-grid {
-			grid-template-columns: 1fr;
-		}
 	}
 
 	@media (max-width: $bp-sm) {
 		.guest-home__actions {
 			flex-direction: column;
-		}
-
-		.guest-home__points li {
-			align-items: flex-start;
-			font-size: $font-size-sm;
-			line-height: 1.55;
 		}
 	}
 </style>

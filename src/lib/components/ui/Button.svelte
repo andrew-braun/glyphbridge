@@ -5,7 +5,7 @@
 	import { cn } from "$lib/utils/cn";
 
 	type ButtonVariant = "primary" | "secondary" | "ghost" | "success";
-	type ButtonSize = "md" | "large";
+	type ButtonSize = "sm" | "md" | "large";
 	type NativeButtonType = "button" | "submit" | "reset";
 
 	let {

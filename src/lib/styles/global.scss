@@ -1,3 +1,21 @@
+@font-face {
+	font-display: swap;
+	font-family: "Noto Sans";
+	font-stretch: 45% 125%;
+	font-style: normal;
+	font-weight: 100 900;
+	src: url("../assets/fonts/NotoSans-VariableFont_wdth,wght.woff2") format("woff2");
+}
+
+@font-face {
+	font-display: swap;
+	font-family: "Noto Sans";
+	font-stretch: 45% 125%;
+	font-style: italic;
+	font-weight: 100 900;
+	src: url("../assets/fonts/NotoSans-Italic-VariableFont_wdth,wght.woff2") format("woff2");
+}
+
 // === GlyphBridge Design System ===
 
 // Color palette — black, light blue, teal, and pink
@@ -19,15 +37,15 @@ $color-text-muted: #7c8a9a;
 $color-border: #d7e6f2;
 
 // Typography
-$font-display: "Chakra Petch", "Manrope", "Sarabun", sans-serif;
+$font-display: "Noto Sans", "Chakra Petch", "Manrope", sans-serif;
 $font-body:
+	"Noto Sans",
 	"Manrope",
-	"Sarabun",
 	-apple-system,
 	BlinkMacSystemFont,
 	"Segoe UI",
 	sans-serif;
-$font-thai: "Sarabun", sans-serif;
+$font-thai: "Noto Sans", sans-serif;
 $font-mono: "JetBrains Mono", "Fira Code", monospace;
 
 $font-size-xs: 0.75rem;
@@ -189,7 +207,7 @@ html {
 body {
 	background-color: var(--color-bg);
 	color: var(--color-text);
-	// Latin UI text uses Manrope while Thai characters fall back to Sarabun.
+	// Noto Sans covers both Latin and Thai (and many other scripts).
 	font-family: $font-body;
 	line-height: 1.6;
 	min-height: 100vh;
@@ -201,7 +219,7 @@ body {
 // Thai text styling — used to bump up the font size and line-height
 // for Thai script that should be displayed prominently (anchor words,
 // letter displays, drill options, etc.). The font-family is inherited
-// from body, so this class only adjusts sizing.
+// from body, so this class only adjusts sizing and overrides for weight.
 .thai {
 	font-family: $font-thai;
 	font-size: $font-size-thai;
