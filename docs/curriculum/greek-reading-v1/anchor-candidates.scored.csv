@@ -1,0 +1,22 @@
+candidate_type,candidate,gloss,weighted_word_frequency,real_world_utility,coverage_gain,decodability,rule_payoff,pronunciation_clarity,review_value,memorability,source_confidence,new_load_penalty,irregularity_penalty,ambiguity_penalty,sensitivity_penalty,license_penalty,notes,candidate_score,score_band
+anchor,νερό,water,0.72,0.95,0.82,0.72,0.62,0.86,0.68,0.86,0.55,0.08,0.02,0.01,0,0,High survival utility and early consonant-vowel payoff,0.6684,promising
+anchor,ένα,one / a,0.82,0.76,0.66,0.76,0.58,0.9,0.62,0.7,0.55,0.04,0.01,0.03,0,0,Very frequent and compact but less domain-specific than survival nouns,0.6554,promising
+anchor,μετρό,metro,0.64,0.88,0.76,0.72,0.58,0.86,0.66,0.82,0.55,0.06,0.02,0.02,0,0,Transit payoff with high positive transfer,0.6318,promising
+anchor,καφέ,coffee / cafe,0.68,0.9,0.78,0.68,0.62,0.84,0.68,0.9,0.55,0.08,0.02,0.02,0,0,Very common menu/cafe anchor and recognizable loanword,0.6286,promising
+anchor,τιμή,price,0.6,0.86,0.72,0.64,0.66,0.84,0.68,0.8,0.55,0.08,0.02,0.02,0,0,Menu and shopping utility; eta-as-i spelling,0.5886,promising
+anchor,σαλάτα,salad,0.56,0.9,0.68,0.66,0.62,0.88,0.66,0.86,0.55,0.08,0.02,0.02,0,0,Menu anchor with simple repeated alpha pattern,0.5838,promising
+anchor,οδός,street / road,0.58,0.86,0.72,0.62,0.68,0.82,0.66,0.76,0.55,0.08,0.02,0.03,0,0,Street-sign payoff and final sigma practice,0.5690,promising
+anchor,στάση,stop / station,0.62,0.86,0.74,0.62,0.72,0.8,0.7,0.78,0.55,0.1,0.03,0.02,0,0,Transit signage anchor and final eta-as-i spelling,0.5666,promising
+anchor,ταξί,taxi,0.58,0.9,0.72,0.62,0.58,0.82,0.62,0.88,0.55,0.12,0.03,0.02,0,0,High traveler utility; introduces xi cluster and final accented i,0.5286,promising
+anchor,όχι,no,0.68,0.82,0.66,0.58,0.64,0.72,0.62,0.82,0.55,0.1,0.04,0.02,0,0,High utility and chi practice; pronunciation needs review,0.5266,promising
+anchor,έξοδος,exit,0.58,0.92,0.78,0.54,0.82,0.78,0.72,0.84,0.55,0.14,0.04,0.02,0,0,Essential public-sign word but adds xi and final-sigma load,0.5258,promising
+anchor,είσοδος,entrance,0.58,0.9,0.76,0.54,0.82,0.78,0.72,0.82,0.55,0.14,0.04,0.02,0,0,Pairs naturally with έξοδος and teaches ει plus final sigma,0.5182,promising
+anchor,γάλα,milk,0.56,0.88,0.66,0.56,0.58,0.78,0.62,0.88,0.55,0.12,0.03,0.02,0,0,Useful food anchor and gamma pronunciation checkpoint,0.4994,weak
+anchor,κοτόπουλο,chicken,0.56,0.92,0.7,0.5,0.72,0.82,0.72,0.86,0.55,0.16,0.03,0.02,0,0,High menu utility; long but excellent review of omicron/ou,0.4870,weak
+anchor,μουσείο,museum,0.54,0.86,0.68,0.5,0.76,0.8,0.72,0.78,0.55,0.16,0.03,0.02,0,0,Cultural-site anchor with ου and ει,0.4678,weak
+anchor,φαρμακείο,pharmacy,0.52,0.92,0.72,0.46,0.78,0.78,0.72,0.84,0.55,0.18,0.04,0.02,0,0,Essential public-facility word but long and digraph-heavy,0.4478,weak
+anchor,ψωμί,bread,0.54,0.9,0.68,0.46,0.58,0.78,0.64,0.9,0.55,0.18,0.03,0.02,0,0,Very useful food anchor but psi and omega make it later-stage,0.4298,weak
+anchor,προσοχή,caution / attention,0.54,0.9,0.72,0.44,0.78,0.72,0.72,0.84,0.55,0.2,0.04,0.02,0,0,Important warning-sign anchor; defer until enough consonants are known,0.4210,weak
+anchor,ανοιχτό,open,0.56,0.9,0.7,0.44,0.72,0.74,0.72,0.78,0.55,0.2,0.04,0.02,0,0,Common shop sign word but diphthong and chi load make it later,0.4154,weak
+anchor,κλειστό,closed,0.56,0.9,0.7,0.42,0.72,0.74,0.72,0.78,0.55,0.2,0.04,0.02,0,0,Pairs with ανοιχτό and teaches ει plus consonant cluster,0.4126,weak
+anchor,ευχαριστώ,thank you,0.62,0.84,0.66,0.34,0.82,0.62,0.78,0.9,0.55,0.28,0.08,0.02,0,0,Essential phrase but too many new rules for early lessons,0.2862,weak

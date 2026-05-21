@@ -1,0 +1,34 @@
+candidate_type,candidate,gloss,corpus_frequency,distinct_word_coverage,domain_coverage_gain,anchor_availability,pronunciation_clarity,rule_gateway_value,visual_distinctiveness,confusability_penalty,load_penalty,irregularity_penalty,font_penalty,license_penalty,notes,candidate_score,score_band
+grapheme,Α α,a sound / alpha,0.95,0.92,0.86,0.9,0.95,0.7,0.8,0.02,0.02,0,0,0,Core vowel with strong positive transfer from Latin A,0.8530,strong
+grapheme,Ε ε,e sound / epsilon,0.88,0.85,0.8,0.85,0.95,0.7,0.82,0.02,0.02,0,0,0,High-frequency vowel and early menu/sign payoff,0.8050,strong
+grapheme,Ο ο,o sound / omicron,0.86,0.84,0.82,0.85,0.94,0.65,0.78,0.03,0.02,0,0,0,High-frequency vowel; later pair with omega merger,0.7820,strong
+grapheme,Ν ν,n sound / nu,0.84,0.82,0.76,0.82,0.95,0.62,0.8,0.02,0.02,0,0,0,Foundational sonorant with strong early anchor availability,0.7690,strong
+grapheme,Τ τ,t sound / tau,0.86,0.84,0.8,0.84,0.95,0.66,0.72,0.08,0.02,0,0,0,Very common; mark Cyrillic lookalike risk in drills,0.7270,promising
+grapheme,Κ κ,k sound / kappa,0.8,0.78,0.76,0.82,0.94,0.68,0.76,0.04,0.03,0,0,0,High-payoff stop in food and place names,0.7220,promising
+grapheme,Ι ι,i sound / iota,0.84,0.82,0.78,0.82,0.94,0.72,0.78,0.04,0.04,0.02,0,0,High-frequency vowel; later explain merger with eta and upsilon,0.7200,promising
+grapheme,Μ μ,m sound / mu,0.78,0.76,0.7,0.78,0.95,0.58,0.82,0.03,0.02,0,0,0,High-frequency sonorant for menus and public words,0.7130,promising
+grapheme,Λ λ,l sound / lambda,0.72,0.7,0.66,0.72,0.94,0.58,0.82,0.03,0.02,0,0,0,Useful early liquid with low pronunciation load,0.6700,promising
+grapheme,Σ σ/ς,s sound / sigma and final sigma,0.86,0.84,0.82,0.86,0.94,0.82,0.66,0.08,0.08,0.02,0,0,Essential but needs explicit final-sigma position rule,0.6640,promising
+grapheme,Π π,p sound / pi,0.78,0.76,0.72,0.78,0.94,0.62,0.72,0.08,0.03,0,0,0,Common consonant with Cyrillic and Latin shape interference,0.6540,promising
+grapheme,τόνος,stress mark on vowels,0.8,0.78,0.78,0.86,0.82,0.78,0.6,0.02,0.1,0.02,0,0,Teach as stress marker early; not a Thai-style tone mark,0.6490,promising
+grapheme,ει,i sound digraph,0.74,0.74,0.7,0.76,0.84,0.8,0.68,0.02,0.08,0.02,0,0,High-frequency digraph in είναι and facility words,0.6290,promising
+grapheme,ου,u sound digraph,0.7,0.7,0.74,0.78,0.9,0.78,0.7,0.02,0.08,0.02,0,0,High-value distinct u sound for του and που patterns,0.6220,promising
+grapheme,αι,e sound digraph,0.72,0.72,0.68,0.74,0.86,0.78,0.68,0.02,0.08,0.02,0,0,High-frequency digraph that sounds like epsilon,0.6140,promising
+grapheme,Ρ ρ,r sound / rho,0.74,0.72,0.7,0.76,0.82,0.58,0.72,0.07,0.04,0,0,0,Common rhotic; pronunciation needs brief rolled-r guidance,0.6130,promising
+grapheme,Φ φ,f sound / phi,0.56,0.58,0.56,0.68,0.9,0.6,0.86,0.03,0.04,0.01,0,0,Clear modern f sound with good public-facility payoff,0.5490,promising
+grapheme,Θ θ,th as in thin / theta,0.56,0.58,0.56,0.64,0.86,0.6,0.86,0.03,0.05,0.02,0,0,Clear fricative and strong contrast partner for delta,0.5210,promising
+grapheme,Ω ω,o sound / omega,0.58,0.58,0.56,0.62,0.78,0.58,0.86,0.03,0.08,0.02,0,0,Merges with omicron in sound but remains common in spelling,0.4850,weak
+grapheme,οι,i sound digraph,0.58,0.58,0.56,0.62,0.8,0.64,0.68,0.02,0.09,0.02,0,0,Useful late digraph for shop signs such as ανοιχτό,0.4840,weak
+grapheme,Η η,i sound / eta,0.66,0.64,0.58,0.64,0.72,0.62,0.78,0.06,0.08,0.03,0,0,High-frequency historical spelling for modern i sound,0.4800,weak
+grapheme,Δ δ,th as in then / delta,0.68,0.66,0.6,0.66,0.72,0.62,0.76,0.08,0.08,0.03,0,0,Modern fricative value differs from expected d sound,0.4740,weak
+grapheme,Ζ ζ,z sound / zeta,0.42,0.44,0.5,0.58,0.9,0.5,0.82,0.03,0.03,0,0,0,Useful in μαγαζί and ζώνη but lower broad coverage,0.4680,weak
+grapheme,Γ γ,gh/y sound / gamma,0.7,0.68,0.62,0.68,0.6,0.64,0.7,0.08,0.1,0.04,0,0,Contextual fricative before front and back vowels,0.4460,weak
+grapheme,Β β,v sound / beta,0.58,0.62,0.58,0.7,0.78,0.64,0.72,0.12,0.05,0.02,0,0,High learner trap because it looks like Latin B but sounds like v,0.4430,weak
+grapheme,Χ χ,kh/h sound / chi,0.6,0.62,0.64,0.72,0.62,0.64,0.78,0.08,0.1,0.03,0,0,Contextual velar or palatal fricative; important for όχι and προσοχή,0.4270,weak
+grapheme,Υ υ,i sound / upsilon,0.58,0.58,0.56,0.62,0.7,0.58,0.74,0.08,0.08,0.03,0,0,Looks like Latin Y or u but usually sounds like i in isolation,0.4110,weak
+grapheme,μπ,b/mb sound digraph,0.5,0.5,0.48,0.56,0.7,0.58,0.68,0.02,0.12,0.03,0,0,Introduces modern b sound through a digraph,0.3700,weak
+grapheme,Ξ ξ,ks cluster / xi,0.34,0.36,0.5,0.62,0.78,0.48,0.82,0.02,0.08,0.02,0,0,Lower-frequency cluster but unlocks ταξί and έξοδος,0.3580,weak
+grapheme,ντ,d/nd sound digraph,0.48,0.48,0.46,0.54,0.7,0.56,0.68,0.02,0.12,0.03,0,0,Introduces modern d sound through a digraph,0.3530,weak
+grapheme,αυ,av/af sound digraph,0.5,0.5,0.5,0.58,0.62,0.6,0.66,0.03,0.12,0.05,0,0,Assimilation rule makes this intermediate rather than early,0.3380,weak
+grapheme,ευ,ev/ef sound digraph,0.48,0.48,0.46,0.54,0.62,0.58,0.66,0.03,0.12,0.05,0,0,Useful in ευχαριστώ but needs voicing-rule review,0.3160,weak
+grapheme,Ψ ψ,ps cluster / psi,0.26,0.28,0.34,0.42,0.78,0.42,0.84,0.02,0.1,0.02,0,0,Defer unless a strong food or cultural anchor needs it,0.2490,weak

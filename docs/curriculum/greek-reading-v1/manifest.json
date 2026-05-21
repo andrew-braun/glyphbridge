@@ -1,0 +1,103 @@
+{
+	"course_id": "greek-reading-v1",
+	"display_name": "Greek Reading",
+	"language_tag": "el-Grek",
+	"script": "Grek",
+	"direction": "ltr",
+	"target_domains": [
+		"food_cafe_menus",
+		"transit_signage",
+		"public_facilities",
+		"museum_cultural_sites",
+		"everyday_labels"
+	],
+	"normalization": {
+		"unicode_form": "NFC",
+		"preserve_original": true,
+		"notes": "Store Modern Greek monotonic text in NFC while preserving source forms. Decompose only in analysis tooling when tonos or dialytika need to be inspected as combining marks."
+	},
+	"segmentation": {
+		"baseline": "unicode_uax_29",
+		"word_segmenter": "unicode_word_break_with_manual_review",
+		"grapheme_segmenter": "unicode_grapheme_clusters",
+		"pedagogical_units": "base letters, final sigma, tonos-marked vowel forms, and high-frequency digraphs",
+		"notes": "Modern Greek uses whitespace word boundaries. Treat final sigma as a positional spelling rule and treat common digraphs as pedagogical units after the base alphabet is underway."
+	},
+	"sources": [
+		{
+			"id": "unicode-greek-block",
+			"kind": "unicode_metadata",
+			"url": "https://www.unicode.org/charts/PDF/U0370.pdf",
+			"license": "Unicode License reviewed for metadata use",
+			"use": "scoring",
+			"domain_weight": 0.4,
+			"notes": "Greek and Coptic block metadata for code points, combining marks, and final sigma. Use as infrastructure metadata only."
+		},
+		{
+			"id": "cldr-el-exemplars",
+			"kind": "locale_metadata",
+			"url": "https://cldr.unicode.org/",
+			"license": "Unicode License reviewed for metadata use",
+			"use": "scoring",
+			"domain_weight": 0.5,
+			"notes": "Locale exemplar characters and casing behavior for Modern Greek. Confirm exact CLDR release before ingestion."
+		},
+		{
+			"id": "wordfreq-el",
+			"kind": "frequency",
+			"url": "https://github.com/rspeer/wordfreq",
+			"license": "MIT package license; upstream corpus licenses require review",
+			"use": "scoring_only",
+			"domain_weight": 0.55,
+			"notes": "Useful for broad Modern Greek frequency intuition. Do not ship derived example text from upstream corpora."
+		},
+		{
+			"id": "greek-wiktionary",
+			"kind": "lexicon",
+			"url": "https://el.wiktionary.org/",
+			"license": "CC BY-SA; attribution and share-alike review required",
+			"use": "discovery_only",
+			"domain_weight": 0.45,
+			"notes": "Useful for glosses, inflection checks, and spelling variants. Keep discovery-only until attribution and share-alike implications are approved."
+		},
+		{
+			"id": "openstreetmap-greece-names",
+			"kind": "environmental_print",
+			"url": "https://www.openstreetmap.org/",
+			"license": "ODbL; derived-data obligations require review",
+			"use": "scoring_only",
+			"domain_weight": 0.8,
+			"notes": "Useful for street, transit, place-name, and public-signage validation. Do not ship raw OSM extracts without license review."
+		},
+		{
+			"id": "europarl-el",
+			"kind": "corpus",
+			"url": "https://www.statmt.org/europarl/",
+			"license": "Europarl terms require review before derived use",
+			"use": "discovery_only",
+			"domain_weight": 0.25,
+			"notes": "Large formal corpus that can cross-check spelling and frequency, but register is poorly matched to traveler-first lessons."
+		},
+		{
+			"id": "app-authored-greek-domain-examples",
+			"kind": "authored_examples",
+			"url": "",
+			"license": "app_owned",
+			"use": "shipped_content",
+			"domain_weight": 0.9,
+			"notes": "Short menu, sign, and label examples authored from reviewed vocabulary rather than copied from third-party corpora."
+		}
+	],
+	"database": {
+		"strategy_file": "db-ingestion-strategy.md",
+		"target_schemas": ["curriculum", "delivery"],
+		"publication_required": true
+	},
+	"review": {
+		"native_speaker_required": true,
+		"pronunciation_required": true,
+		"license_signoff_required": true,
+		"cultural_review_required": true,
+		"font_rendering_required": true
+	}
+}

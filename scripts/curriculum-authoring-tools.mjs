@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, extname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -50,16 +50,19 @@ const graphemePenaltyKeys = [
 ];
 
 function usage() {
-	return `Usage:
-  pnpm curriculum:scaffold <course-id> --name "Course Name" --language-tag <tag> --script <script-code>
-  pnpm curriculum:validate <path-to-manifest.json>
-  pnpm curriculum:score <path-to-candidates.csv> [--out <path>]
-  pnpm curriculum:review <path-to-course-workspace> [--out <path>]
-
-Common options:
-  --root <path>   Resolve generated paths from a different repo root.
-  --force         Allow scaffold/review commands to overwrite generated files.
-`;
+	return [
+		"Usage:",
+		'  pnpm curriculum:scaffold <course-id> --name "Course Name" --language-tag <tag> --script <script-code> [--tracker <path|none>]',
+		"  pnpm curriculum:validate <path-to-manifest.json>",
+		"  pnpm curriculum:score <path-to-candidates.csv> [--out <path>]",
+		"  pnpm curriculum:review <path-to-course-workspace> [--out <path>]",
+		"",
+		"Common options:",
+		"  --root <path>   Resolve generated paths from a different repo root.",
+		"  --force         Allow scaffold/review commands to overwrite generated files.",
+		'  --tracker       Use a custom scaffold tracker path, or "none" to skip it.',
+		"",
+	].join("\n");
 }
 
 function parseArgs(rawArgs) {
@@ -126,7 +129,7 @@ function csvEscape(value) {
 	return `"${text.replace(/"/gu, '""')}"`;
 }
 
-function parseCsv(text) {
+function parseCsvRows(text) {
 	const rows = [];
 	let row = [];
 	let cell = "";
@@ -169,17 +172,36 @@ function parseCsv(text) {
 		rows.push(row);
 	}
 
+	return rows;
+}
+
+function parseCsvWithMetadata(text) {
+	const rows = parseCsvRows(text);
+
 	const [headerRow, ...dataRows] = rows.filter((candidate) => {
 		return candidate.some((cellValue) => cellValue.trim());
 	});
 
-	if (!headerRow) return [];
+	if (!headerRow) return { headers: [], rows: [] };
 
-	return dataRows.map((dataRow) => {
-		return Object.fromEntries(
-			headerRow.map((header, index) => [header.trim(), dataRow[index]?.trim() ?? ""]),
+	const headers = headerRow.map((header) => header.trim());
+	const parsedRows = dataRows.map((dataRow, rowIndex) => {
+		const parsedRow = Object.fromEntries(
+			headers.map((header, index) => [header, dataRow[index]?.trim() ?? ""]),
 		);
+
+		Object.defineProperty(parsedRow, "__rowNumber", {
+			value: rowIndex + 2,
+		});
+
+		return parsedRow;
 	});
+
+	return { headers, rows: parsedRows };
+}
+
+function parseCsv(text) {
+	return parseCsvWithMetadata(text).rows;
 }
 
 function stringifyCsv(rows) {
@@ -200,14 +222,66 @@ function stringifyCsv(rows) {
 
 function numeric(row, key) {
 	const rawValue = row[key];
-	if (rawValue === undefined || rawValue === "") return 0;
+	const candidateLabel = row.candidate ? ` for candidate "${row.candidate}"` : "";
+	const rowLabel = row.__rowNumber ? `Row ${row.__rowNumber}${candidateLabel}` : "Row";
+
+	if (rawValue === undefined) {
+		throw new Error(`${rowLabel} is missing numeric column ${key}`);
+	}
+
+	if (rawValue === "") return 0;
 
 	const value = Number(rawValue);
 	if (!Number.isFinite(value)) {
-		throw new Error(`Expected numeric value for ${key}, received ${rawValue}`);
+		throw new Error(`${rowLabel} expected numeric value for ${key}, received "${rawValue}"`);
 	}
 
 	return value;
+}
+
+function scoringKeys(candidateType) {
+	return candidateType === "grapheme"
+		? [...Object.keys(graphemeWeights), ...graphemePenaltyKeys]
+		: [...Object.keys(anchorWeights), ...anchorPenaltyKeys];
+}
+
+function validateCandidateCsv({ headers, rows, inputPath }) {
+	if (!rows.length) {
+		throw new Error(`No candidate rows found in ${inputPath}`);
+	}
+
+	const headerSet = new Set(headers);
+	const candidateTypes = new Set(rows.map(inferCandidateType));
+
+	for (const candidateType of candidateTypes) {
+		const missing = scoringKeys(candidateType).filter((key) => !headerSet.has(key));
+		if (missing.length) {
+			throw new Error(
+				`${inputPath} is missing required ${candidateType} scoring columns: ${missing.join(", ")}`,
+			);
+		}
+	}
+
+	const notesIndex = headers.indexOf("notes");
+	if (notesIndex >= 0) {
+		const penaltyKeys = [...anchorPenaltyKeys, ...graphemePenaltyKeys];
+		const penaltyAfterNotes = penaltyKeys.filter((key) => {
+			const penaltyIndex = headers.indexOf(key);
+			return penaltyIndex > notesIndex;
+		});
+
+		if (penaltyAfterNotes.length) {
+			throw new Error(
+				`${inputPath} must place penalty columns before notes: ${penaltyAfterNotes.join(", ")}`,
+			);
+		}
+	}
+
+	for (const row of rows) {
+		for (const key of scoringKeys(inferCandidateType(row))) {
+			numeric(row, key);
+		}
+	}
 }
 
 function weightedSum(row, weights) {
@@ -353,6 +427,7 @@ Track curriculum authoring for ${name} (${languageTag}, ${script}).
 - [ ] Source manifest validated
 - [ ] Script inventory drafted
 - [ ] Candidate anchors scored
+- [ ] Lesson sequence drafted
 - [ ] Review packet generated
 - [ ] DB ingestion strategy reviewed
 - [ ] Lessons authored
@@ -454,6 +529,74 @@ This durable course note should stay useful after the authoring task is complete
 `;
 }
 
+function lessonSequenceTemplate({ courseId, name }) {
+	return `# ${name} Lesson Sequence
+
+This is the staged implementation outline for \`${courseId}\`. It should be
+updated after candidate scoring and reviewer feedback.
+
+## Course Shape
+
+- First-session reading win:
+- Approximate lesson count:
+- Structural family:
+- Required app support beyond the current Thai runtime:
+
+## Stage 1: First Decoding Wins
+
+| Lesson | Anchor | New units | Rule or pattern | Review units | Drill focus |
+| --- | --- | --- | --- | --- | --- |
+| 1 | TBD | TBD | TBD | TBD | TBD |
+
+## Stage 2: Core Coverage
+
+| Lesson | Anchor | New units | Rule or pattern | Review units | Drill focus |
+| --- | --- | --- | --- | --- | --- |
+| TBD | TBD | TBD | TBD | TBD | TBD |
+
+## Stage 3: Variants, Confusables, And Domain Text
+
+| Lesson | Anchor | New units | Rule or pattern | Review units | Drill focus |
+| --- | --- | --- | --- | --- | --- |
+| TBD | TBD | TBD | TBD | TBD | TBD |
+
+## Coverage Notes
+
+- Target-domain samples:
+- Known-grapheme or known-unit coverage goal:
+- Known-word or known-anchor coverage goal:
+- Deferred high-load material:
+`;
+}
+
+function questionsTemplate({ courseId, name }) {
+	return `# ${name} Questions
+
+Use this file for unresolved decisions that research cannot safely settle during
+the \`${courseId}\` bootstrap.
+
+## Architecture
+
+- None yet.
+
+## Product And Pedagogy
+
+- None yet.
+
+## Sources, Licensing, And Attribution
+
+- None yet.
+
+## Reviewers And Validation
+
+- None yet.
+
+## App Expansion Recommendations
+
+- None yet.
+`;
+}
+
 function dbStrategyTemplate({ courseId, name }) {
 	return `# ${name} DB Ingestion Strategy
 
@@ -467,7 +610,9 @@ script.
 - Sources: \`sources.csv\`
 - Grapheme candidates: \`grapheme-candidates.csv\`
 - Anchor candidates: \`anchor-candidates.csv\`
+- Lesson sequence: \`lesson-sequence.md\`
 - Review packet: \`review-packet.md\`
+- Open questions: \`questions.md\`
 - Future lesson data: TBD
 
 ## Target Database Boundary
@@ -607,6 +752,21 @@ ${candidateRows}
 `;
 }
 
+function relatedTrackerNames(root, courseId) {
+	const trackerDir = repoPath(root, ".ai/curriculum");
+	if (!existsSync(trackerDir)) return [];
+
+	const baseCourseId = courseId.replace(/-v\d+$/u, "");
+
+	return readdirSync(trackerDir)
+		.filter((fileName) => fileName.endsWith(".md"))
+		.map((fileName) => fileName.replace(/\.md$/u, ""))
+		.filter((trackerId) => trackerId !== courseId)
+		.filter(
+			(trackerId) => trackerId === baseCourseId || baseCourseId.startsWith(`${trackerId}-`),
+		);
+}
+
 function commandScaffold(positional, flags) {
 	const courseId = toKebabCase(positional[0] ?? "");
 	if (!courseId) throw new Error("scaffold requires a course id");
@@ -616,14 +776,29 @@ function commandScaffold(positional, flags) {
 	const languageTag = String(flags["language-tag"] ?? "und-Zzzz");
 	const script = String(flags.script ?? "Zzzz");
 	const force = Boolean(flags.force);
+	const trackerFlag = flags.tracker;
+	const trackerPath =
+		trackerFlag === "none"
+			? undefined
+			: repoPath(root, String(trackerFlag ?? `.ai/curriculum/${courseId}.md`));
 	const workspaceRelativePath = `docs/curriculum/${courseId}`;
 	const workspacePath = repoPath(root, `docs/curriculum/${courseId}`);
+	const relatedTrackers = relatedTrackerNames(root, courseId);
 
-	writeFile(
-		repoPath(root, `.ai/curriculum/${courseId}.md`),
-		courseTrackerTemplate({ courseId, name, languageTag, script }),
-		{ force },
-	);
+	if (relatedTrackers.length && !trackerFlag) {
+		console.warn(
+			`Warning: found related curriculum tracker(s): ${relatedTrackers.join(", ")}. Use --tracker <path> or --tracker none if one of these should be reused.`,
+		);
+	}
+
+	if (trackerPath) {
+		writeFile(trackerPath, courseTrackerTemplate({ courseId, name, languageTag, script }), {
+			force,
+		});
+	} else {
+		console.log("Skipped tracker creation because --tracker none was provided");
+	}
+
 	writeFile(
 		resolve(workspacePath, "manifest.json"),
 		manifestTemplate({ courseId, name, languageTag, script }),
@@ -639,6 +814,13 @@ function commandScaffold(positional, flags) {
 		force,
 	});
 	writeFile(
+		resolve(workspacePath, "lesson-sequence.md"),
+		lessonSequenceTemplate({ courseId, name }),
+		{
+			force,
+		},
+	);
+	writeFile(
 		resolve(workspacePath, "review-packet.md"),
 		`# ${name} Review Packet\n\nRun \`pnpm curriculum:review ${workspaceRelativePath}\` after scoring candidates.`,
 		{ force },
@@ -651,6 +833,9 @@ function commandScaffold(positional, flags) {
 		},
 	);
 	writeFile(resolve(workspacePath, `${courseId}.md`), courseDocTemplate({ name }), { force });
+	writeFile(resolve(workspacePath, "questions.md"), questionsTemplate({ courseId, name }), {
+		force,
+	});
 }
 
 function commandValidate(positional) {
@@ -676,7 +861,8 @@ function commandScore(positional, flags) {
 	if (!inputPath) throw new Error("score requires a candidate CSV path");
 
 	const resolvedInputPath = resolve(inputPath);
-	const rows = parseCsv(readFileSync(resolvedInputPath, "utf8"));
+	const { headers, rows } = parseCsvWithMetadata(readFileSync(resolvedInputPath, "utf8"));
+	validateCandidateCsv({ headers, rows, inputPath: resolvedInputPath });
 	const scoredRows = rows
 		.map(scoreRow)
 		.sort((left, right) => Number(right.candidate_score) - Number(left.candidate_score));

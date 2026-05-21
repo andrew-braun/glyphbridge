@@ -13,6 +13,14 @@ Create a starter workspace for a future course:
 pnpm curriculum:scaffold japanese-kana-v1 --name "Japanese Kana" --language-tag ja-Jpan --script Jpan
 ```
 
+Reuse an existing tracker or skip tracker creation when a planning file already
+exists:
+
+```sh
+pnpm curriculum:scaffold japanese-kana-v1 --name "Japanese Kana" --language-tag ja-Jpan --script Jpan --tracker .ai/curriculum/japanese-kana.md
+pnpm curriculum:scaffold japanese-kana-v1 --name "Japanese Kana" --language-tag ja-Jpan --script Jpan --tracker none
+```
+
 Validate a course manifest:
 
 ```sh
@@ -44,11 +52,16 @@ The scaffold command creates these files:
   scoring input.
 - `docs/curriculum/<course-id>/anchor-candidates.csv`: manual anchor scoring
   input.
+- `docs/curriculum/<course-id>/lesson-sequence.md`: staged implementation
+  outline for anchors, new units, rules, review units, and drill focus.
 - `docs/curriculum/<course-id>/review-packet.md`: generated reviewer handoff.
 - `docs/curriculum/<course-id>/db-ingestion-strategy.md`: starter strategy for
   moving reviewed data into `curriculum.*` and `delivery.*`.
 - `docs/curriculum/<course-id>/<course-id>.md`: durable course note for
   sequencing rationale, validation notes, and other seed-source decisions.
+- `docs/curriculum/<course-id>/questions.md`: unresolved architecture, product,
+  source, reviewer, licensing, or app-expansion decisions that research cannot
+  safely answer during bootstrap.
 
 Use the split intentionally: `.ai/curriculum/` is for active curriculum tracking
 only, while `docs/curriculum/<course-id>/` is the durable home for bootstrap
@@ -56,6 +69,34 @@ artifacts that will inform future DB seeding and publication work.
 
 The generated DB strategy intentionally stays Markdown. It should be reviewed
 before any seed generator, SQL migration, or publication helper is written.
+
+The scaffold command warns when it sees a tracker-like file in
+`.ai/curriculum/`. Use `--tracker <path>` to reuse a known tracker or
+`--tracker none` when a separate task file already owns planning.
+
+## Bulk Bootstrap Workflow
+
+For broad writing-system batches, treat scaffolded files as an artifact contract
+rather than as final lesson content.
+
+1. Choose a conservative v1 boundary with one language, script, audience, and
+   target-domain profile.
+2. Scaffold the course workspace.
+3. Fill `manifest.json` and `sources.csv` from researched, license-audited
+   sources.
+4. Validate the manifest with `pnpm curriculum:validate`.
+5. Fill grapheme and anchor candidate CSVs with reviewed or clearly marked
+   manual-estimate values.
+6. Score both candidate files with `pnpm curriculum:score`.
+7. Draft `lesson-sequence.md` from the highest-payoff candidates and cognitive
+   load constraints in the authoring framework.
+8. Generate `review-packet.md` with `pnpm curriculum:review`.
+9. Record unresolved app, database, product, source, or reviewer decisions in
+   `questions.md`.
+
+The batch is review-ready when every in-scope course has the artifact set above,
+automated validation has passed, and any remaining implementation blockers are
+explicitly documented.
 
 ## Candidate Scoring
 
@@ -67,6 +108,12 @@ with `candidate_type` set to `anchor` or `grapheme`, appends
 All scoring fields are numbers from `0` to `1`. Penalties are also numbers from
 `0` to `1` and are subtracted from the weighted score. The score is an authoring
 signal, not an automatic lesson decision.
+
+The score command validates that every required numeric scoring column exists
+for the inferred candidate type and reports row-specific errors when a numeric
+field contains free text. Keep penalty columns before the free-text `notes`
+column so malformed rows fail clearly instead of shifting note text into a
+penalty field.
 
 ## Manifest Validation
 
@@ -151,13 +198,11 @@ should be addressed before the next course:
 
 ### Duplicate tracker on scaffold
 
-The scaffold command always creates `.ai/curriculum/<course-id>.md` even when a
-bootstrap runbook with a similar name already exists. For Korean Hangul this
-produced two parallel files: `korean-hangul.md` (bootstrap runbook, written by
-hand) and `korean-hangul-v1.md` (scaffold output). The fix is to add a
-`--tracker <path>` flag so authors can point scaffold at an existing file instead
-of creating a second one, or at minimum to print a warning when a tracker-like
-file already exists in `.ai/curriculum/`.
+The scaffold command now supports `--tracker <path>` and `--tracker none`, and
+warns when a tracker-like file already exists in `.ai/curriculum/`. Korean Hangul
+still has two historical files: `korean-hangul.md` (bootstrap runbook, written by
+hand) and `korean-hangul-v1.md` (scaffold output). Future scaffold runs should
+reuse or skip tracker creation intentionally.
 
 ### No `jamo_position` field in grapheme candidates
 
@@ -192,9 +237,9 @@ Penalty columns must appear in the exact order declared in the CSV header.
 During the Korean Hangul bootstrap, a descriptive notes string was accidentally
 placed in the `new_load_penalty` column, causing the score command to fail with
 a numeric parse error. The fix is to always write penalty values before any
-free-text `notes` field. Consider adding a header-validation step to the score
-command that checks that penalty columns contain numeric values and surfaces a
-clear error message pointing to the offending column.
+free-text `notes` field. The score command now validates required scoring
+columns and reports the offending row, candidate, and numeric column when a value
+cannot be parsed.
 
 ### Penalty weight calibration
 

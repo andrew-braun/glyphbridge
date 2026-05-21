@@ -1,0 +1,34 @@
+candidate_type,candidate,gloss,corpus_frequency,distinct_word_coverage,domain_coverage_gain,anchor_availability,pronunciation_clarity,rule_gateway_value,visual_distinctiveness,confusability_penalty,load_penalty,irregularity_penalty,font_penalty,license_penalty,notes
+grapheme,Α α,a sound / alpha,0.95,0.92,0.86,0.9,0.95,0.7,0.8,0.02,0.02,0,0,0,Core vowel with strong positive transfer from Latin A
+grapheme,Ε ε,e sound / epsilon,0.88,0.85,0.8,0.85,0.95,0.7,0.82,0.02,0.02,0,0,0,High-frequency vowel and early menu/sign payoff
+grapheme,Ο ο,o sound / omicron,0.86,0.84,0.82,0.85,0.94,0.65,0.78,0.03,0.02,0,0,0,High-frequency vowel; later pair with omega merger
+grapheme,Ν ν,n sound / nu,0.84,0.82,0.76,0.82,0.95,0.62,0.8,0.02,0.02,0,0,0,Foundational sonorant with strong early anchor availability
+grapheme,Κ κ,k sound / kappa,0.8,0.78,0.76,0.82,0.94,0.68,0.76,0.04,0.03,0,0,0,High-payoff stop in food and place names
+grapheme,Τ τ,t sound / tau,0.86,0.84,0.8,0.84,0.95,0.66,0.72,0.08,0.02,0,0,0,Very common; mark Cyrillic lookalike risk in drills
+grapheme,Μ μ,m sound / mu,0.78,0.76,0.7,0.78,0.95,0.58,0.82,0.03,0.02,0,0,0,High-frequency sonorant for menus and public words
+grapheme,Λ λ,l sound / lambda,0.72,0.7,0.66,0.72,0.94,0.58,0.82,0.03,0.02,0,0,0,Useful early liquid with low pronunciation load
+grapheme,Ι ι,i sound / iota,0.84,0.82,0.78,0.82,0.94,0.72,0.78,0.04,0.04,0.02,0,0,High-frequency vowel; later explain merger with eta and upsilon
+grapheme,Π π,p sound / pi,0.78,0.76,0.72,0.78,0.94,0.62,0.72,0.08,0.03,0,0,0,Common consonant with Cyrillic and Latin shape interference
+grapheme,Ρ ρ,r sound / rho,0.74,0.72,0.7,0.76,0.82,0.58,0.72,0.07,0.04,0,0,0,Common rhotic; pronunciation needs brief rolled-r guidance
+grapheme,Σ σ/ς,s sound / sigma and final sigma,0.86,0.84,0.82,0.86,0.94,0.82,0.66,0.08,0.08,0.02,0,0,Essential but needs explicit final-sigma position rule
+grapheme,Β β,v sound / beta,0.58,0.62,0.58,0.7,0.78,0.64,0.72,0.12,0.05,0.02,0,0,High learner trap because it looks like Latin B but sounds like v
+grapheme,Γ γ,gh/y sound / gamma,0.7,0.68,0.62,0.68,0.6,0.64,0.7,0.08,0.1,0.04,0,0,Contextual fricative before front and back vowels
+grapheme,Δ δ,th as in then / delta,0.68,0.66,0.6,0.66,0.72,0.62,0.76,0.08,0.08,0.03,0,0,Modern fricative value differs from expected d sound
+grapheme,Θ θ,th as in thin / theta,0.56,0.58,0.56,0.64,0.86,0.6,0.86,0.03,0.05,0.02,0,0,Clear fricative and strong contrast partner for delta
+grapheme,Φ φ,f sound / phi,0.56,0.58,0.56,0.68,0.9,0.6,0.86,0.03,0.04,0.01,0,0,Clear modern f sound with good public-facility payoff
+grapheme,Χ χ,kh/h sound / chi,0.6,0.62,0.64,0.72,0.62,0.64,0.78,0.08,0.1,0.03,0,0,Contextual velar or palatal fricative; important for όχι and προσοχή
+grapheme,Η η,i sound / eta,0.66,0.64,0.58,0.64,0.72,0.62,0.78,0.06,0.08,0.03,0,0,High-frequency historical spelling for modern i sound
+grapheme,Υ υ,i sound / upsilon,0.58,0.58,0.56,0.62,0.7,0.58,0.74,0.08,0.08,0.03,0,0,Looks like Latin Y or u but usually sounds like i in isolation
+grapheme,Ω ω,o sound / omega,0.58,0.58,0.56,0.62,0.78,0.58,0.86,0.03,0.08,0.02,0,0,Merges with omicron in sound but remains common in spelling
+grapheme,Ζ ζ,z sound / zeta,0.42,0.44,0.5,0.58,0.9,0.5,0.82,0.03,0.03,0,0,0,Useful in μαγαζί and ζώνη but lower broad coverage
+grapheme,Ξ ξ,ks cluster / xi,0.34,0.36,0.5,0.62,0.78,0.48,0.82,0.02,0.08,0.02,0,0,Lower-frequency cluster but unlocks ταξί and έξοδος
+grapheme,Ψ ψ,ps cluster / psi,0.26,0.28,0.34,0.42,0.78,0.42,0.84,0.02,0.1,0.02,0,0,Defer unless a strong food or cultural anchor needs it
+grapheme,τόνος,stress mark on vowels,0.8,0.78,0.78,0.86,0.82,0.78,0.6,0.02,0.1,0.02,0,0,Teach as stress marker early; not a Thai-style tone mark
+grapheme,αι,e sound digraph,0.72,0.72,0.68,0.74,0.86,0.78,0.68,0.02,0.08,0.02,0,0,High-frequency digraph that sounds like epsilon
+grapheme,ει,i sound digraph,0.74,0.74,0.7,0.76,0.84,0.8,0.68,0.02,0.08,0.02,0,0,High-frequency digraph in είναι and facility words
+grapheme,ου,u sound digraph,0.7,0.7,0.74,0.78,0.9,0.78,0.7,0.02,0.08,0.02,0,0,High-value distinct u sound for του and που patterns
+grapheme,οι,i sound digraph,0.58,0.58,0.56,0.62,0.8,0.64,0.68,0.02,0.09,0.02,0,0,Useful late digraph for shop signs such as ανοιχτό
+grapheme,αυ,av/af sound digraph,0.5,0.5,0.5,0.58,0.62,0.6,0.66,0.03,0.12,0.05,0,0,Assimilation rule makes this intermediate rather than early
+grapheme,ευ,ev/ef sound digraph,0.48,0.48,0.46,0.54,0.62,0.58,0.66,0.03,0.12,0.05,0,0,Useful in ευχαριστώ but needs voicing-rule review
+grapheme,μπ,b/mb sound digraph,0.5,0.5,0.48,0.56,0.7,0.58,0.68,0.02,0.12,0.03,0,0,Introduces modern b sound through a digraph
+grapheme,ντ,d/nd sound digraph,0.48,0.48,0.46,0.54,0.7,0.56,0.68,0.02,0.12,0.03,0,0,Introduces modern d sound through a digraph

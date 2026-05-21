@@ -1,0 +1,8 @@
+id,kind,url,license,use,domain_weight,notes
+unicode-greek-block,unicode_metadata,https://www.unicode.org/charts/PDF/U0370.pdf,Unicode License reviewed for metadata use,scoring,0.4,Greek code point and combining-mark metadata for infrastructure use only
+cldr-el-exemplars,locale_metadata,https://cldr.unicode.org/,Unicode License reviewed for metadata use,scoring,0.5,Modern Greek exemplar characters and locale casing behavior; confirm exact CLDR release before ingestion
+wordfreq-el,frequency,https://github.com/rspeer/wordfreq,MIT package license; upstream corpus licenses require review,scoring_only,0.55,Broad frequency intuition only; do not ship derived upstream example text
+greek-wiktionary,lexicon,https://el.wiktionary.org/,CC BY-SA; attribution and share-alike review required,discovery_only,0.45,Gloss and spelling discovery only until attribution and share-alike implications are approved
+openstreetmap-greece-names,environmental_print,https://www.openstreetmap.org/,ODbL; derived-data obligations require review,scoring_only,0.8,Street transit place-name and public-signage validation; do not ship raw extracts without review
+europarl-el,corpus,https://www.statmt.org/europarl/,Europarl terms require review before derived use,discovery_only,0.25,Formal-register cross-check only; weak target-domain match for traveler-first content
+app-authored-greek-domain-examples,authored_examples,,app_owned,shipped_content,0.9,Short reviewed examples authored by GlyphBridge rather than copied from third-party corpora
