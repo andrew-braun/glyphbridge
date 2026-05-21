@@ -4,6 +4,10 @@ This durable course note captures decisions and rationale that should outlive
 the bootstrap authoring task. For active status and next-step tracking, see
 `.ai/curriculum/korean-hangul-v1.md`.
 
+The rest of the durable bootstrap product for this course also lives in this
+folder: `manifest.json`, `sources.csv`, `grapheme-candidates.csv`,
+`anchor-candidates.csv`, `review-packet.md`, and `db-ingestion-strategy.md`.
+
 ## Course Boundary
 
 - Language/script: Korean written in Hangul (`ko-Hang`, ISO 15924 `Hang`)
@@ -65,4 +69,4 @@ estimates — pending corpus validation):
   strings, especially food and culture-domain words.
 - License review: all sources currently discovery_only or scoring_only. No
   content may ship until source licenses are individually confirmed. See
-  `.ai/curriculum/korean-hangul-v1/sources.csv` for current status.
+  `sources.csv` for current status.

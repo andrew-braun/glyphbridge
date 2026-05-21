@@ -1,6 +1,6 @@
 # Writing Systems Catalog
 
-Last reviewed: 2026-05-19
+Last reviewed: 2026-05-21
 
 This catalog is a roadmap for scripts and writing systems GlyphBridge could cover
 after Thai. It should be read alongside the [curriculum authoring
@@ -347,10 +347,114 @@ they were deliberately constructed.
 | 69   | Original app-created fictional scripts                    | Future GlyphBridge-owned practice worlds or public-domain texts      | Lowest external popularity, but highest legal control if we create them.                                        |
 | 70   | Other Omniglot or ConScript community scripts             | Independent conlang scripts and private-use scripts                  | Long-tail source of ideas; evaluate only when there is an active community or corpus.                           |
 
+## Ranking By Available Data
+
+This ranking estimates bootstrap difficulty from easiest to hardest. It is a
+separate axis from learner popularity: a system can be popular but hard to
+bootstrap if frequency lists, corpora, tooling, licensing, or reviewer access are
+thin. Conversely, a niche system can rank higher here when its structure is well
+documented and the source ecosystem is unusually clean.
+
+The ranking weighs these data-readiness signals:
+
+- Unicode, ISO 15924, CLDR, font, normalization, and segmentation metadata.
+- Glyph, word, structure, component, syllable, or rule-frequency resources.
+- Public corpora, dictionaries, transliteration systems, and pronunciation data.
+- Mature tokenizers, analyzers, OCR tools, keyboard/input tooling, and NLP
+  libraries.
+- Academic research, grammars, textbooks, teaching sequences, and review access.
+- License clarity for analysis, scoring, and learner-visible shipped content.
+
+| Rank | Candidate                                      | Bootstrap difficulty | Data-readiness rationale                                                                                                                                         |
+| :--- | :--------------------------------------------- | :------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1    | Latin extensions and diacritics                | Very low             | Massive corpora, dictionaries, CLDR data, fonts, keyboards, frequency lists, and pedagogy across European and Latin-script languages.                            |
+| 2    | International Phonetic Alphabet                | Very low             | Standardized charts, Unicode support, textbooks, pronunciation literature, and cross-language teaching material; no native corpus dependency.                    |
+| 3    | Hangul                                         | Very low             | Algorithmic Unicode decomposition, mature Korean corpora, frequency lists, tokenizers, dictionaries, pedagogical literature, and an existing GlyphBridge packet. |
+| 4    | Greek                                          | Very low             | Compact alphabet, strong Unicode/font support, abundant modern and classical resources, dictionaries, frequency lists, and teaching materials.                   |
+| 5    | Cyrillic                                       | Low                  | Strong metadata, corpora, keyboards, dictionaries, NLP tools, and pedagogy for Russian plus several Slavic and Central Asian variants.                           |
+| 6    | Japanese writing system                        | Low-medium           | Very rich corpora, kana/kanji frequency lists, dictionaries, JLPT/Joyo scaffolds, tokenizers, and pedagogy; complexity is high but data is excellent.            |
+| 7    | Han characters for Chinese                     | Low-medium           | Unihan, frequency lists, HSK resources, dictionaries, segmentation tools, corpora, and OCR are abundant; variant and word-boundary choices add work.             |
+| 8    | Arabic script                                  | Medium               | Large corpora, morphology tools, Quranic and modern resources, keyboards, and pedagogy; dialects, optional vowels, shaping, and variants increase scope.         |
+| 9    | Devanagari                                     | Medium               | Strong Unicode/CLDR support, Hindi/Sanskrit/Nepali corpora, Indic NLP tools, dictionaries, and teaching literature; conjuncts require careful modeling.          |
+| 10   | Hebrew                                         | Medium               | Modern and biblical corpora, dictionaries, frequency lists, transliteration, pedagogy, and tooling exist; niqqud and abjad behavior need clear course bounds.    |
+| 11   | Thai                                           | Medium               | Existing app expertise, Unicode support, corpora, dictionaries, segmentation tools, and pedagogy exist; word segmentation and tone rules still need review.      |
+| 12   | Bopomofo                                       | Medium               | Mandarin-focused pedagogical data is strong, and the inventory is compact; it depends on a Chinese course boundary rather than a standalone language corpus.     |
+| 13   | Bengali-Assamese                               | Medium               | Large speaker base, Unicode support, corpora, dictionaries, and Indic tooling; conjuncts and language variants require review.                                   |
+| 14   | Tamil                                          | Medium               | Good Unicode support, corpora, dictionaries, transliteration, and pedagogy; classical-versus-modern boundaries need care.                                        |
+| 15   | Gurmukhi                                       | Medium               | Punjabi resources, Sikh teaching material, Unicode support, and dictionaries are available; corpus/tooling depth trails the largest Indic scripts.               |
+| 16   | Telugu                                         | Medium               | Good Unicode, corpora, dictionaries, and Indic tooling; curriculum design needs script-specific review for clusters and vowel signs.                             |
+| 17   | Kannada                                        | Medium               | Good Unicode and regional-language resources; corpora and beginner pedagogy are available but less abundant than Hindi or Tamil.                                 |
+| 18   | Malayalam                                      | Medium               | Good Unicode, dictionaries, corpora, and pedagogy; orthographic reforms and conjunct handling add scope.                                                         |
+| 19   | Gujarati                                       | Medium               | Solid Unicode, dictionaries, corpora, transliteration, and learner resources; moderate tooling depth.                                                            |
+| 20   | Odia                                           | Medium               | Unicode and regional resources are solid, but open corpora, NLP tooling, and pedagogical material are thinner than higher-ranked Indic scripts.                  |
+| 21   | Ethiopic                                       | Medium               | Unicode, fonts, dictionaries, Amharic/Tigrinya resources, and grammars exist; syllabary-size and transliteration choices add work.                               |
+| 22   | Braille                                        | Medium               | Standards and teaching literature are excellent, but a visual-first app must define tactile-versus-visual pedagogy and language-specific braille boundaries.     |
+| 23   | Morse code and signaling systems               | Medium               | Standards, drills, and teaching resources are abundant, but these are not ordinary writing-system courses and require different interaction design.              |
+| 24   | Armenian                                       | Medium               | Compact alphabet, strong Unicode support, dictionaries, corpora, and pedagogy; market is smaller but data is adequate.                                           |
+| 25   | Georgian                                       | Medium               | Strong Unicode, fonts, dictionaries, and teaching resources; fewer large open corpora and NLP tools than top modern languages.                                   |
+| 26   | Coptic                                         | Medium               | Unicode, fonts, grammars, dictionaries, and liturgical resources are strong for a historical script; pronunciation and dialect boundaries need review.           |
+| 27   | Tibetan                                        | Medium-high          | Unicode, dictionaries, grammars, and corpora exist; stacked letters, transliteration, segmentation, and font behavior make bootstrap harder.                     |
+| 28   | Khmer                                          | Medium-high          | Unicode and some corpora/tools exist; complex shaping, subscripts, and limited beginner frequency resources raise effort.                                        |
+| 29   | Lao                                            | Medium-high          | Unicode, fonts, and Thai-adjacent pedagogy help; corpus, segmentation, and frequency tooling are thinner than Thai.                                              |
+| 30   | Myanmar                                        | Medium-high          | Unicode and NLP resources exist, but Zawgyi migration, shaping, fonts, and variant languages make source hygiene important.                                      |
+| 31   | Sinhala                                        | Medium-high          | Unicode, dictionaries, and learner resources exist; open corpora and NLP tooling are moderate.                                                                   |
+| 32   | Egyptian hieroglyphs                           | Medium-high          | Excellent academic literature, sign lists, dictionaries, fonts, and teaching resources; logosyllabic complexity and historical uncertainty add review load.      |
+| 33   | Runic scripts                                  | Medium-high          | Unicode, compact inventories, academic literature, and teaching resources are good; many periods and languages need clear boundaries.                            |
+| 34   | Phoenician                                     | Medium-high          | Compact encoded abjad with good academic resources; corpus is inscriptional and small but manageable for recognition-first lessons.                              |
+| 35   | Ogham                                          | Medium-high          | Compact encoded system, good epigraphic research, and teaching resources; corpus is small but tractable.                                                         |
+| 36   | Linear B                                       | Medium-high          | Deciphered, encoded, well researched, and teachable; corpus is finite and academic, not everyday.                                                                |
+| 37   | Cuneiform                                      | High                 | Strong academic data and Unicode coverage, but multiple languages, huge sign inventories, transliteration conventions, and specialized tooling raise effort.     |
+| 38   | Maya hieroglyphs                               | High                 | Rich scholarship and pedagogy exist, but font/input support, sign variants, visual complexity, and expert review needs are substantial.                          |
+| 39   | Old Persian cuneiform                          | High                 | Compact and well documented, with Unicode and teaching resources; still needs historical-language review and limited corpus handling.                            |
+| 40   | Ugaritic                                       | High                 | Encoded, compact, and researched; corpus and pedagogy are specialist but usable.                                                                                 |
+| 41   | Old Italic family                              | High                 | Unicode and epigraphic research exist, but the family spans several languages and regional alphabets.                                                            |
+| 42   | Glagolitic                                     | High                 | Encoded and well researched, with church and Slavic resources; course boundary between script, Old Church Slavonic, and modern interest needs care.              |
+| 43   | Gothic                                         | High                 | Compact encoded alphabet and strong grammar resources; corpus is small and historical-language expertise is needed.                                              |
+| 44   | Brahmi                                         | High                 | Encoded and central to script history, but paleographic variation, Prakrit/Sanskrit boundaries, and epigraphic sourcing make it specialist.                      |
+| 45   | Syriac                                         | High                 | Unicode, fonts, grammars, dictionaries, and liturgical resources exist; multiple styles and language varieties complicate scope.                                 |
+| 46   | Mongolian                                      | High                 | Unicode and resources exist, but vertical layout, shaping, variants, and toolchain behavior are high-risk for authoring and UI.                                  |
+| 47   | Tifinagh                                       | High                 | Unicode and basic teaching resources exist; corpora, frequency lists, and standardization differ by Amazigh/Tuareg context.                                      |
+| 48   | Javanese                                       | High                 | Unicode and cultural resources exist, but modern corpus depth, normalization, and pedagogy are thinner than major living scripts.                                |
+| 49   | Balinese                                       | High                 | Unicode and teaching resources exist; domain corpora and practical modern reading targets are limited.                                                           |
+| 50   | Baybayin or Tagalog script                     | High                 | Unicode and revival materials are available, but historical versus modern revival conventions and limited corpora need careful handling.                         |
+| 51   | Cherokee                                       | High                 | Unicode, keyboards, pedagogy, and revitalization resources exist; open corpora and frequency data are limited.                                                   |
+| 52   | Canadian Aboriginal syllabics                  | High                 | Unicode and standards are strong, but language-specific inventories, community review, and data access vary widely.                                              |
+| 53   | Adlam                                          | High                 | Unicode, fonts, and community resources exist; open corpora and pedagogical literature are growing but still limited.                                            |
+| 54   | N'Ko                                           | High                 | Unicode and educational resources exist; corpora and tooling are more limited than larger scripts.                                                               |
+| 55   | Shavian                                        | High                 | Unicode, a compact inventory, and public teaching material exist; word-frequency and pronunciation mapping for English need app-owned decisions.                 |
+| 56   | Deseret alphabet                               | High                 | Unicode and historical resources exist; practical corpora and modern pedagogy are small but manageable.                                                          |
+| 57   | Sitelen Pona                                   | High                 | Active community and compact corpus help; glyph variants, licensing, and logographic segmentation need review.                                                   |
+| 58   | Vai                                            | High                 | Unicode and scholarship exist; corpora, frequency data, and reviewer availability are limited.                                                                   |
+| 59   | Bamum                                          | High                 | Unicode and historical resources exist; script-stage selection and limited corpus access make it specialist.                                                     |
+| 60   | Thaana                                         | High                 | Unicode and Dhivehi resources exist; small language ecosystem and fewer open analytics tools raise effort.                                                       |
+| 61   | Meitei Mayek                                   | High                 | Unicode and revival materials exist; corpora, frequency data, and language review are less abundant.                                                             |
+| 62   | Newa, Tirhuta, Syloti Nagri, and related Indic | High-very high       | Encoded and documented, but open corpora, pedagogy, and modern learner demand are uneven.                                                                        |
+| 63   | Tengwar and Cirth                              | High-very high       | Fan documentation is extensive, but Unicode is not standard, modes vary, and rights/licensing must be cleared before shipping.                                   |
+| 64   | Aurebesh                                       | High-very high       | Mapping data is easy, but useful corpora are franchise-bound and require rights review.                                                                          |
+| 65   | Klingon pIqaD                                  | High-very high       | Community resources exist, but Unicode is not standard, orthographic conventions vary, and IP/licensing review is required.                                      |
+| 66   | D'ni                                           | High-very high       | Strong fan resources exist, but corpus and rights are game-franchise-bound.                                                                                      |
+| 67   | Other franchise cipher scripts                 | High-very high       | Zelda, Elder Scrolls, Unown, Standard Galactic, Futurama, and similar scripts are often easy mappings but weak on licensed corpora.                              |
+| 68   | Kharoshthi, Siddham, Grantha, and Sharada      | Very high            | Encoded and academically documented, but paleography, language boundaries, and specialist review make them advanced historical courses.                          |
+| 69   | Old Turkic, Sogdian, and Old Uyghur            | Very high            | Encoded and researched, but corpora are specialist and beginner pedagogy is sparse.                                                                              |
+| 70   | Avestan, Pahlavi, and Manichaean               | Very high            | Useful scholarship exists, but scripts, languages, and religious-historical contexts require expert handling.                                                    |
+| 71   | Tangut                                         | Very high            | Encoded and researched, but enormous character inventory, specialist dictionaries, and low pedagogy make it hard.                                                |
+| 72   | Nushu                                          | Very high            | Unicode and cultural research exist, but corpus size, variants, and review expertise are limiting.                                                               |
+| 73   | Meroitic scripts                               | Very high            | Signs and sound values are partly known, but language understanding is incomplete; recognition is safer than full reading.                                       |
+| 74   | Long-tail active community scripts             | Very high            | Warang Citi, Sora Sompeng, Gondi scripts, Wancho, Tangsa, Toto, Sunuwar, and similar scripts need community review and custom source discovery.                  |
+| 75   | Long-tail historical Brahmic scripts           | Very high            | Kaithi, Modi, Mahajani, Multani, Khojki, Takri, Dogra, Ahom, Kawi, and related scripts are feasible only with specialist source curation.                        |
+| 76   | Symbolic or AAC systems                        | Very high            | Blissymbolics, iConji, LoCoS, Yerkish, and similar systems need different success metrics from language-script decoding.                                         |
+| 77   | Occult and philosophical alphabets             | Very high            | Theban, Enochian, Celestial, Malachim, Transitus Fluvii, Litterae Ignotae, and Real Character are documented but niche and nonstandard.                          |
+| 78   | Linear A, Indus, Rongorongo, and Voynich       | Save for later       | Famous and appealing, but undeciphered or disputed; courses can teach history and sign recognition, not reliable reading.                                        |
+| 79   | Proto-writing and Neolithic sign systems       | Save for later       | Proto-cuneiform, Vinča, Jiahu, Banpo, and similar systems have thin or disputed language mapping and should wait for history-mode tooling.                       |
+| 80   | Other obscure, private, or unencoded systems   | Save for later       | If source data is private, image-only, unencoded, or community-specific, bootstrap should wait until a source manifest and reviewer path are clear.              |
+
 ## Early Roadmap Implications
 
 - Best near-term living-script candidates after Thai: Japanese, Korean Hangul,
   Chinese Han characters, Arabic, Cyrillic, Greek, Hebrew, Devanagari, and IPA.
+- Lowest bootstrap-risk candidates by data availability: Latin extensions, IPA,
+  Hangul, Greek, Cyrillic, Japanese, Han characters for Chinese, Arabic,
+  Devanagari, Hebrew, Thai, and Bopomofo.
 - Best historical candidates: Egyptian hieroglyphs, runes, cuneiform, Maya,
   Linear B, Phoenician, Ogham, Glagolitic, and Gothic.
 - Best fictional or constructed candidates by expected demand: Tengwar,

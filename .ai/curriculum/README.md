@@ -7,6 +7,8 @@ curriculum progress, coverage status, and next authoring work.
 
 - One markdown file per language or script system, named `<language>.md`
 - Current curriculum status for that language
+- Curriculum task tracking and bootstrap progress for that language or script
+  system
 - Coverage summaries for what is already authored
 - Concrete follow-up authoring work and open curriculum questions
 - Practical status wording that other task trackers can reuse without drifting
@@ -22,6 +24,16 @@ Keep those in:
 - `.ai/<dated-task>.md` for non-minor task trackers
 - `.ai/tasks/<task-slug>/` for multi-file implementation workstreams
 - `docs/` for durable product, pedagogy, and architecture reference docs
+
+## Storage Boundary
+
+- Keep active curriculum tracking, bootstrap checklists, score summaries, and
+  next-step planning in `.ai/curriculum/`.
+- Store the bootstrap artifacts themselves in `docs/curriculum/<course-id>/`:
+  manifest, sources, candidate CSVs, review packet, DB strategy, and durable
+  course notes.
+- Treat those `docs/curriculum/<course-id>/` files as durable seed-source
+  material, not as temporary task output.
 
 ## File Expectations
 

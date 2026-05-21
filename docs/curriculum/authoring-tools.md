@@ -16,20 +16,20 @@ pnpm curriculum:scaffold japanese-kana-v1 --name "Japanese Kana" --language-tag 
 Validate a course manifest:
 
 ```sh
-pnpm curriculum:validate .ai/curriculum/japanese-kana-v1/manifest.json
+pnpm curriculum:validate docs/curriculum/japanese-kana-v1/manifest.json
 ```
 
 Score hand-entered anchor or grapheme candidates:
 
 ```sh
-pnpm curriculum:score .ai/curriculum/japanese-kana-v1/anchor-candidates.csv
-pnpm curriculum:score .ai/curriculum/japanese-kana-v1/grapheme-candidates.csv
+pnpm curriculum:score docs/curriculum/japanese-kana-v1/anchor-candidates.csv
+pnpm curriculum:score docs/curriculum/japanese-kana-v1/grapheme-candidates.csv
 ```
 
 Generate a review packet from the manifest and scored anchor candidates:
 
 ```sh
-pnpm curriculum:review .ai/curriculum/japanese-kana-v1 --force
+pnpm curriculum:review docs/curriculum/japanese-kana-v1 --force
 ```
 
 ## Scaffolded Files
@@ -37,18 +37,22 @@ pnpm curriculum:review .ai/curriculum/japanese-kana-v1 --force
 The scaffold command creates these files:
 
 - `.ai/curriculum/<course-id>.md`: central course tracker.
-- `.ai/curriculum/<course-id>/manifest.json`: machine-validated source and
+- `docs/curriculum/<course-id>/manifest.json`: machine-validated source and
   course manifest.
-- `.ai/curriculum/<course-id>/sources.csv`: source inventory and license notes.
-- `.ai/curriculum/<course-id>/grapheme-candidates.csv`: manual grapheme scoring
+- `docs/curriculum/<course-id>/sources.csv`: source inventory and license notes.
+- `docs/curriculum/<course-id>/grapheme-candidates.csv`: manual grapheme
+  scoring input.
+- `docs/curriculum/<course-id>/anchor-candidates.csv`: manual anchor scoring
   input.
-- `.ai/curriculum/<course-id>/anchor-candidates.csv`: manual anchor scoring
-  input.
-- `.ai/curriculum/<course-id>/review-packet.md`: generated reviewer handoff.
-- `.ai/curriculum/<course-id>/db-ingestion-strategy.md`: starter strategy for
+- `docs/curriculum/<course-id>/review-packet.md`: generated reviewer handoff.
+- `docs/curriculum/<course-id>/db-ingestion-strategy.md`: starter strategy for
   moving reviewed data into `curriculum.*` and `delivery.*`.
-- `docs/curriculum/<course-id>.md`: durable course notes once the course becomes
-  more than a task.
+- `docs/curriculum/<course-id>/<course-id>.md`: durable course note for
+  sequencing rationale, validation notes, and other seed-source decisions.
+
+Use the split intentionally: `.ai/curriculum/` is for active curriculum tracking
+only, while `docs/curriculum/<course-id>/` is the durable home for bootstrap
+artifacts that will inform future DB seeding and publication work.
 
 The generated DB strategy intentionally stays Markdown. It should be reviewed
 before any seed generator, SQL migration, or publication helper is written.
@@ -212,3 +216,39 @@ app, these must be renamed to a language-agnostic field (e.g., `text`), with
 all references in `src/lib/data/thai.ts` updated accordingly. This rename is
 tracked as an engineering follow-up and was intentionally deferred from the
 bootstrap task.
+
+## Cross-Course Lessons
+
+The Korean Hangul bootstrap surfaced several rules that should apply to future
+curriculum work, not just to Hangul.
+
+- Set the course boundary with standards-based identifiers before authoring
+  begins. Use the right language tag, script code, and explicit scope so the
+  course does not drift into region, script, or variant assumptions later.
+- Bootstrap first and automate later. A validated manifest, source inventory,
+  candidate scoring pass, review packet, and DB strategy are enough to expose
+  real gaps before heavier corpus or publication tooling is justified.
+- Treat pedagogical units and Unicode or rendering units as separate layers.
+  Storage text, visible glyphs, grapheme clusters, and teachable units are often
+  different things.
+- Expect script-specific extensions. The shared pipeline should stay general,
+  but it must allow fields or notes that capture script-specific pedagogy when a
+  generic schema is too coarse.
+- Treat bootstrap scores as relative sequencing signals, not absolute truth.
+  Manual estimates are acceptable early on, but uncertainty should be visible
+  through fields such as `source_confidence` and reviewer notes.
+- Use penalties carefully. A high penalty can mean "teach later" rather than
+  "low value," so the scoring model should not bury essential high-frequency
+  units just because they are confusable or irregular.
+- Validate authoring inputs as early as possible. CSV headers, numeric columns,
+  and schema expectations should fail fast with clear errors instead of letting a
+  malformed row break scoring later.
+- Expect the first non-Thai course to reveal product-generalization work. When a
+  curriculum exposes Thai-specific names or assumptions in the app model, treat
+  that as shared engineering work, not a one-off course quirk.
+- Keep tracking and durable documentation separate. Active curriculum planning
+  belongs in `.ai/curriculum/`; reusable outputs from a bootstrap pass belong in
+  `docs/curriculum/` once they are stable enough to outlive the task.
+- Keep source licensing conservative by default. Corpus outputs and reference
+  materials may be useful for scoring long before they are safe to quote or ship
+  in learner-facing content.

@@ -16,6 +16,8 @@ resolved before lesson drafting begins.
   work.
 - Use this file as the central status location for Korean Hangul authoring
   progress and next steps.
+- Keep active task tracking in `.ai/curriculum/`, but publish durable bootstrap
+  outputs that should outlive the tracking cycle into `../../docs/curriculum/`.
 - Keep reusable multi-script pedagogy and pipeline rules in
   `../../docs/curriculum/authoring-framework.md`.
 - Keep CLI workflow, scaffold behavior, and candidate-scoring instructions in
@@ -33,6 +35,9 @@ resolved before lesson drafting begins.
 - The immediate objective is not lesson authoring yet; it is a validated
   manifest, starter source inventory, first grapheme inventory, scored anchor
   candidates, review packet, and DB handoff notes.
+- The tracker for that work stays here in `.ai/curriculum/`; any durable course
+  notes and bootstrap artifacts belong in
+  `../../docs/curriculum/korean-hangul-v1/`.
 
 ## Standard Identifiers
 
@@ -57,9 +62,8 @@ pnpm curriculum:scaffold korean-hangul-v1 --name "Korean Hangul" --language-tag 
 ```
 
 This creates the working files under `.ai/curriculum/korean-hangul-v1/`, a
-course tracker at `.ai/curriculum/korean-hangul-v1.md`, and a durable course note
-at `docs/curriculum/korean-hangul-v1.md` once the course has durable content worth
-preserving.
+course tracker at `.ai/curriculum/korean-hangul-v1.md`, and the durable
+bootstrap workspace under `../../docs/curriculum/korean-hangul-v1/`.
 
 ## First Pass Scope
 
@@ -75,18 +79,17 @@ preserving.
 
 ## Current Source Hierarchy
 
-1. `../../docs/curriculum/authoring-framework.md`
-   - Canonical cross-script curriculum workflow, validation gates, and artifact
-     definitions.
-2. `../../docs/curriculum/authoring-tools.md`
-   - Canonical CLI and authoring workflow reference for scaffold, validate,
-     score, and review commands.
-3. `.ai/curriculum/korean-hangul.md`
-   - Current Korean Hangul bootstrap scope, identifiers, and next steps.
-4. Future scaffold outputs under `.ai/curriculum/korean-hangul-v1/`
-   - Manifest, sources, candidate CSVs, review packet, and DB strategy starter.
-5. `../../docs/database-dto-spec.md`
-   - Canonical DB mapping target once curriculum data is ready for ingestion.
+1. `../../docs/curriculum/authoring-framework.md` — canonical cross-script
+   curriculum workflow, validation gates, and artifact definitions.
+1. `../../docs/curriculum/authoring-tools.md` — canonical CLI and authoring
+   workflow reference for scaffold, validate, score, and review commands.
+1. `.ai/curriculum/korean-hangul.md` — current Korean Hangul bootstrap scope,
+   identifiers, and next steps.
+1. Durable bootstrap outputs under `../../docs/curriculum/korean-hangul-v1/` —
+   manifest, sources, candidate CSVs, review packet, DB strategy, and course
+   notes that will inform future seeding.
+1. `../../docs/database-dto-spec.md` — canonical DB mapping target once
+   curriculum data is ready for ingestion.
 
 ## Bootstrap Steps (completed 2026-05-20)
 
@@ -108,6 +111,8 @@ preserving.
 
 Active status, score summaries, and next steps live in the scaffolded tracker:
 `.ai/curriculum/korean-hangul-v1.md`
+
+The durable bootstrap product lives in `../../docs/curriculum/korean-hangul-v1/`.
 
 ## Hangul-Specific Authoring Notes
 

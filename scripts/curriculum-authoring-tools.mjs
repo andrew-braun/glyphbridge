@@ -342,10 +342,10 @@ Track curriculum authoring for ${name} (${languageTag}, ${script}).
 
 ## Source Files
 
-- Workspace: \`.ai/curriculum/${courseId}/\`
-- Manifest: \`.ai/curriculum/${courseId}/manifest.json\`
-- DB strategy: \`.ai/curriculum/${courseId}/db-ingestion-strategy.md\`
-- Durable course notes: \`docs/curriculum/${courseId}.md\`
+- Bootstrap workspace: \`docs/curriculum/${courseId}/\`
+- Manifest: \`docs/curriculum/${courseId}/manifest.json\`
+- DB strategy: \`docs/curriculum/${courseId}/db-ingestion-strategy.md\`
+- Durable course notes: \`docs/curriculum/${courseId}/${courseId}.md\`
 
 ## Current Status
 
@@ -616,8 +616,8 @@ function commandScaffold(positional, flags) {
 	const languageTag = String(flags["language-tag"] ?? "und-Zzzz");
 	const script = String(flags.script ?? "Zzzz");
 	const force = Boolean(flags.force);
-	const workspaceRelativePath = `.ai/curriculum/${courseId}`;
-	const workspacePath = repoPath(root, `.ai/curriculum/${courseId}`);
+	const workspaceRelativePath = `docs/curriculum/${courseId}`;
+	const workspacePath = repoPath(root, `docs/curriculum/${courseId}`);
 
 	writeFile(
 		repoPath(root, `.ai/curriculum/${courseId}.md`),
@@ -650,9 +650,7 @@ function commandScaffold(positional, flags) {
 			force,
 		},
 	);
-	writeFile(repoPath(root, `docs/curriculum/${courseId}.md`), courseDocTemplate({ name }), {
-		force,
-	});
+	writeFile(resolve(workspacePath, `${courseId}.md`), courseDocTemplate({ name }), { force });
 }
 
 function commandValidate(positional) {
