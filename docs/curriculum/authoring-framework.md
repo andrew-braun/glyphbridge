@@ -594,8 +594,8 @@ review:
 
 A course should not be implemented until these gates pass:
 
-- **Pedagogy gate**: every lesson follows the seven-step contract, includes
-  support-word transfer before scored drills, and improves decoding payoff.
+- **Pedagogy gate**: every lesson follows the seven-step contract, asks learners
+  to read support words before revealing the answer, and improves decoding payoff.
 - **Coverage gate**: stage-level coverage targets are measured against target
   corpora.
 - **Segmentation gate**: tokenization and pedagogical grapheme mapping are

@@ -23,6 +23,7 @@
 - Prefer SvelteKit remote functions for first-party typed client-server reads and mutations when they fit the feature and current framework support. Use `+server.ts` for true HTTP endpoints, webhooks, third-party integrations, or when remote functions are a poor fit.
 - Treat props as read-only, prefer callback props for child-to-parent communication, and use `$bindable` only for intentional two-way APIs.
 - Preserve accessible semantic HTML, descriptive titles, useful page copy, and human-readable URLs.
+- Give learners usable tools, then let them try those tools in new contexts before revealing answers.
 - Do not duplicate lesson content or create abstractions with only one speculative use.
 - Use server-only SvelteKit modules for secrets, writes, or privileged data.
 - If Supabase-backed auth or server data is added, use `@supabase/ssr`; never put admin credentials in client code.

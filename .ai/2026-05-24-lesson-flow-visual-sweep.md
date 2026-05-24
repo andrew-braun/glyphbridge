@@ -55,6 +55,17 @@ feel like one coherent learning experience.
   sky/on-sky `6.58:1` AA, mango/on-mango `9.56:1` AAA, accent/on-accent
   `6.17:1` AA, and success/on-success `5.37:1` AA.
 
+## Desktop Tightening Follow-Up
+
+- Reduced desktop lesson chrome, step gaps, panel padding, drill option height,
+  transfer-word row height, and learn-index card density.
+- Kept lesson advance actions in normal document flow after follow-up review, so
+  longer steps can scroll naturally instead of pinning controls over content.
+- Confirmed the removed fixed-action selectors no longer appear in lesson or
+  drill components.
+- Browser spot-check on `/learn/1` confirmed the breakdown and drill next
+  buttons compute to `position: static` and remain in content flow.
+
 ## Validation
 
 - `pnpm check` — passed with 0 errors and 0 warnings.
@@ -67,3 +78,7 @@ feel like one coherent learning experience.
 - `curl -I http://127.0.0.1:5173/test/lesson-complete` — returned 200 OK.
 - `pnpm check:all` — blocked at repo-wide `format:check` by unrelated existing
   Prettier drift in 10 files outside this sweep.
+- Desktop follow-up validation: `pnpm check`, `pnpm stylelint`, `pnpm lint`, and
+  `git diff --check` passed after the spacing update. `pnpm check:all` remained
+  blocked at repo-wide `format:check` by unrelated existing Prettier drift in 10
+  files outside this sweep.

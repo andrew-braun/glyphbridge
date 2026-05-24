@@ -49,8 +49,8 @@
 <style lang="scss">
 	.intro-shell {
 		display: grid;
-		gap: clamp(#{$space-lg}, 3vw, #{$space-2xl});
-		padding: clamp(#{$space-lg}, 4vw, #{$space-2xl});
+		gap: clamp(#{$space-md}, 2vw, #{$space-xl});
+		padding: clamp(#{$space-lg}, 3vw, #{$space-xl});
 
 		&__copy {
 			display: flex;
@@ -75,7 +75,7 @@
 		border-radius: $radius-xl;
 		box-shadow: var(--shadow-card);
 		color: var(--color-on-primary);
-		padding: $space-2xl;
+		padding: $space-xl;
 		text-align: center;
 
 		.word-reveal__thai {
@@ -85,7 +85,7 @@
 		.word-reveal__hint {
 			color: var(--color-on-primary);
 			font-weight: 700;
-			margin-top: $space-md;
+			margin-top: $space-sm;
 		}
 	}
 

@@ -123,7 +123,7 @@
 	// Two-column grid; collapses to single column on mobile
 	.lessons-grid {
 		display: grid;
-		gap: $space-lg;
+		gap: $space-md;
 		grid-template-columns: repeat(2, 1fr);
 	}
 
@@ -134,8 +134,9 @@
 		color: inherit;
 		display: flex;
 		flex-direction: column;
-		gap: $space-sm;
+		gap: $space-xs;
 		overflow: hidden;
+		padding: $space-lg;
 		position: relative;
 		text-decoration: none;
 		@include motion-safe-transition(
@@ -174,6 +175,7 @@
 
 		&__word {
 			color: var(--color-primary-strong);
+			line-height: 1.25;
 		}
 
 		&__meaning {
@@ -183,8 +185,8 @@
 
 		&__new-letters {
 			display: flex;
-			gap: $space-sm;
-			margin-top: $space-sm;
+			gap: $space-xs;
+			margin-top: $space-xs;
 		}
 
 		&__overlay {
@@ -208,9 +210,15 @@
 		border-radius: $radius-md;
 		color: var(--color-primary-strong);
 		display: flex;
-		height: 40px;
+		height: 36px;
 		justify-content: center;
-		width: 40px;
+		width: 36px;
+	}
+
+	@media (min-width: $bp-lg) {
+		.lessons-grid {
+			grid-template-columns: repeat(3, 1fr);
+		}
 	}
 
 	// Mobile: single-column layout for lesson cards

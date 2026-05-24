@@ -175,14 +175,30 @@
 </PageShell>
 
 <style lang="scss">
+	:global(.lesson.page-shell) {
+		gap: $space-md;
+	}
+
 	.lesson__stage {
-		@include fade-in-animation($motion-distance-md, $motion-duration-slow);
+		@include motion-safe-animation(
+			lessonStageFade $motion-duration-slow $motion-ease-standard both
+		);
+	}
+
+	@keyframes lessonStageFade {
+		from {
+			opacity: 0;
+		}
+
+		to {
+			opacity: 1;
+		}
 	}
 
 	.lesson__chrome {
 		align-items: center;
 		display: grid;
-		gap: $space-sm;
+		gap: $space-xs $space-sm;
 		grid-template-columns: auto minmax(12rem, 1fr);
 		margin: 0 auto;
 		max-width: 64rem;

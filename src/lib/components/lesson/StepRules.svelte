@@ -83,24 +83,34 @@
 <style lang="scss">
 	.rule-card {
 		display: grid;
-		gap: $space-lg;
-		padding: clamp(#{$space-lg}, 4vw, #{$space-2xl});
+		gap: $space-md;
+		padding: clamp(#{$space-lg}, 3vw, #{$space-xl});
+
+		h2 {
+			margin: 0;
+		}
 
 		&__short {
 			color: var(--color-accent);
 			font-size: $font-size-lg;
 			font-weight: 500;
+			margin: 0;
 		}
 
 		&__explanation {
 			border-top: 0.35rem solid var(--color-accent);
-			line-height: 1.7;
+			line-height: 1.55;
+			padding: $space-md;
+
+			p {
+				margin: 0;
+			}
 		}
 
 		&__examples {
 			display: flex;
 			flex-direction: column;
-			gap: $space-md;
+			gap: $space-sm;
 
 			h4 {
 				@include step-counter; // reuse the small uppercase label style
@@ -115,8 +125,8 @@
 			display: flex;
 			flex-wrap: wrap;
 			font-size: $font-size-sm;
-			gap: $space-md;
-			padding: $space-md;
+			gap: $space-sm;
+			padding: $space-sm $space-md;
 
 			:global(.thai) {
 				align-items: center;

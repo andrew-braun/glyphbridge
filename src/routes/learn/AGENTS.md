@@ -15,6 +15,7 @@
 
 - The visible lesson sequence must stay linear unless product requirements explicitly change.
 - New letters, rules, and drills must come from the lesson data model.
+- Transfer sections should let learners try a new word before the UI reveals the pronunciation or meaning.
 - A lesson should not be marked complete before its drill flow is complete.
 - Progress updates should happen once per completion event, with deterministic scoring.
 

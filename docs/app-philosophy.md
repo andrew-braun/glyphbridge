@@ -18,6 +18,7 @@ GlyphBridge is a real-word-first reading app for scripts and writing systems. It
 - Anchor every lesson in text a learner could plausibly encounter outside the app.
 - Keep cognitive load low by introducing small, cumulative sets of new material.
 - Teach rules in the context of words, not as detached theory.
+- Give learners the tools first, then ask them to try those tools in a new context before revealing the answer.
 - Reinforce earlier material through review without breaking the primary lesson path.
 - Judge curriculum quality by how quickly learners can decode useful text, not by how quickly they finish a full script chart.
 
@@ -29,7 +30,7 @@ Every lesson follows the same seven-step structure when support vocabulary exist
 2. Breakdown: show how the word segments into readable parts.
 3. Letters: introduce only the new graphemes required for this lesson.
 4. Rules: explain the specific patterns that make the word readable.
-5. Same letters, new words: show support vocabulary that reuses the new graphemes and patterns in different real words.
+5. Same letters, new words: show support vocabulary that reuses the new graphemes and patterns in different real words, hiding pronunciation and meaning until the learner has a chance to read first.
 6. Drills: verify recognition, mapping, pronunciation, and discrimination.
 7. Complete: summarize performance and unlock the next lesson.
 
@@ -64,6 +65,7 @@ Each lesson should define a stable identifier, stage, title, anchor word, suppor
 Use this document as a filter for product and implementation choices:
 
 - Does this help learners decode useful text sooner?
+- Does this let learners try a transfer task before the UI gives away the answer?
 - Is this concept owned by curriculum data, rendering, or progress state?
 - Can this model support another writing system without renaming core concepts?
 - Are we storing a fact that should be derived instead?

@@ -97,9 +97,9 @@
 	.letter-intro {
 		align-items: center;
 		display: grid;
-		gap: clamp(#{$space-lg}, 3vw, #{$space-2xl});
+		gap: clamp(#{$space-md}, 2vw, #{$space-xl});
 		justify-items: center;
-		padding: clamp(#{$space-lg}, 4vw, #{$space-2xl});
+		padding: clamp(#{$space-lg}, 3vw, #{$space-xl});
 		text-align: center;
 
 		&__char {
@@ -110,11 +110,11 @@
 			box-shadow: var(--shadow-card);
 			color: var(--color-on-sky);
 			display: flex;
-			font-size: 5rem;
-			height: 140px;
+			font-size: 4.5rem;
+			height: 120px;
 			justify-content: center;
 			line-height: 1;
-			width: 140px;
+			width: 120px;
 		}
 
 		// Stacked rows of letter properties
@@ -139,15 +139,15 @@
 		.letter-intro {
 			align-items: stretch;
 			display: grid;
-			gap: $space-lg $space-xl;
-			grid-template-columns: 14rem minmax(0, 1fr);
+			gap: $space-md $space-lg;
+			grid-template-columns: 12rem minmax(0, 1fr);
 			justify-items: stretch;
 			text-align: left;
 
 			&__char {
-				font-size: 6rem;
+				font-size: 5rem;
 				height: 100%;
-				min-height: 14rem;
+				min-height: 10rem;
 				width: 100%;
 			}
 

@@ -9,6 +9,7 @@
 - Preserve the canonical order of the learning flow: intro, breakdown, letters, rules, same letters/new words, drills, complete.
 - Each step should have one clear learning objective.
 - Keep explanations concise, concrete, and cumulative.
+- Let learners attempt a transfer read before revealing pronunciation, meaning, or segmentation.
 - Prefer reinforcing previously introduced patterns over introducing surprise complexity.
 
 ## Data Ownership

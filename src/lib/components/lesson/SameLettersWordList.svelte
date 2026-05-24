@@ -8,12 +8,16 @@
 		ariaLabel = "Words using the same letters",
 		revealStart = 0,
 		revealStep = 80,
+		showAnswers = true,
+		hiddenLabel = "Read this word before checking the sound and meaning.",
 	}: {
 		entries: LessonVocabularyEntry[];
 		newLetters: Letter[];
 		ariaLabel?: string;
 		revealStart?: number;
 		revealStep?: number;
+		showAnswers?: boolean;
+		hiddenLabel?: string;
 	} = $props();
 
 	function focusLetters(entry: LessonVocabularyEntry) {
@@ -26,7 +30,9 @@
 		{@const wordFocusLetters = focusLetters(entry)}
 		<li
 			class="same-letters-word-list__item"
-			aria-label={`${entry.word.thai}, ${entry.word.pronunciation}, ${entry.word.meaning}`}
+			aria-label={showAnswers
+				? `${entry.word.thai}, ${entry.word.pronunciation}, ${entry.word.meaning}`
+				: `${entry.word.thai}, answer hidden`}
 		>
 			<Reveal as="div" delay={revealStart + index * revealStep} distance={10}>
 				<div class="same-letters-word-list__shell">
@@ -48,37 +54,50 @@
 						{/if}
 					</div>
 
-					<div class="same-letters-word-list__body">
-						<div class="same-letters-word-list__copy">
-							<span class="same-letters-word-list__pronunciation">
-								{entry.word.pronunciation}
-							</span>
-							<span class="same-letters-word-list__meaning">{entry.word.meaning}</span
-							>
+					{#if showAnswers}
+						<div class="same-letters-word-list__body">
+							<div class="same-letters-word-list__copy">
+								<span class="same-letters-word-list__pronunciation">
+									{entry.word.pronunciation}
+								</span>
+								<span class="same-letters-word-list__meaning">
+									{entry.word.meaning}
+								</span>
+							</div>
+
+							{#if entry.word.syllables.length > 0}
+								<ul
+									class="same-letters-word-list__syllables"
+									aria-label={`Readable parts of ${entry.word.thai}`}
+								>
+									{#each entry.word.syllables as syllable}
+										<li class="same-letters-word-list__syllable">
+											<span
+												class="same-letters-word-list__syllable-thai thai"
+											>
+												{syllable.thai}
+											</span>
+											<span class="same-letters-word-list__syllable-sound">
+												{syllable.sound}
+											</span>
+										</li>
+									{/each}
+								</ul>
+							{/if}
+
+							{#if entry.word.contextNote}
+								<p class="same-letters-word-list__context">
+									{entry.word.contextNote}
+								</p>
+							{/if}
 						</div>
-
-						{#if entry.word.syllables.length > 0}
-							<ul
-								class="same-letters-word-list__syllables"
-								aria-label={`Readable parts of ${entry.word.thai}`}
-							>
-								{#each entry.word.syllables as syllable}
-									<li class="same-letters-word-list__syllable">
-										<span class="same-letters-word-list__syllable-thai thai">
-											{syllable.thai}
-										</span>
-										<span class="same-letters-word-list__syllable-sound">
-											{syllable.sound}
-										</span>
-									</li>
-								{/each}
-							</ul>
-						{/if}
-
-						{#if entry.word.contextNote}
-							<p class="same-letters-word-list__context">{entry.word.contextNote}</p>
-						{/if}
-					</div>
+					{:else}
+						<div
+							class="same-letters-word-list__body same-letters-word-list__body--hidden"
+						>
+							<p class="same-letters-word-list__hidden-label">{hiddenLabel}</p>
+						</div>
+					{/if}
 				</div>
 			</Reveal>
 		</li>
@@ -91,7 +110,7 @@
 		--same-letters-accent-soft: rgb(var(--rgb-mango) / 0.16);
 
 		display: grid;
-		gap: clamp(#{$space-md}, 2vw, #{$space-lg});
+		gap: $space-md;
 		list-style: none;
 		margin: 0;
 		padding: 0;
@@ -108,9 +127,9 @@
 			border-top: 0.35rem solid var(--same-letters-accent);
 			color: var(--color-text);
 			display: grid;
-			gap: clamp(#{$space-md}, 2vw, #{$space-xl});
+			gap: clamp(#{$space-sm}, 1.5vw, #{$space-lg});
 			grid-template-columns: minmax(5.75rem, 0.32fr) minmax(0, 1fr);
-			padding: clamp(#{$space-lg}, 2.5vw, #{$space-xl});
+			padding: $space-md;
 		}
 
 		.same-letters-word-list__script,
@@ -120,13 +139,13 @@
 		}
 
 		.same-letters-word-list__script {
-			gap: $space-md;
+			gap: $space-sm;
 			justify-items: start;
 		}
 
 		.same-letters-word-list__thai {
 			color: var(--same-letters-accent);
-			font-size: clamp(1.9rem, 5vw, 2.45rem);
+			font-size: clamp(1.6rem, 3.5vw, 2rem);
 			font-weight: 750;
 			line-height: 1.08;
 			overflow-wrap: anywhere;
@@ -162,7 +181,16 @@
 		}
 
 		.same-letters-word-list__body {
-			gap: $space-md;
+			gap: $space-sm;
+
+			&.same-letters-word-list__body--hidden {
+				align-content: center;
+				background: var(--surface-interactive);
+				border: 1px dashed var(--color-border-strong);
+				border-radius: $radius-lg;
+				min-height: 4rem;
+				padding: $space-sm $space-md;
+			}
 		}
 
 		.same-letters-word-list__copy {
@@ -186,8 +214,16 @@
 
 		.same-letters-word-list__meaning,
 		.same-letters-word-list__context,
+		.same-letters-word-list__hidden-label,
 		.same-letters-word-list__syllable-sound {
 			color: var(--color-text-muted);
+		}
+
+		.same-letters-word-list__hidden-label {
+			font-size: $font-size-sm;
+			font-weight: 700;
+			line-height: 1.55;
+			margin: 0;
 		}
 
 		.same-letters-word-list__syllables {
@@ -218,7 +254,7 @@
 
 		.same-letters-word-list__context {
 			font-size: $font-size-sm;
-			line-height: 1.55;
+			line-height: 1.45;
 			margin: 0;
 		}
 	}

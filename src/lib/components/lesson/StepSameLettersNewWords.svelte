@@ -1,8 +1,8 @@
 <!--
   StepSameLettersNewWords.svelte — Lesson Step 5: Transfer Words
   ===============================================================
-  Shows support vocabulary that reuses the lesson's new letters and patterns.
-  This gives the learner a low-stakes transfer moment before scored drills.
+	Self-checks support vocabulary that reuses the lesson's new letters and patterns.
+	Learners see each word before its pronunciation and meaning are revealed.
 -->
 <script lang="ts">
 	import SameLettersWordList from "$lib/components/lesson/SameLettersWordList.svelte";
@@ -21,18 +21,47 @@
 		words: LessonVocabularyEntry[];
 		onComplete: () => void;
 	} = $props();
+
+	let currentIndex = $state(0);
+	let isAnswerRevealed = $state(false);
+
+	const currentWord = $derived(words[currentIndex]);
+	const currentEntries = $derived(currentWord ? [currentWord] : []);
+	const hasNextWord = $derived(currentIndex < words.length - 1);
+	const actionLabel = $derived(
+		isAnswerRevealed
+			? hasNextWord
+				? "Try the next word ->"
+				: "Bring on the drills ->"
+			: "Check my read",
+	);
+
+	function next() {
+		if (!isAnswerRevealed) {
+			isAnswerRevealed = true;
+			return;
+		}
+
+		if (hasNextWord) {
+			currentIndex++;
+			isAnswerRevealed = false;
+			return;
+		}
+
+		onComplete();
+	}
 </script>
 
-<StepLayout class="step--same-letters">
+<StepLayout class="step--same-letters" counter={`New word ${currentIndex + 1} of ${words.length}`}>
 	<section class="same-letters surface-panel lesson-accent-panel lesson-accent-panel--mango">
 		<Reveal as="div" distance={14}>
 			<div class="same-letters__intro">
 				<div class="same-letters__copy">
-					<Eyebrow>Fresh word shapes</Eyebrow>
+					<Eyebrow>Read before reveal</Eyebrow>
 					<h2>Same letters, new words</h2>
 					<p>
 						The word you opened was <span class="thai">{lesson.anchorWord.thai}</span>.
-						Now read the same letters and patterns in different real words.
+						Use those tools on this new word before checking the answer.
 					</p>
 				</div>
 
@@ -44,31 +73,37 @@
 			</div>
 		</Reveal>
 
-		<SameLettersWordList
-			entries={words}
-			newLetters={lesson.newLetters}
-			ariaLabel="Words using this lesson's letters"
-			revealStart={120}
-		/>
+		{#key `${currentIndex}-${isAnswerRevealed}`}
+			<SameLettersWordList
+				entries={currentEntries}
+				newLetters={lesson.newLetters}
+				ariaLabel={isAnswerRevealed
+					? "Answer for the current transfer word"
+					: "Current transfer word to read before revealing the answer"}
+				revealStart={120}
+				showAnswers={isAnswerRevealed}
+				hiddenLabel="Read it first. Say the sound in your head, then check yourself."
+			/>
+		{/key}
 	</section>
 
-	<Button variant="primary" size="large" fullWidth={true} onclick={onComplete}>
-		Bring on the drills ->
+	<Button variant="primary" size="large" fullWidth={true} onclick={next}>
+		{actionLabel}
 	</Button>
 </StepLayout>
 
 <style lang="scss">
 	.same-letters {
 		--same-letters-accent: var(--color-mango);
-		--same-letters-panel-padding: clamp(#{$space-lg}, 4vw, #{$space-2xl});
+		--same-letters-panel-padding: #{$space-lg};
 
 		display: grid;
-		gap: clamp(#{$space-lg}, 3vw, #{$space-2xl});
+		gap: clamp(#{$space-md}, 2vw, #{$space-lg});
 		padding: var(--same-letters-panel-padding);
 
 		.same-letters__intro {
 			display: grid;
-			gap: $space-lg;
+			gap: $space-md;
 		}
 
 		.same-letters__copy {
@@ -83,8 +118,8 @@
 
 			p {
 				color: var(--color-text-muted);
-				font-size: $font-size-lg;
-				line-height: 1.65;
+				font-size: $font-size-base;
+				line-height: 1.5;
 			}
 
 			.thai {
@@ -103,7 +138,7 @@
 			display: grid;
 			gap: $space-xs;
 			justify-items: center;
-			padding: $space-lg;
+			padding: $space-md;
 			text-align: center;
 		}
 
@@ -116,7 +151,7 @@
 		}
 
 		.same-letters__anchor-word {
-			font-size: clamp(2.5rem, 7vw, 4rem);
+			font-size: clamp(2rem, 5vw, 3rem);
 			font-weight: 750;
 			line-height: 1;
 		}
@@ -130,7 +165,7 @@
 		.same-letters {
 			.same-letters__intro {
 				align-items: center;
-				grid-template-columns: minmax(0, 1fr) minmax(14rem, 0.42fr);
+				grid-template-columns: minmax(0, 1fr) minmax(12rem, 0.34fr);
 			}
 		}
 	}

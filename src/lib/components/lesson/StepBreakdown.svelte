@@ -84,10 +84,14 @@
 </StepLayout>
 
 <style lang="scss">
+	h2 {
+		margin: 0;
+	}
+
 	.breakdown {
 		align-items: center;
 		display: grid;
-		gap: $space-lg;
+		gap: $space-md;
 		grid-template-columns: minmax(0, 1fr);
 		margin-inline: auto;
 		max-width: 72rem;
@@ -96,8 +100,8 @@
 		&__panel {
 			display: flex;
 			flex-direction: column;
-			gap: $space-md;
-			padding: clamp($space-lg, 3vw, $space-2xl);
+			gap: $space-sm;
+			padding: clamp($space-md, 2.5vw, $space-xl);
 			position: relative;
 			width: 100%;
 		}
@@ -139,8 +143,8 @@
 			justify-items: center;
 			margin-inline: auto;
 			max-width: 26rem;
-			min-height: clamp(9.5rem, 24vw, 13rem);
-			padding: $space-lg;
+			min-height: clamp(6rem, 15vw, 8rem);
+			padding: $space-md;
 			width: 100%;
 		}
 
@@ -168,9 +172,9 @@
 			color: var(--color-text-soft);
 			display: grid;
 			font-size: $font-size-xl;
-			height: 3rem;
+			height: 2.5rem;
 			justify-items: center;
-			width: 3rem;
+			width: 2.5rem;
 
 			&--right {
 				display: none;
@@ -189,13 +193,13 @@
 			align-items: stretch;
 			display: flex;
 			flex-wrap: wrap;
-			gap: $space-md;
+			gap: $space-sm;
 			justify-content: flex-start;
 		}
 
 		&__full {
 			border-top: 1px solid var(--color-border);
-			padding-top: $space-md;
+			padding-top: $space-sm;
 		}
 
 		&__gloss {
@@ -224,7 +228,7 @@
 	@media (min-width: $bp-md) {
 		.breakdown {
 			align-items: stretch;
-			gap: $space-lg clamp($space-md, 2vw, $space-xl);
+			gap: $space-md clamp($space-md, 2vw, $space-lg);
 			grid-template-columns: minmax(0, 0.92fr) minmax(4.5rem, 5.5rem) minmax(0, 1.08fr);
 
 			&__panel {
@@ -240,7 +244,7 @@
 			}
 
 			&__word {
-				font-size: clamp(3rem, 6vw, 4.5rem);
+				font-size: clamp(2.75rem, 5vw, 4rem);
 			}
 
 			&__connector {
@@ -274,9 +278,9 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		min-height: 9rem;
-		min-width: min(8.5rem, 100%);
-		padding: $space-lg $space-xl;
+		min-height: 5.75rem;
+		min-width: min(6.5rem, 100%);
+		padding: $space-sm $space-md;
 
 		> :global(.reveal) {
 			align-items: center;
@@ -289,7 +293,7 @@
 
 		&__thai {
 			color: var(--color-sky);
-			font-size: clamp(2.25rem, 4vw, 3rem);
+			font-size: clamp(1.8rem, 3vw, 2.35rem);
 		}
 
 		&__sound {

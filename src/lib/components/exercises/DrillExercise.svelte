@@ -97,26 +97,46 @@
 <style lang="scss">
 	.drill {
 		display: grid;
-		gap: clamp(#{$space-lg}, 3vw, #{$space-xl});
+		gap: clamp(#{$space-md}, 2vw, #{$space-lg});
 		margin: 0 auto;
 		max-width: 48rem;
-		padding: clamp(#{$space-lg}, 4vw, #{$space-2xl});
+		padding: clamp(#{$space-lg}, 3vw, #{$space-xl});
 		width: 100%;
 
 		&__prompt {
 			font-size: $font-size-xl;
+			margin: 0;
 			text-align: center;
 		}
 
 		:global(.drill__options) {
-			gap: $space-lg;
+			gap: $space-md;
+		}
+
+		:global(.drill__options .radio-buttons__option) {
+			min-height: 4.75rem;
+			padding: $space-sm $space-md;
+		}
+
+		:global(.drill__options .radio-buttons__label.thai) {
+			font-size: $font-size-xl;
+			line-height: 1.2;
+		}
+
+		:global(.feedback-banner) {
+			font-size: $font-size-base;
+			padding: $space-sm $space-md;
 		}
 	}
 
 	@media (min-width: $bp-md) {
 		.drill {
 			:global(.drill__options) {
-				gap: $space-xl;
+				gap: $space-md;
+			}
+
+			:global(.drill__options .radio-buttons__option) {
+				min-height: 3.75rem;
 			}
 		}
 	}

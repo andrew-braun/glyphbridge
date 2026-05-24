@@ -26,7 +26,7 @@
 		align-items: center;
 		display: flex;
 		gap: $space-sm;
-		padding: $space-sm $space-md;
+		padding: $space-xs $space-md;
 
 		&__bar {
 			flex: 1;

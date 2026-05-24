@@ -28,7 +28,7 @@
 	.step {
 		display: flex;
 		flex-direction: column;
-		gap: clamp(#{$space-lg}, 3vw, #{$space-2xl});
+		gap: clamp(#{$space-md}, 2vw, #{$space-lg});
 		margin: 0 auto;
 		max-width: var(--content-max-width);
 		width: 100%;

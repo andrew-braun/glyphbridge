@@ -4,6 +4,7 @@
 
 - GlyphBridge is a SvelteKit app for learning to read Thai through real words, structured lesson flows, and progressive drills.
 - Optimize for clarity, pedagogy, accessibility, and long-term maintainability.
+- Give learners usable tools, then let them try those tools in new contexts before revealing answers.
 - Favor strong conventions and small, obvious abstractions over cleverness.
 
 ## Source Of Truth

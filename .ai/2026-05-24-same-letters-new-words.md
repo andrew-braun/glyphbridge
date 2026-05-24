@@ -44,6 +44,9 @@ and patterns from the anchor word into different real words before drills begin.
   support words without a schema change.
 - Decision: Include the step dynamically only when support words exist.
   Reason: Future lessons can stay valid even if support vocabulary is not authored yet.
+- Decision: Hide support-word answers until the learner chooses to check the read.
+  Reason: The section should test transfer before explaining, matching the app-wide
+  principle of giving tools first and revealing answers after an attempt.
 
 ## Progress
 
@@ -60,9 +63,10 @@ and patterns from the anchor word into different real words before drills begin.
 - `git diff --check`: passed.
 - Scoped markdown lint for touched markdown files: passed.
 - Scoped Prettier check for touched files: passed.
+- Self-check reveal update: revalidated with `pnpm check`, `pnpm stylelint`,
+  `pnpm lint`, scoped markdown lint, scoped Prettier check, and `git diff --check`.
 - `pnpm build`: blocked before Vite by `publication:generate` because no generated
-  publication artifact is present and local Supabase/Docker is unavailable in this
-  environment.
+  publication artifact is available and the delivery fetch fails in this environment.
 
 ## Open Questions
 
@@ -72,5 +76,4 @@ and patterns from the anchor word into different real words before drills begin.
 
 ## Follow-Up
 
-- Consider a later active reveal interaction if passive transfer cards are not enough
-  after manual testing or learner feedback.
+- Add curriculum validation for support-word quality once more courses use this pattern.
