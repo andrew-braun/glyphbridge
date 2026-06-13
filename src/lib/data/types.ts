@@ -93,13 +93,30 @@ export interface Word {
 }
 
 /**
- * A lesson-scoped vocabulary entry. The current runtime still keeps one featured
- * anchor word, but lessons can now also carry supporting words for future review
- * and drill expansion.
+ * Describes what kind of practice target a lesson vocabulary entry represents.
+ * Real words are the default. Phrases combine known words into useful chunks,
+ * while nonsense targets exist only to train decoding when the real pool is too
+ * small.
+ */
+export type LessonVocabularySourceType = "real" | "phrase" | "nonsense";
+
+/**
+ * Practice vocabulary comes in two tiers. Core targets are part of the required
+ * lesson path; extension targets are optional extra decoding practice once the
+ * learner finishes the core set.
+ */
+export type LessonVocabularyTier = "core" | "extension";
+
+/**
+ * A lesson-scoped practice vocabulary entry. The featured anchor remains on the
+ * lesson itself, while this collection powers transfer practice, review, and
+ * vocabulary unlocks.
  */
 export interface LessonVocabularyEntry {
-	/** Whether this word is the featured lesson anchor or a supporting word */
-	role: "anchor" | "support";
+	/** Whether this practice target is required or optional within the lesson flow */
+	tier: LessonVocabularyTier;
+	/** Whether this is a real word, a short phrase, or a sound-only practice target */
+	sourceType: LessonVocabularySourceType;
 	/** Whether this word should be eligible for vocabulary-focused drills */
 	drillTarget: boolean;
 	/** The reusable word payload itself */
@@ -154,7 +171,7 @@ export interface LessonProgress {
 export interface AppProgress {
 	/** All Thai characters the learner has encountered and practiced so far */
 	knownLetters: string[];
-	/** All lesson vocabulary words the learner has unlocked through completed lessons */
+	/** All lexical lesson targets the learner has unlocked through completed lessons */
 	knownWords: Word[];
 	/** Per-lesson completion records with scores and timestamps */
 	lessonProgress: LessonProgress[];

@@ -1,4 +1,11 @@
-import type { DrillQuestion, Lesson, Letter, Rule, Word } from "../data/types";
+import type {
+	DrillQuestion,
+	Lesson,
+	LessonVocabularySourceType,
+	Letter,
+	Rule,
+	Word,
+} from "../data/types";
 
 export type PublishedLessonCard = Pick<
 	Lesson,
@@ -16,7 +23,16 @@ const letterPositions = new Set<NonNullable<Letter["position"]>>([
 	"around",
 	"standalone",
 ]);
-const lessonVocabularyRoles = new Set<"anchor" | "support">(["anchor", "support"]);
+const lessonVocabularyRoles = new Set<"anchor" | "practice_core" | "practice_extension">([
+	"anchor",
+	"practice_core",
+	"practice_extension",
+]);
+const lessonVocabularySourceTypes = new Set<LessonVocabularySourceType>([
+	"real",
+	"phrase",
+	"nonsense",
+]);
 const drillTypes = new Set<DrillQuestion["type"]>(["recognize", "match", "sound", "spot"]);
 
 export class DeliveryPayloadError extends Error {}
@@ -94,6 +110,14 @@ function mapWord(value: unknown, context: string): Word {
 		syllables,
 		...(contextNote ? { contextNote } : {}),
 	};
+}
+
+function readVocabularySourceType(value: unknown, context: string): LessonVocabularySourceType {
+	if (value === undefined) {
+		return "real";
+	}
+
+	return expectEnum(lessonVocabularySourceTypes, value, context);
 }
 
 function mapLetter(value: unknown, context: string): Letter {
@@ -205,19 +229,32 @@ export function mapPublishedLessonPayload(payload: unknown): Lesson {
 		vocabulary: expectArray(lesson.vocabulary, "payload.lesson.vocabulary").flatMap(
 			(entry, index) => {
 				const entryRecord = expectRecord(entry, `payload.lesson.vocabulary[${index}]`);
+				const itemRecord = expectRecord(
+					entryRecord.item,
+					`payload.lesson.vocabulary[${index}].item`,
+				);
 				const role = expectEnum(
 					lessonVocabularyRoles,
 					entryRecord.roleKey,
 					`payload.lesson.vocabulary[${index}].roleKey`,
 				);
 
-				if (role === "anchor") return [];
+				if (role === "anchor") {
+					return [];
+				}
+
+				const itemMetadata = isRecord(itemRecord.metadata) ? itemRecord.metadata : {};
+				const tier = role === "practice_extension" ? "extension" : "core";
 
 				return [
 					{
-						role,
+						tier,
+						sourceType: readVocabularySourceType(
+							itemMetadata.sourceType,
+							`payload.lesson.vocabulary[${index}].item.metadata.sourceType`,
+						),
 						drillTarget: entryRecord.isDrillTarget === true,
-						word: mapWord(entryRecord.item, `payload.lesson.vocabulary[${index}].item`),
+						word: mapWord(itemRecord, `payload.lesson.vocabulary[${index}].item`),
 					},
 				];
 			},

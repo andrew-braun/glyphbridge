@@ -53,7 +53,8 @@ The scaffold command creates these files:
 - `docs/curriculum/<course-id>/anchor-candidates.csv`: manual anchor scoring
   input.
 - `docs/curriculum/<course-id>/lesson-sequence.md`: staged implementation
-  outline for anchors, new units, rules, review units, and drill focus.
+  outline for anchors, new units, rules, practice-target counts, review units,
+  and drill focus.
 - `docs/curriculum/<course-id>/review-packet.md`: generated reviewer handoff.
 - `docs/curriculum/<course-id>/db-ingestion-strategy.md`: starter strategy for
   moving reviewed data into `curriculum.*` and `delivery.*`.

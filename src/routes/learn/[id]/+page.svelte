@@ -1,7 +1,7 @@
 <!--
   Lesson Page — /learn/[id]
   ==========================
-	The core learning experience. Orchestrates a 7-step lesson flow when support
+	The core learning experience. Orchestrates a 7-step lesson flow when practice
 	vocabulary exists:
 		1. Intro      — Show the anchor word, spark curiosity
 		2. Breakdown  — Reveal syllable structure
@@ -38,13 +38,17 @@
 	const publication = $derived(data.publication);
 	const lesson = $derived(data.lesson);
 	const nextLessonId = $derived(data.nextLessonId);
-	const supportingWords = $derived(lesson.vocabulary.filter((entry) => entry.role === "support"));
+	const corePracticeWords = $derived(lesson.vocabulary.filter((entry) => entry.tier === "core"));
+	const extensionPracticeWords = $derived(
+		lesson.vocabulary.filter((entry) => entry.tier === "extension"),
+	);
+	const hasPracticeWords = $derived(corePracticeWords.length + extensionPracticeWords.length > 0);
 
 	// --- Step state machine ---
 	// The lesson progresses linearly through these steps.
 	type Step = "intro" | "breakdown" | "letters" | "rules" | "sameLetters" | "drills" | "complete";
 	const stepOrder = $derived(
-		supportingWords.length > 0
+		hasPracticeWords
 			? ([
 					"intro",
 					"breakdown",
@@ -153,12 +157,17 @@
 				<StepRules
 					rules={lesson.rulesIntroduced}
 					onComplete={nextStep}
-					completeLabel={supportingWords.length > 0
+					completeLabel={hasPracticeWords
 						? "Try them in new words ->"
 						: "Bring on the drills ->"}
 				/>
 			{:else if currentStep === "sameLetters"}
-				<StepSameLettersNewWords {lesson} words={supportingWords} onComplete={nextStep} />
+				<StepSameLettersNewWords
+					{lesson}
+					coreWords={corePracticeWords}
+					extensionWords={extensionPracticeWords}
+					onComplete={nextStep}
+				/>
 			{:else if currentStep === "drills"}
 				<StepDrills drills={lesson.drills} onComplete={handleDrillsComplete} />
 			{:else if currentStep === "complete"}

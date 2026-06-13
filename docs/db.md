@@ -31,7 +31,7 @@ At the time of writing:
 
 - the local seed contains `1` course and `1` published course version
 - the Thai seed contains `13` lessons
-- the current vocabulary model contains `39` vocabulary items
+- the current vocabulary model contains `47` vocabulary items
 - the current publication layer contains `13` `delivery.course_publication_lessons`
   rows
 - `src/lib/data/thai.ts` remains the curriculum source of truth, and
@@ -57,6 +57,9 @@ Anchor note:
 
 - `anchor_targets` remains the featured lesson word for the current runtime contract.
 - Reusable lesson vocabulary now belongs in `vocabulary_items` and `lesson_vocabulary` so the same word can appear in multiple lessons and later power standalone vocabulary drilling.
+- Runtime lesson vocabulary should use `anchor`, `practice_core`, and
+  `practice_extension` role keys plus metadata such as `sourceType` for phrases
+  and nonsense decoding targets.
 
 ## Table Role Reference
 
@@ -65,27 +68,27 @@ opening the full DTO spec.
 
 ### `curriculum` table roles
 
-| Table                       | Role                                                                                                      |
-| --------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `languages`                 | Reference list of spoken languages supported by courses.                                                  |
-| `script_systems`            | Reference list of writing systems and rendering metadata.                                                 |
-| `courses`                   | Learner-facing course container with hero copy, SEO copy, and current published version pointer.          |
-| `course_versions`           | Immutable curriculum releases for a course.                                                               |
-| `graphemes`                 | Canonical script units independent of lesson ordering.                                                    |
-| `course_version_graphemes`  | Course-version-specific pedagogy for each grapheme, such as mnemonics and pronunciation hints.            |
-| `lessons`                   | Ordered lesson metadata within a course version.                                                          |
-| `vocabulary_items`          | Reusable words taught in a course version.                                                                |
-| `vocabulary_segments`       | Ordered syllabic or segment breakdown for each vocabulary item.                                           |
-| `lesson_vocabulary`         | Join table assigning vocabulary items to lessons with `anchor` or `support` role and drill-target status. |
-| `anchor_targets`            | Featured lesson-word projection for the current runtime lesson contract.                                  |
-| `anchor_segments`           | Segment breakdown for the featured anchor target.                                                         |
-| `orthography_rules`         | Reusable reading or spelling rules introduced in lessons.                                                 |
-| `orthography_rule_examples` | Ordered examples attached to a rule.                                                                      |
-| `lesson_graphemes`          | Join table describing which graphemes are new or review content in a lesson.                              |
-| `lesson_rules`              | Ordered rule assignments for a lesson.                                                                    |
-| `drills`                    | Canonical drill prompts for a course version.                                                             |
-| `drill_options`             | Ordered answer options for a drill, including the correct option marker.                                  |
-| `lesson_drills`             | Ordered drill assignments for a lesson.                                                                   |
+| Table                       | Role                                                                                                                                   |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `languages`                 | Reference list of spoken languages supported by courses.                                                                               |
+| `script_systems`            | Reference list of writing systems and rendering metadata.                                                                              |
+| `courses`                   | Learner-facing course container with hero copy, SEO copy, and current published version pointer.                                       |
+| `course_versions`           | Immutable curriculum releases for a course.                                                                                            |
+| `graphemes`                 | Canonical script units independent of lesson ordering.                                                                                 |
+| `course_version_graphemes`  | Course-version-specific pedagogy for each grapheme, such as mnemonics and pronunciation hints.                                         |
+| `lessons`                   | Ordered lesson metadata within a course version.                                                                                       |
+| `vocabulary_items`          | Reusable words taught in a course version.                                                                                             |
+| `vocabulary_segments`       | Ordered syllabic or segment breakdown for each vocabulary item.                                                                        |
+| `lesson_vocabulary`         | Join table assigning vocabulary items to lessons with `anchor`, `practice_core`, or `practice_extension` role and drill-target status. |
+| `anchor_targets`            | Featured lesson-word projection for the current runtime lesson contract.                                                               |
+| `anchor_segments`           | Segment breakdown for the featured anchor target.                                                                                      |
+| `orthography_rules`         | Reusable reading or spelling rules introduced in lessons.                                                                              |
+| `orthography_rule_examples` | Ordered examples attached to a rule.                                                                                                   |
+| `lesson_graphemes`          | Join table describing which graphemes are new or review content in a lesson.                                                           |
+| `lesson_rules`              | Ordered rule assignments for a lesson.                                                                                                 |
+| `drills`                    | Canonical drill prompts for a course version.                                                                                          |
+| `drill_options`             | Ordered answer options for a drill, including the correct option marker.                                                               |
+| `lesson_drills`             | Ordered drill assignments for a lesson.                                                                                                |
 
 ### `delivery` table roles
 

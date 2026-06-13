@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/state";
+	import GlyphinLogo from "$lib/assets/brand/glyphin-logo.svg";
 	import HamburgerMenu from "$lib/components/navigation/HamburgerMenu.svelte";
 	import ThemeToggle from "$lib/components/ui/ThemeToggle.svelte";
 	import { authSession } from "$lib/stores/learner";
@@ -67,7 +68,12 @@
 <nav class="nav">
 	<div class="nav__inner container">
 		<a href="/" class="nav__logo">
-			<span class="nav__logo-mark">GB</span>
+			<span class="nav__logo-mark">
+				<img
+					src={GlyphinLogo}
+					alt="Glyphin logo: a teal-colored griffin holding a glowing golden scroll"
+				/>
+			</span>
 			<span class="nav__logo-copy">
 				<span class="nav__logo-spark">Glyph</span><span class="nav__logo-scripts">in</span>
 			</span>
@@ -116,17 +122,17 @@
 
 			&-mark {
 				align-items: center;
-				background: var(--color-primary);
+				aspect-ratio: 1 / 1;
 				border-radius: 1rem;
 				color: white;
 				display: inline-flex;
 				font-size: 0.75rem;
 				font-weight: 800;
-				height: 2.4rem;
+
 				justify-content: center;
 				letter-spacing: 0.08em;
 				text-transform: uppercase;
-				width: 2.4rem;
+				width: 4.2rem;
 			}
 
 			&-copy {

@@ -12,6 +12,7 @@ import { thaiPack } from "$lib/data/thai";
 import type {
 	AppProgress,
 	LessonProgress,
+	LessonVocabularyEntry,
 	ProgressSnapshot,
 	ProgressSnapshotV2,
 	Word,
@@ -29,10 +30,26 @@ const lessonById = new Map(lessons.map((lesson) => [lesson.id, lesson]));
 const knownLetterCharacters = new Set(
 	lessons.flatMap((lesson) => lesson.newLetters.map((letter) => letter.character)),
 );
-const lessonVocabularyWords = lessons.flatMap((lesson) => {
-	return lesson.vocabulary.map((entry) => entry.word);
-});
-const knownWordThaiMap = new Map(lessonVocabularyWords.map((word) => [word.thai, word]));
+
+function countsAsKnownWord(entry: LessonVocabularyEntry): boolean {
+	return entry.sourceType !== "nonsense";
+}
+
+function getCanonicalLessonWords(lessonId: number): Word[] {
+	const lesson = lessonById.get(lessonId);
+	if (!lesson) return [];
+
+	return [
+		lesson.anchorWord,
+		...lesson.vocabulary.filter(countsAsKnownWord).map((entry) => entry.word),
+	];
+}
+
+const knownWordThaiMap = new Map(
+	lessons
+		.flatMap((lesson) => getCanonicalLessonWords(lesson.id))
+		.map((word) => [word.thai, word] as const),
+);
 
 /** Returns a blank AppProgress object representing a brand-new learner */
 function createInitialProgress(): AppProgress {
@@ -166,7 +183,7 @@ function collectKnownWords(storedKnownWords: Word[], lessonProgress: LessonProgr
 	const normalizedWordSet = new Set<string>();
 
 	for (const lesson of lessons) {
-		const lessonWords = lesson.vocabulary.map((entry) => entry.word);
+		const lessonWords = getCanonicalLessonWords(lesson.id);
 		const shouldIncludeLessonWords =
 			completedLessonIds.has(lesson.id) ||
 			lessonWords.some((word) => storedWordSet.has(word.thai));
@@ -371,7 +388,7 @@ export function completeLesson(lessonId: number, drillScore: number): LessonProg
 			knownWords.push(lesson.anchorWord);
 		}
 
-		for (const entry of lesson.vocabulary) {
+		for (const entry of lesson.vocabulary.filter(countsAsKnownWord)) {
 			if (knownWordSet.has(entry.word.thai)) continue;
 
 			knownWordSet.add(entry.word.thai);

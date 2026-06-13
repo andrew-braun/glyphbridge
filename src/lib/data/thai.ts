@@ -13,7 +13,7 @@
  *   Stage 4 - Sibilants, short vowels, and price/menu language
  *   Stage 5 - High-class survival words, silent carriers, and food lexicon
  */
-import type { LanguagePack, Lesson, Word } from "./types";
+import type { LanguagePack, Lesson, LessonVocabularyEntry, Word } from "./types";
 
 type BaseLesson = Omit<Lesson, "vocabulary">;
 
@@ -32,6 +32,22 @@ function createWord(
 		category,
 		syllables,
 		contextNote,
+	};
+}
+
+function createPracticeEntry(
+	word: Word,
+	options: {
+		tier?: LessonVocabularyEntry["tier"];
+		sourceType?: LessonVocabularyEntry["sourceType"];
+		drillTarget?: boolean;
+	} = {},
+): LessonVocabularyEntry {
+	return {
+		tier: options.tier ?? "core",
+		sourceType: options.sourceType ?? "real",
+		drillTarget: options.drillTarget ?? true,
+		word,
 	};
 }
 
@@ -90,7 +106,7 @@ const baseLessons: BaseLesson[] = [
 				shortDescription: "า is written after the consonant and gives you a long aa sound",
 				explanation:
 					"Thai often places vowels around a consonant instead of in a straight line like English. The long vowel า sits to the right of the consonant and stretches the syllable into a clear aa sound.",
-				examples: ["มา = maa", "กา = gaa", "มาก = mâak"],
+				examples: ["มาก = mâak", "ตา = taa"],
 			},
 			{
 				id: "final-k-stop",
@@ -98,7 +114,16 @@ const baseLessons: BaseLesson[] = [
 				shortDescription: "At the end of a syllable, ก closes sharply as a k sound",
 				explanation:
 					"Thai final consonants are often clipped. In มาก, the last ก does not open into a full English g. It closes the syllable with a short unreleased k sound.",
-				examples: ["มาก = mâak", "นก = nók"],
+				examples: ["มาก = mâak"],
+			},
+			{
+				id: "implied-short-o",
+				name: 'Two Bare Consonants Often Add a Short "o"',
+				shortDescription:
+					"When Thai stacks two consonants with no written vowel, a short o often appears between them",
+				explanation:
+					"Once you know a few consonants, you can read more than long-vowel forms. In many short Thai syllables, two consonants written together with no vowel sign are read with an implied short o sound between them.",
+				examples: ["นก = nok", "รถ = rot"],
 			},
 		],
 		drills: [
@@ -131,6 +156,12 @@ const baseLessons: BaseLesson[] = [
 				prompt: "How does the final ก sound in มาก?",
 				options: ["m", "k", "g", "n"],
 				correctIndex: 1,
+			},
+			{
+				type: "sound",
+				prompt: "If two consonants appear together with no written vowel, what sound often shows up between them?",
+				options: ['long "aa"', 'long "ee"', 'short "o"', 'long "oo"'],
+				correctIndex: 2,
 			},
 		],
 	},
@@ -175,7 +206,7 @@ const baseLessons: BaseLesson[] = [
 				shortDescription: "ี is written above the consonant and gives you a long ee sound",
 				explanation:
 					"Thai vowels are often placed above, below, or around the consonant. In ดี, the consonant comes first and the long vowel ี sits above it, so you read ด then stretch into ee.",
-				examples: ["ดี = dii", "มี = mii"],
+				examples: ["ดี = dii", "สี = sii"],
 			},
 			{
 				id: "initial-d-sound",
@@ -277,7 +308,7 @@ const baseLessons: BaseLesson[] = [
 				shortDescription: "At the end of a syllable, น keeps a clear n sound",
 				explanation:
 					"Not every Thai final consonant gets clipped into a stop. Final น stays nasal and easy to hear, so กิน closes with a clear n sound.",
-				examples: ["กิน = gin", "ดิน = din"],
+				examples: ["กิน = gin", "บิน = bin"],
 			},
 		],
 		drills: [
@@ -538,7 +569,7 @@ const baseLessons: BaseLesson[] = [
 				shortDescription: "The vowel แ is written before the consonant you pronounce first",
 				explanation:
 					"Thai does not always place vowels after the consonant. In แม่, your eye has to notice แ on the left, then come back to read ม with that vowel sound attached.",
-				examples: ["แม = mae", "แก่ = gàe"],
+				examples: ["แม = mae", "แต่ = dtàae"],
 			},
 			{
 				id: "mai-ek-tone-mark",
@@ -547,7 +578,7 @@ const baseLessons: BaseLesson[] = [
 					"Tone marks sit above the consonant and change the sound of the whole syllable",
 				explanation:
 					"You do not need the full tone system at once. Start by recognizing that ่ lives above the consonant and changes the word you say. High-frequency sight words make tone marks easier to remember than abstract charts.",
-				examples: ["แม่ = mâae", "แก่ = gàe"],
+				examples: ["แม่ = mâae", "แต่ = dtàae"],
 			},
 		],
 		drills: [
@@ -905,7 +936,7 @@ const baseLessons: BaseLesson[] = [
 				shortDescription: "ข is not the same as ก; it has a stronger puff of air",
 				explanation:
 					"Thai distinguishes plain k sounds from aspirated kh sounds. If you hold your hand in front of your mouth, ข pushes out a little air in a way ก does not.",
-				examples: ["กา = gaa", "ขาว = khǎao", "ข้าว = khâao"],
+				examples: ["กา = gaa", "ข่าว = khàao", "ข้าว = khâao"],
 			},
 			{
 				id: "aaw-glide",
@@ -914,7 +945,7 @@ const baseLessons: BaseLesson[] = [
 					"In words like ข้าว, ว helps shape the ending vowel sound instead of behaving like a full separate consonant",
 				explanation:
 					"Not every written consonant is heard as a clean standalone consonant. In ข้าว, ว helps form the -าว ending, so you hear a smooth glide rather than a sharp final w.",
-				examples: ["ขาว = khǎao", "ข้าว = khâao"],
+				examples: ["ข่าว = khàao", "ข้าว = khâao"],
 			},
 		],
 		drills: [
@@ -1001,7 +1032,7 @@ const baseLessons: BaseLesson[] = [
 					"In common words like หมู, ห helps a following low consonant behave differently",
 				explanation:
 					"This is one of the Thai chunks worth learning as a whole. In words like หมู, the ห is not there to give you a full h sound before every letter. It helps control the syllable pattern of the low consonant that follows.",
-				examples: ["หมู = mǔu", "หมา = mǎa"],
+				examples: ["หมู = mǔu", "หมอ = mǎaw"],
 			},
 			{
 				id: "long-uu-below",
@@ -1009,7 +1040,7 @@ const baseLessons: BaseLesson[] = [
 				shortDescription: "The long oo vowel is written below the consonant",
 				explanation:
 					"Thai uses the space below the line too. In หมู and หู, the vowel ู sits under the consonant and gives you a long oo sound.",
-				examples: ["หมู = mǔu", "หู = hǔu"],
+				examples: ["หมู = mǔu", "ดู = duu"],
 			},
 		],
 		drills: [
@@ -1184,7 +1215,7 @@ const baseLessons: BaseLesson[] = [
 				shortDescription: "ผ is not the same as บ; it starts with a stronger puff of air",
 				explanation:
 					"Thai distinguishes plain b/p-like sounds from aspirated ph sounds. In ผัด, you can feel a burst of air at the start that you do not get with บ.",
-				examples: ["ผัด = phàt", "ผัก = phàk"],
+				examples: ["ผัด = phàt", "ผัน = phan"],
 			},
 			{
 				id: "short-a-above",
@@ -1192,7 +1223,7 @@ const baseLessons: BaseLesson[] = [
 				shortDescription: "The short a vowel is written above the consonant",
 				explanation:
 					"Thai uses a small mark above the consonant for the short a sound in words like ผัด. It is quicker and more clipped than the long right-side vowel า you learned earlier.",
-				examples: ["ผัด = phàt", "ผัก = phàk"],
+				examples: ["ผัด = phàt", "ผัน = phan"],
 			},
 		],
 		drills: [
@@ -1231,171 +1262,314 @@ const baseLessons: BaseLesson[] = [
 	},
 ];
 
-// The first vocabulary slice stays tight: each lesson keeps its featured anchor word
-// and adds a small set of supporting words that reinforce the same grapheme patterns.
-const supportingVocabularyByLessonId: Record<number, Word[]> = {
+// Practice vocabulary stays ordered and lesson-scoped so the app can present
+// core transfer reads first, then optional extension work when it exists.
+const practiceVocabularyByLessonId: Record<number, LessonVocabularyEntry[]> = {
 	1: [
-		createWord(
-			"มา",
-			"to come",
-			"maa",
-			"daily",
-			[{ thai: "มา", sound: "maa" }],
-			"A basic movement verb you will hear in invitations, directions, and casual conversation.",
+		createPracticeEntry(
+			createWord(
+				"มา",
+				"to come",
+				"maa",
+				"daily",
+				[{ thai: "มา", sound: "maa" }],
+				"A basic movement verb you will hear in invitations, directions, and casual conversation.",
+			),
 		),
-		createWord(
-			"กา",
-			"crow",
-			"gaa",
-			"daily",
-			[{ thai: "กา", sound: "gaa" }],
-			"A simple real word that reuses the กา frame with no extra letters added.",
+		createPracticeEntry(
+			createWord(
+				"กา",
+				"crow / kettle / mark",
+				"gaa",
+				"daily",
+				[{ thai: "กา", sound: "gaa" }],
+				"A compact real word that reuses the same long-aa frame with no extra letters added.",
+			),
+		),
+		createPracticeEntry(
+			createWord(
+				"กาม",
+				"sensuality",
+				"gaam",
+				"daily",
+				[{ thai: "กาม", sound: "gaam" }],
+				"A low-frequency but fully decodable real word that stretches the same letters into a longer frame.",
+			),
+		),
+		createPracticeEntry(
+			createWord(
+				"กาก",
+				"residue / trashy (casual)",
+				"gaak",
+				"daily",
+				[{ thai: "กาก", sound: "gaak" }],
+				"A real word that also appears as casual slang online, so it is useful to recognize even if it is not polite.",
+			),
+		),
+		createPracticeEntry(
+			createWord(
+				"กก",
+				"reeds; to cuddle",
+				"kok",
+				"daily",
+				[{ thai: "กก", sound: "kok" }],
+				"This one introduces the implied short o pattern with a real dictionary word.",
+			),
+		),
+		createPracticeEntry(
+			createWord(
+				"กากมาก",
+				"really trashy (casual)",
+				"gaak maak",
+				"daily",
+				[
+					{ thai: "กาก", sound: "gaak" },
+					{ thai: "มาก", sound: "maak" },
+				],
+				"A common casual online insult. Useful to recognize, but definitely not polite speech.",
+			),
+			{ sourceType: "phrase" },
+		),
+		createPracticeEntry(
+			createWord(
+				"มามาก",
+				"comes a lot / heavy",
+				"maa maak",
+				"daily",
+				[
+					{ thai: "มา", sound: "maa" },
+					{ thai: "มาก", sound: "maak" },
+				],
+				"A short everyday phrase built from the same two visible chunks repeating back to back.",
+			),
+			{ sourceType: "phrase" },
+		),
+		createPracticeEntry(
+			createWord(
+				"กามา",
+				"sensual matters",
+				"gaa maa",
+				"daily",
+				[
+					{ thai: "กา", sound: "gaa" },
+					{ thai: "มา", sound: "maa" },
+				],
+				"A formal compound that is low-frequency but cleanly decodable from this lesson alone.",
+			),
+			{ sourceType: "phrase" },
+		),
+		createPracticeEntry(
+			createWord(
+				"กม",
+				"sound-only practice",
+				"gom",
+				"daily",
+				[{ thai: "กม", sound: "gom" }],
+				"This one is here just to train the implied short o pattern. It is not a normal dictionary word.",
+			),
+			{ sourceType: "nonsense" },
+		),
+		createPracticeEntry(
+			createWord(
+				"มก",
+				"sound-only practice",
+				"mok",
+				"daily",
+				[{ thai: "มก", sound: "mok" }],
+				"A second sound-only target so you can rehearse the same hidden-vowel move from the other direction.",
+			),
+			{ sourceType: "nonsense" },
 		),
 	],
 	2: [
-		createWord(
-			"มี",
-			"to have",
-			"mii",
-			"daily",
-			[{ thai: "มี", sound: "mii" }],
-			"A core possession verb that appears constantly in speech and signage.",
+		createPracticeEntry(
+			createWord(
+				"มี",
+				"to have",
+				"mii",
+				"daily",
+				[{ thai: "มี", sound: "mii" }],
+				"A core possession verb that appears constantly in speech and signage.",
+			),
 		),
-		createWord(
-			"ดีมาก",
-			"very good",
-			"dii maak",
-			"daily",
-			[
-				{ thai: "ดี", sound: "dii" },
-				{ thai: "มาก", sound: "maak" },
-			],
-			"A common praise phrase that combines the first two lessons into one useful chunk.",
+		createPracticeEntry(
+			createWord(
+				"ดีมาก",
+				"very good",
+				"dii maak",
+				"daily",
+				[
+					{ thai: "ดี", sound: "dii" },
+					{ thai: "มาก", sound: "maak" },
+				],
+				"A common praise phrase that combines the first two lessons into one useful chunk.",
+			),
+			{ sourceType: "phrase" },
 		),
 	],
 	3: [
-		createWord("ดิน", "soil / earth", "din", "daily", [
-			{ thai: "ดิ", sound: "di" },
-			{ thai: "น", sound: "n" },
-		]),
-		createWord(
-			"มีด",
-			"knife",
-			"miit",
-			"food",
-			[
-				{ thai: "มี", sound: "mii" },
-				{ thai: "ด", sound: "t" },
-			],
-			"A practical kitchen word that reinforces the long ee vowel plus a clipped final stop.",
+		createPracticeEntry(
+			createWord("ดิน", "soil / earth", "din", "daily", [
+				{ thai: "ดิ", sound: "di" },
+				{ thai: "น", sound: "n" },
+			]),
+		),
+		createPracticeEntry(
+			createWord(
+				"มีด",
+				"knife",
+				"miit",
+				"food",
+				[
+					{ thai: "มี", sound: "mii" },
+					{ thai: "ด", sound: "t" },
+				],
+				"A practical kitchen word that reinforces the long ee vowel plus a clipped final stop.",
+			),
 		),
 	],
 	4: [
-		createWord("ตา", "eye", "taa", "daily", [{ thai: "ตา", sound: "taa" }]),
-		createWord("ลาน", "courtyard / open yard", "laan", "place", [
-			{ thai: "ลา", sound: "laa" },
-			{ thai: "น", sound: "n" },
-		]),
+		createPracticeEntry(
+			createWord("ตา", "eye", "taa", "daily", [{ thai: "ตา", sound: "taa" }]),
+		),
+		createPracticeEntry(
+			createWord("ลาน", "courtyard / open yard", "laan", "place", [
+				{ thai: "ลา", sound: "laa" },
+				{ thai: "น", sound: "n" },
+			]),
+		),
 	],
 	5: [
-		createWord("บาน", "to bloom / open out", "baan", "daily", [
-			{ thai: "บา", sound: "baa" },
-			{ thai: "น", sound: "n" },
-		]),
-		createWord("บีบ", "to squeeze", "biip", "daily", [
-			{ thai: "บี", sound: "bii" },
-			{ thai: "บ", sound: "p" },
-		]),
+		createPracticeEntry(
+			createWord("บาน", "to bloom / open out", "baan", "daily", [
+				{ thai: "บา", sound: "baa" },
+				{ thai: "น", sound: "n" },
+			]),
+		),
+		createPracticeEntry(
+			createWord("บีบ", "to squeeze", "biip", "daily", [
+				{ thai: "บี", sound: "bii" },
+				{ thai: "บ", sound: "p" },
+			]),
+		),
 	],
 	6: [
-		createWord("แก่", "old", "gae", "daily", [{ thai: "แก่", sound: "gae" }]),
-		createWord("แน่", "certain / sure", "nae", "daily", [{ thai: "แน่", sound: "nae" }]),
+		createPracticeEntry(
+			createWord("แก่", "old", "gae", "daily", [{ thai: "แก่", sound: "gae" }]),
+		),
+		createPracticeEntry(
+			createWord("แน่", "certain / sure", "nae", "daily", [{ thai: "แน่", sound: "nae" }]),
+		),
 	],
 	7: [
-		createWord("ล้าน", "million", "laan", "sign", [
-			{ thai: "ล้า", sound: "laa" },
-			{ thai: "น", sound: "n" },
-		]),
-		createWord("ด้าน", "side / aspect", "daan", "sign", [
-			{ thai: "ด้า", sound: "daa" },
-			{ thai: "น", sound: "n" },
-		]),
+		createPracticeEntry(
+			createWord("ล้าน", "million", "laan", "sign", [
+				{ thai: "ล้า", sound: "laa" },
+				{ thai: "น", sound: "n" },
+			]),
+		),
+		createPracticeEntry(
+			createWord("ด้าน", "side / aspect", "daan", "sign", [
+				{ thai: "ด้า", sound: "daa" },
+				{ thai: "น", sound: "n" },
+			]),
+		),
 	],
 	8: [
-		createWord("ชาม", "bowl", "chaam", "food", [{ thai: "ชาม", sound: "chaam" }]),
-		createWord("ดุ", "fierce / strict", "du", "daily", [{ thai: "ดุ", sound: "du" }]),
+		createPracticeEntry(
+			createWord("ชาม", "bowl", "chaam", "food", [{ thai: "ชาม", sound: "chaam" }]),
+		),
+		createPracticeEntry(
+			createWord("ดุ", "fierce / strict", "du", "daily", [{ thai: "ดุ", sound: "du" }]),
+		),
 	],
 	9: [
-		createWord("สิน", "goods / merchandise", "sin", "sign", [
-			{ thai: "สิ", sound: "si" },
-			{ thai: "น", sound: "n" },
-		]),
-		createWord("สาม", "three", "saam", "sign", [{ thai: "สาม", sound: "saam" }]),
+		createPracticeEntry(
+			createWord("สิน", "goods / merchandise", "sin", "sign", [
+				{ thai: "สิ", sound: "si" },
+				{ thai: "น", sound: "n" },
+			]),
+		),
+		createPracticeEntry(
+			createWord("สาม", "three", "saam", "sign", [{ thai: "สาม", sound: "saam" }]),
+		),
 	],
 	10: [
-		createWord("ขาว", "white", "khaao", "daily", [{ thai: "ขาว", sound: "khaao" }]),
-		createWord("วาด", "to draw", "waat", "daily", [
-			{ thai: "วา", sound: "waa" },
-			{ thai: "ด", sound: "t" },
-		]),
+		createPracticeEntry(
+			createWord("ขาว", "white", "khaao", "daily", [{ thai: "ขาว", sound: "khaao" }]),
+		),
+		createPracticeEntry(
+			createWord("วาด", "to draw", "waat", "daily", [
+				{ thai: "วา", sound: "waa" },
+				{ thai: "ด", sound: "t" },
+			]),
+		),
 	],
 	11: [
-		createWord("หมา", "dog", "maa", "daily", [{ thai: "หมา", sound: "maa" }]),
-		createWord("หู", "ear", "huu", "daily", [{ thai: "หู", sound: "huu" }]),
+		createPracticeEntry(
+			createWord("หมา", "dog", "maa", "daily", [{ thai: "หมา", sound: "maa" }]),
+		),
+		createPracticeEntry(
+			createWord("หู", "ear", "huu", "daily", [{ thai: "หู", sound: "huu" }]),
+		),
 	],
 	12: [
-		createWord(
-			"อ่าน",
-			"to read",
-			"aan",
-			"sign",
-			[
-				{ thai: "อ่า", sound: "aa" },
-				{ thai: "น", sound: "n" },
-			],
-			"A high-payoff verb for menus, labels, and interface text once the silent carrier starts to click.",
+		createPracticeEntry(
+			createWord(
+				"อ่าน",
+				"to read",
+				"aan",
+				"sign",
+				[
+					{ thai: "อ่า", sound: "aa" },
+					{ thai: "น", sound: "n" },
+				],
+				"A high-payoff verb for menus, labels, and interface text once the silent carrier starts to click.",
+			),
 		),
-		createWord(
-			"ออก",
-			"to exit / go out",
-			"awk",
-			"sign",
-			[
-				{ thai: "ออ", sound: "aaw" },
-				{ thai: "ก", sound: "k" },
-			],
-			"A survival sign word that appears on doors, stations, and directional labels.",
+		createPracticeEntry(
+			createWord(
+				"ออก",
+				"to exit / go out",
+				"awk",
+				"sign",
+				[
+					{ thai: "ออ", sound: "aaw" },
+					{ thai: "ก", sound: "k" },
+				],
+				"A survival sign word that appears on doors, stations, and directional labels.",
+			),
 		),
 	],
 	13: [
-		createWord(
-			"ผัก",
-			"vegetables",
-			"phak",
-			"food",
-			[
-				{ thai: "ผั", sound: "pha" },
-				{ thai: "ก", sound: "k" },
-			],
-			"A very common menu word that reinforces the same ผั- opening as ผัด.",
+		createPracticeEntry(
+			createWord(
+				"ผัก",
+				"vegetables",
+				"phak",
+				"food",
+				[
+					{ thai: "ผั", sound: "pha" },
+					{ thai: "ก", sound: "k" },
+				],
+				"A very common menu word that reinforces the same ผั- opening as ผัด.",
+			),
 		),
-		createWord("กัน", "together / to prevent", "gan", "daily", [
-			{ thai: "กั", sound: "ga" },
-			{ thai: "น", sound: "n" },
-		]),
+		createPracticeEntry(
+			createWord("กัน", "together / to prevent", "gan", "daily", [
+				{ thai: "กั", sound: "ga" },
+				{ thai: "น", sound: "n" },
+			]),
+		),
 	],
 };
 
 const lessons: Lesson[] = baseLessons.map((lesson) => {
-	const supportingVocabulary = supportingVocabularyByLessonId[lesson.id] ?? [];
+	const practiceVocabulary = practiceVocabularyByLessonId[lesson.id] ?? [];
 
 	return {
 		...lesson,
-		vocabulary: supportingVocabulary.map((word) => ({
-			role: "support" as const,
-			drillTarget: true,
-			word,
-		})),
+		vocabulary: practiceVocabulary,
 	};
 });
 

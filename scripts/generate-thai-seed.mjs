@@ -273,7 +273,7 @@ function buildSeedModel() {
 		heroTitle: "Learn to read Thai",
 		heroSubtitle:
 			"Don't memorize an alphabet chart. Learn real words you'll see on streets, menus, and signs - and pick up the letters naturally.",
-		seoTitle: "GlyphBridge — Learn Thai Through Real Words",
+		seoTitle: "Glyphin — Learn Thai Through Real Words",
 		seoDescription:
 			"Learn to read Thai through real words, guided lesson steps, and short drills built around signs, menus, roads, and everyday language.",
 		uiConfig: {},

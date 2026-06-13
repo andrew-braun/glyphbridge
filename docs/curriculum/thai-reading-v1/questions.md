@@ -23,7 +23,8 @@ the `thai-reading-v1` bootstrap.
 - Should clusters such as `ตล` in `ตลาด` and leading `ห` be taught with one
   shared cluster mechanic or separate script-specific rule cards?
 - Should `ร้านอาหาร`, `ออก`, and `ผัก` become first-class anchors when Thai is
-  reauthored for DB delivery, or remain support vocabulary around current anchors?
+  reauthored for DB delivery, or remain lesson practice targets around current
+  anchors?
 
 ## Sources, Licensing, And Attribution
 

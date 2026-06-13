@@ -3,6 +3,14 @@
 This backfill sequence mirrors the current runtime order in `src/lib/data/thai.ts`.
 It is not a new proposal for the live app.
 
+## Practice Contract
+
+- Every lesson keeps one anchor word.
+- Lesson 1 now targets `10` core practice reads because its decodable pool is
+  smallest and may need low-frequency or nonsense items.
+- Lessons 2-13 should be expanded to `10` core practice reads plus an optional
+  extension set during the next Thai content pass.
+
 ## Course Shape
 
 - First-session reading win: read `มาก`, `ดี`, and `กิน` as useful real words.

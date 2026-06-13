@@ -30,12 +30,15 @@ seed script.
 
 1. Treat the existing runtime lesson order as fixed for the first Thai DB
    publication pass.
-2. Convert runtime anchors, support vocabulary, rules, drills, and syllable
+2. Convert runtime anchors, practice vocabulary, rules, drills, and syllable
    breakdowns into reviewed normalized records.
-3. Add explicit Thai-specific metadata that is currently implicit in lesson
+3. Carry lesson-vocabulary metadata for practice tier and source type so the
+   publication can distinguish core practice, optional extension practice,
+   phrases, and nonsense decoding targets.
+4. Add explicit Thai-specific metadata that is currently implicit in lesson
    prose: vowel position, tone marks, consonant class, final-sound role,
    leading-H behavior, and silent carrier behavior.
-4. Generate a delivery publication from normalized records and compare the
+5. Generate a delivery publication from normalized records and compare the
    published payload against the existing runtime course before activation.
 
 ## Mapping Plan
@@ -47,7 +50,7 @@ seed script.
 | Course prospectus              | `curriculum.courses`                                                                              |
 | Runtime stage and lesson order | `curriculum.course_versions`, `curriculum.lessons`                                                |
 | Reviewed grapheme inventory    | `curriculum.graphemes`, `curriculum.course_version_graphemes`                                     |
-| Anchor and support words       | `curriculum.vocabulary_items`, `curriculum.vocabulary_segments`, `curriculum.lesson_vocabulary`   |
+| Anchor and practice targets    | `curriculum.vocabulary_items`, `curriculum.vocabulary_segments`, `curriculum.lesson_vocabulary`   |
 | Featured runtime anchors       | `curriculum.anchor_targets`, `curriculum.anchor_segments`                                         |
 | Runtime rules                  | `curriculum.orthography_rules`, `curriculum.orthography_rule_examples`, `curriculum.lesson_rules` |
 | Runtime drills and options     | `curriculum.drills`, `curriculum.drill_options`, `curriculum.lesson_drills`                       |
@@ -71,6 +74,8 @@ seed script.
 - [ ] Every runtime new letter maps to a reviewed grapheme or unit row.
 - [ ] Every anchor word also exists as vocabulary with `role_key = 'anchor'`.
 - [ ] Every lesson has exactly one featured anchor target.
+- [ ] Every lesson has at least ten core practice targets or an explicit early-lesson exception.
+- [ ] Later lessons carry an optional extension set in publication data.
 - [ ] Every drill has exactly one correct option.
 - [ ] Thai syllable segmentation is reviewed before publication.
 - [ ] Delivery payloads can be regenerated deterministically.

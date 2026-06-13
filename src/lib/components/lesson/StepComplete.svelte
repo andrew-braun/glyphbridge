@@ -31,9 +31,13 @@
 		hasNextLesson: boolean;
 	} = $props();
 
-	const supportingWords = $derived(lesson.vocabulary.filter((entry) => entry.role === "support"));
+	const corePracticeWords = $derived(lesson.vocabulary.filter((entry) => entry.tier === "core"));
+	const extensionPracticeWords = $derived(
+		lesson.vocabulary.filter((entry) => entry.tier === "extension"),
+	);
+	const practiceWords = $derived([...corePracticeWords, ...extensionPracticeWords]);
 	const newLetterCount = $derived(lesson.newLetters.length);
-	const relatedWordCount = $derived(supportingWords.length);
+	const relatedWordCount = $derived(practiceWords.length);
 	const drillScorePercent = $derived(
 		totalDrills > 0 ? Math.round((correctCount / totalDrills) * 100) : 0,
 	);
@@ -96,8 +100,14 @@
 							</div>
 							{#if relatedWordCount > 0}
 								<div>
-									<dt>Pattern words</dt>
+									<dt>Practice reads</dt>
 									<dd>{relatedWordCount}</dd>
+								</div>
+							{/if}
+							{#if extensionPracticeWords.length > 0}
+								<div>
+									<dt>Extension reads</dt>
+									<dd>{extensionPracticeWords.length}</dd>
 								</div>
 							{/if}
 						</dl>
@@ -147,7 +157,7 @@
 				</Reveal>
 			</section>
 
-			{#if supportingWords.length > 0}
+			{#if practiceWords.length > 0}
 				<section
 					class="complete__panel complete__panel--vocabulary surface-panel surface-panel--mango"
 				>
@@ -155,19 +165,21 @@
 						<div class="complete__panel-inner">
 							<div class="complete__section-header">
 								<div>
-									<p class="complete__section-kicker">Words from this lesson</p>
+									<p class="complete__section-kicker">
+										Practice from this lesson
+									</p>
 									<h2>Same letters, now familiar</h2>
 								</div>
 								<p class="complete__section-copy">
-									These are the transfer words you practiced before the drill
+									These are the practice reads you worked through before the drill
 									checkpoint.
 								</p>
 							</div>
 
 							<SameLettersWordList
-								entries={supportingWords}
+								entries={practiceWords}
 								newLetters={lesson.newLetters}
-								ariaLabel="Transfer words practiced in this lesson"
+								ariaLabel="Practice reads completed in this lesson"
 								revealStart={180}
 								revealStep={70}
 							/>

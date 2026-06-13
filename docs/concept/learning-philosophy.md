@@ -65,13 +65,13 @@ Every Glyphin course is defined by a strict, repeatable architecture. The same s
 
 ### 3.1 The Lesson Contract (seven steps)
 
-Every lesson, in every course, follows the same seven-step flow when support vocabulary exists:
+Every lesson, in every course, follows the same seven-step flow when practice vocabulary exists:
 
 1. **Intro** — present the anchor word and why a learner will encounter it.
 2. **Breakdown** — show how the word segments into readable parts (syllables, consonant + vowel slots, tone, etc.).
 3. **Letters** — introduce only the graphemes new to this lesson, with type, class, pronunciation, mnemonic, and positional behavior.
 4. **Rules** — surface the orthographic or phonetic patterns that make this word readable (and that will pay off in future words).
-5. **Same letters, new words** — transfer the new graphemes and patterns into different real words before scoring begins, revealing pronunciation and meaning only after the learner attempts the read.
+5. **Same letters, new reads** — transfer the new graphemes and patterns into different words, short phrases, or sound-only decoding targets before scoring begins, revealing pronunciation and meaning only after the learner attempts the read.
 6. **Drills** — verify recognition, mapping, pronunciation, and visual discrimination via short multiple-choice items.
 7. **Complete** — summarize performance and unlock the next lesson.
 
@@ -84,7 +84,7 @@ Each lesson must define:
 - A stable numeric `id` and a `stage` (the curriculum band it belongs to).
 - A human-readable `title` whose first half is the anchor word in script.
 - One `anchorWord` with Thai/script form, romanization, gloss, category, a syllable breakdown, and a context note explaining where the learner will actually meet this word.
-- An ordered `vocabulary` list of `LessonVocabularyEntry` items, each tagged `anchor` or `support` and flagged for drill eligibility. Support words should give the learner same-lesson transfer into different real-word contexts.
+- An ordered `vocabulary` list of `LessonVocabularyEntry` items, each tagged as `core` or `extension`, labeled as `real`, `phrase`, or `nonsense`, and flagged for drill eligibility. Every lesson should aim for at least ten core practice targets. Later lessons should also include an optional extension set for extra transfer reps.
 - A `newLetters` set — only the graphemes introduced for the first time in this lesson.
 - A `rulesIntroduced` set — concise, named, reusable orthographic/phonetic rules with examples.
 - A `drills` set covering at least recognition, mapping, sound, and visual discrimination.
@@ -129,7 +129,7 @@ These are the binding rules. If a proposed lesson, drill, vocabulary item, or cu
 
 ### 4.2 Authoring Principles
 
-1. **One anchor word per lesson, plus support vocabulary.** Support words reuse only graphemes already introduced (or being introduced this lesson) and should appear inside the lesson before scored drills. Show the word first, then reveal pronunciation and meaning after the learner has tried to read it.
+1. **One anchor word per lesson, plus substantial practice vocabulary.** Core practice targets should reuse only graphemes already introduced (or being introduced this lesson), should appear inside the lesson before scored drills, and should usually number at least ten. Later lessons should also include an optional extension set. Show the target first, then reveal pronunciation and meaning after the learner has tried to read it. When the real pool is too small, clearly tagged nonsense targets are acceptable as sound-only decoding practice.
 2. **Every new grapheme is introduced exactly once.** Subsequent appearances are `review`, not `new`.
 3. **Every rule has a name, a one-line summary, an explanation, and concrete examples.** Rules are reusable named units; do not paraphrase the same rule under three names.
 4. **Every drill targets a specific competence** — recognition (glyph → sound), mapping (word → meaning), sound (correct pronunciation), or visual discrimination (the right form among near look-alikes). Don't ship four drills that test the same competence.
@@ -212,7 +212,7 @@ Our level-6 Thai list is mostly globalization loanwords (`คอมพิวเ�
 
 ## 6. Summary
 
-Glyphin teaches script-illiterate adults to read real text in a new writing system, fast. It does that by sequencing graphemes by **decoding payoff**, anchoring every lesson in **one real-world word**, asking learners to transfer those graphemes into **same-lesson support words before answers are revealed**, teaching **rules from words**, drilling in **small cumulative sets** within a fixed seven-step contract, and treating environmental print as the validation surface.
+Glyphin teaches script-illiterate adults to read real text in a new writing system, fast. It does that by sequencing graphemes by **decoding payoff**, anchoring every lesson in **one real-world word**, asking learners to transfer those graphemes into **same-lesson practice reads before answers are revealed**, teaching **rules from words**, drilling in **small cumulative sets** within a fixed seven-step contract, and treating environmental print as the validation surface.
 
 The approach is consistent with the usage-based account of L2 acquisition, systematic-phonics evidence, Ehri's orthographic mapping, cognitive-load theory, Bjork's desirable-difficulty framework, and motivation research. The main places it can still grow are: adding **production drills**, adding **scheduled spaced retrieval**, adding **audio for tone**, adding a **between-lessons extensive-reading surface**, and being **explicit about the blocked-then-interleaved schedule** the research supports.
 

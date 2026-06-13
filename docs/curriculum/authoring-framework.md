@@ -68,8 +68,9 @@ Every new course should produce these artifacts before implementation:
    risks.
 4. **Frequency report**: word, lemma, grapheme, grapheme-pair, syllable, rule,
    and target-domain coverage summaries.
-5. **Lesson sequence**: ordered anchors, new graphemes, rules, support words,
-   review items, drills, and coverage deltas.
+5. **Lesson sequence**: ordered anchors, new graphemes, rules, core practice
+   targets, extension practice targets, review items, drills, and coverage
+   deltas.
 6. **Validation packet**: coverage thresholds, native or expert review notes,
    license sign-off, sample target texts, pronunciation checks, and known gaps.
 
@@ -306,8 +307,13 @@ Recommended v1 constraints:
 
 - Lessons 1-5: two to five new pedagogical graphemes, zero to one new rule, and
   one strong anchor.
-- Early support words should reuse already taught material plus the lesson's new
+- Early core practice should reuse already taught material plus the lesson's new
   material.
+- Every lesson should target at least ten core practice reads. Later lessons
+  should also carry an optional extension set when the decodable pool is large
+  enough.
+- Nonsense targets are allowed only as clearly tagged sound-only decoding
+  practice when the real word and phrase pool is too small.
 - Avoid introducing two visually confusable forms in the same lesson unless the
   lesson's explicit purpose is discrimination.
 - Put blocked practice inside the lesson and interleaved review across later
@@ -595,7 +601,8 @@ review:
 A course should not be implemented until these gates pass:
 
 - **Pedagogy gate**: every lesson follows the seven-step contract, asks learners
-  to read support words before revealing the answer, and improves decoding payoff.
+  to read core and extension practice targets before revealing the answer, and
+  improves decoding payoff.
 - **Coverage gate**: stage-level coverage targets are measured against target
   corpora.
 - **Segmentation gate**: tokenization and pedagogical grapheme mapping are

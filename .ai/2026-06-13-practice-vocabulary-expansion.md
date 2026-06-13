@@ -2,19 +2,19 @@
 
 - Start date: 2026-06-13
 - Owner: Codex
-- Status: planned
+- Status: in progress
 
 ## Goal
 
 Shift Glyphin lessons from one anchor plus a tiny support-word sample to a
 practice-first model: each lesson should teach one anchor word and then give
 learners at least ten fresh, decodable practice words or short phrases before
-scored drills. Later lessons may also expose an optional extension set.
+scored drills. Later lessons will also include an optional extension set.
 
 ## Scope
 
 - In scope:
-  - Define the curriculum contract for anchor, core practice, and optional
+  - Define the curriculum contract for anchor, core practice, and extension
     practice vocabulary.
   - Plan changes to Thai lesson authoring artifacts, runtime TypeScript data,
     delivery DTO mapping, and database publication.
@@ -48,19 +48,47 @@ scored drills. Later lessons may also expose an optional extension set.
   anchor, taught, review, and extension vocabulary, but the runtime and Thai
   docs have not caught up.
 
+## Implementation Update
+
+- Updated `src/lib/data/types.ts` so lesson vocabulary now carries
+  `tier: "core" | "extension"` and `sourceType: "real" | "phrase" | "nonsense"`.
+- Reworked `src/routes/learn/[id]/+page.svelte` and
+  `src/lib/components/lesson/StepSameLettersNewWords.svelte` so the lesson flow
+  distinguishes core practice from optional extension practice and lets the
+  learner skip extension before drills.
+- Updated `src/lib/components/lesson/StepComplete.svelte` to summarize practice
+  reads instead of the older support-word concept.
+- Expanded Thai Lesson 1 in `src/lib/data/thai.ts` to `10` core practice
+  targets, including tagged phrase and nonsense items.
+- Added the implied-short-o rule to Lesson 1 and audited rule examples so
+  current lessons no longer reveal their own practice targets before the
+  transfer step.
+- Updated `src/lib/stores/progress.ts` so nonsense targets do not enter
+  `knownWords`, while anchors and lexical practice items do.
+- Updated `src/lib/server/delivery-payload.ts`,
+  `scripts/generate-thai-seed.mjs`, and `supabase/seed.sql` so publication and
+  seed data now use `anchor`, `practice_core`, and `practice_extension` role
+  keys plus `sourceType` metadata.
+- Updated durable docs to describe the new practice-first lesson contract and
+  the required later-lesson extension set.
+
 ## Target Curriculum Contract
 
 - Every lesson keeps exactly one featured anchor.
 - Every standard lesson should have at least ten core practice targets that are
   decodable from prior lessons plus the current lesson's new graphemes and
   rules.
-- Later lessons may add up to ten optional practice targets after the core set
-  when the grapheme pool is large enough.
+- Later lessons will include an optional extension set after the core set.
+  The extension set can scale with available vocabulary, but it is part of the
+  intended lesson shape rather than a maybe-later bonus.
 - Practice targets may be standalone words, high-frequency compounds, or short
   phrases.
-- Nonsense or constructed targets are allowed only as a pressure-release valve
-  for the earliest lessons, and must be clearly tagged as constructed so they do
-  not pollute learned-word lists as ordinary vocabulary.
+- Nonsense words are explicitly allowed as a pressure-release valve when the real
+  word and phrase pool is too small. A nonsense word is a pronounceable grapheme
+  combination that maps to a possible sound in the target language but has no
+  lexical meaning.
+- Nonsense targets must be clearly tagged so they do not pollute learned-word
+  lists as ordinary vocabulary.
 - Practice targets should be hidden from pre-practice lesson copy, rule examples,
   drill prompts, and answer options unless the learner has already attempted
   them in the transfer step.
@@ -83,9 +111,9 @@ Candidate core practice set from known graphemes `ม`, `า`, `ก`:
 - `กากมาก` — very bad / really trashy, casual
 - `มามาก` — comes a lot / heavy flow, gloss should stay neutral
 - `กามา` — sensuality or sensual matters, formal/poetic register
-- review-needed slot 9: real phrase preferred; constructed target acceptable if
+- review-needed slot 9: real phrase preferred; nonsense target acceptable if
   tagged
-- review-needed slot 10: real phrase preferred; constructed target acceptable if
+- review-needed slot 10: real phrase preferred; nonsense target acceptable if
   tagged
 
 Sensitive-language guidance:
@@ -104,48 +132,51 @@ Sensitive-language guidance:
   a practice vocabulary model:
   - anchor: one featured lesson word;
   - core practice: minimum ten read-before-reveal targets;
-  - optional practice: later extra targets for fluency and review;
-  - constructed target: allowed only when marked and reviewed.
+  - optional extension: required for later lessons, with size based on available
+    decodable vocabulary;
+  - nonsense target: pronounceable but meaning-free decoding practice, allowed
+    only when marked and reviewed.
 - Update `docs/curriculum/authoring-tools.md` to make lesson sequences and
   review packets report practice counts.
 - Update `docs/curriculum/thai-reading-v1/lesson-sequence.md` so every row has a
   practice-vocabulary count target, not only "drill focus."
 - Update `docs/curriculum/thai-reading-v1/db-ingestion-strategy.md` to state
-  that Thai ingestion must populate all anchor, core practice, optional practice,
-  and constructed/review metadata before publication.
+  that Thai ingestion must populate all anchor, core practice, extension
+  practice, nonsense/review metadata, and later-lesson extension sets before
+  publication.
 
 ### 2. Update The Data Contract
 
 - Extend `LessonVocabularyEntry` in `src/lib/data/types.ts` to distinguish
   practice role and tier. Recommended shape:
   - `role: "anchor" | "practice"`;
-  - `tier: "core" | "optional"` for practice entries;
-  - `sourceType: "real" | "phrase" | "constructed"`;
+  - `tier: "core" | "extension"` for practice entries;
+  - `sourceType: "real" | "phrase" | "nonsense"`;
   - `drillTarget: boolean`.
 - Keep `anchorWord` for the current page contract, but ensure the anchor is also
   present in vocabulary when publication data is generated.
-- Decide whether learned-word collection should include constructed targets. The
-  conservative default is no: constructed targets should train decoding, not
+- Decide whether learned-word collection should include nonsense targets. The
+  conservative default is no: nonsense targets should train decoding, not
   become saved vocabulary.
 
 ### 3. Align Delivery DTOs And Database Publication
 
 - Update `docs/database-dto-spec.md` role-key examples to match the runtime
-  contract: `anchor`, `practice_core`, `practice_optional`, and optionally
+  contract: `anchor`, `practice_core`, `practice_extension`, and optionally
   `review`.
 - Update `src/lib/server/delivery-payload.ts` so published payloads accept the
   new role keys and map them into runtime `LessonVocabularyEntry` values.
 - Keep the DB schema unless implementation proves we need constraints; current
   `lesson_vocabulary.role_key text` and `metadata jsonb` are flexible enough.
 - Store source/type metadata in `lesson_vocabulary.metadata` or
-  `vocabulary_items.metadata` for constructed/sensitive/register notes.
+  `vocabulary_items.metadata` for nonsense/sensitive/register notes.
 - Add publication smoke checks that fail when a lesson has fewer than ten core
   practice targets, except for explicitly approved early-lesson exceptions.
 
 ### 4. Rework Static Thai Runtime Content
 
 - Replace `supportingVocabularyByLessonId` with a practice vocabulary structure
-  that can hold core and optional targets.
+  that can hold core and extension targets.
 - Expand Lesson 1 first using the reviewed candidate pool above.
 - Expand Lessons 2-13 by allowing each lesson to reuse all previously taught
   graphemes plus current graphemes. This keeps new lessons feeling cumulative
@@ -153,7 +184,8 @@ Sensitive-language guidance:
 - For later lessons, target:
   - one anchor;
   - ten core practice targets;
-  - up to ten optional practice targets when quality is high enough.
+  - a skippable extension set, ideally ten more targets when quality is high
+    enough.
 - Keep transliteration, tone marking, segmentation, and context notes consistent
   with existing Thai lesson voice.
 
@@ -177,11 +209,11 @@ Sensitive-language guidance:
 
 - Keep the existing read-before-reveal interaction.
 - Add pacing for 10-20 targets:
-  - core/optional progress labels;
-  - "continue core practice" and "optional extra practice" transitions;
+  - core/extension progress labels;
+  - "continue core practice" and "extension practice" transitions;
   - compact completion summary;
   - no long scrolling list that reveals answers prematurely.
-- Consider letting learners skip optional practice after the ten core targets.
+- Let learners skip optional extension practice after the ten core targets.
 - Preserve mobile ergonomics: one target at a time, stable button sizing, and no
   dense table of hidden answers.
 
@@ -208,7 +240,7 @@ Sensitive-language guidance:
   - sensitive glosses are appropriately toned;
   - completion and known-word collection behave as intended.
 - Have Thai content reviewed before treating low-frequency, slang, sensitive, or
-  constructed targets as final shipped content.
+  nonsense targets as final shipped content.
 
 ## Implementation Order
 
@@ -224,22 +256,39 @@ Sensitive-language guidance:
 
 - [x] Discovery and research
 - [x] Planning artifact created
-- [ ] Documentation updates
-- [ ] Runtime data/model implementation
-- [ ] Database/DTO publication alignment
-- [ ] Thai Lesson 1 rework
+- [x] Documentation updates
+- [x] Runtime data/model implementation
+- [x] Database/DTO publication alignment
+- [x] Thai Lesson 1 rework
 - [ ] Full Thai practice vocabulary expansion
-- [ ] Validation
+- [x] Validation
 
 ## Open Questions
 
 - What should the two remaining Lesson 1 practice targets be after Thai review?
-- Should constructed targets ever be stored in `knownWords`, or should they only
+- Should nonsense targets ever be stored in `knownWords`, or should they only
   count as decoding practice?
-- Should optional practice be skippable by default, or only after a learner has
-  demonstrated high accuracy?
+- Should optional extension practice be skippable by default, or only after a
+  learner has demonstrated high accuracy?
 - Do we want a hard validator that blocks every published lesson below ten core
   practice targets, or a warning with explicit exceptions for early lessons?
+
+## Validation Notes
+
+- `git diff --check` passed for the touched files.
+- Focused `eslint` and `stylelint` checks on touched source files passed.
+- `node scripts/generate-thai-seed.mjs > supabase/seed.sql` succeeded.
+- A direct lesson-data overlap audit confirmed that current rule examples no
+  longer exactly match current lesson practice targets before the transfer step.
+- `pnpm publication:generate` failed because the script needs a reachable
+  delivery publication source and none is configured in this sandbox.
+- `pnpm db:smoke:delivery` failed because `PUBLIC_SUPABASE_URL` and
+  `PUBLIC_SUPABASE_ANON_KEY` are not configured here.
+- `pnpm check` is still blocked by a pre-existing repo issue: missing Node type
+  definitions referenced by `src/lib/server/published-lessons.ts` and
+  `tsconfig.json`.
+- Repo-wide `markdownlint` is still blocked by long-standing hard-tab violations
+  in `docs/database-dto-spec.md` outside the lines changed for this task.
 
 ## Follow-Up
 

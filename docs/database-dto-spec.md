@@ -334,7 +334,7 @@ Indexes:
 
 ### `curriculum.lesson_vocabulary`
 
-Purpose: ordered lesson membership for anchor, taught, review, and extension vocabulary.
+Purpose: ordered lesson membership for anchors plus core and extension practice vocabulary.
 
 | Column               | Type      | Constraints                                                         |
 | -------------------- | --------- | ------------------------------------------------------------------- |
@@ -764,6 +764,11 @@ export type LessonVocabularyDTO = {
  item: VocabularyItemDTO;
 };
 
+// Recommended role keys:
+// - anchor
+// - practice_core
+// - practice_extension
+
 export type RuleDTO = {
  id: string;
  key: string;
@@ -939,14 +944,14 @@ Current runtime model to target backend model:
 
 Current runtime gap:
 
-- `src/lib/data/types.ts` still models one `anchorWord` per lesson and has no shared lesson-vocabulary collection yet.
-- The publication DTO now reserves that richer lesson vocabulary surface ahead of the runtime refactor.
+- `src/lib/data/types.ts` still keeps one `anchorWord` per lesson while lesson vocabulary carries practice targets only.
+- The publication DTO should carry `anchor`, `practice_core`, and `practice_extension` role keys plus item metadata such as `sourceType` for phrases and nonsense decoding targets.
 
 ## Build-Now Checklist
 
 - Implement the schemas, enums, and tables in this document.
 - Seed the current Thai course into the normalized curriculum model.
-- Materialize anchor words into both `curriculum.anchor_targets` and `curriculum.lesson_vocabulary`, then add supporting lesson vocabulary as the source inventory expands.
+- Materialize anchor words into both `curriculum.anchor_targets` and `curriculum.lesson_vocabulary`, then add core and extension practice vocabulary as the source inventory expands.
 - Implement one publication generator that emits `LessonBundleDTO` payloads into `delivery.course_publication_lessons`, including the lesson vocabulary list.
 - Implement one server-side batch sync function for lesson attempts.
 - Keep route and component code bound only to the DTOs in this document.

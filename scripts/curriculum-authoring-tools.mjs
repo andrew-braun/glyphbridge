@@ -636,7 +636,7 @@ script.
 | Release plan | \`curriculum.course_versions\` |
 | Reviewed grapheme inventory | \`curriculum.graphemes\`, \`curriculum.course_version_graphemes\` |
 | Lesson sequence | \`curriculum.lessons\` |
-| Anchor and support words | \`curriculum.vocabulary_items\`, \`curriculum.vocabulary_segments\`, \`curriculum.lesson_vocabulary\` |
+| Anchor and practice targets | \`curriculum.vocabulary_items\`, \`curriculum.vocabulary_segments\`, \`curriculum.lesson_vocabulary\` |
 | Featured lesson anchor | \`curriculum.anchor_targets\`, \`curriculum.anchor_segments\` |
 | Reusable rules | \`curriculum.orthography_rules\`, \`curriculum.orthography_rule_examples\`, \`curriculum.lesson_rules\` |
 | Drills and options | \`curriculum.drills\`, \`curriculum.drill_options\`, \`curriculum.lesson_drills\` |

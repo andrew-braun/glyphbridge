@@ -5,7 +5,7 @@
 	let {
 		entries,
 		newLetters,
-		ariaLabel = "Words using the same letters",
+		ariaLabel = "Practice reads using the same letters",
 		revealStart = 0,
 		revealStep = 80,
 		showAnswers = true,

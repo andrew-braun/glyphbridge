@@ -24,17 +24,17 @@ Glyphin is a real-word-first reading app for scripts and writing systems. Its pu
 
 ## Lesson Contract
 
-Every lesson follows the same seven-step structure when support vocabulary exists:
+Every lesson follows the same seven-step structure when practice vocabulary exists:
 
 1. Intro: present the anchor word and why it matters.
 2. Breakdown: show how the word segments into readable parts.
 3. Letters: introduce only the new graphemes required for this lesson.
 4. Rules: explain the specific patterns that make the word readable.
-5. Same letters, new words: show support vocabulary that reuses the new graphemes and patterns in different real words, hiding pronunciation and meaning until the learner has a chance to read first.
+5. Same letters, new reads: show lesson practice targets that reuse the new graphemes and patterns in different words, phrases, or sound-only decoding items, hiding pronunciation and meaning until the learner has a chance to read first.
 6. Drills: verify recognition, mapping, pronunciation, and discrimination.
 7. Complete: summarize performance and unlock the next lesson.
 
-Each lesson should define a stable identifier, stage, title, anchor word, support vocabulary, new graphemes, introduced rules, drills, and optional review graphemes. Components should render this contract. They should not invent lesson-specific structures or duplicate curriculum facts in UI code.
+Each lesson should define a stable identifier, stage, title, anchor word, core practice targets, optional extension practice targets, new graphemes, introduced rules, drills, and optional review graphemes. Components should render this contract. They should not invent lesson-specific structures or duplicate curriculum facts in UI code.
 
 ## Progress Path
 
