@@ -600,9 +600,9 @@ review:
 
 A course should not be implemented until these gates pass:
 
-- **Pedagogy gate**: every lesson follows the seven-step contract, asks learners
-  to read core and extension practice targets before revealing the answer, and
-  improves decoding payoff.
+- **Pedagogy gate**: every lesson follows the learning-plus-practice contract,
+  asks learners to read core and extension practice targets before revealing the
+  answer, and improves decoding payoff.
 - **Coverage gate**: stage-level coverage targets are measured against target
   corpora.
 - **Segmentation gate**: tokenization and pedagogical grapheme mapping are

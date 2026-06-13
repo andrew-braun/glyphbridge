@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 
 import { error } from "@sveltejs/kit";
 
+import { thaiPack } from "$lib/data/thai";
 import type { Lesson } from "$lib/data/types";
 import {
 	GENERATED_PUBLICATION_MANIFEST_FILE,
@@ -25,6 +26,7 @@ type LessonPublicationManifest = PublishedLessonVersion & {
 	artifactPath: string;
 };
 
+const canonicalLessonById = new Map(thaiPack.lessons.map((lesson) => [lesson.id, lesson]));
 const GENERATED_DIR = resolve(process.cwd(), ".generated");
 const ARTIFACT_MANIFEST_PATH = resolve(GENERATED_DIR, GENERATED_PUBLICATION_MANIFEST_FILE);
 
@@ -83,13 +85,40 @@ function readArtifact(manifest: LessonPublicationManifest): LessonPublicationArt
 	}
 }
 
+function isCurrentVocabularyEntryShape(value: unknown): boolean {
+	if (typeof value !== "object" || value === null) {
+		return false;
+	}
+
+	return "tier" in value && "sourceType" in value && "drillTarget" in value && "word" in value;
+}
+
+function hasCurrentLessonShape(lesson: Lesson): boolean {
+	return lesson.vocabulary.every((entry) => isCurrentVocabularyEntryShape(entry));
+}
+
+function normalizeArtifactLessons(lessons: Lesson[]): Lesson[] {
+	const hasLegacyLessonShape = lessons.some((lesson) => !hasCurrentLessonShape(lesson));
+
+	if (!hasLegacyLessonShape) {
+		return lessons;
+	}
+
+	return lessons.map((lesson) => canonicalLessonById.get(lesson.id) ?? lesson);
+}
+
 async function getPublicationArtifact(): Promise<LessonPublicationArtifact | null> {
 	const manifest = readArtifactManifest();
 	if (!manifest) {
 		return null;
 	}
 
-	return readArtifact(manifest);
+	const artifact = readArtifact(manifest);
+
+	return {
+		...artifact,
+		lessons: normalizeArtifactLessons(artifact.lessons),
+	};
 }
 
 export async function getPublishedLessonVersion(): Promise<PublishedLessonVersion> {

@@ -156,12 +156,20 @@ export interface Lesson {
 export interface LessonProgress {
 	/** The ID of the lesson this progress record corresponds to */
 	lessonId: number;
-	/** Whether the learner has finished this lesson */
-	completed: boolean;
-	/** The learner's score on the drill section (number of correct answers) */
-	drillScore?: number;
-	/** ISO 8601 timestamp of when the lesson was completed */
-	completedAt?: string;
+	/** Whether the learner has finished the teaching phase for this lesson */
+	learningCompleted: boolean;
+	/** ISO 8601 timestamp of when the learning phase was completed */
+	learningCompletedAt?: string;
+	/** Total number of scored practice attempts recorded for this lesson */
+	practiceAttempts: number;
+	/** The best scored practice result the learner has earned for this lesson */
+	bestPracticeScore?: number;
+	/** The most recent scored practice result for this lesson */
+	latestPracticeScore?: number;
+	/** Whether the learner has passed the scored practice gate for this lesson */
+	practicePassed: boolean;
+	/** ISO 8601 timestamp of when the learner first passed lesson practice */
+	practicePassedAt?: string;
 }
 
 /**
@@ -195,8 +203,16 @@ export interface ProgressSnapshotV2 {
 	progress: AppProgress;
 }
 
+/** Versioned persistence wrapper after the learning/practice split */
+export interface ProgressSnapshotV3 {
+	/** Storage schema version for this snapshot payload */
+	version: 3;
+	/** Normalized learner progress payload */
+	progress: AppProgress;
+}
+
 /** Current union of supported persisted progress snapshot shapes */
-export type ProgressSnapshot = ProgressSnapshotV1 | ProgressSnapshotV2;
+export type ProgressSnapshot = ProgressSnapshotV1 | ProgressSnapshotV2 | ProgressSnapshotV3;
 
 /**
  * A complete language curriculum package. The app is designed to support multiple

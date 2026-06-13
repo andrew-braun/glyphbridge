@@ -63,17 +63,12 @@ This is why Glyphin ends every lesson with drills rather than re-reading, and wh
 
 Every Glyphin course is defined by a strict, repeatable architecture. The same shape works for any script because the contract is script-agnostic — it carries content, it does not enshrine any particular language's quirks.
 
-### 3.1 The Lesson Contract (seven steps)
+### 3.1 The Lesson Contract (learning + practice)
 
-Every lesson, in every course, follows the same seven-step flow when practice vocabulary exists:
+Every lesson, in every course, follows the same two-phase flow:
 
-1. **Intro** — present the anchor word and why a learner will encounter it.
-2. **Breakdown** — show how the word segments into readable parts (syllables, consonant + vowel slots, tone, etc.).
-3. **Letters** — introduce only the graphemes new to this lesson, with type, class, pronunciation, mnemonic, and positional behavior.
-4. **Rules** — surface the orthographic or phonetic patterns that make this word readable (and that will pay off in future words).
-5. **Same letters, new reads** — transfer the new graphemes and patterns into different words, short phrases, or sound-only decoding targets before scoring begins, revealing pronunciation and meaning only after the learner attempts the read.
-6. **Drills** — verify recognition, mapping, pronunciation, and visual discrimination via short multiple-choice items.
-7. **Complete** — summarize performance and unlock the next lesson.
+1. **Learning** — present the anchor word, break it down, teach the new graphemes, surface the governing rules, and end with two guided same-letters reads before any score is involved.
+2. **Practice** — move into a separate practice deck, a quick recap pass, and a scored checkpoint that unlocks the next lesson only after a passing score.
 
 This contract is enforced by the runtime data model ([`src/lib/data/types.ts`](../../src/lib/data/types.ts#L114-L133)) and by the step components in [`src/lib/components/lesson/`](../../src/lib/components/lesson/). Components render the contract — they do not invent lesson-specific structures, and curriculum facts are never duplicated into UI code.
 
@@ -102,10 +97,10 @@ For the Thai course, the concrete six-level sequence is specified in [approach-t
 
 ### 3.4 Progress Model
 
-- Progression is **linear** by default — the next lesson unlocks only after the previous one is completed with scored drills.
+- Progression is **linear** by default — the next lesson unlocks only after the previous lesson's scored Practice phase is passed.
 - Progress is **course-scoped**, not global. A second course starts fresh.
-- The canonical learner state is two things: per-lesson completion records and the current position. Everything else (known graphemes, known words, unlock state, review eligibility) is **derived**, never stored as a parallel source of truth.
-- Review and practice surfaces draw from completed lessons only, so the learner is never asked to retrieve material that was never taught.
+- The canonical learner state is learning completion plus scored Practice results. Everything else (known graphemes, known words, unlock state, review eligibility) is **derived**, never stored as a parallel source of truth.
+- Review and free-practice surfaces draw from lessons whose Practice phase has been passed, so the learner is never asked to retrieve material that was never taught.
 
 ### 3.5 Data ownership and boundaries
 
@@ -212,7 +207,7 @@ Our level-6 Thai list is mostly globalization loanwords (`คอมพิวเ�
 
 ## 6. Summary
 
-Glyphin teaches script-illiterate adults to read real text in a new writing system, fast. It does that by sequencing graphemes by **decoding payoff**, anchoring every lesson in **one real-world word**, asking learners to transfer those graphemes into **same-lesson practice reads before answers are revealed**, teaching **rules from words**, drilling in **small cumulative sets** within a fixed seven-step contract, and treating environmental print as the validation surface.
+Glyphin teaches script-illiterate adults to read real text in a new writing system, fast. It does that by sequencing graphemes by **decoding payoff**, anchoring every lesson in **one real-world word**, asking learners to transfer those graphemes into **same-lesson practice reads before answers are revealed**, teaching **rules from words**, splitting instruction from mastery checking, and treating environmental print as the validation surface.
 
 The approach is consistent with the usage-based account of L2 acquisition, systematic-phonics evidence, Ehri's orthographic mapping, cognitive-load theory, Bjork's desirable-difficulty framework, and motivation research. The main places it can still grow are: adding **production drills**, adding **scheduled spaced retrieval**, adding **audio for tone**, adding a **between-lessons extensive-reading surface**, and being **explicit about the blocked-then-interleaved schedule** the research supports.
 

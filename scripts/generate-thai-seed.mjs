@@ -151,12 +151,17 @@ function buildSeedModel() {
 
 		const vocabulary = lesson.vocabulary.map((entry, index) => {
 			const key = vocabularyKey(entry.word.thai);
+			const roleKey = entry.tier === "extension" ? "practice_extension" : "practice_core";
 			return {
 				itemId: stableUuid(`vocabulary:${key}`),
 				key,
-				roleKey: entry.role,
+				roleKey,
 				ordinalInRole: lesson.vocabulary.filter((candidate, candidateIndex) => {
-					return candidate.role === entry.role && candidateIndex <= index;
+					return (
+						(candidate.tier === "extension"
+							? "practice_extension"
+							: "practice_core") === roleKey && candidateIndex <= index
+					);
 				}).length,
 				isDrillTarget: entry.drillTarget,
 				displayText: entry.word.thai,
@@ -165,7 +170,9 @@ function buildSeedModel() {
 				pronunciation: entry.word.pronunciation,
 				categoryKey: entry.word.category,
 				contextNote: entry.word.contextNote ?? null,
-				metadata: {},
+				metadata: {
+					sourceType: entry.sourceType,
+				},
 				segments: entry.word.syllables.map((segment, segmentIndex) => ({
 					id: stableUuid(`vocabulary-segment:${key}:${segmentIndex + 1}`),
 					order: segmentIndex + 1,

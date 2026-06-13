@@ -7,13 +7,11 @@
 	interface Props {
 		knownLetters: string[];
 		knownWords: Word[];
-		currentLessonId: number;
+		completedLessonCount: number;
 		totalLessons: number;
 	}
 
-	let { knownLetters, knownWords, currentLessonId, totalLessons }: Props = $props();
-
-	const completedLessonCount = $derived(Math.max(0, currentLessonId - 1));
+	let { knownLetters, knownWords, completedLessonCount, totalLessons }: Props = $props();
 </script>
 
 {#if knownLetters.length > 0}

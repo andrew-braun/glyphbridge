@@ -252,6 +252,144 @@ Sensitive-language guidance:
 6. DB/DTO spec and publication smoke-check updates.
 7. Validation and manual lesson review.
 
+## Learning / Practice Split Plan
+
+### Current Regression Hypothesis
+
+- The product needs two distinct learner intents:
+  - learn the new graphemes, rule, anchor, and a tiny amount of guided transfer;
+  - practice the full lesson vocabulary set until mastery is strong enough to
+    unlock the next lesson.
+- The current route treats the whole lesson as a single linear completion flow.
+  That made it easy for the new practice vocabulary model to become metadata
+  instead of a mandatory mastery gate.
+- `StepSameLettersNewWords.svelte` already implements a useful read-before-reveal
+  interaction, but it should become either a small guided Learning-phase preview
+  or a reusable card primitive for the standalone Practice phase.
+- `scripts/generate-thai-seed.mjs` still reads `entry.role`, which no longer
+  exists on `LessonVocabularyEntry`. The checked-in seed has practice role keys,
+  but the generator is a drift risk and should be fixed before relying on
+  regenerated publications.
+
+### Product Definition
+
+- Split each lesson into two phases:
+  - **Learning**: unscored, linear instruction. It teaches the anchor, graphemes,
+    rules, and two of the simplest practice reads.
+  - **Practice**: scored mastery work. It uses the full core practice vocabulary
+    set, plus optional extension targets when available.
+- The lesson is not complete, and the next lesson is not unlocked, until the
+  learner passes the scored Practice phase.
+- Practice unlock threshold: require at least `6/10` on Lesson 1 practice before
+  Lesson 2 unlocks. Model this as a `60%` default threshold so future lessons can
+  keep the same rule even when practice item counts vary.
+- A failed or below-threshold Practice attempt should preserve the latest score
+  and best score, then offer immediate retry and targeted review without
+  rewinding the learner through Learning.
+- Lesson cards expose two actions:
+  - **Learn**: available when the lesson itself is unlocked.
+  - **Practice**: locked until Learning is complete; after unlock, goes directly
+    to the Practice phase.
+- Required read-before-reveal sequence for Practice preparation cards:
+  1. Show the script target only, plus any new-letter highlighting.
+  2. Prompt the learner to attempt the read.
+  3. On explicit action, reveal transliteration, definition, segmentation, and
+     context.
+  4. Advance to the next target only after the reveal state has been seen.
+- The scored portion may reference only the anchor and practice targets that were
+  taught or previewed in Learning/Practice preparation.
+
+### Progress Model
+
+- Replace the binary lesson-complete concept with phase-aware progress:
+  - `learningCompletedAt`: set when the Learning phase is finished.
+  - `practiceAttempts`: or server-backed attempt records, including score,
+    item count, passed flag, and timestamp.
+  - `bestPracticeScore` and `latestPracticeScore`.
+  - `practiceCompletedAt` or `masteredAt`: set when score meets the threshold.
+- Derive:
+  - Learning unlocked: previous lesson has passed Practice, except Lesson 1.
+  - Practice unlocked: this lesson's Learning phase is complete.
+  - Lesson complete/mastered: this lesson's Practice score meets threshold.
+  - Next lesson unlocked: previous lesson is complete/mastered.
+- Known letters can unlock after Learning because the graphemes have been taught.
+- Known lexical practice words should unlock after passed Practice so the words
+  list represents tested reading wins. Nonsense targets remain excluded.
+
+### Implementation Steps
+
+1. Add route structure:
+   - `/learn/[id]` for Learning.
+   - `/learn/[id]/practice` for standalone Practice.
+   - Preserve direct route validation so locked practice routes redirect or show
+     a clear locked state.
+2. Rework Learning phase:
+   - keep intro, breakdown, letters, and rules;
+   - include exactly two simple core practice targets as guided read-before-reveal
+     transfer;
+   - end with a Learning-complete screen and a primary CTA to Practice.
+3. Build Practice phase:
+   - start with a flip-card stack for the full core practice set;
+   - include a mini-batch recap that shows all targets Thai-only with tap-to-review
+     answers;
+   - finish with a scored `10` item check for Lesson 1, passing at `6/10`;
+   - allow retry from the score screen without sending the learner back through
+     Learning.
+4. Update lesson list cards:
+   - show separate Learn and Practice buttons;
+   - lock Practice until Learning is complete;
+   - badge states should distinguish current learning, practice unlocked, passed,
+     and locked.
+5. Update progress and sync boundaries:
+   - add phase-aware local progress fields and migration from the current binary
+     progress shape;
+   - update learner projection/sync DTOs if server-backed completion starts
+     distinguishing learning completion from practice mastery;
+   - derive next-lesson unlocks from passed Practice, not from entering Practice.
+6. Fix publication generation:
+   - derive role keys from `entry.tier`
+     (`core -> practice_core`, `extension -> practice_extension`);
+   - preserve `sourceType` in vocabulary metadata;
+   - keep anchors materialized separately as `roleKey: "anchor"`.
+7. Add focused validation:
+   - static lesson lint: every non-exempt lesson has at least one core practice
+     target now and targets ten core reads as the curriculum is filled out;
+   - publication lint: generated payloads include `practice_core` entries;
+   - route/component test: Learning completion unlocks Practice but does not
+     unlock Lesson 2;
+   - route/component test: Practice score below threshold keeps Lesson 2 locked;
+   - route/component test: Practice score at or above threshold unlocks Lesson 2.
+8. Manual QA Lesson 1:
+   - walk Learning and confirm only the two guided practice words appear there;
+   - finish Learning and confirm Practice unlocks;
+   - score `5/10` and confirm Lesson 2 remains locked with retry available;
+   - score `6/10` or higher and confirm Lesson 2 unlocks;
+   - confirm transliteration and meaning stay hidden until reveal in the flip-card
+     stack.
+
+### Layout Options
+
+1. **Flip-card stack, recommended for Practice.**
+   - Show the target as a tactile card with a reveal face, plus a compact
+     progress rail for the ten core reads.
+   - Best fit for engagement because the learner gets a clear attempt/reveal loop
+     without seeing the whole answer list too early.
+   - Requires keyboard support, semantic buttons, screen-reader labels, and
+     reduced-motion handling.
+2. **Mini-batch recap, recommended before scoring.**
+   - After the flip-card stack, show all Thai targets again without answers and
+     let the learner tap any card to re-open the answer.
+   - Gives a retention bump before scoring while preserving learner control.
+3. **Confidence self-rating, later enhancement.**
+   - After reveal, ask "Got it" / "Shaky" before moving on. Store only local
+     transient state at first, then use it later for review selection.
+   - Strong for retention signals, but it should wait until the threshold-gated
+     Practice flow is stable.
+
+Recommended first pass: Learning gets two simple guided read-before-reveal cards.
+Practice gets the flip-card stack, mini-batch recap, and a scored `10` item check
+with a `6/10` pass threshold for Lesson 1.
+
 ## Progress
 
 - [x] Discovery and research
@@ -259,40 +397,126 @@ Sensitive-language guidance:
 - [x] Documentation updates
 - [x] Runtime data/model implementation
 - [x] Database/DTO publication alignment
-- [x] Thai Lesson 1 rework
+- [x] Lesson Learning/Practice split implementation
+- [x] Lesson list and home CTA updates
 - [ ] Full Thai practice vocabulary expansion
-- [x] Validation
+- [x] Focused validation
+
+## Implementation Notes
+
+- Local progress is now schema version `3` and stores:
+  - `learningCompleted` / `learningCompletedAt`
+  - `practiceAttempts`
+  - `bestPracticeScore` / `latestPracticeScore`
+  - `practicePassed` / `practicePassedAt`
+- Old binary lesson-complete snapshots migrate forward by treating prior lesson
+  completion as both Learning-complete and Practice-passed.
+- Known letters now unlock after Learning. Known words still unlock only after
+  passed Practice.
+- `/learn/[id]` is now the unscored Learning route.
+- `/learn/[id]/practice` is now the scored Practice route.
+- Practice currently uses:
+  - a flip-card stack across core plus extension targets;
+  - a mini-batch recap across the same set;
+  - a scored checkpoint over core `drillTarget` entries only.
+- The blank Practice regression on stale publication artifacts was fixed in
+  `src/lib/server/published-lessons.ts` by normalizing legacy generated lessons
+  back onto the current canonical `thaiPack` lesson shape at runtime.
+- The practice pass gate is currently modeled as a fixed `60%` threshold via the
+  progress store helper. Lesson 1 therefore requires `6/10`.
+- Server sync is intentionally conservative for now:
+  - failed first-time Practice attempts stay local only;
+  - passed attempts, and any later attempts after a lesson is already passed,
+    continue to use the existing lesson-completion sync pipe;
+  - this avoids falsely completing lessons on the current backend contract,
+    which only supports `completed: true` lesson attempts.
+
+## Next Phase: Scored Multiple-Choice Practice Cards
+
+### Product Direction Captured On 2026-06-13
+
+- The current split between an unscored flip-card deck and a later scored
+  checkpoint is too indirect.
+- The main Practice interaction should itself become the scored activity.
+- Keep the flip-card animation, but make the answer choice trigger the reveal.
+- Each practice item should:
+  - show the Thai word first;
+  - present `6` multiple-choice options below the card;
+  - flip to the answer face as soon as the learner chooses an option;
+  - lock that item's score on first choice;
+  - allow the learner to flip back and forth before advancing;
+  - require an explicit `Next` button to move to the next question.
+
+### Planned UI / Flow Update
+
+1. Replace the separate `StepPracticeCheckpoint` phase with a scored
+   `StepPracticeDeck` flow.
+2. Use the current core `drillTarget` items as the scored question set so the
+   lesson gate still passes at `6/10` for Lesson 1.
+3. Generate up to `6` deterministic answer options per item, with the correct
+   pronunciation/definition plus lesson-appropriate distractors.
+4. Auto-flip the card when an answer is chosen, then expose:
+   - a flip toggle so the learner can review front/back freely;
+   - a `Next question` / `See score` button for progression.
+5. Keep the mini-batch recap as a lightweight review surface, but move it out of
+   the role of "real scoring happens later."
+6. Update copy, progress labels, and lesson docs so Practice is described as a
+   scored card run rather than "deck, recap, checkpoint."
+
+### Planned Implementation Notes
+
+- Route/state machine:
+  - simplify `/learn/[id]/practice/+page.svelte` from
+    `deck -> recap -> checkpoint -> complete` to a flow where the deck emits the
+    scored result directly before completion.
+- Component work:
+  - rebuild `StepPracticeDeck.svelte` around multiple choice state, answer
+    locking, flip toggling, and explicit next-button navigation;
+  - retire or remove `StepPracticeCheckpoint.svelte` once the new deck is live.
+- Scoring:
+  - continue recording percent score through `recordLessonPracticeAttempt`;
+  - preserve the current lesson-unlock contract based on passing Practice.
+- Validation:
+  - manually verify one full Lesson 1 practice run, including wrong-answer and
+    right-answer states, back-and-forth flipping, next-button progression, and
+    the final unlock threshold.
 
 ## Open Questions
 
-- What should the two remaining Lesson 1 practice targets be after Thai review?
-- Should nonsense targets ever be stored in `knownWords`, or should they only
-  count as decoding practice?
-- Should optional extension practice be skippable by default, or only after a
-  learner has demonstrated high accuracy?
+- Do we want first-time failed Practice attempts to sync cross-device, which
+  would require a backend contract that can distinguish `completed: false`
+  attempts from passed mastery attempts?
+- Should the Practice checkpoint remain tied to authored `core` `drillTarget`
+  entries, or should it eventually become a separately authored `practiceCheck`
+  payload with explicit distractors?
+- Should extension targets remain mixed into the Practice deck/recap by default,
+  or move behind an explicit "extra reps" branch after the core set?
 - Do we want a hard validator that blocks every published lesson below ten core
   practice targets, or a warning with explicit exceptions for early lessons?
+- Should the mini-batch recap stay between the scored deck and the score screen,
+  or move to a post-score review surface once the scored-card flow is in place?
 
 ## Validation Notes
 
-- `git diff --check` passed for the touched files.
-- Focused `eslint` and `stylelint` checks on touched source files passed.
-- `node scripts/generate-thai-seed.mjs > supabase/seed.sql` succeeded.
-- A direct lesson-data overlap audit confirmed that current rule examples no
-  longer exactly match current lesson practice targets before the transfer step.
-- `pnpm publication:generate` failed because the script needs a reachable
-  delivery publication source and none is configured in this sandbox.
-- `pnpm db:smoke:delivery` failed because `PUBLIC_SUPABASE_URL` and
-  `PUBLIC_SUPABASE_ANON_KEY` are not configured here.
-- `pnpm check` is still blocked by a pre-existing repo issue: missing Node type
-  definitions referenced by `src/lib/server/published-lessons.ts` and
-  `tsconfig.json`.
-- Repo-wide `markdownlint` is still blocked by long-standing hard-tab violations
-  in `docs/database-dto-spec.md` outside the lines changed for this task.
+- `git diff --check` passed.
+- `pnpm prettier --check` passed for the touched Svelte/TS lesson files after
+  local formatting.
+- `pnpm check` now only fails on the pre-existing repo-wide Node typings issue:
+  `tsconfig.json` references the `node` type library, but this workspace does
+  not currently resolve Node typings for `src/lib/server/published-lessons.ts`.
+- `pnpm build` failed in `pnpm publication:generate` because
+  `scripts/generate-publication-artifact.mjs` could not reach its delivery
+  source (`fetch failed`) in this sandbox.
+- `pnpm check:all` failed at repo-wide formatting before reaching lint/stylelint
+  because there are unrelated existing Prettier issues in files outside this
+  task, including historical `.ai/`, `.kilo/`, and `docs/database-dto-spec.md`
+  entries.
 
 ## Follow-Up
 
-- Update `.ai/curriculum/thai-reading-v1.md` as the Thai-specific tracker for
-  the expansion.
+- Expand Lessons 2+ so each checkpoint has a more robust core practice pool.
+- Decide whether incomplete Practice attempts need first-class server support.
 - Consider adding a reusable curriculum lint command once the first expanded
-  lesson lands.
+  post-Lesson-1 checkpoint lands.
+- Implement the scored multiple-choice flip-card Practice flow captured in the
+  "Next Phase" section above.

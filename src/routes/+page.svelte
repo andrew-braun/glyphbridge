@@ -3,24 +3,35 @@
 	import HomeStatsOverview from "$lib/components/content/home/HomeStatsOverview.svelte";
 	import LessonList from "$lib/components/content/lesson/LessonList.svelte";
 	import { authSession } from "$lib/stores/learner";
-	import { currentLessonId, knownLetters, knownWords, totalLessons } from "$lib/stores/progress";
+	import {
+		completedLessonCount,
+		knownLetters,
+		knownWords,
+		resumeHref,
+		resumeTarget,
+		totalLessons,
+	} from "$lib/stores/progress";
 
 	const hasStartedLearning = $derived(
-		$currentLessonId > 1 || $knownLetters.length > 0 || $knownWords.length > 0,
+		$completedLessonCount > 0 || $knownLetters.length > 0 || $knownWords.length > 0,
 	);
 	const showLearnerDetails = $derived($authSession.authenticated || hasStartedLearning);
 </script>
 
 <div class="home container">
-	<HomeHero authenticated={$authSession.authenticated} currentLessonId={$currentLessonId} />
+	<HomeHero
+		authenticated={$authSession.authenticated}
+		resumeHref={$resumeHref}
+		resumePhase={$resumeTarget.phase}
+	/>
 	{#if showLearnerDetails}
 		<HomeStatsOverview
 			knownLetters={$knownLetters}
 			knownWords={$knownWords}
-			currentLessonId={$currentLessonId}
+			completedLessonCount={$completedLessonCount}
 			{totalLessons}
 		/>
-		<LessonList currentLessonId={$currentLessonId} knownWords={$knownWords} />
+		<LessonList />
 	{/if}
 </div>
 

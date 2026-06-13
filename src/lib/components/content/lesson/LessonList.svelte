@@ -1,26 +1,27 @@
 <script lang="ts">
 	import Badge from "$lib/components/ui/Badge.svelte";
+	import Button from "$lib/components/ui/Button.svelte";
 	import Heading from "$lib/components/ui/Heading.svelte";
 	import Reveal from "$lib/components/ui/Reveal.svelte";
 	import { thaiPack } from "$lib/data/thai";
-	import type { Word } from "$lib/data/types";
+	import { getLessonJourneyState, type LessonJourneyState, progress } from "$lib/stores/progress";
 	import { cn } from "$lib/utils/cn";
 
-	interface Props {
-		currentLessonId: number;
-		knownWords: Word[];
-	}
-
-	let { currentLessonId, knownWords }: Props = $props();
-
-	function getLessonItemClasses(isCompleted: boolean, isCurrent: boolean, isLocked: boolean) {
+	function getLessonItemClasses(state: LessonJourneyState) {
 		return cn(
 			"lesson-item",
 			"card",
-			isCompleted && "lesson-item--completed",
-			isCurrent && "lesson-item--current",
-			isLocked && "lesson-item--locked",
+			state.practicePassed && "lesson-item--completed",
+			state.isCurrent && "lesson-item--current",
+			!state.learnUnlocked && "lesson-item--locked",
 		);
+	}
+
+	function getStatusLabel(state: LessonJourneyState) {
+		if (!state.learnUnlocked) return "Locked";
+		if (state.practicePassed) return "Passed";
+		if (state.practiceUnlocked) return "Practice Ready";
+		return "Learning";
 	}
 </script>
 
@@ -28,41 +29,63 @@
 	<Heading>Your Lessons</Heading>
 	<div class="lesson-list">
 		{#each thaiPack.lessons as lesson}
-			{@const isCompleted = knownWords.some((w) => w.thai === lesson.anchorWord.thai)}
-			{@const isCurrent = lesson.id === currentLessonId}
-			{@const isLocked = lesson.id > currentLessonId}
+			{@const state = getLessonJourneyState($progress, lesson.id)}
 			<Reveal as="div" delay={30 + (lesson.stage - 1) * 45} distance={14}>
-				<svelte:element
-					this={isLocked ? "div" : "a"}
-					href={isLocked ? undefined : `/learn/${lesson.id}`}
-					class={getLessonItemClasses(isCompleted, isCurrent, isLocked)}
-					aria-disabled={isLocked ? "true" : undefined}
-				>
-					<div class="lesson-item__status">
-						{#if isCompleted}
-							<span class="lesson-item__check">&#10003;</span>
-						{:else if isCurrent}
-							<span class="lesson-item__dot"></span>
-						{:else}
-							<span class="lesson-item__lock">&#128274;</span>
-						{/if}
-					</div>
-
+				<article class={getLessonItemClasses(state)}>
 					<div class="lesson-item__content">
-						<Badge class="lesson-item__stage">Stage {lesson.stage}</Badge>
+						<div class="lesson-item__header">
+							<Badge class="lesson-item__stage">Stage {lesson.stage}</Badge>
+							<Badge tone={state.practicePassed ? "success" : "accent"}>
+								{getStatusLabel(state)}
+							</Badge>
+						</div>
 						<h3 class="lesson-item__title">{lesson.title}</h3>
 						<span class="lesson-item__word thai thai--sm">{lesson.anchorWord.thai}</span
 						>
 						<span class="lesson-item__meaning">{lesson.anchorWord.meaning}</span>
+						<div class="lesson-item__actions">
+							<Button
+								href={state.learnUnlocked ? `/learn/${lesson.id}` : undefined}
+								variant="primary"
+								disabled={!state.learnUnlocked}
+							>
+								{state.learningCompleted ? "Learn Again" : "Learn"}
+							</Button>
+							<Button
+								href={state.practiceUnlocked
+									? `/learn/${lesson.id}/practice`
+									: undefined}
+								variant="secondary"
+								disabled={!state.practiceUnlocked}
+							>
+								Practice
+							</Button>
+						</div>
 					</div>
 
-					<div class="lesson-item__letters">
-						{#each lesson.newLetters as letter}
-							<span class="lesson-item__letter thai thai--sm">{letter.character}</span
-							>
-						{/each}
+					<div class="lesson-item__aside">
+						<div class="lesson-item__letters">
+							{#each lesson.newLetters as letter}
+								<span class="lesson-item__letter thai thai--sm"
+									>{letter.character}</span
+								>
+							{/each}
+						</div>
+						<p class="lesson-item__score">
+							{#if state.practicePassed}
+								Best {state.bestPracticeScore ?? 0}%
+							{:else if state.practiceAttempts > 0}
+								Latest {state.latestPracticeScore ?? 0}%
+							{:else if !state.learnUnlocked}
+								Previous practice gate
+							{:else if !state.practiceUnlocked}
+								Finish Learning first
+							{:else}
+								Ready for the score gate
+							{/if}
+						</p>
 					</div>
-				</svelte:element>
+				</article>
 			</Reveal>
 		{/each}
 	</div>
@@ -81,18 +104,14 @@
 	}
 
 	.lesson-item {
-		align-items: center;
-		color: inherit;
-		display: flex;
+		display: grid;
 		gap: $space-lg;
 		padding: $space-lg $space-xl;
-		text-decoration: none;
-		@include motion-safe-transition(
+		transition:
 			border-color $transition-base,
 			box-shadow $transition-base,
 			transform $transition-base,
-			opacity $transition-fast
-		);
+			opacity $transition-fast;
 
 		&:hover {
 			transform: translateY(-2px);
@@ -108,47 +127,21 @@
 		}
 
 		&--locked {
-			cursor: not-allowed;
-			opacity: 0.5;
-
-			&:hover {
-				box-shadow: $shadow-md;
-				transform: none;
-			}
+			opacity: 0.72;
 		}
 
-		&__status {
-			align-items: center;
+		&__content,
+		&__aside {
+			display: grid;
+			gap: $space-sm;
+		}
+
+		&__header,
+		&__actions,
+		&__letters {
 			display: flex;
-			flex-shrink: 0;
-			height: 40px;
-			justify-content: center;
-			width: 40px;
-		}
-
-		&__check {
-			color: var(--color-success);
-			font-size: $font-size-xl;
-			font-weight: 700;
-		}
-
-		&__dot {
-			@include motion-safe-animation(pulse 2s ease-in-out infinite);
-			background: var(--color-primary);
-			border-radius: $radius-full;
-			height: 14px;
-			width: 14px;
-		}
-
-		&__lock {
-			font-size: $font-size-lg;
-		}
-
-		&__content {
-			display: flex;
-			flex: 1;
-			flex-direction: column;
-			gap: $space-xs;
+			flex-wrap: wrap;
+			gap: $space-sm;
 		}
 
 		&__title {
@@ -159,14 +152,22 @@
 			color: var(--color-primary-strong);
 		}
 
-		&__meaning {
+		&__meaning,
+		&__score {
 			color: var(--color-text-muted);
 			font-size: $font-size-sm;
 		}
 
+		&__actions {
+			margin-top: $space-xs;
+
+			:global(.btn) {
+				flex: 1 1 11rem;
+			}
+		}
+
 		&__letters {
-			display: flex;
-			gap: $space-sm;
+			justify-content: flex-end;
 		}
 
 		&__letter {
@@ -180,22 +181,26 @@
 			justify-content: center;
 			width: 44px;
 		}
+
+		&__score {
+			margin: 0;
+			text-align: right;
+		}
 	}
 
-	@keyframes pulse {
-		0%,
-		100% {
-			opacity: 1;
-		}
-		50% {
-			opacity: 0.5;
+	@media (min-width: $bp-md) {
+		.lesson-item {
+			align-items: center;
+			grid-template-columns: minmax(0, 1fr) auto;
 		}
 	}
 
 	@media (max-width: $bp-md) {
 		.lesson-item {
-			&__letters {
-				display: none;
+			&__letters,
+			&__score {
+				justify-content: flex-start;
+				text-align: left;
 			}
 		}
 	}

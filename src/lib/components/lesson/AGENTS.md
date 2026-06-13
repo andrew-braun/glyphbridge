@@ -6,7 +6,7 @@
 
 ## Pedagogical Constraints
 
-- Preserve the canonical order of the learning flow: intro, breakdown, letters, rules, same letters/new words, drills, complete.
+- Preserve the canonical phase order: Learning runs intro, breakdown, letters, rules, guided same-letters reads, handoff; Practice runs card stack, recap, scored checkpoint, result.
 - Each step should have one clear learning objective.
 - Keep explanations concise, concrete, and cumulative.
 - Let learners attempt a transfer read before revealing pronunciation, meaning, or segmentation.

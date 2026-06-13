@@ -1,186 +1,134 @@
-<!--
-  Lesson Page — /learn/[id]
-  ==========================
-	The core learning experience. Orchestrates a 7-step lesson flow when practice
-	vocabulary exists:
-		1. Intro      — Show the anchor word, spark curiosity
-		2. Breakdown  — Reveal syllable structure
-		3. Letters    — Teach new letters one at a time
-		4. Rules      — Explain spelling/pronunciation rules
-		5. New Words  — Transfer the same letters into fresh word contexts
-		6. Drills     — Multiple-choice practice questions
-		7. Complete   — Score summary and navigation
-
-  Each step is its own component (in $lib/components/lesson/).
-  This page manages the step state machine and progress persistence.
--->
 <script lang="ts">
+	import { onMount } from "svelte";
+
 	import { goto } from "$app/navigation";
 	import PageShell from "$lib/components/layout/PageShell.svelte";
 	import LessonBackLink from "$lib/components/lesson/LessonBackLink.svelte";
+	import LessonGateState from "$lib/components/lesson/LessonGateState.svelte";
 	import LessonProgressTracker from "$lib/components/lesson/LessonProgressTracker.svelte";
 	import StepBreakdown from "$lib/components/lesson/StepBreakdown.svelte";
-	import StepComplete from "$lib/components/lesson/StepComplete.svelte";
-	import StepDrills from "$lib/components/lesson/StepDrills.svelte";
 	import StepIntro from "$lib/components/lesson/StepIntro.svelte";
+	import StepLearningComplete from "$lib/components/lesson/StepLearningComplete.svelte";
 	import StepLetters from "$lib/components/lesson/StepLetters.svelte";
 	import StepRules from "$lib/components/lesson/StepRules.svelte";
 	import StepSameLettersNewWords from "$lib/components/lesson/StepSameLettersNewWords.svelte";
-	import { completeLesson } from "$lib/stores/progress";
-	import {
-		createLessonCompletionSyncInput,
-		queueAndFlushLessonCompletionAttempt,
-	} from "$lib/stores/progress-sync";
+	import { completeLessonLearning, getLessonJourneyState, progress } from "$lib/stores/progress";
 
 	import type { PageProps } from "./$types";
 
 	let { data }: PageProps = $props();
 	const publication = $derived(data.publication);
 	const lesson = $derived(data.lesson);
-	const nextLessonId = $derived(data.nextLessonId);
 	const corePracticeWords = $derived(lesson.vocabulary.filter((entry) => entry.tier === "core"));
-	const extensionPracticeWords = $derived(
-		lesson.vocabulary.filter((entry) => entry.tier === "extension"),
-	);
-	const hasPracticeWords = $derived(corePracticeWords.length + extensionPracticeWords.length > 0);
+	const guidedPracticeWords = $derived(corePracticeWords.slice(0, 2));
+	const hasGuidedPracticeWords = $derived(guidedPracticeWords.length > 0);
+	const lessonJourney = $derived.by(() => getLessonJourneyState($progress, lesson.id));
 
-	// --- Step state machine ---
-	// The lesson progresses linearly through these steps.
-	type Step = "intro" | "breakdown" | "letters" | "rules" | "sameLetters" | "drills" | "complete";
+	type Step = "intro" | "breakdown" | "letters" | "rules" | "sameLetters" | "complete";
+
 	const stepOrder = $derived(
-		hasPracticeWords
+		hasGuidedPracticeWords
 			? ([
 					"intro",
 					"breakdown",
 					"letters",
 					"rules",
 					"sameLetters",
-					"drills",
 					"complete",
 				] satisfies Step[])
-			: (["intro", "breakdown", "letters", "rules", "drills", "complete"] satisfies Step[]),
+			: (["intro", "breakdown", "letters", "rules", "complete"] satisfies Step[]),
 	);
 
-	let currentStepIndex = $state(0);
-	let currentStep = $derived(stepOrder[currentStepIndex]);
+	let currentStepIndex = $derived(0);
+	let hasHydratedProgress = $state(false);
 
-	// Drill results — passed from StepDrills to StepComplete
-	let drillCorrectCount = $state(0);
-
-	// Progress bar percentage (0% at intro, 100% at complete)
+	const currentStep = $derived(stepOrder[currentStepIndex]);
 	const progressPercent = $derived((currentStepIndex / (stepOrder.length - 1)) * 100);
+	const learnLocked = $derived(hasHydratedProgress && !lessonJourney.learnUnlocked);
 
-	// Check if there's a lesson after this one
-	const hasNextLesson = $derived(nextLessonId !== null);
-
-	function resetLessonFlow(lessonId: number) {
-		if (lessonId < 1) return;
-
-		currentStepIndex = 0;
-		drillCorrectCount = 0;
-	}
-
-	$effect(() => {
-		resetLessonFlow(lesson.id);
+	onMount(() => {
+		hasHydratedProgress = true;
 	});
 
-	/** Advance to the next step in the lesson flow. */
 	function nextStep() {
 		if (currentStepIndex < stepOrder.length - 1) {
-			currentStepIndex++;
+			currentStepIndex += 1;
 		}
 	}
 
-	/**
-	 * Called when all drills are completed.
-	 * Saves progress to localStorage and advances to the complete step.
-	 */
-	function handleDrillsComplete(correctCount: number) {
-		drillCorrectCount = correctCount;
-		const score = Math.round((correctCount / lesson.drills.length) * 100);
-		const completion = completeLesson(lesson.id, score);
-
-		if (completion?.completedAt) {
-			void queueAndFlushLessonCompletionAttempt(
-				createLessonCompletionSyncInput({
-					completedAt: completion.completedAt,
-					lessonId: lesson.id,
-					publicationId: publication.publicationId,
-					score,
-				}),
-			);
-		}
-
+	function handleLearningComplete() {
+		completeLessonLearning(lesson.id);
 		nextStep();
 	}
 
-	/** Navigate to the next lesson in the curriculum. */
-	function goToNextLesson() {
-		if (nextLessonId !== null) {
-			goto(`/learn/${nextLessonId}`);
-		} else {
-			goto("/learn");
-		}
+	function goToPractice() {
+		goto(`/learn/${lesson.id}/practice`);
 	}
 </script>
 
 <svelte:head>
-	<title>{lesson.title} — Glyphin</title>
+	<title>{lesson.title} — Learn — Glyphin</title>
 	<meta
 		name="description"
-		content={`Learn to read ${lesson.anchorWord.thai}, meaning ${lesson.anchorWord.meaning}, through letters, reading rules, and short Thai practice drills.`}
+		content={`Learn to read ${lesson.anchorWord.thai}, meaning ${lesson.anchorWord.meaning}, through letters, rules, and guided Thai reads before you enter scored practice.`}
 	/>
 	<meta name="glyphbridge-publication-id" content={publication.publicationId} />
 	<meta name="glyphbridge-publication-cache-key" content={publication.publicationCacheKey} />
 </svelte:head>
 
 <PageShell class="lesson">
-	<div class="lesson__chrome">
-		<LessonBackLink />
-		<LessonProgressTracker
-			currentStep={currentStepIndex + 1}
-			totalSteps={stepOrder.length}
-			value={progressPercent}
+	{#if learnLocked}
+		<LessonGateState
+			title="This lesson is still locked."
+			description="Pass the practice gate from the previous lesson to open this learning phase."
+			primaryHref="/learn"
+			primaryLabel="Back to lessons"
+			secondaryHref={`/learn/${Math.max(1, lesson.id - 1)}/practice`}
+			secondaryLabel="Open previous practice"
 		/>
-	</div>
-
-	<!-- Render the current step component -->
-	{#key `${lesson.id}-${currentStep}`}
-		<div class="lesson__stage">
-			{#if currentStep === "intro"}
-				<StepIntro {lesson} onNext={nextStep} />
-			{:else if currentStep === "breakdown"}
-				<StepBreakdown {lesson} onNext={nextStep} />
-			{:else if currentStep === "letters"}
-				<StepLetters letters={lesson.newLetters} onComplete={nextStep} />
-			{:else if currentStep === "rules"}
-				<StepRules
-					rules={lesson.rulesIntroduced}
-					onComplete={nextStep}
-					completeLabel={hasPracticeWords
-						? "Try them in new words ->"
-						: "Bring on the drills ->"}
-				/>
-			{:else if currentStep === "sameLetters"}
-				<StepSameLettersNewWords
-					{lesson}
-					coreWords={corePracticeWords}
-					extensionWords={extensionPracticeWords}
-					onComplete={nextStep}
-				/>
-			{:else if currentStep === "drills"}
-				<StepDrills drills={lesson.drills} onComplete={handleDrillsComplete} />
-			{:else if currentStep === "complete"}
-				<StepComplete
-					{lesson}
-					correctCount={drillCorrectCount}
-					totalDrills={lesson.drills.length}
-					onNextLesson={goToNextLesson}
-					{hasNextLesson}
-				/>
-			{/if}
+	{:else}
+		<div class="lesson__chrome">
+			<LessonBackLink />
+			<LessonProgressTracker
+				currentStep={currentStepIndex + 1}
+				totalSteps={stepOrder.length}
+				value={progressPercent}
+			/>
 		</div>
-	{/key}
+
+		{#key `${lesson.id}-${currentStep}`}
+			<div class="lesson__stage">
+				{#if currentStep === "intro"}
+					<StepIntro {lesson} onNext={nextStep} />
+				{:else if currentStep === "breakdown"}
+					<StepBreakdown {lesson} onNext={nextStep} />
+				{:else if currentStep === "letters"}
+					<StepLetters letters={lesson.newLetters} onComplete={nextStep} />
+				{:else if currentStep === "rules"}
+					<StepRules
+						rules={lesson.rulesIntroduced}
+						onComplete={hasGuidedPracticeWords ? nextStep : handleLearningComplete}
+						completeLabel={hasGuidedPracticeWords
+							? "Try two guided reads ->"
+							: "Finish learning ->"}
+					/>
+				{:else if currentStep === "sameLetters"}
+					<StepSameLettersNewWords
+						{lesson}
+						coreWords={guidedPracticeWords}
+						onComplete={handleLearningComplete}
+					/>
+				{:else if currentStep === "complete"}
+					<StepLearningComplete
+						{lesson}
+						guidedWordCount={guidedPracticeWords.length}
+						practiceWordCount={corePracticeWords.length}
+						onStartPractice={goToPractice}
+					/>
+				{/if}
+			</div>
+		{/key}
+	{/if}
 </PageShell>
 
 <style lang="scss">

@@ -1,10 +1,3 @@
-/**
- * Progress Store
- *
- * Manages the learner's progress state using Svelte stores backed by localStorage.
- * Provides writable and derived stores for tracking known letters, known words,
- * lesson completion, and the current lesson. All mutations auto-persist to localStorage.
- */
 import { derived, type Unsubscriber, writable } from "svelte/store";
 
 import type { LearnerProjection } from "$lib/data/learner";
@@ -14,13 +7,42 @@ import type {
 	LessonProgress,
 	LessonVocabularyEntry,
 	ProgressSnapshot,
-	ProgressSnapshotV2,
+	ProgressSnapshotV3,
 	Word,
 } from "$lib/data/types";
 
-/** localStorage key under which the serialized progress JSON is stored */
 const STORAGE_KEY = "glyphbridge_progress";
-const STORAGE_VERSION = 2;
+const STORAGE_VERSION = 3;
+
+export const PRACTICE_PASS_PERCENT = 60;
+
+export type LessonJourneyPhase = "learn" | "practice" | "review";
+
+export type LessonJourneyState = {
+	lessonId: number;
+	learnUnlocked: boolean;
+	practiceUnlocked: boolean;
+	learningCompleted: boolean;
+	practicePassed: boolean;
+	practiceAttempts: number;
+	bestPracticeScore?: number;
+	latestPracticeScore?: number;
+	isCurrent: boolean;
+	currentPhase: Exclude<LessonJourneyPhase, "review"> | null;
+};
+
+export type ResumeTarget = {
+	lessonId: number | null;
+	phase: LessonJourneyPhase;
+	href: string;
+};
+
+export type LessonPracticeAttemptResult = {
+	completedAt: string;
+	entry: LessonProgress;
+	practicePassed: boolean;
+	shouldSync: boolean;
+};
 
 const lessons = thaiPack.lessons;
 const firstLessonId = lessons[0]?.id ?? 1;
@@ -51,7 +73,6 @@ const knownWordThaiMap = new Map(
 		.map((word) => [word.thai, word] as const),
 );
 
-/** Returns a blank AppProgress object representing a brand-new learner */
 function createInitialProgress(): AppProgress {
 	return {
 		knownLetters: [],
@@ -105,12 +126,17 @@ function normalizeKnownWords(value: unknown): Word[] {
 	return normalized;
 }
 
-function normalizeDrillScore(value: unknown): number | undefined {
+function normalizeScore(value: unknown): number | undefined {
 	if (typeof value !== "number" || !Number.isFinite(value)) return undefined;
 	return Math.max(0, Math.min(100, Math.round(value)));
 }
 
-function normalizeCompletedAt(value: unknown): string | undefined {
+function normalizeNonNegativeInteger(value: unknown): number | undefined {
+	if (typeof value !== "number" || !Number.isInteger(value) || value < 0) return undefined;
+	return value;
+}
+
+function normalizeTimestamp(value: unknown): string | undefined {
 	if (typeof value !== "string") return undefined;
 	return Number.isNaN(Date.parse(value)) ? undefined : value;
 }
@@ -126,27 +152,57 @@ function normalizeLessonProgress(value: unknown): LessonProgress[] {
 		const lessonId = normalizeLessonId(item.lessonId);
 		if (lessonId === null) continue;
 
-		const normalizedEntry: LessonProgress = {
+		const legacyCompletedAt = normalizeTimestamp(item.completedAt);
+		const legacyDrillScore = normalizeScore(item.drillScore);
+
+		let learningCompletedAt = normalizeTimestamp(item.learningCompletedAt) ?? legacyCompletedAt;
+		const practicePassedAt = normalizeTimestamp(item.practicePassedAt) ?? legacyCompletedAt;
+		const bestPracticeScore = normalizeScore(item.bestPracticeScore ?? legacyDrillScore);
+		const latestPracticeScore = normalizeScore(item.latestPracticeScore ?? legacyDrillScore);
+
+		let learningCompleted =
+			item.learningCompleted === true ||
+			item.completed === true ||
+			learningCompletedAt !== undefined;
+		const practicePassed =
+			item.practicePassed === true ||
+			item.completed === true ||
+			practicePassedAt !== undefined;
+
+		if (practicePassed) {
+			learningCompleted = true;
+			learningCompletedAt ??= practicePassedAt;
+		}
+
+		let practiceAttempts = normalizeNonNegativeInteger(item.practiceAttempts) ?? 0;
+		if (
+			practiceAttempts === 0 &&
+			(bestPracticeScore !== undefined || latestPracticeScore !== undefined || practicePassed)
+		) {
+			practiceAttempts = 1;
+		}
+
+		byLessonId.set(lessonId, {
 			lessonId,
-			completed: item.completed === true,
-		};
-
-		const drillScore = normalizeDrillScore(item.drillScore);
-		if (drillScore !== undefined) {
-			normalizedEntry.drillScore = drillScore;
-		}
-
-		const completedAt = normalizeCompletedAt(item.completedAt);
-		if (completedAt) {
-			normalizedEntry.completedAt = completedAt;
-		}
-
-		byLessonId.set(lessonId, normalizedEntry);
+			learningCompleted,
+			...(learningCompletedAt ? { learningCompletedAt } : {}),
+			practiceAttempts,
+			...(bestPracticeScore !== undefined ? { bestPracticeScore } : {}),
+			...(latestPracticeScore !== undefined ? { latestPracticeScore } : {}),
+			practicePassed,
+			...(practicePassedAt ? { practicePassedAt } : {}),
+		});
 	}
 
-	return Array.from(byLessonId.values()).sort((left, right) => {
-		return left.lessonId - right.lessonId;
-	});
+	return Array.from(byLessonId.values()).sort((left, right) => left.lessonId - right.lessonId);
+}
+
+function hasLearningCompleted(entry: LessonProgress | undefined): boolean {
+	return entry?.learningCompleted === true;
+}
+
+function hasPracticePassed(entry: LessonProgress | undefined): boolean {
+	return entry?.practicePassed === true;
 }
 
 function collectKnownLetters(
@@ -154,7 +210,7 @@ function collectKnownLetters(
 	lessonProgress: LessonProgress[],
 ): string[] {
 	const completedLessonIds = new Set(
-		lessonProgress.filter((entry) => entry.completed).map((entry) => entry.lessonId),
+		lessonProgress.filter(hasLearningCompleted).map((entry) => entry.lessonId),
 	);
 	const storedLetterSet = new Set(storedKnownLetters);
 	const normalized: string[] = [];
@@ -176,7 +232,7 @@ function collectKnownLetters(
 
 function collectKnownWords(storedKnownWords: Word[], lessonProgress: LessonProgress[]): Word[] {
 	const completedLessonIds = new Set(
-		lessonProgress.filter((entry) => entry.completed).map((entry) => entry.lessonId),
+		lessonProgress.filter(hasPracticePassed).map((entry) => entry.lessonId),
 	);
 	const storedWordSet = new Set(storedKnownWords.map((word) => word.thai));
 	const normalized: Word[] = [];
@@ -204,12 +260,12 @@ function collectKnownWords(storedKnownWords: Word[], lessonProgress: LessonProgr
 }
 
 function getCurrentLessonIdFromProgress(lessonProgress: LessonProgress[]): number {
-	const completedLessonIds = new Set(
-		lessonProgress.filter((entry) => entry.completed).map((entry) => entry.lessonId),
+	const passedLessonIds = new Set(
+		lessonProgress.filter(hasPracticePassed).map((entry) => entry.lessonId),
 	);
 
 	for (const lessonId of lessonIds) {
-		if (!completedLessonIds.has(lessonId)) {
+		if (!passedLessonIds.has(lessonId)) {
 			return lessonId;
 		}
 	}
@@ -243,23 +299,26 @@ function normalizeSnapshot(value: unknown): ProgressSnapshot | null {
 		};
 	}
 
-	if ("version" in value) {
-		return null;
+	if (value.version === 1 || value.version === 2) {
+		return {
+			version: value.version,
+			progress: normalizeProgress(value.progress),
+		};
 	}
 
 	return null;
 }
 
-function createSnapshot(progress: AppProgress): ProgressSnapshotV2 {
+function createSnapshot(progress: AppProgress): ProgressSnapshotV3 {
 	return {
 		version: STORAGE_VERSION,
 		progress: normalizeProgress(progress),
 	};
 }
 
-/** Loads saved progress from localStorage, falling back to initial state on failure or SSR */
 function loadProgress(): AppProgress {
 	if (typeof window === "undefined") return createInitialProgress();
+
 	try {
 		const stored = localStorage.getItem(STORAGE_KEY);
 		if (!stored) return createInitialProgress();
@@ -269,12 +328,13 @@ function loadProgress(): AppProgress {
 	} catch {
 		// ignore parse errors
 	}
+
 	return createInitialProgress();
 }
 
-/** Persists the current progress state to localStorage; silently no-ops during SSR */
 function saveProgress(progress: AppProgress) {
 	if (typeof window === "undefined") return;
+
 	try {
 		localStorage.setItem(STORAGE_KEY, JSON.stringify(createSnapshot(progress)));
 	} catch {
@@ -282,18 +342,106 @@ function saveProgress(progress: AppProgress) {
 	}
 }
 
-/** The primary writable store holding the full AppProgress state */
+function upsertLessonProgress(
+	lessonProgress: LessonProgress[],
+	nextEntry: LessonProgress,
+): LessonProgress[] {
+	return [
+		...lessonProgress.filter((entry) => entry.lessonId !== nextEntry.lessonId),
+		nextEntry,
+	].sort((left, right) => left.lessonId - right.lessonId);
+}
+
+function getLessonProgressEntry(
+	lessonProgress: LessonProgress[],
+	lessonId: number,
+): LessonProgress | undefined {
+	return lessonProgress.find((entry) => entry.lessonId === lessonId);
+}
+
+function summarizeResumeTarget(progressSnapshot: AppProgress): ResumeTarget {
+	for (const lessonId of lessonIds) {
+		const entry = getLessonProgressEntry(progressSnapshot.lessonProgress, lessonId);
+		if (hasPracticePassed(entry)) continue;
+
+		if (hasLearningCompleted(entry)) {
+			return {
+				lessonId,
+				phase: "practice",
+				href: `/learn/${lessonId}/practice`,
+			};
+		}
+
+		return {
+			lessonId,
+			phase: "learn",
+			href: `/learn/${lessonId}`,
+		};
+	}
+
+	return {
+		lessonId: lessonIds.length > 0 ? lastLessonId : null,
+		phase: "review",
+		href: "/practice",
+	};
+}
+
+function getPassedLessonCount(lessonProgress: LessonProgress[]): number {
+	return lessonProgress.filter(hasPracticePassed).length;
+}
+
+export function getLessonJourneyState(
+	progressSnapshot: AppProgress,
+	lessonId: number,
+): LessonJourneyState {
+	const lessonIndex = lessonIds.indexOf(lessonId);
+	const currentLessonId = getCurrentLessonIdFromProgress(progressSnapshot.lessonProgress);
+	const entry = getLessonProgressEntry(progressSnapshot.lessonProgress, lessonId);
+	const previousLessonId = lessonIndex > 0 ? lessonIds[lessonIndex - 1] : null;
+	const previousEntry =
+		previousLessonId === null
+			? undefined
+			: getLessonProgressEntry(progressSnapshot.lessonProgress, previousLessonId);
+	const learningCompleted = hasLearningCompleted(entry);
+	const practicePassed = hasPracticePassed(entry);
+
+	return {
+		lessonId,
+		learnUnlocked: previousLessonId === null || hasPracticePassed(previousEntry),
+		practiceUnlocked: learningCompleted,
+		learningCompleted,
+		practicePassed,
+		practiceAttempts: entry?.practiceAttempts ?? 0,
+		...(entry?.bestPracticeScore !== undefined
+			? { bestPracticeScore: entry.bestPracticeScore }
+			: {}),
+		...(entry?.latestPracticeScore !== undefined
+			? { latestPracticeScore: entry.latestPracticeScore }
+			: {}),
+		isCurrent: lessonId === currentLessonId,
+		currentPhase:
+			lessonId === currentLessonId && !practicePassed
+				? learningCompleted
+					? "practice"
+					: "learn"
+				: null,
+	};
+}
+
+export function getPracticePassCorrectCount(totalItems: number): number {
+	if (totalItems <= 0) return 0;
+	return Math.min(totalItems, Math.max(1, Math.ceil((totalItems * PRACTICE_PASS_PERCENT) / 100)));
+}
+
+function clampScore(score: number): number {
+	return Math.max(0, Math.min(100, Math.round(score)));
+}
+
 export const progress = writable<AppProgress>(createInitialProgress());
 
 let hasInitializedProgress = false;
 let persistProgressUnsubscribe: Unsubscriber | null = null;
 
-/**
- * Initializes the progress store by loading saved state from localStorage
- * and subscribing to future changes so they are automatically persisted.
- * The store self-initializes in the browser so routes can rely on it without
- * an explicit layout-level lifecycle hook.
- */
 function ensureProgressInitialized() {
 	if (typeof window === "undefined") return;
 	if (hasInitializedProgress) return;
@@ -305,49 +453,59 @@ function ensureProgressInitialized() {
 
 ensureProgressInitialized();
 
-/** Derived store: array of all Thai characters the learner has encountered */
 export const knownLetters = derived(progress, ($p) => $p.knownLetters);
-/** Derived store: array of all lesson vocabulary unlocked from completed lessons */
 export const knownWords = derived(progress, ($p) => $p.knownWords);
-/** Derived store: the numeric ID of the learner's current (or next) lesson */
 export const currentLessonId = derived(progress, ($p) => $p.currentLessonId);
-
-/** Total number of lessons available in the Thai curriculum */
+export const completedLessonCount = derived(progress, ($p) =>
+	getPassedLessonCount($p.lessonProgress),
+);
+export const resumeTarget = derived(progress, ($p) => summarizeResumeTarget($p));
+export const resumeHref = derived(resumeTarget, ($resumeTarget) => $resumeTarget.href);
 export const totalLessons = lessons.length;
-
-/**
- * Marks a lesson as completed and updates the learner's progress.
- * This function:
- *   1. Adds any newly introduced letters to the known letters list
- *   2. Adds the lesson's vocabulary words to the known words list
- *   3. Records (or updates) the lesson's completion status and drill score
- *   4. Advances the current lesson pointer to the next available lesson
- *
- * @param lessonId - The ID of the lesson being completed
- * @param drillScore - The learner's score on the drill section
- */
 
 export function applyLearnerProjection(projection: LearnerProjection) {
 	progress.update(($p) => {
 		const byLessonId = new Map($p.lessonProgress.map((entry) => [entry.lessonId, entry]));
 
 		for (const serverLesson of projection.lessons) {
-			if (serverLesson.status !== "completed") continue;
-
 			const existing = byLessonId.get(serverLesson.lessonId);
-			const serverScore = serverLesson.bestScore ?? serverLesson.latestScore ?? undefined;
-			const completedAt =
-				serverLesson.firstCompletedAt ??
-				serverLesson.lastAttemptAt ??
-				existing?.completedAt;
+			const serverBestScore = normalizeScore(serverLesson.bestScore ?? undefined);
+			const serverLatestScore = normalizeScore(serverLesson.latestScore ?? undefined);
+			const serverAttemptCount = Math.max(
+				serverLesson.attemptCount,
+				existing?.practiceAttempts ?? 0,
+			);
+			const practicePassed =
+				serverLesson.status === "completed" || existing?.practicePassed === true;
+			const learningCompleted = existing?.learningCompleted === true || practicePassed;
+			const practicePassedAt = serverLesson.firstCompletedAt ?? existing?.practicePassedAt;
+			const learningCompletedAt =
+				existing?.learningCompletedAt ?? practicePassedAt ?? undefined;
+			const shouldTrustServerLatest =
+				serverLesson.attemptCount >= (existing?.practiceAttempts ?? 0);
 
 			byLessonId.set(serverLesson.lessonId, {
 				lessonId: serverLesson.lessonId,
-				completed: true,
-				...(serverScore !== undefined || existing?.drillScore !== undefined
-					? { drillScore: Math.max(serverScore ?? 0, existing?.drillScore ?? 0) }
+				learningCompleted,
+				...(learningCompletedAt ? { learningCompletedAt } : {}),
+				practiceAttempts: serverAttemptCount,
+				...(serverBestScore !== undefined || existing?.bestPracticeScore !== undefined
+					? {
+							bestPracticeScore: Math.max(
+								serverBestScore ?? 0,
+								existing?.bestPracticeScore ?? 0,
+							),
+						}
 					: {}),
-				...(completedAt ? { completedAt } : {}),
+				...(serverLatestScore !== undefined || existing?.latestPracticeScore !== undefined
+					? {
+							latestPracticeScore: shouldTrustServerLatest
+								? (serverLatestScore ?? existing?.latestPracticeScore ?? 0)
+								: (existing?.latestPracticeScore ?? serverLatestScore ?? 0),
+						}
+					: {}),
+				practicePassed,
+				...(practicePassedAt ? { practicePassedAt } : {}),
 			});
 		}
 
@@ -360,64 +518,84 @@ export function applyLearnerProjection(projection: LearnerProjection) {
 			...merged,
 			currentLessonId: Math.max(
 				merged.currentLessonId,
-				projection.resumeLessonId ?? merged.currentLessonId,
+				projection.currentLessonId ?? merged.currentLessonId,
 			),
 		};
 	});
 }
 
-export function completeLesson(lessonId: number, drillScore: number): LessonProgress | null {
+export function completeLessonLearning(lessonId: number): LessonProgress | null {
 	let completedEntry: LessonProgress | null = null;
 
 	progress.update(($p) => {
-		const lesson = lessonById.get(lessonId);
-		if (!lesson) return $p;
+		if (!lessonById.has(lessonId)) return $p;
 
-		const knownLetters = [...$p.knownLetters];
-		for (const letter of lesson.newLetters) {
-			if (!knownLetters.includes(letter.character)) {
-				knownLetters.push(letter.character);
-			}
-		}
-
-		const knownWords = [...$p.knownWords];
-		const knownWordSet = new Set(knownWords.map((word) => word.thai));
-
-		if (!knownWordSet.has(lesson.anchorWord.thai)) {
-			knownWordSet.add(lesson.anchorWord.thai);
-			knownWords.push(lesson.anchorWord);
-		}
-
-		for (const entry of lesson.vocabulary.filter(countsAsKnownWord)) {
-			if (knownWordSet.has(entry.word.thai)) continue;
-
-			knownWordSet.add(entry.word.thai);
-			knownWords.push(entry.word);
-		}
-
-		const lessonProgressEntry: LessonProgress = {
+		const existing = getLessonProgressEntry($p.lessonProgress, lessonId);
+		const learningCompletedAt = existing?.learningCompletedAt ?? new Date().toISOString();
+		const nextEntry: LessonProgress = {
 			lessonId,
-			completed: true,
-			drillScore: Math.max(0, Math.min(100, Math.round(drillScore))),
-			completedAt: new Date().toISOString(),
+			learningCompleted: true,
+			learningCompletedAt,
+			practiceAttempts: existing?.practiceAttempts ?? 0,
+			...(existing?.bestPracticeScore !== undefined
+				? { bestPracticeScore: existing.bestPracticeScore }
+				: {}),
+			...(existing?.latestPracticeScore !== undefined
+				? { latestPracticeScore: existing.latestPracticeScore }
+				: {}),
+			practicePassed: existing?.practicePassed ?? false,
+			...(existing?.practicePassedAt ? { practicePassedAt: existing.practicePassedAt } : {}),
 		};
-		completedEntry = lessonProgressEntry;
+		completedEntry = nextEntry;
 
-		const lessonProgress = [
-			...$p.lessonProgress.filter((entry) => entry.lessonId !== lessonId),
-			lessonProgressEntry,
-		].sort((left, right) => left.lessonId - right.lessonId);
-
-		return {
-			knownLetters,
-			knownWords,
-			lessonProgress,
-			currentLessonId: Math.max(
-				$p.currentLessonId,
-				getCurrentLessonIdFromProgress(lessonProgress),
-			),
-		};
+		return normalizeProgress({
+			...$p,
+			lessonProgress: upsertLessonProgress($p.lessonProgress, nextEntry),
+		});
 	});
 
 	return completedEntry;
+}
+
+export function recordLessonPracticeAttempt(
+	lessonId: number,
+	practiceScore: number,
+): LessonPracticeAttemptResult | null {
+	let result: LessonPracticeAttemptResult | null = null;
+
+	progress.update(($p) => {
+		if (!lessonById.has(lessonId)) return $p;
+
+		const existing = getLessonProgressEntry($p.lessonProgress, lessonId);
+		const completedAt = new Date().toISOString();
+		const score = clampScore(practiceScore);
+		const passedThisAttempt = score >= PRACTICE_PASS_PERCENT;
+		const alreadyPassed = existing?.practicePassed === true;
+		const nextEntry: LessonProgress = {
+			lessonId,
+			learningCompleted: true,
+			learningCompletedAt: existing?.learningCompletedAt ?? completedAt,
+			practiceAttempts: (existing?.practiceAttempts ?? 0) + 1,
+			bestPracticeScore: Math.max(existing?.bestPracticeScore ?? 0, score),
+			latestPracticeScore: score,
+			practicePassed: alreadyPassed || passedThisAttempt,
+			...(existing?.practicePassedAt || passedThisAttempt
+				? { practicePassedAt: existing?.practicePassedAt ?? completedAt }
+				: {}),
+		};
+
+		result = {
+			completedAt,
+			entry: nextEntry,
+			practicePassed: nextEntry.practicePassed,
+			shouldSync: alreadyPassed || passedThisAttempt,
+		};
+
+		return normalizeProgress({
+			...$p,
+			lessonProgress: upsertLessonProgress($p.lessonProgress, nextEntry),
+		});
+	});
+
+	return result;
 }

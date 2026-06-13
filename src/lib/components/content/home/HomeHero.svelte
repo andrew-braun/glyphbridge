@@ -5,10 +5,11 @@
 
 	interface Props {
 		authenticated: boolean;
-		currentLessonId: number;
+		resumeHref: string;
+		resumePhase: "learn" | "practice" | "review";
 	}
 
-	let { authenticated, currentLessonId }: Props = $props();
+	let { authenticated, resumeHref, resumePhase }: Props = $props();
 
 	const languages = [
 		{
@@ -120,9 +121,13 @@
 
 				<div class="home-hero__actions">
 					{#if authenticated}
-						<Button href={`/learn/${currentLessonId}`} variant="primary" size="large"
-							>Continue</Button
-						>
+						<Button href={resumeHref} variant="primary" size="large">
+							{resumePhase === "practice"
+								? "Continue Practice"
+								: resumePhase === "review"
+									? "Review What You Know"
+									: "Continue Learning"}
+						</Button>
 					{:else}
 						<Button href="/auth" variant="primary" size="large"
 							>Get Started for Free</Button

@@ -33,7 +33,7 @@
 	// Reactively re-computed when progress changes (e.g. after completing a new lesson).
 	const availableDrills = $derived.by(() => {
 		const completedIds = $progress.lessonProgress
-			.filter((lp) => lp.completed)
+			.filter((lp) => lp.practicePassed)
 			.map((lp) => lp.lessonId);
 		return thaiPack.lessons.filter((l) => completedIds.includes(l.id)).flatMap((l) => l.drills);
 	});
