@@ -31,7 +31,7 @@ At the time of writing:
 
 - the local seed contains `1` course and `1` published course version
 - the Thai seed contains `13` lessons
-- the current vocabulary model contains `47` vocabulary items
+- the current vocabulary model contains `122` vocabulary items
 - the current publication layer contains `13` `delivery.course_publication_lessons`
   rows
 - `src/lib/data/thai.ts` remains the curriculum source of truth, and

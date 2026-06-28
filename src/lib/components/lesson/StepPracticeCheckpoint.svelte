@@ -23,7 +23,8 @@
 
 	const uid = $props.id();
 	const promptId = `practice-checkpoint-${uid}`;
-	const questions = $derived(buildQuestions(entries));
+	const shuffledEntries = $derived.by(() => shuffle([...entries]));
+	const questions = $derived(buildQuestions(shuffledEntries));
 
 	let currentIndex = $state(0);
 	let correctCount = $state(0);
@@ -47,6 +48,15 @@
 				: "default",
 		})),
 	);
+
+	function shuffle<T>(items: T[]): T[] {
+		const shuffled = [...items];
+		for (let i = shuffled.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+		}
+		return shuffled;
+	}
 
 	function buildQuestions(words: LessonVocabularyEntry[]): PracticeQuestion[] {
 		return words.map((entry, index) => {

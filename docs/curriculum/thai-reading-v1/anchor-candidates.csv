@@ -15,3 +15,11 @@ anchor,ผัด,stir-fry,0.8,0.98,0.86,0.68,0.84,0.82,0.82,0.94,0.9,0.12,0.03,0
 anchor,ผัก,vegetable,0.78,0.94,0.82,0.72,0.78,0.82,0.78,0.9,0.75,0.1,0.02,0.02,0,0,Runtime support word for ผัด and menu expansion
 anchor,ออก,exit / go out,0.78,0.94,0.82,0.62,0.86,0.72,0.8,0.86,0.75,0.16,0.05,0.03,0,0,Runtime support word and public wayfinding gap
 anchor,ร้านอาหาร,restaurant,0.82,0.98,0.9,0.5,0.9,0.72,0.86,0.94,0.75,0.24,0.06,0.03,0,0,High payoff compound assembled from runtime anchors
+anchor,ของ,of / belonging to,0.92,0.84,0.86,0.6,0.88,0.78,0.84,0.78,0.72,0.2,0.06,0.03,0,0,Stage 6 lesson 14 introduces ng plus final ng plus the o ang aw vowel and carries heavy new load
+anchor,ทาง,way / direction,0.8,0.86,0.7,0.82,0.78,0.86,0.78,0.8,0.72,0.08,0.02,0.02,0,0,Stage 6 lesson 15 wayfinding word reuses ng with new low th
+anchor,จะ,will future particle,0.9,0.72,0.74,0.78,0.82,0.84,0.76,0.74,0.72,0.1,0.02,0.02,0,0,Stage 6 lesson 16 core grammar word for j and short a glottal stop
+anchor,เกม,game,0.72,0.74,0.72,0.84,0.86,0.84,0.76,0.82,0.7,0.08,0.02,0.02,0,0,Stage 6 lesson 17 clean leading e vowel that teaches the scan left rule
+anchor,ไก่,chicken,0.76,0.9,0.78,0.8,0.82,0.84,0.8,0.86,0.72,0.14,0.03,0.04,0,0,Stage 6 lesson 18 food anchor introducing the two ai vowels
+anchor,โต,big / to grow,0.74,0.76,0.7,0.86,0.8,0.86,0.74,0.78,0.7,0.06,0.02,0.02,0,0,Stage 6 lesson 19 clean leading long o vowel
+anchor,ปิด,closed,0.78,0.94,0.72,0.82,0.78,0.82,0.8,0.84,0.72,0.08,0.02,0.04,0,0,Stage 6 lesson 20 high signage open closed pair with p versus b contrast
+anchor,ยา,medicine,0.76,0.86,0.74,0.84,0.78,0.84,0.78,0.8,0.72,0.1,0.02,0.02,0,0,Stage 6 lesson 21 pharmacy signage word for y and glide finals

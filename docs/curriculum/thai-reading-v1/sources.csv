@@ -7,3 +7,6 @@ wordfreq-th,frequency,https://github.com/rspeer/wordfreq,MIT package license; up
 pythainlp,tokenizer_tool,https://github.com/PyThaiNLP/pythainlp,Apache 2.0 package license,discovery_only,0,Future tokenizer and syllable review tool rather than a content source
 thai-language-reference,lexicon_reference,http://www.thai-language.com/,site terms require review before derived use,discovery_only,0.35,Consonant class final sound and gloss checks kept discovery only
 app-authored-thai-domain-examples,authored_examples,,app_owned,shipped_content,0.95,Short reviewed examples authored by Glyphin rather than copied from third-party corpora
+thai-char-corpus-2023,frequency,,license review required,scoring_only,0.7,2023 study of a 2.2M-word modern Thai corpus (newspapers web reports web boards chats 2016-2019) used 2026-06-27 to recalibrate grapheme frequency percentages
+munthuli-phoneme-frequency,frequency,,license review required,scoring_only,0.6,Munthuli et al. Thai phoneme frequencies from one written (BEST) and two spoken corpora used 2026-06-27 to order initial vowel and final-coda sound roles
+thai-national-corpus,frequency,https://www.arts.chula.ac.th/ling/tnc/,license review required,scoring_only,0.55,General standard-Thai written corpus used as a balance check against web-heavy sources

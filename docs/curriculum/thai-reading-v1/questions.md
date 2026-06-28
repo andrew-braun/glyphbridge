@@ -16,8 +16,26 @@ the `thai-reading-v1` bootstrap.
 - Should authored Thai word segmentation remain manual for v1, or should a
   reviewed PyThaiNLP pass become part of publication QA?
 
+## Resolved
+
+- Full-alphabet coverage is now in scope (decision 2026-06-27). The remaining
+  Thai inventory has been scored frequency-first in
+  `grapheme-candidates.scored.csv`, and a proposed Stage 6+ sequence is drafted
+  in `lesson-sequence.md`. Tracking: `.ai/archive/2026-06-27-thai-full-alphabet-research.md`.
+- Redundant phonemes (multiple glyphs -> one sound) and obsolete glyphs are
+  grouped into late "same sound, rarer glyph" recognition lessons rather than
+  given individual high-effort lessons.
+
 ## Product And Pedagogy
 
+- The first-pass expansion scores are LLM frequency intuition only and need a
+  Thai-speaker / corpus review before they are treated as a final sequence.
+- Should the full-alphabet expansion ship as a continuation of `thai-reading-v1`
+  or as a new `thai-reading-v2` course boundary?
+- Should obsolete glyphs (`ฃ ฅ ฦ ฦๅ`) and archaic marks ship as an optional
+  recognition-only appendix lesson, or be dropped from the taught path entirely?
+- Anchors for Stages 6+ are provisional and still need the anchor-candidate
+  scoring pass before lesson authoring.
 - How much of the formal tone-class matrix belongs in v1 versus later review?
 - Should tone marks be assessed as pronunciation, visual recognition, or both?
 - Should clusters such as `ตล` in `ตลาด` and leading `ห` be taught with one

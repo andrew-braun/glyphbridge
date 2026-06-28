@@ -10,12 +10,19 @@ The live lesson content already exists in `src/lib/data/thai.ts`.
   for menus, storefronts, prices, transit labels, and common signs.
 - Target domains: restaurant menus, street storefronts, market price signs,
   transit wayfinding, public facilities, everyday labels, and food packaging.
-- In scope for this backfill: the current 13 runtime lessons, their support
-  vocabulary, vowel-position rules, early tone marks, final consonant behavior,
-  leading-H, silent `อ`, and food or storefront anchors.
-- Out of scope for v1: full tone matrix mastery, full consonant inventory,
-  production spelling, handwriting, Thai numerals, advanced clusters, and broad
-  grammar instruction.
+- In scope (shipped today, Stages 1-5): the current 13 runtime lessons, their
+  corpus-reviewed practice vocabulary, vowel-position rules, early tone marks,
+  final consonant behavior, leading-H, silent `อ`, and food or storefront
+  anchors.
+- Now in scope (proposed full-alphabet expansion, Stages 6+, research pass
+  2026-06-27): the complete 44-consonant inventory, the full vowel chart, all
+  four tone marks, the formal tone-class matrix, Thai numerals, silent and
+  repetition marks, true clusters, and the main spelling exceptions. Ordered
+  frequency-first in `grapheme-candidates.scored.csv` and `lesson-sequence.md`,
+  with redundant Sanskrit/Pali and obsolete glyphs grouped into late recognition
+  lessons. See `.ai/archive/2026-06-27-thai-full-alphabet-research.md`.
+- Still out of scope: handwriting/production, tokenizer-backed coverage
+  measurement, audio assets, and broad grammar instruction.
 
 ## Sequencing Rationale
 
@@ -54,3 +61,7 @@ The live lesson content already exists in `src/lib/data/thai.ts`.
 - License review: existing runtime and app-authored examples are app-owned.
   External frequency, tokenizer, and lexicon sources remain scoring or discovery
   only until terms are reviewed.
+- Vocabulary review: the 2026-06-27 practice refresh aligns runtime lesson
+  inventories with a corpus-backed decodability audit, while still allowing
+  very early lessons to stay below ten real items when the glyph pool is too
+  small.

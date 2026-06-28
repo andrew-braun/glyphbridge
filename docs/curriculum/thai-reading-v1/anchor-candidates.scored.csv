@@ -4,14 +4,22 @@ anchor,ดี,good,0.9,0.82,0.74,0.82,0.78,0.9,0.72,0.8,0.9,0.06,0.01,0.02,0,0,R
 anchor,ร้าน,shop,0.82,0.96,0.88,0.72,0.9,0.8,0.82,0.92,0.9,0.1,0.03,0.02,0,0,Runtime lesson 7 and storefront anchor,0.7028,promising
 anchor,สิบ,ten,0.84,0.92,0.82,0.72,0.78,0.82,0.76,0.82,0.9,0.08,0.02,0.02,0,0,Runtime lesson 9 and price reading payoff,0.7024,promising
 anchor,มาก,very / a lot,0.86,0.82,0.78,0.76,0.84,0.82,0.74,0.78,0.9,0.08,0.02,0.02,0,0,Runtime lesson 1 high payoff word for final k and long aa,0.6912,promising
+anchor,ทาง,way / direction,0.8,0.86,0.7,0.82,0.78,0.86,0.78,0.8,0.72,0.08,0.02,0.02,0,0,Stage 6 lesson 15 wayfinding word reuses ng with new low th,0.6776,promising
 anchor,ผัก,vegetable,0.78,0.94,0.82,0.72,0.78,0.82,0.78,0.9,0.75,0.1,0.02,0.02,0,0,Runtime support word for ผัด and menu expansion,0.6742,promising
+anchor,โต,big / to grow,0.74,0.76,0.7,0.86,0.8,0.86,0.74,0.78,0.7,0.06,0.02,0.02,0,0,Stage 6 lesson 19 clean leading long o vowel,0.6704,promising
+anchor,ปิด,closed,0.78,0.94,0.72,0.82,0.78,0.82,0.8,0.84,0.72,0.08,0.02,0.04,0,0,Stage 6 lesson 20 high signage open closed pair with p versus b contrast,0.6704,promising
 anchor,ผัด,stir-fry,0.8,0.98,0.86,0.68,0.84,0.82,0.82,0.94,0.9,0.12,0.03,0.02,0,0,Runtime lesson 13 and high value cooking word,0.6696,promising
+anchor,ยา,medicine,0.76,0.86,0.74,0.84,0.78,0.84,0.78,0.8,0.72,0.1,0.02,0.02,0,0,Stage 6 lesson 21 pharmacy signage word for y and glide finals,0.6564,promising
 anchor,บิน,to fly,0.68,0.78,0.66,0.8,0.76,0.86,0.74,0.78,0.9,0.06,0.01,0.02,0,0,Runtime lesson 5 reuses the in frame,0.6560,promising
+anchor,จะ,will future particle,0.9,0.72,0.74,0.78,0.82,0.84,0.76,0.74,0.72,0.1,0.02,0.02,0,0,Stage 6 lesson 16 core grammar word for j and short a glottal stop,0.6540,promising
 anchor,ข้าว,rice,0.9,0.98,0.9,0.66,0.9,0.8,0.84,0.94,0.9,0.16,0.04,0.02,0,0,Runtime lesson 10 and essential Thai menu word,0.6508,promising
+anchor,เกม,game,0.72,0.74,0.72,0.84,0.86,0.84,0.76,0.82,0.7,0.08,0.02,0.02,0,0,Stage 6 lesson 17 clean leading e vowel that teaches the scan left rule,0.6500,promising
 anchor,ชุด,set / combo,0.68,0.9,0.74,0.68,0.78,0.82,0.76,0.82,0.9,0.1,0.02,0.02,0,0,Runtime lesson 8 and below short u in menu contexts,0.6252,promising
 anchor,ตลาด,market,0.74,0.96,0.84,0.64,0.9,0.78,0.82,0.9,0.9,0.14,0.04,0.02,0,0,Runtime lesson 4 and hidden vowel plus market signage,0.6152,promising
+anchor,ไก่,chicken,0.76,0.9,0.78,0.8,0.82,0.84,0.8,0.86,0.72,0.14,0.03,0.04,0,0,Stage 6 lesson 18 food anchor introducing the two ai vowels,0.6020,promising
 anchor,หมู,pork,0.84,0.96,0.86,0.62,0.92,0.76,0.84,0.94,0.9,0.18,0.05,0.02,0,0,Runtime lesson 11 and leading H pattern,0.5908,promising
 anchor,แม่,mother,0.78,0.72,0.64,0.72,0.88,0.78,0.72,0.8,0.9,0.12,0.03,0.02,0,0,Runtime lesson 6 introduces before vowel and mai ek tone mark,0.5780,promising
 anchor,ออก,exit / go out,0.78,0.94,0.82,0.62,0.86,0.72,0.8,0.86,0.75,0.16,0.05,0.03,0,0,Runtime support word and public wayfinding gap,0.5598,promising
 anchor,อาหาร,food,0.86,0.96,0.9,0.58,0.94,0.72,0.86,0.9,0.9,0.2,0.06,0.03,0,0,Runtime lesson 12 and silent carrier plus final r to n,0.5544,promising
+anchor,ของ,of / belonging to,0.92,0.84,0.86,0.6,0.88,0.78,0.84,0.78,0.72,0.2,0.06,0.03,0,0,Stage 6 lesson 14 introduces ng plus final ng plus the o ang aw vowel and carries heavy new load,0.5316,promising
 anchor,ร้านอาหาร,restaurant,0.82,0.98,0.9,0.5,0.9,0.72,0.86,0.94,0.75,0.24,0.06,0.03,0,0,High payoff compound assembled from runtime anchors,0.4926,weak

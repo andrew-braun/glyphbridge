@@ -298,7 +298,7 @@ function buildSeedModel() {
 		releaseNotes: {
 			source: "src/lib/data/thai.ts",
 			conceptSource: "docs/concept/approach-thai.md",
-			vocabularyModel: "anchor-plus-support",
+			vocabularyModel: "anchor-plus-practice",
 		},
 	};
 

@@ -26,6 +26,10 @@ backfill packet for the existing runtime Thai course.
 - [x] Source manifest validated
 - [x] Candidate anchors scored
 - [x] Review packet generated
+- [x] Full-alphabet grapheme inventory scored frequency-first (2026-06-27 pass)
+- [x] Frequency-ordered Stage 6+ lesson sequence drafted
+- [ ] First-pass expansion scores reviewed by a Thai speaker / corpus
+- [ ] Anchor candidates scored for Stages 6+
 - [ ] DB ingestion strategy reviewed
 - [ ] Lessons authored beyond existing runtime data
 - [ ] Publication path designed
@@ -39,6 +43,8 @@ backfill packet for the existing runtime Thai course.
 - See `docs/curriculum/thai-reading-v1/questions.md`.
 - See `.ai/2026-06-13-practice-vocabulary-expansion.md` for the current
   practice-vocabulary expansion plan.
+- See `.ai/archive/2026-06-27-thai-full-alphabet-research.md` for the full-alphabet
+  research pass and proposed Stage 6+ sequence.
 
 ## Notes
 

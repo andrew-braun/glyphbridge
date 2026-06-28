@@ -1,29 +1,93 @@
 candidate_type,candidate,gloss,corpus_frequency,distinct_word_coverage,domain_coverage_gain,anchor_availability,pronunciation_clarity,rule_gateway_value,visual_distinctiveness,confusability_penalty,load_penalty,irregularity_penalty,font_penalty,license_penalty,notes,candidate_score,score_band
-grapheme,า,right vowel long aa,0.96,0.94,0.9,0.95,0.94,0.86,0.78,0.02,0.04,0.01,0,0,Highest payoff right side vowel and first placement rule,0.8550,strong
-grapheme,ม,low consonant m,0.92,0.9,0.86,0.95,0.94,0.72,0.82,0.02,0.03,0.01,0,0,Runtime lesson 1 and core menu words,0.8270,strong
-grapheme,ก,mid consonant k g,0.94,0.92,0.9,0.95,0.88,0.86,0.8,0.03,0.04,0.02,0,0,Runtime lesson 1 and final k stop rule,0.8200,strong
-grapheme,น,low consonant n,0.9,0.88,0.82,0.9,0.94,0.78,0.78,0.03,0.04,0.01,0,0,Core final nasal and high coverage consonant,0.7900,strong
-grapheme,ด,mid consonant d final t,0.84,0.82,0.76,0.88,0.86,0.78,0.76,0.04,0.05,0.02,0,0,Introduces initial d and clipped final stop behavior,0.7100,promising
-grapheme,ิ,above vowel short i,0.82,0.78,0.76,0.88,0.9,0.78,0.72,0.03,0.06,0.01,0,0,Unlocks กิน and the reusable in frame,0.7080,promising
-grapheme,ล,low consonant l,0.78,0.76,0.76,0.86,0.9,0.72,0.78,0.04,0.04,0.01,0,0,Market and place word consonant,0.6970,promising
-grapheme,ต,mid consonant t,0.82,0.8,0.78,0.86,0.84,0.76,0.74,0.04,0.05,0.02,0,0,Market word and hidden vowel gateway,0.6960,promising
-grapheme,ี,above vowel long ii,0.8,0.78,0.72,0.84,0.92,0.78,0.74,0.03,0.06,0.01,0,0,Early vertical scanning in ดี and มี,0.6950,promising
-grapheme,final ก,final k stop,0.84,0.8,0.8,0.88,0.78,0.9,0.66,0.02,0.08,0.03,0,0,Explicit final consonant role separate from initial ก,0.6910,promising
-grapheme,ร,low consonant r final n,0.84,0.82,0.8,0.88,0.78,0.8,0.78,0.04,0.07,0.03,0,0,Storefront anchor and final r to n later,0.6810,promising
-grapheme,ั,above vowel short a,0.76,0.74,0.78,0.84,0.86,0.78,0.7,0.03,0.06,0.01,0,0,Common short vowel in ผัด and ผัก,0.6760,promising
-grapheme,ส,high consonant s,0.82,0.8,0.82,0.84,0.88,0.76,0.76,0.06,0.06,0.02,0,0,Price word สิบ and high class gateway,0.6750,promising
-grapheme,บ,mid consonant b final p,0.78,0.76,0.72,0.82,0.86,0.72,0.76,0.04,0.05,0.02,0,0,Supports บิน and final p rule in สิบ,0.6620,promising
-grapheme,final ด ต,final t stop family,0.82,0.78,0.78,0.86,0.76,0.88,0.66,0.03,0.09,0.03,0,0,Market combo and ชุด final stop behavior,0.6520,promising
-grapheme,ู,below vowel long uu,0.7,0.68,0.7,0.82,0.9,0.76,0.7,0.03,0.06,0.01,0,0,Long below vowel in หมู and หู,0.6340,promising
-grapheme,ุ,below vowel short u,0.7,0.68,0.68,0.78,0.9,0.76,0.7,0.03,0.06,0.01,0,0,First below vowel and clipped syllable rhythm,0.6270,promising
-grapheme,อ,silent carrier,0.84,0.82,0.82,0.86,0.7,0.9,0.72,0.05,0.12,0.04,0,0,Carrier behavior for vowel initial words like อาหาร,0.6110,promising
-grapheme,ห,high consonant h and leading H,0.76,0.74,0.78,0.84,0.82,0.9,0.82,0.04,0.1,0.04,0,0,Leading H pattern and food signs like หมู,0.6100,promising
-grapheme,ว,w consonant and glide,0.74,0.72,0.72,0.82,0.82,0.78,0.76,0.04,0.08,0.03,0,0,Builds -าว in ข้าว and later glide patterns,0.6040,promising
-grapheme,้,tone mark mai tho,0.76,0.74,0.72,0.82,0.72,0.84,0.62,0.02,0.1,0.04,0,0,Second early tone mark in ร้าน and ข้าว,0.5930,promising
-grapheme,ช,low consonant ch,0.68,0.66,0.68,0.76,0.88,0.7,0.74,0.06,0.05,0.01,0,0,Menu combo anchor ชุด and contrast with ส,0.5890,promising
-grapheme,ข,high consonant kh,0.72,0.7,0.78,0.82,0.82,0.8,0.78,0.08,0.07,0.02,0,0,Aspirated high class k in survival food words,0.5860,promising
-grapheme,แ,left vowel long ae,0.7,0.68,0.66,0.76,0.84,0.82,0.72,0.04,0.08,0.02,0,0,First before vowel and scanning left rule,0.5830,promising
-grapheme,่,tone mark mai ek,0.74,0.72,0.7,0.8,0.72,0.84,0.62,0.02,0.1,0.04,0,0,Tone mark introduced through sight word แม่,0.5780,promising
+grapheme,า,right vowel long aa,0.97,0.94,0.9,0.95,0.94,0.86,0.78,0.02,0.04,0.01,0,0,Highest payoff right side vowel and first placement rule,0.8580,strong
+grapheme,น,low consonant n,0.91,0.88,0.82,0.9,0.94,0.78,0.78,0.03,0.04,0.01,0,0,Core final nasal and high coverage consonant,0.7930,strong
+grapheme,ก,mid consonant k g,0.85,0.84,0.9,0.95,0.88,0.86,0.8,0.03,0.04,0.02,0,0,Runtime lesson 1 and final k stop rule,0.7770,strong
+grapheme,ม,low consonant m,0.8,0.78,0.86,0.95,0.94,0.72,0.82,0.02,0.03,0.01,0,0,Runtime lesson 1 and core menu words,0.7670,strong
+grapheme,ร,low consonant r final n,0.89,0.86,0.8,0.88,0.78,0.8,0.78,0.04,0.07,0.03,0,0,Storefront anchor and final r to n later,0.7040,promising
+grapheme,ง,low consonant ng and final ng,0.82,0.8,0.8,0.84,0.84,0.82,0.74,0.04,0.06,0.02,0,0,Very common final nasal ng and new final sound,0.6930,promising
+grapheme,ั,above vowel short a,0.79,0.76,0.78,0.84,0.86,0.78,0.7,0.03,0.06,0.01,0,0,Common short vowel in ผัด and ผัก,0.6890,promising
+grapheme,เ,before vowel e family,0.81,0.78,0.8,0.84,0.78,0.86,0.7,0.04,0.05,0.03,0,0,Leading e vowel and gateway to many compounds,0.6820,promising
+grapheme,ล,low consonant l,0.73,0.71,0.76,0.86,0.9,0.72,0.78,0.04,0.04,0.01,0,0,Market and place word consonant,0.6720,promising
+grapheme,่,tone mark mai ek,0.85,0.82,0.7,0.8,0.72,0.84,0.62,0.02,0.06,0.04,0,0,Tone mark introduced through sight word แม่,0.6710,promising
+grapheme,้,tone mark mai tho,0.83,0.8,0.72,0.82,0.72,0.84,0.62,0.02,0.06,0.04,0,0,Second early tone mark in ร้าน and ข้าว,0.6660,promising
+grapheme,ี,above vowel long ii,0.74,0.72,0.72,0.84,0.92,0.78,0.74,0.03,0.06,0.01,0,0,Early vertical scanning in ดี and มี,0.6650,promising
+grapheme,อ,silent carrier,0.83,0.8,0.82,0.86,0.7,0.9,0.72,0.05,0.06,0.04,0,0,Carrier behavior for vowel initial words like อาหาร,0.6640,promising
+grapheme,ด,mid consonant d final t,0.73,0.71,0.76,0.88,0.86,0.78,0.76,0.04,0.05,0.02,0,0,Introduces initial d and clipped final stop behavior,0.6550,promising
+grapheme,ะ,after vowel short a,0.71,0.69,0.78,0.84,0.86,0.82,0.7,0.03,0.05,0.02,0,0,Short a sign with glottal stop after consonant,0.6550,promising
+grapheme,final ง,final ng nasal role,0.8,0.77,0.74,0.8,0.8,0.84,0.62,0.03,0.07,0.03,0,0,Explicit final ng sound role for reading closed syllables,0.6500,promising
+grapheme,ท,low consonant th,0.73,0.71,0.78,0.84,0.86,0.74,0.72,0.04,0.05,0.02,0,0,Very common low th in transit and signage words,0.6480,promising
+grapheme,ิ,above vowel short i,0.68,0.66,0.76,0.88,0.9,0.78,0.72,0.03,0.06,0.01,0,0,Unlocks กิน and the reusable in frame,0.6420,promising
+grapheme,final ก,final k stop,0.72,0.7,0.8,0.88,0.78,0.9,0.66,0.02,0.08,0.03,0,0,Explicit final consonant role separate from initial ก,0.6350,promising
+grapheme,final ด ต,final t stop family,0.78,0.75,0.78,0.86,0.76,0.88,0.66,0.03,0.09,0.03,0,0,Market combo and ชุด final stop behavior,0.6340,promising
+grapheme,ย,low consonant y and glide,0.77,0.74,0.72,0.82,0.8,0.78,0.72,0.05,0.06,0.02,0,0,Very common y consonant and final glide,0.6330,promising
+grapheme,ต,mid consonant t,0.69,0.67,0.78,0.86,0.84,0.76,0.74,0.04,0.05,0.02,0,0,Market word and hidden vowel gateway,0.6310,promising
+grapheme,ส,high consonant s,0.7,0.68,0.82,0.84,0.88,0.76,0.76,0.06,0.06,0.02,0,0,Price word สิบ and high class gateway,0.6150,promising
+grapheme,ว,w consonant and glide,0.76,0.73,0.72,0.82,0.82,0.78,0.76,0.04,0.08,0.03,0,0,Builds -าว in ข้าว and later glide patterns,0.6120,promising
+grapheme,บ,mid consonant b final p,0.67,0.65,0.72,0.82,0.86,0.72,0.76,0.04,0.05,0.02,0,0,Supports บิน and final p rule in สิบ,0.6070,promising
+grapheme,ไ,before vowel ai mai malai,0.61,0.58,0.72,0.82,0.86,0.8,0.72,0.04,0.05,0.02,0,0,Common ai vowel confusable with ใ,0.5810,promising
+grapheme,ป,mid consonant p,0.65,0.63,0.74,0.82,0.84,0.74,0.7,0.06,0.05,0.02,0,0,Very common mid p confusable with บ and ษ,0.5770,promising
+grapheme,ห,high consonant h and leading H,0.68,0.66,0.78,0.84,0.82,0.9,0.82,0.04,0.1,0.04,0,0,Leading H pattern and food signs like หมู,0.5700,promising
+grapheme,ู,below vowel long uu,0.56,0.54,0.7,0.82,0.9,0.76,0.7,0.03,0.06,0.01,0,0,Long below vowel in หมู and หู,0.5640,promising
+grapheme,โ,before vowel long o,0.56,0.54,0.7,0.8,0.86,0.8,0.72,0.03,0.05,0.02,0,0,Leading long o vowel,0.5630,promising
+grapheme,ุ,below vowel short u,0.57,0.55,0.68,0.78,0.9,0.76,0.7,0.03,0.06,0.01,0,0,First below vowel and clipped syllable rhythm,0.5620,promising
+grapheme,จ,mid consonant j,0.62,0.6,0.7,0.8,0.8,0.72,0.72,0.05,0.05,0.02,0,0,Common mid j confusable with ง,0.5590,promising
+grapheme,final ย ว,final glide y w,0.74,0.7,0.62,0.72,0.76,0.78,0.58,0.04,0.08,0.04,0,0,Glide finals that close diphthong syllables,0.5500,promising
+grapheme,ค,low consonant kh,0.64,0.62,0.74,0.82,0.84,0.72,0.68,0.07,0.06,0.02,0,0,Very common low kh confusable with ด ต อ,0.5490,promising
+grapheme,พ,low consonant ph,0.6,0.58,0.74,0.82,0.84,0.72,0.7,0.06,0.06,0.02,0,0,Very common low ph confusable with ผ ฟ ฝ,0.5400,promising
+grapheme,แ,left vowel long ae,0.61,0.59,0.66,0.76,0.84,0.82,0.72,0.04,0.08,0.02,0,0,First before vowel and scanning left rule,0.5380,promising
+grapheme,ช,low consonant ch,0.57,0.55,0.68,0.76,0.88,0.7,0.74,0.06,0.05,0.01,0,0,Menu combo anchor ชุด and contrast with ส,0.5340,promising
+grapheme,เ-า,compound vowel ao,0.58,0.55,0.7,0.8,0.82,0.8,0.64,0.04,0.07,0.03,0,0,Wrap around ao vowel pattern,0.5230,promising
 grapheme,leading ห,leading tone helper,0.7,0.68,0.76,0.82,0.68,0.94,0.68,0.03,0.14,0.05,0,0,Cluster like chunk in หมู and later หน หย หร patterns,0.5180,promising
-grapheme,ผ,high consonant ph,0.58,0.6,0.72,0.78,0.82,0.74,0.82,0.07,0.08,0.02,0,0,High value cooking word ผัด and aspirated contrast,0.5070,promising
+grapheme,ข,high consonant kh,0.58,0.56,0.78,0.82,0.82,0.8,0.78,0.08,0.07,0.02,0,0,Aspirated high class k in survival food words,0.5160,promising
+grapheme,ำ,vowel am,0.56,0.54,0.66,0.78,0.84,0.74,0.7,0.04,0.06,0.03,0,0,sara am with built in final m,0.5160,promising
+grapheme,ื,above vowel long ue,0.58,0.55,0.64,0.76,0.82,0.72,0.66,0.05,0.06,0.02,0,0,Long ue vowel usually needs o ang carrier,0.5130,promising
+grapheme,์,thanthakhat silent marker,0.58,0.54,0.62,0.72,0.72,0.82,0.58,0.04,0.05,0.04,0,0,Karan silences letters in loanwords like เบอร์,0.5000,promising
+grapheme,ซ,low consonant s,0.53,0.51,0.66,0.78,0.84,0.66,0.72,0.06,0.05,0.02,0,0,Common low s confusable with ช,0.4940,weak
+grapheme,ฟ,low consonant f,0.52,0.5,0.64,0.76,0.84,0.66,0.7,0.05,0.05,0.02,0,0,Common f mostly loanwords confusable with ฝ,0.4930,weak
+grapheme,-อ,aw vowel via o ang,0.55,0.52,0.7,0.78,0.78,0.78,0.66,0.06,0.07,0.03,0,0,o ang doubling as the aw vowel,0.4810,weak
+grapheme,ึ,above vowel short ue,0.54,0.52,0.6,0.72,0.8,0.7,0.64,0.05,0.06,0.02,0,0,Short ue vowel above the consonant,0.4800,weak
+grapheme,ผ,high consonant ph,0.54,0.52,0.72,0.78,0.82,0.74,0.82,0.07,0.08,0.02,0,0,High value cooking word ผัด and aspirated contrast,0.4790,weak
+grapheme,ใ,before vowel ai mai muan,0.59,0.56,0.62,0.74,0.84,0.72,0.7,0.05,0.08,0.04,0,0,Only about twenty words must be memorized confusable with ไ,0.4770,weak
+grapheme,ๆ,maiyamok repetition mark,0.52,0.48,0.58,0.7,0.74,0.76,0.62,0.03,0.06,0.03,0,0,Repeat the previous word for plurals and emphasis,0.4700,weak
+grapheme,ถ,high consonant th,0.52,0.5,0.62,0.74,0.8,0.66,0.66,0.06,0.06,0.03,0,0,Common high th confusable with ภ,0.4520,weak
+grapheme,็,mai taikhu vowel shortener,0.5,0.48,0.58,0.7,0.74,0.78,0.6,0.04,0.07,0.03,0,0,Shortens the vowel and carries no sound of its own,0.4450,weak
+grapheme,true initial clusters,blendable cr cl cw clusters,0.58,0.54,0.64,0.74,0.74,0.8,0.58,0.05,0.09,0.05,0,0,True clusters like กร กล กว ปร ปล distinct from hidden vowel frame,0.4450,weak
+grapheme,เ-ีย,compound vowel ia,0.5,0.48,0.58,0.74,0.8,0.74,0.62,0.05,0.07,0.03,0,0,Falling diphthong ia reading pattern,0.4420,weak
+grapheme,ัว,compound vowel ua,0.5,0.48,0.58,0.74,0.8,0.74,0.62,0.05,0.07,0.03,0,0,ua diphthong reading pattern,0.4420,weak
+grapheme,ฉ,high consonant ch,0.5,0.48,0.54,0.7,0.8,0.64,0.68,0.06,0.06,0.03,0,0,High class ch completing the ch pair with ช,0.4250,weak
+grapheme,เ-อ,compound vowel oe,0.48,0.46,0.56,0.72,0.78,0.72,0.62,0.05,0.07,0.03,0,0,oe vowel reading pattern,0.4230,weak
+grapheme,ฝ,high consonant f,0.48,0.46,0.52,0.68,0.82,0.64,0.68,0.05,0.06,0.03,0,0,High class f completing the f pair with ฟ,0.4220,weak
+grapheme,ฮ,low consonant h,0.48,0.46,0.46,0.64,0.82,0.58,0.66,0.05,0.06,0.03,0,0,Low class h in colloquial and onomatopoeic words,0.4020,weak
+grapheme,ธ,low consonant th rarer,0.5,0.48,0.54,0.7,0.8,0.6,0.64,0.05,0.08,0.05,0,0,Same th sound as ท but in formal and loan vocabulary,0.3890,weak
+grapheme,๐๑๒๓๔๕๖๗๘๙,thai numerals zero to nine,0.46,0.42,0.5,0.62,0.84,0.6,0.66,0.04,0.08,0.03,0,0,Thai numeral set for price and sign reading,0.3860,weak
+grapheme,ญ,low consonant y rarer base,0.5,0.48,0.54,0.7,0.78,0.62,0.66,0.06,0.08,0.05,0,0,Same y sound as ย but rarer and often final,0.3800,weak
+grapheme,เ-ือ,compound vowel uea,0.45,0.43,0.52,0.7,0.78,0.72,0.6,0.05,0.08,0.04,0,0,uea diphthong reading pattern,0.3790,weak
+grapheme,ภ,low consonant ph rarer,0.49,0.47,0.52,0.68,0.8,0.6,0.64,0.06,0.08,0.05,0,0,Same ph sound as พ confusable with ถ,0.3690,weak
+grapheme,๊,tone mark mai tri,0.4,0.38,0.5,0.66,0.72,0.72,0.6,0.04,0.08,0.04,0,0,Third tone mark common in colloquial and loan spellings,0.3510,weak
+grapheme,เ-ะ,compound vowel e short,0.4,0.38,0.48,0.64,0.74,0.62,0.58,0.05,0.07,0.03,0,0,Short e with mai taikhu or glottal stop,0.3470,weak
 grapheme,ตล hidden vowel frame,initial cluster with hidden a,0.5,0.48,0.7,0.74,0.62,0.84,0.62,0.04,0.16,0.06,0,0,Runtime lesson 4 uses ตลาด to teach nonwritten a,0.3420,weak
+grapheme,ศ,high consonant s sanskrit,0.51,0.49,0.52,0.66,0.78,0.56,0.62,0.07,0.09,0.07,0,0,Same s sound as ส appears in common ประเทศ and ศาล,0.3300,weak
+grapheme,๋,tone mark mai chattawa,0.37,0.35,0.46,0.62,0.72,0.7,0.6,0.04,0.08,0.04,0,0,Fourth tone mark for rising tone in colloquial spellings,0.3240,weak
+grapheme,เ-าะ,compound vowel aw short,0.36,0.34,0.46,0.64,0.74,0.64,0.58,0.05,0.08,0.04,0,0,Short aw diphthong reading pattern,0.3060,weak
+grapheme,ณ,low consonant n sanskrit,0.51,0.49,0.42,0.58,0.76,0.5,0.58,0.07,0.1,0.08,0,0,Same n sound as น in Sanskrit derived vocabulary,0.2770,weak
+grapheme,โ-ะ,compound vowel o short,0.32,0.3,0.42,0.6,0.72,0.6,0.56,0.05,0.08,0.04,0,0,Short o often unwritten in closed syllables,0.2690,weak
+grapheme,แ-ะ,compound vowel ae short,0.32,0.3,0.42,0.6,0.72,0.6,0.56,0.05,0.08,0.04,0,0,Short ae diphthong reading pattern,0.2690,weak
+grapheme,ษ,high consonant s sanskrit,0.5,0.48,0.42,0.58,0.76,0.5,0.6,0.08,0.1,0.08,0,0,Same s sound as ส in Sanskrit derived vocabulary,0.2630,weak
+grapheme,ฯ,paiyannoi abbreviation,0.3,0.28,0.36,0.52,0.62,0.56,0.54,0.04,0.08,0.05,0,0,Abbreviation mark as in กรุงเทพฯ,0.2270,weak
+grapheme,ฤ,vocalic r ru ri rue,0.4,0.38,0.38,0.56,0.66,0.52,0.6,0.06,0.1,0.08,0,0,Vocalic r read as ru ri or rue depending on the word,0.2170,weak
+grapheme,leading อ,silent o tone helper,0.4,0.34,0.42,0.56,0.66,0.66,0.54,0.05,0.12,0.1,0,0,Silent o in the four ya words อย่า อยาก อย่าง อยู่,0.1960,weak
+grapheme,silent r and ทร,silent r and tr read as s,0.34,0.3,0.4,0.54,0.62,0.6,0.54,0.05,0.1,0.08,0,0,Spelling exceptions where ร is silent or ทร reads as s,0.1950,weak
+grapheme,ฬ,low consonant l sanskrit,0.32,0.3,0.32,0.5,0.74,0.44,0.56,0.06,0.1,0.08,0,0,Same l sound as ล mostly in กีฬา and Pali words,0.1600,weak
+grapheme,ฐ,high consonant th sanskrit,0.3,0.28,0.36,0.54,0.74,0.46,0.58,0.07,0.1,0.08,0,0,Same th sound as ถ in formal Sanskrit vocabulary,0.1530,weak
+grapheme,ฎ,mid consonant d sanskrit,0.28,0.26,0.32,0.5,0.74,0.44,0.58,0.07,0.1,0.08,0,0,Same d sound as ด in Sanskrit derived vocabulary,0.1310,weak
+grapheme,ฏ,mid consonant t sanskrit,0.28,0.26,0.32,0.5,0.74,0.44,0.58,0.07,0.1,0.08,0,0,Same t sound as ต in Sanskrit derived vocabulary,0.1310,weak
+grapheme,ฆ,low consonant kh sanskrit,0.26,0.24,0.3,0.48,0.74,0.42,0.56,0.07,0.11,0.09,0,0,Same kh sound as ค in rare Sanskrit vocabulary,0.0930,weak
+grapheme,ฑ,low consonant th sanskrit,0.25,0.23,0.3,0.48,0.72,0.42,0.56,0.07,0.11,0.09,0,0,Same th or d sound in rare Sanskrit vocabulary,0.0860,weak
+grapheme,ฒ,low consonant th sanskrit,0.25,0.23,0.3,0.48,0.72,0.42,0.56,0.07,0.11,0.09,0,0,Same th sound in rare Sanskrit vocabulary,0.0860,weak
+grapheme,ฌ,low consonant ch rare,0.2,0.18,0.24,0.42,0.72,0.38,0.56,0.07,0.12,0.1,0,0,Same ch sound as ช in very rare vocabulary,0.0220,weak
+grapheme,ๅ,lakkhangyao length mark,0.1,0.08,0.18,0.36,0.6,0.36,0.52,0.05,0.1,0.08,0,0,Archaic vowel length mark recognition only,0.0010,weak
+grapheme,ฤๅ,rare vocalic r rue long,0.1,0.08,0.14,0.32,0.6,0.3,0.52,0.06,0.11,0.1,0,0,Long vocalic r in very rare vocabulary recognition only,0.0000,weak
+grapheme,ฃ,obsolete high consonant kho khuat,0.05,0.03,0.1,0.24,0.66,0.24,0.5,0.06,0.1,0.12,0,0,No longer used in modern Thai recognition only,0.0000,weak
+grapheme,ฅ,obsolete low consonant kho khon,0.05,0.03,0.1,0.24,0.66,0.24,0.5,0.06,0.1,0.12,0,0,No longer used in modern Thai recognition only,0.0000,weak
+grapheme,ฦ,obsolete vocalic l lu,0.03,0.02,0.06,0.18,0.58,0.18,0.48,0.06,0.12,0.14,0,0,Obsolete vocalic l recognition only,0.0000,weak
+grapheme,ฦๅ,obsolete vocalic l lue long,0.03,0.02,0.06,0.18,0.58,0.18,0.48,0.06,0.12,0.14,0,0,Obsolete long vocalic l recognition only,0.0000,weak

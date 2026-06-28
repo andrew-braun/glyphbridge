@@ -71,6 +71,34 @@ scored drills. Later lessons will also include an optional extension set.
   keys plus `sourceType` metadata.
 - Updated durable docs to describe the new practice-first lesson contract and
   the required later-lesson extension set.
+- Replaced the ad hoc Thai lesson practice map in `src/lib/data/thai.ts` with a
+  reviewed 13-lesson inventory based on the 2026-06-27 corpus-backed audit.
+  Early lessons now use smaller but cleaner pools when the letter inventory is
+  genuinely constrained, while later lessons promote overflow review words and
+  phrases into optional extension practice.
+
+## 2026-06-27 Vocabulary Refresh Notes
+
+- Lesson 1 was intentionally pruned from the earlier speculative ten-item set
+  down to four real targets plus one flagged nonsense drill. The attached audit
+  made a stronger case for quality over padding at that stage.
+- Lesson 2 now expands beyond `มี` and `ดีมาก` with `ดีด`, `มีด`, and earlier
+  review words, which resolves the most obvious runtime underfill.
+- Lessons 3-13 now follow the attached ordering rule more closely: new-letter
+  targets first, then review words, then phrases at the end.
+- Later lessons now use the existing `extension` tier for overflow items such as
+  review phrases and secondary decodable words, instead of forcing every item
+  into scored core practice.
+
+## 2026-06-27 Publication Push
+
+- Regenerated `supabase/seed.sql` from `scripts/generate-thai-seed.mjs` after the
+  Thai runtime vocabulary refresh, so both `curriculum.lesson_vocabulary` and
+  `delivery.course_publication_lessons` now reflect the expanded lesson sets.
+- Updated generator release metadata to use `anchor-plus-practice` instead of
+  the stale `anchor-plus-support` label.
+- The regenerated Thai seed now publishes `122` unique vocabulary items across
+  the current `13` lessons.
 
 ## Target Curriculum Contract
 

@@ -96,6 +96,13 @@ next authoring work needed to expand it.
 
 ## Open To-Dos
 
+- Full-alphabet scope is now approved (2026-06-27). The remaining Thai grapheme
+  inventory is scored frequency-first in
+  `docs/curriculum/thai-reading-v1/grapheme-candidates.scored.csv`, and a
+  proposed Stage 6+ lesson sequence (Lessons 14-46) is drafted in
+  `docs/curriculum/thai-reading-v1/lesson-sequence.md`. Tracking file:
+  `.ai/archive/2026-06-27-thai-full-alphabet-research.md`. Next: Thai-speaker review of
+  first-pass scores, anchor scoring for new lessons, then authoring.
 - Scope the first level 6 Thai content wave from `docs/concept/approach-thai.md`.
 - Decide the next Thai version boundary after the current 13-lesson release.
 - Validate the next lesson candidates against real-world print targets such as
