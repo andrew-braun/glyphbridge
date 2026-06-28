@@ -9,7 +9,7 @@ This directory groups the active and recently completed `.ai` task documents for
 - `implementation-status.md` is the authoritative next-steps and resume-point document for this workstream.
 - `foundation-plan.md` is the authoritative architecture and schema-rationale document.
 - `auth-sync-strategy.md` is the authoritative plan for the authenticated rollout lane only.
-- `../../2026-04-26-thai-content-seeding-plan.md` is the authoritative planning record for the completed Thai content-seeding lane.
+- `../../archive/2026-04-26-thai-content-seeding-plan.md` is the authoritative planning record for the completed Thai content-seeding lane.
 - `../../curriculum/thai.md` is the authoritative Thai curriculum progress, coverage, and source-inventory tracker.
 - `../../../docs/concept/approach-thai.md` is the authoritative durable Thai concept source for grapheme sequencing, lesson expansion, and coverage targets.
 
@@ -23,7 +23,7 @@ This directory groups the active and recently completed `.ai` task documents for
   - Current implementation state, completed foundation outputs, validation status, and concrete next steps.
   - Start here when resuming hands-on work.
 
-- `../../2026-04-26-thai-content-seeding-plan.md`
+- `../../archive/2026-04-26-thai-content-seeding-plan.md`
   - Current Thai content-seeding plan, rewrite status, and implementation sequence.
 
 - `../../curriculum/thai.md`

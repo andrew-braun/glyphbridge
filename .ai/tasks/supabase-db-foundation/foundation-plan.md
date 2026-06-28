@@ -9,7 +9,7 @@
 - `README.md` for the bundle index and redundancy assessment
 - `implementation-status.md` for what actually landed and what still needs to happen next
 - `auth-sync-strategy.md` for the future authenticated rollout work
-- `../../2026-04-26-thai-content-seeding-plan.md` for the current Thai content-seeding plan and approval gate
+- `../../archive/2026-04-26-thai-content-seeding-plan.md` for the completed Thai content-seeding plan and approval gate
 - `../../curriculum/thai.md` for Thai curriculum status, coverage, and source inventory
 - `../../../docs/concept/approach-thai.md` for the durable Thai grapheme and lesson sequencing concept source
 

@@ -36,7 +36,7 @@ Track the implemented foundation of the Supabase and database workstream, summar
 - The learn index and lesson detail routes now read published lesson bundles from `delivery.course_publication_lessons` through a server-owned SvelteKit boundary, while local client persistence still remains in `src/lib/stores/progress.ts` and other curriculum views still retain static Thai source data.
 - The runtime lesson model now also carries a first supporting-vocabulary slice per lesson, while preserving the featured `anchorWord` for the current lesson flow.
 - `src/lib/stores/progress.ts` now uses snapshot version `2` so older local progress does not map onto the rewritten lesson IDs.
-- Thai content seeding planning now lives in `../../2026-04-26-thai-content-seeding-plan.md`, and Thai curriculum progress plus follow-on authoring work now live in `../../curriculum/thai.md`.
+- Thai content seeding planning now lives in `../../archive/2026-04-26-thai-content-seeding-plan.md`, and Thai curriculum progress plus follow-on authoring work now live in `../../curriculum/thai.md`.
 - `docs/database-dto-spec.md` now includes first-class reusable lesson vocabulary tables so the content model can grow into vocabulary drilling without another schema redesign.
 - `supabase/migrations/20260430110000_lesson_vocabulary_tables.sql` now creates the reusable vocabulary tables in the live migration chain and validates cleanly with a local DB reset.
 - `scripts/generate-thai-seed.mjs` now derives the first Thai curriculum seed directly from `src/lib/data/thai.ts`.
@@ -53,7 +53,7 @@ Track the implemented foundation of the Supabase and database workstream, summar
 
 - The 2026-04-25 audit found real boundary and surface-area issues in the baseline DB design; the foundation is not ready for the first authenticated learner route yet.
 - The critical findings around direct `lesson_attempts` writes, trusted caller identity, and mutable `SECURITY DEFINER` search paths were accepted as true positives and have been addressed in the hardening migrations.
-- The active remediation tracker is `.ai/2026-04-25-supabase-security-remediation-plan.md`.
+- DB security remediation is complete; see `.ai/archive/2026-04-25-supabase-security-remediation-plan.md`.
 - `docs/database-dto-spec.md` and `docs/db.md` now reflect the hardened DB boundary and current schema contract.
 
 ## Completed DB Hardening
